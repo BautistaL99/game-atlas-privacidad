@@ -1,0 +1,29 @@
+/* V150 desktop-only fixes. Mobile web and Android <=700px remain unchanged. */
+@media(min-width:701px){
+  /* Keep the donate CTA and language control from overlapping. */
+  .topbar{display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:12px!important;min-height:76px!important;height:auto!important}
+  .topbar .top-search-wrap{flex:1 1 260px!important;min-width:180px!important;max-width:min(520px,100%)!important}
+  .topbar .lang-badge{flex:0 0 auto!important;white-space:nowrap!important}
+  .topbar a,.topbar button{max-width:100%}
+  /* Desktop has a full filters sidebar: mobile quick-filter chips and touch gesture switch are redundant. */
+  .atlas-map .vi-map-filter-chips,.atlas-map .atlas-mobile-filter-toggle,
+  .atlas-controls .vi-map-gesture-toggle{display:none!important}
+  /* Make the existing full-screen map control prominent; sidebar filters stay accessible. */
+  .atlas-map>.vi-map-fullscreen-btn{display:grid!important;place-items:center!important;position:absolute!important;z-index:86!important;right:9px!important;top:8px!important;width:44px!important;height:44px!important;border-radius:12px!important;border:1px solid #77b8c9!important;background:#10384be8!important;color:#fff!important}
+  .atlas-map>.vi-map-fullscreen-btn svg{width:22px!important;height:22px!important}
+  /* Keep text compact and progress area ready for all eight categories. */
+  .home-v18 .v18-progress-zone{grid-template-columns:minmax(230px,300px) minmax(0,1fr)!important;align-items:start!important}
+  .home-v18 .v18-progress-intro h2{font-size:clamp(25px,2.2vw,36px)!important}
+  .home-v18 .v18-progress-cards .progress-dashboard.v113-progress{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px!important}
+  .home-v18 .v18-progress-cards .progress-dashboard .progress-tile{min-width:0!important}
+  /* Sidebar: avoid the large image passing behind the independent-project notice. */
+  html.vi-real-gallery .sidebar::before{bottom:58px!important;height:175px!important;opacity:.6!important;background-position:center center!important;mask-image:linear-gradient(to bottom,transparent,black 35%,black 76%,transparent)!important}
+  html.vi-real-gallery .sidebar-note{margin:0 5px 0!important;font-size:10px!important;line-height:1.4!important;max-width:calc(100% - 10px)!important}
+}
+@media(min-width:701px) and (max-width:1150px){
+  .home-v18 .v18-progress-zone{grid-template-columns:1fr!important}
+  .home-v18 .v18-progress-cards .progress-dashboard.v113-progress{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}
+@media(min-width:701px) and (max-width:850px){
+  .home-v18 .v18-progress-cards .progress-dashboard.v113-progress{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
