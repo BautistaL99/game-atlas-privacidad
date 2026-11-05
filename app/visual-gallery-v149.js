@@ -181,6 +181,16 @@
    document.querySelectorAll('.youtube-tile-art').forEach((el,i)=>imageBackground(el,community[i%community.length]));
    document.querySelectorAll('.news-panel .news-story img').forEach((el,i)=>imageSource(el,editorial[i%editorial.length]));
    document.querySelectorAll('.ranking-hero-art').forEach(el=>imageBackground(el,location.hash.includes('donaciones')?rankings[1]:rankings[0]));
+   // Web-only My Game HUD: preserve native layout, local progress and all buttons.
+   for(const row of document.querySelectorAll('.v120-progress-row,.progress-tile')){
+     const link=row.getAttribute('href')||'';
+     const cat=link.match(/\/explorar\/([a-z-]+)/)?.[1];
+     const key=categories[cat];
+     if(key&&photo(key))row.style.setProperty('--progress-image','url("'+photo(key)+'")','important');
+   }
+   const sidebar=document.querySelector('.sidebar');
+   if(sidebar&&photo('vice-6'))sidebar.style.setProperty('--vi-sidebar-photo','url("'+photo('vice-6')+'")');
+
    const credit=document.querySelector('.v18-showcase-note');
    if(credit)credit.textContent=document.documentElement.lang==='en'?'Official promotional screenshots © Rockstar Games / Take-Two. Independent companion, not affiliated.':document.documentElement.lang==='pt'?'Capturas promocionais oficiais © Rockstar Games / Take-Two. Guia independente, não afiliado.':'Imágenes promocionales oficiales © Rockstar Games / Take-Two. Guía independiente, no afiliada.';
  }
