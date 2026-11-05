@@ -152,7 +152,7 @@
      if(img.dataset.viPhoto===k){img.dataset.viPhoto='failed:'+k;img.src=fallback}
    },{once:true});
    img.src=photo(k);
-   img.referrerPolicy='no-referrer';
+   img.referrerPolicy='strict-origin-when-cross-origin';
    img.loading='lazy';
  };
  function apply(){
@@ -181,6 +181,8 @@
    document.querySelectorAll('.youtube-tile-art').forEach((el,i)=>imageBackground(el,community[i%community.length]));
    document.querySelectorAll('.news-panel .news-story img').forEach((el,i)=>imageSource(el,editorial[i%editorial.length]));
    document.querySelectorAll('.ranking-hero-art').forEach(el=>imageBackground(el,location.hash.includes('donaciones')?rankings[1]:rankings[0]));
+   const credit=document.querySelector('.v18-showcase-note');
+   if(credit)credit.textContent=document.documentElement.lang==='en'?'Official promotional screenshots © Rockstar Games / Take-Two. Independent companion, not affiliated.':document.documentElement.lang==='pt'?'Capturas promocionais oficiais © Rockstar Games / Take-Two. Guia independente, não afiliado.':'Imágenes promocionales oficiales © Rockstar Games / Take-Two. Guía independiente, no afiliada.';
  }
  let queued=false;
  function schedule(){
