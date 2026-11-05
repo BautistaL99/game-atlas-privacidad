@@ -27,3 +27,16 @@
 @media(min-width:701px) and (max-width:850px){
   .home-v18 .v18-progress-cards .progress-dashboard.v113-progress{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
+
+/* Desktop full-screen map: keep its normal filter panel open at the left. */
+@media(min-width:701px){
+  #root .atlas-v119.vi-fullscreen-map .atlas-layout{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(245px,300px)!important;gap:10px!important;position:relative!important}
+  #root .atlas-v119.vi-fullscreen-map .atlas-center{position:relative!important;inset:auto!important;width:100%!important;height:100%!important;min-width:0!important}
+  #root .atlas-v119.vi-fullscreen-map .atlas-map{height:100%!important;width:100%!important}
+  #root .atlas-v119.vi-fullscreen-map .atlas-filters.mobile-closed,
+  #root .atlas-v119.vi-fullscreen-map .atlas-filters.mobile-open{display:block!important;position:relative!important;inset:auto!important;top:auto!important;left:auto!important;right:auto!important;bottom:auto!important;order:-1!important;width:100%!important;max-width:none!important;max-height:none!important;height:100%!important;overflow-y:auto!important;z-index:3!important}
+  #root .atlas-v119.vi-fullscreen-map .atlas-layout{grid-template-columns:minmax(245px,300px) minmax(0,1fr)!important}
+  #root .atlas-v119.vi-fullscreen-map .atlas-filters{grid-column:1!important;grid-row:1!important}
+  #root .atlas-v119.vi-fullscreen-map .atlas-center{grid-column:2!important;grid-row:1!important}
+  #root .atlas-v119.vi-fullscreen-map .vi-map-filter-close{display:none!important}
+}
