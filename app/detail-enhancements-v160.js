@@ -3,9 +3,9 @@
  * Only explicitly reviewed gallery images; never infer extra screenshots.
  */
 (function(root){'use strict';
- const supported=['vehiculos','armas','economia','mapa-lugares'];
+ const supported=['vehiculos','armas','economia','mapa-lugares','misiones'];
  const names={es:{title:'Comparar fichas',intro:'Compará hasta tres elementos de la misma categoría. Solo se muestran datos publicados y verificados: no se inventan estadísticas.',choose:'Elegí una categoría',item:'Elegí una ficha',missing:'Sin datos verificados',notEnough:'Elegí al menos dos fichas distintas para comparar.',facts:'Características verificadas',gallery:'Imágenes de la ficha',photo:'Imagen',caption:'Imagen ilustrativa',compare:'⇄ Comparar con otro',source:'Consultar fuente',none:'Todavía no hay parámetros técnicos comparables para estas fichas.',available:'La galería tendrá más imágenes cuando se verifiquen fotografías adicionales del mismo elemento.'},en:{title:'Compare entries',intro:'Compare up to three entries from the same category. Only published, verified data is shown.',choose:'Choose a category',item:'Choose an entry',missing:'No verified data',notEnough:'Choose at least two different entries.',facts:'Verified specifications',gallery:'Entry images',photo:'Image',caption:'Illustrative image',compare:'⇄ Compare with another',source:'View source',none:'No verified comparable specifications yet.',available:'More images appear when additional pictures of this exact item are reviewed.'},pt:{title:'Comparar fichas',intro:'Compare até três itens da mesma categoria. Somente dados publicados e verificados são exibidos.',choose:'Escolha uma categoria',item:'Escolha uma ficha',missing:'Dados não verificados',notEnough:'Escolha duas fichas diferentes.',facts:'Características verificadas',gallery:'Imagens da ficha',photo:'Imagem',caption:'Imagem ilustrativa',compare:'⇄ Comparar com outro',source:'Ver fonte',none:'Ainda não há informações técnicas verificadas para comparar.',available:'Novas imagens aparecerão quando fotos do mesmo item forem verificadas.'}};
- const cats={vehiculos:{es:'Vehículos',en:'Vehicles',pt:'Veículos'},armas:{es:'Armas',en:'Weapons',pt:'Armas'},economia:{es:'Propiedades y negocios',en:'Properties and businesses',pt:'Imóveis e negócios'},'mapa-lugares':{es:'Lugares y edificios',en:'Places and buildings',pt:'Lugares e edifícios'}};
+ const cats={misiones:{es:'Misiones',en:'Missions',pt:'Missões'},vehiculos:{es:'Vehículos',en:'Vehicles',pt:'Veículos'},armas:{es:'Armas',en:'Weapons',pt:'Armas'},economia:{es:'Propiedades y negocios',en:'Properties and businesses',pt:'Imóveis e negócios'},'mapa-lugares':{es:'Lugares y edificios',en:'Places and buildings',pt:'Lugares e edifícios'}};
  const safe=s=>String(s===undefined||s===null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const tr=(obj,lang)=>typeof obj==='string'?obj:obj&&typeof obj==='object'?(obj[lang]||obj.es||obj.en||''):'';
  const validSource=url=>{try{const u=new URL(url);return u.protocol==='https:'&&!u.username&&!u.password&&!u.port&&!u.hash&&['www.rockstargames.com','rockstargames.com'].includes(u.hostname)}catch{return false}};
@@ -62,7 +62,7 @@
  }
  function state(records){
   const query=params();const requested=query.get('cat');const cat=supported.includes(requested)?requested:'vehiculos';
-  const choices=records.filter(r=>r.status==='verified'&&r.category===cat).sort((a,b)=>tr(a.title,'es').localeCompare(tr(b.title,'es')));
+  const choices=records.filter(r=>r.status==='verified'&&r.category===cat&&r.recordType!=='story_overview').sort((a,b)=>tr(a.title,'es').localeCompare(tr(b.title,'es')));
   const raw=(query.get('ids')||'').split(',').filter(Boolean).slice(0,3);
   const allowed=new Set(choices.map(r=>r.id));const ids=[];
   for(const id of raw){if(allowed.has(id)&&!ids.includes(id))ids.push(id)}
