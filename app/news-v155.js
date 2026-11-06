@@ -1,9 +1,9 @@
 /* V155. Separate news destination: official verified source vs community candidate. */
 (()=>{'use strict';
 const labels={
- es:{title:'Noticias de GTA VI',sub:'Novedades, anuncios e información con su fuente original.',official:'Oficiales',other:'No oficiales',empty:'Todavía no hay noticias no oficiales listas para publicar.',note:'Las fuentes de la comunidad aparecerán aquí claramente separadas de las confirmaciones de Rockstar.',source:'Leer noticia original',detail:'Ver ficha',nodate:'Fecha por confirmar',archive:'Archivo',archiveEmpty:'Todavía no hay noticias antiguas archivadas.',archiveNote:'Las publicaciones anteriores se conservarán aquí con su fecha, imagen y fuente original. No se elimina información.'},
- en:{title:'GTA VI News',sub:'Updates and announcements with their original sources.',official:'Official',other:'Unofficial',empty:'No unofficial stories have passed review yet.',note:'Community information will appear here, clearly separated from Rockstar confirmations.',source:'Read original article',detail:'View entry',nodate:'Date to be confirmed',archive:'Archive',archiveEmpty:'No older news has been archived yet.',archiveNote:'Past announcements will remain available here with dates, images and original sources.'},
- pt:{title:'Notícias de GTA VI',sub:'Novidades e anúncios com suas fontes originais.',official:'Oficiais',other:'Não oficiais',empty:'Ainda não há notícias não oficiais prontas para publicação.',note:'As notícias da comunidade aparecerão aqui, separadas das confirmações da Rockstar.',source:'Ler notícia original',detail:'Ver ficha',nodate:'Data a confirmar',archive:'Arquivo',archiveEmpty:'Ainda não há notícias antigas arquivadas.',archiveNote:'As notícias anteriores ficarão aqui com data, imagem e fonte original.'}
+ es:{title:'Noticias de GTA VI',sub:'Novedades, anuncios e información con su fuente original.',official:'Oficiales',other:'No oficiales',empty:'Todavía no hay noticias no oficiales listas para publicar.',note:'Las fuentes de la comunidad aparecerán aquí claramente separadas de las confirmaciones de Rockstar.',source:'Leer noticia original',detail:'Ver ficha',nodate:'Fecha por confirmar',archive:'Archivo',archiveEmpty:'Todavía no hay noticias antiguas archivadas.',archiveNote:'Las publicaciones anteriores se conservarán aquí con su fecha, imagen y fuente original. No se elimina información.',unconfirmed:'RUMOR · NO CONFIRMADO',communityVisual:'FUENTE COMUNITARIA'},
+ en:{title:'GTA VI News',sub:'Updates and announcements with their original sources.',official:'Official',other:'Unofficial',empty:'No unofficial stories have passed review yet.',note:'Community information will appear here, clearly separated from Rockstar confirmations.',source:'Read original article',detail:'View entry',nodate:'Date to be confirmed',archive:'Archive',archiveEmpty:'No older news has been archived yet.',archiveNote:'Past announcements will remain available here with dates, images and original sources.',unconfirmed:'RUMOUR · UNCONFIRMED',communityVisual:'COMMUNITY SOURCE'},
+ pt:{title:'Notícias de GTA VI',sub:'Novidades e anúncios com suas fontes originais.',official:'Oficiais',other:'Não oficiais',empty:'Ainda não há notícias não oficiais prontas para publicação.',note:'As notícias da comunidade aparecerão aqui, separadas das confirmações da Rockstar.',source:'Ler notícia original',detail:'Ver ficha',nodate:'Data a confirmar',archive:'Arquivo',archiveEmpty:'Ainda não há notícias antigas arquivadas.',archiveNote:'As notícias anteriores ficarão aqui com data, imagem e fonte original.',unconfirmed:'RUMOR · NÃO CONFIRMADO',communityVisual:'FONTE COMUNITÁRIA'}
 };
 window.viNewsPage=function(route){
  const t=labels[locale]||labels.es,archive=route==='/noticias/archivo',official=archive||!route.endsWith('/no-oficiales');
@@ -21,10 +21,14 @@ window.viNewsPage=function(route){
    ?new Intl.DateTimeFormat(locale==='en'?'en-US':locale==='pt'?'pt-BR':'es-AR',
       {day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date(i.publishedAt+'T12:00:00Z')):t.nodate;
   const url=i.sources?.[0]?.url||'';
-  return '<article class="vi-news-card">'+
-   '<a href="#/ficha/'+encodeURIComponent(i.id)+'" class="vi-news-image-link">'+thumb(i,'vi-news-image')+'</a>'+
+  const communityCard=!official;
+  const preview=communityCard?'<div class="vi-news-rumor-cover"><span>GTA VI</span><strong>'+t.unconfirmed+'</strong><small>'+t.communityVisual+'</small></div>':thumb(i,'vi-news-image');
+  const sourceLabel=communityCard?(url.includes('grandtheftwiki.com')?'Grand Theft Wiki':'GTA Wiki'):'Rockstar Games';
+  return '<article class="vi-news-card'+(communityCard?' vi-news-community':'')+'">'+
+   '<a href="#/ficha/'+encodeURIComponent(i.id)+'" class="vi-news-image-link">'+preview+'</a>'+
    '<div class="vi-news-body">'+
-   '<div class="vi-news-date">'+esc(date)+' · '+(official?'Rockstar Games':'Comunidad')+'</div>'+
+   '<div class="vi-news-date">'+esc(date)+' · '+sourceLabel+'</div>'+
+   (communityCard?'<div class="vi-news-rumor-label">'+t.unconfirmed+'</div>':'')+
    '<h2><a href="#/ficha/'+encodeURIComponent(i.id)+'">'+esc(tr(i.title))+'</a></h2>'+
    '<p>'+esc(tr(i.summary))+'</p>'+
    '<div class="vi-news-actions"><a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+t.source+' ↗</a>'+
