@@ -77,3 +77,44 @@
 .vi-news-community .vi-rumor-overlay strong{background:#172720df;border:1px solid #c5d68e9c;border-radius:7px;padding:5px 9px;color:#fff6ad;font-size:10px;letter-spacing:.07em;font-weight:850}
 .vi-news-community .vi-rumor-overlay small{font-size:10px;line-height:1.3;font-weight:700;color:#eef7f9;text-shadow:0 1px 3px #000}
 .vi-news-archive-note{background:#10283c;border:1px solid #39718477;border-radius:14px;color:#d2edf3;padding:15px 18px;font-size:13px;line-height:1.5;margin:0 0 19px}
+
+/* V160: gallery / verified item comparison. Images are curated; no wiki photos imported. */
+.vi-gallery{width:100%;min-width:0}
+.vi-gallery-stage{position:relative;overflow:hidden;border-radius:14px;touch-action:pan-y}
+.vi-gallery-slide[hidden]{display:none!important}
+.vi-gallery-slide{position:relative}
+.vi-gallery-slide .detail-thumb{border-radius:14px;margin:0}
+.vi-gallery-slide-caption{padding:8px 11px;background:#14273d;color:#deebf9;font-size:12px;line-height:1.35}
+.vi-gallery-slide-caption a{float:right;color:#7bf0dc;font-size:14px}
+.vi-gallery-nav{position:absolute;top:45%;transform:translateY(-50%);z-index:2;border:1px solid #d7f9f355;border-radius:50%;width:38px;height:38px;display:grid;place-items:center;background:#071927c7;color:#fff;font-size:31px;cursor:pointer}
+.vi-gallery-nav.vi-prev{left:10px}.vi-gallery-nav.vi-next{right:10px}
+.vi-gallery-nav:focus-visible,.vi-gallery-thumbs button:focus-visible{outline:3px solid #63e8e5;outline-offset:2px}
+.vi-gallery-counter{position:absolute;right:12px;top:10px;color:#fff;background:#071927de;font-size:12px;font-weight:850;border-radius:9px;padding:6px 9px}
+.vi-gallery-thumbs{display:flex;overflow-x:auto;gap:9px;padding:10px 2px 3px}
+.vi-gallery-thumbs button{flex:0 0 70px;height:49px;overflow:hidden;border:2px solid #48657d;border-radius:10px;padding:0;background:#101d30;cursor:pointer}
+.vi-gallery-thumbs button[aria-pressed="true"]{border-color:#5cebd2;box-shadow:0 0 0 1px #5cebd244}
+.vi-gallery-thumbs img{width:100%;height:100%;object-fit:cover}
+.vi-detail-compare{display:inline-flex;text-decoration:none;border:1px solid #56c6b7;border-radius:10px;color:#d4fffa;background:#19493f;padding:10px 15px;font-size:13px;font-weight:800;margin:17px 0 0}
+.vi-detail-compare:hover{background:#266c5c}
+.vi-compare-page{max-width:1250px;margin:0 auto;color:#f3f7fc}
+.vi-compare-intro{padding:24px 28px;border:1px solid #406b7b;border-radius:18px;background:linear-gradient(120deg,#0e2036,#183e49)}
+.vi-compare-intro .eyebrow{letter-spacing:.15em;color:#77e9dc}
+.vi-compare-intro h1{font-size:clamp(26px,4vw,42px);margin:8px 0 10px;color:#fff}
+.vi-compare-intro p{color:#cee3ee;line-height:1.55;margin:0}
+.vi-compare-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;margin:19px 0}
+.vi-compare-controls label{display:flex;flex-direction:column;gap:7px;color:#cbe4ed;font-size:13px;font-weight:800}
+.vi-compare-controls select{width:100%;background:#152438;border:1px solid #517187;border-radius:11px;padding:12px 10px;color:#fff;min-height:44px}
+.vi-compare-message{padding:26px 20px;background:#182638;border:1px solid #3b5a72;border-radius:15px;color:#d7e2ed;line-height:1.55}
+.vi-compare-scroll{max-width:100%;overflow-x:auto;border:1px solid #436375;border-radius:15px;background:#101e30}
+.vi-compare-scroll table{width:100%;min-width:600px;border-collapse:collapse;text-align:left;font-size:14px}
+.vi-compare-scroll th,.vi-compare-scroll td{border-bottom:1px solid #314b61;padding:14px 15px;vertical-align:top;min-width:155px}
+.vi-compare-scroll thead th{background:#20374b;color:#edffff;font-weight:900}
+.vi-compare-scroll th[scope="row"]{font-weight:750;color:#97eedf;min-width:175px}
+.vi-compare-scroll th a{color:#fff;text-decoration:underline;text-decoration-color:#65d9c5}
+.vi-compare-scroll td{color:#e7eef7}
+.vi-compare-scroll tr:last-child td,.vi-compare-scroll tr:last-child th{border-bottom:0}
+.vi-compare-sources{display:flex;flex-wrap:wrap;gap:13px;margin-top:18px}
+.vi-compare-sources a{color:#7ce9d7;font-weight:800;font-size:12px}
+@media(max-width:700px){.vi-compare-intro{padding:18px}.vi-gallery-nav{width:33px;height:33px;font-size:26px}.vi-gallery-thumbs button{flex-basis:60px}}
+
+.vi-reviewed-single-photo small{display:block;color:#bed3dd;font-size:11px;margin-top:7px;padding:4px 3px}
