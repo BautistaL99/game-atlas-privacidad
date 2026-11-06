@@ -33,10 +33,21 @@
    const publishedAt=r.publishedAt===undefined?undefined:r.publishedAt;
    if(publishedAt!==undefined&&!/^\d{4}-\d{2}-\d{2}$/.test(publishedAt))throw Error('Bad publication date');
    // Optional licensed image. Image bytes are verified separately before becoming an object URL.
-   let photo;
-   if(r.image!==undefined){imageCount++;const i=r.image;if(!i||!/^updates\/assets\/[a-f0-9]{64}\.(?:webp|png|jpe?g)$/.test(i.path)||!/[a-f0-9]{64}/.test(i.sha256)||i.path.split('/').pop().split('.')[0]!==i.sha256||!translated(i.alt,180)||!['owned','permission'].includes(i.rights))throw Error('Image asset');photo={path:i.path,sha256:i.sha256,alt:i.alt,rights:i.rights}}
+   let photo,officialPhoto;
+   if(r.image!==undefined){
+    imageCount++;const i=r.image;
+    if(i?.type==='official'&&r.category==='actualizaciones'){
+     const path=new URL(sources[0].url).pathname,postId=path.match(/\/article\/([a-z0-9_-]+)\//i)?.[1];
+     const mediaRe=new RegExp('^https://media-rockstargames-com\\.akamaized\\.net/tina-uploads/posts/'+postId+'/[a-f0-9]{40}\\.(?:jpe?g|png|webp)$');
+     if(!postId||!mediaRe.test(i.remote)||i.officialPage!==sources[0].url||!translated(i.caption,180))throw Error('Untrusted Rockstar cover');
+     officialPhoto={type:'official',remote:i.remote,caption:i.caption,officialPage:i.officialPage};
+    }else{
+     if(!i||!/^updates\/assets\/[a-f0-9]{64}\.(?:webp|png|jpe?g)$/.test(i.path)||!/[a-f0-9]{64}/.test(i.sha256)||i.path.split('/').pop().split('.')[0]!==i.sha256||!translated(i.alt,180)||!['owned','permission'].includes(i.rights))throw Error('Image asset');
+     photo={path:i.path,sha256:i.sha256,alt:i.alt,rights:i.rights};
+    }
+   }
    items.push({id:r.id,slug:r.id,category:r.category,status:'verified',title:r.title,summary:r.summary,desc:r.summary,facets,tags,sources,mapPoint,
-      trackable:typeof r.trackable==='boolean'?r.trackable:undefined,publishedAt,spoilerLevel:0,facts:[],__signedPhoto:photo});
+      trackable:typeof r.trackable==='boolean'?r.trackable:undefined,publishedAt,spoilerLevel:0,facts:[],image:officialPhoto,__signedPhoto:photo});
   }
   const routes=o.routes===undefined?[]:o.routes;
   if(!Array.isArray(routes)||routes.length>80)throw Error('Routes');
