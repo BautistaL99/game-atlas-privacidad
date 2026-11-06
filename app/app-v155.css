@@ -118,3 +118,48 @@
 @media(max-width:700px){.vi-compare-intro{padding:18px}.vi-gallery-nav{width:33px;height:33px;font-size:26px}.vi-gallery-thumbs button{flex-basis:60px}}
 
 .vi-reviewed-single-photo small{display:block;color:#bed3dd;font-size:11px;margin-top:7px;padding:4px 3px}
+
+/* V161 - compact visual comparison cockpit, progressive specs, and metric grading */
+.vi-compare-page{padding-bottom:28px}
+.vi-compare-intro{position:relative;isolation:isolate;overflow:hidden;min-height:290px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+ background:linear-gradient(100deg,#071829f9 3%,#0a1f33e8 38%,#09182769 70%,#11202a5e 100%),
+ url('https://www.rockstargames.com/VI/_next/static/media/Vice_City_11.09paum3g942sc.jpg?akim=1&imdensity=1&imwidth=1280') center 45%/cover,
+ linear-gradient(120deg,#0e2639,#184e52)!important;border-color:#69a4aa8c;box-shadow:0 20px 45px #0005}
+.vi-compare-intro:after{content:'';position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at 80% 50%,#56e4d329,transparent 45%)}
+.vi-compare-title{max-width:670px;position:relative;z-index:2}
+.vi-compare-title .eyebrow{font-weight:950;letter-spacing:.2em;color:#73fff0}
+.vi-compare-intro h1{font-size:clamp(34px,4.7vw,58px);line-height:1.08;text-shadow:0 4px 14px #000b}
+.vi-compare-intro p{max-width:640px;color:#f0fcff;font-size:clamp(14px,1.3vw,17px);text-shadow:0 2px 9px #000a}
+.vi-compare-hero-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.vi-compare-hero-tags span{border:1px solid #bafce079;color:#e4fff7;background:#081a27cd;border-radius:30px;padding:7px 11px;font-size:11px;letter-spacing:.035em;font-weight:850}
+.vi-compare-art{display:flex;align-items:center;justify-content:center;position:relative;z-index:1;flex:0 0 260px;filter:drop-shadow(0 10px 18px #0009)}
+.vi-compare-art span{font-size:34px;font-weight:1000;color:#bcfff7;background:#0d2941e8;border:1px solid #8bfffbb1;padding:26px 15px;border-radius:18px;transform:rotate(-8deg)}
+.vi-compare-art span:last-child{transform:rotate(8deg);background:#103e43ea}
+.vi-compare-art strong{font-size:48px;color:#fff;background:#116c69;border:2px solid #a9fff1;border-radius:50%;width:76px;height:76px;display:grid;place-items:center;z-index:2;margin:0 -14px}
+.vi-compare-legend{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 15px;margin-bottom:13px;border:1px solid #3c6675;border-radius:12px;background:#122438}
+.vi-compare-legend span{border-radius:9px;padding:5px 9px;font-size:12px;font-weight:850}
+.vi-legend-good{color:#96f8b2;background:#123e2f}.vi-legend-bad{color:#ffb4b6;background:#542629}
+.vi-compare-legend small{font-size:11px;color:#c4dbe4;line-height:1.4}
+.vi-compare-scroll tbody td.vi-metric-better{background:#124932c7;color:#e5ffec;box-shadow:inset 0 0 0 1px #39b87044}
+.vi-compare-scroll tbody td.vi-metric-worse{background:#4c242ac7;color:#ffe6e8;box-shadow:inset 0 0 0 1px #e4757544}
+.vi-metric-badge{display:block;margin-top:5px;font-weight:850;font-size:10px;opacity:.95}
+.vi-spec-panel{margin-top:25px;border-top:1px solid #38516a;padding-top:15px}
+.vi-spec-panel h3{margin:3px 0 9px;color:#f2fbff}
+.vi-spec-panel>p{margin:0 0 18px;color:#bcd0df;font-size:12px;line-height:1.5}
+.vi-spec-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.vi-spec-cell{border:1px solid #375064;background:#1c3043;border-radius:12px;padding:13px 14px;min-width:0}
+.vi-spec-cell small,.vi-spec-cell strong{display:block}.vi-spec-cell small{font-size:11px;color:#a8d3db;margin-bottom:8px}
+.vi-spec-cell strong{color:#f3fbff;font-size:15px;overflow-wrap:anywhere}
+.vi-spec-cell.vi-spec-pending{background:#172739;border-color:#304659}
+.vi-spec-cell.vi-spec-pending strong{color:#889eae}
+.vi-explore-compare{margin:-12px 0 20px;border:1px solid #4aafad99;background:linear-gradient(120deg,#133a45,#1d2942);padding:15px 17px;border-radius:13px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.vi-explore-compare div{display:flex;flex-direction:column;gap:4px}
+.vi-explore-compare b{font-size:15px;color:#eafffb}.vi-explore-compare span{color:#bddee2;font-size:12px;line-height:1.45}
+.vi-explore-compare>a{background:#2f907e;border:1px solid #82f6d9;border-radius:10px;padding:10px 14px;color:#f9fffd;font-weight:900;text-decoration:none;white-space:nowrap;font-size:13px}
+.vi-explore-compare>a:hover{background:#46ae9b}
+@media(max-width:780px){.vi-compare-intro{min-height:230px}.vi-compare-art{flex-basis:150px}.vi-compare-art span{font-size:19px;padding:17px 9px}.vi-compare-art strong{font-size:29px;width:52px;height:52px}}
+@media(max-width:600px){.vi-compare-intro{min-height:260px;padding:23px!important;background-position:center!important}.vi-compare-art{display:none}.vi-compare-title{width:100%}.vi-compare-hero-tags{gap:6px}.vi-compare-hero-tags span{font-size:10px}.vi-spec-grid{grid-template-columns:1fr 1fr;gap:8px}.vi-spec-cell{padding:10px}.vi-explore-compare{flex-direction:column;align-items:stretch;margin-top:-12px}.vi-explore-compare>a{text-align:center}}
+
+/* Keep the rumor illustration notice legible on narrow screens, V161. */
+.vi-news-community .vi-rumor-overlay small{letter-spacing:normal!important;word-spacing:normal!important;text-transform:none!important;overflow-wrap:normal;word-break:normal;max-width:100%;font-family:inherit;line-height:1.5!important;display:block}
+.vi-news-community .vi-rumor-overlay{gap:5px;align-items:flex-start}
