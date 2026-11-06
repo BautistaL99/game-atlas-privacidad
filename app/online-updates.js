@@ -24,7 +24,20 @@
    if(!r||!ID.test(r.id)||seen.has(r.id)||!CATEGORIES.has(r.category)||r.status!=='verified')throw Error('Invalid record');seen.add(r.id);
    if(!translated(r.title,180)||!translated(r.summary,1300))throw Error('Missing translations');
    if(!Array.isArray(r.sources)||r.sources.length<1||r.sources.length>5)throw Error('Missing source');
-   const sources=r.sources.map(x=>({url:rockstar(x.url),type:'official',label:'Rockstar Games'}));
+   // A community source is verified as a source, never as a Rockstar-confirmed fact.
+   // Keep signed and browser validation consistent so one rumor cannot reject the whole feed.
+   const community=r.category==='actualizaciones'&&r.facets?.community===1;
+   if(community&&(r.facets?.claim_status!=='unconfirmed'||
+     !/^rumor(?:es)?\b/i.test(r.title.es)||!/^rumou?r(?:s)?\b/i.test(r.title.en)||
+     !/^rumor(?:es)?\b/i.test(r.title.pt)))throw Error('Rumor must be marked as unconfirmed');
+   const sources=r.sources.map(x=>{
+    if(!community)return {url:rockstar(x.url),type:'official',label:'Rockstar Games'};
+    const u=new URL(x.url);
+    if(u.protocol!=='https:'||u.username||u.password||u.port||u.search||u.hash||
+       !((u.hostname==='gta.wiki'&&u.pathname.startsWith('/w/'))||
+         (u.hostname==='www.grandtheftwiki.com'&&u.pathname.startsWith('/'))))throw Error('Untrusted community source');
+    return {url:u.href,type:'community',label:u.hostname==='gta.wiki'?'GTA Wiki':'Grand Theft Wiki'};
+   });
    let facets={};
    if(r.facets!==undefined){if(!r.facets||typeof r.facets!=='object'||Array.isArray(r.facets)||Object.keys(r.facets).length>35)throw Error('Facets');
     for(const [k,v] of Object.entries(r.facets)){if(!/^[a-z0-9_-]{1,60}$/.test(k)||!(typeof v==='number'&&Number.isFinite(v)||string(v,180)))throw Error('Facet value');facets[k]=v}}
