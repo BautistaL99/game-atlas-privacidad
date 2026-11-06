@@ -1,0 +1,55 @@
+/* V155: News destination and high-contrast progress HUD. Applies to web and future native bundles. */
+.vi-news-page{max-width:1320px;margin:0 auto;color:#f4f8ff}
+.vi-news-hero{padding:27px clamp(18px,4vw,40px);border-radius:22px;background:linear-gradient(110deg,#0f1d35,#18364a 66%,#102139);border:1px solid #42677977;margin:7px 0 20px}
+.vi-news-hero .eyebrow{letter-spacing:.18em;color:#4ee4db;font-weight:900}
+.vi-news-hero h1{font-size:clamp(30px,4vw,48px);margin:10px 0 8px;line-height:1.08;color:#fff}
+.vi-news-hero p{font-size:15px;color:#ccdae9;line-height:1.6;margin:0}
+.vi-news-tabs{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px}
+.vi-news-tabs a{border:1px solid #415d72;border-radius:12px;padding:12px 19px;color:#cadbe7;background:#102134;font-weight:850;text-decoration:none}
+.vi-news-tabs a.is-active{background:#22584f;color:#eafff9;border-color:#4bdebe;box-shadow:0 0 0 1px #52d8cd44 inset}
+.vi-news-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:19px}
+.vi-news-card{min-width:0;overflow:hidden;background:#171c30;border:1px solid #42566b99;border-radius:17px;display:flex;flex-direction:column;box-shadow:0 8px 25px #0003}
+.vi-news-image-link{display:block;position:relative;overflow:hidden;aspect-ratio:16 / 9;background:#081525}
+.vi-news-card .vi-news-image{display:block;width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .3s ease;border-radius:0}
+.vi-news-card:hover .vi-news-image{transform:scale(1.025)}
+.vi-news-body{padding:18px 19px 20px;display:flex;flex:1;flex-direction:column}
+.vi-news-date{color:#72e2d5;letter-spacing:.04em;font-size:11px;font-weight:800;margin-bottom:10px}
+.vi-news-body h2{font-size:clamp(18px,1.7vw,22px);line-height:1.25;margin:0 0 12px}
+.vi-news-body h2 a{color:#fff}
+.vi-news-body p{font-size:13px;color:#c4d4e7;line-height:1.6;margin:0 0 17px;flex:1}
+.vi-news-actions{border-top:1px solid #4a67808a;padding-top:14px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.vi-news-actions a{color:#6ff3df;font-size:12px;font-weight:800}
+.vi-news-actions a+ a{color:#e6eafa}
+.vi-news-empty{grid-column:1/-1;background:#132339;border:1px solid #36596b;padding:34px 28px;border-radius:16px}
+.vi-news-empty h2{margin:0 0 10px;font-size:20px}.vi-news-empty p{margin:0;color:#c6d5e7}
+.v120-next-milestone,.v120-next-milestone>b,.v120-next-milestone p{color:#eefbff!important}
+.v120-next-milestone{background:linear-gradient(135deg,#103148,#092132)!important;border-color:#4f8996!important}
+.v120-next-milestone>b{font-weight:950!important;text-shadow:0 1px 8px #0005}
+.v120-next-milestone p{font-weight:650!important}
+.v120-next-milestone>small{color:#65f7e4!important}
+/* Desktop web-only: true image panel below the menu, never behind links. */
+@media(min-width:701px){
+ html.vi-real-gallery .sidebar{overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:thin!important}
+ html.vi-real-gallery .sidebar::before{display:none!important;content:none!important}
+ html.vi-real-gallery .sidebar-nav{flex:0 0 auto!important}
+ html.vi-real-gallery .sidebar-rankings{flex:0 0 auto!important;position:relative!important;z-index:2!important;background:#111321!important;backdrop-filter:none!important;margin-bottom:0!important}
+ html.vi-real-gallery .sidebar-photo{display:block!important;position:relative!important;flex:1 0 125px!important;max-height:200px!important;min-height:110px!important;margin:7px -17px 0!important;width:calc(100% + 34px)!important;background-image:linear-gradient(180deg,#111321 0%,#11132144 13%,#11132100 35%,#11132145 100%),var(--vi-sidebar-photo)!important;background-position:center,center center!important;background-size:cover,cover!important;background-repeat:no-repeat!important}
+ html.vi-real-gallery .sidebar-note{display:block!important;position:relative!important;inset:auto!important;z-index:3!important;flex:0 0 auto!important;width:auto!important;max-width:none!important;margin:0 -17px -27px!important;padding:10px 15px 14px!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#111321!important;color:#bdccda!important;font-size:10px!important;line-height:1.35!important;font-weight:450!important;text-align:center!important;text-shadow:none!important}
+ html.vi-real-gallery .my-game-hero .my-game-hero-art{background-image:url("https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_01.0naeahss9-1x6.jpg")!important;background-position:72% 48%!important;background-size:cover!important;opacity:1!important}
+ html.vi-real-gallery .my-game-hero:before{background:linear-gradient(90deg,#0b122af5 0%,#0b1529e6 31%,#0a1729ad 55%,#09162644 100%)!important}
+}
+/* Bottom HUD: five primary tabs plus the more-menu. */
+@media(max-width:700px){
+ .bottom-nav{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:1px!important}
+ .bottom-nav>a,.bottom-nav .mobile-more{min-width:0!important}
+ .bottom-nav>a{font-size:9px!important;overflow:hidden!important;white-space:nowrap}
+ .bottom-nav .nav-symbol{font-size:20px!important}
+ .vi-news-card .vi-news-body{padding:15px}
+ .vi-news-page{padding-bottom:14px}
+ .vi-news-list{grid-template-columns:1fr;gap:14px}
+ .vi-news-tabs a{flex:1;text-align:center;font-size:12px;padding:12px 6px}
+}
+@media(max-width:480px){
+ .vi-news-hero{padding:20px 18px}
+ .vi-news-hero h1{font-size:29px}
+}
