@@ -179,7 +179,7 @@
    document.querySelectorAll('.home-permanent-art').forEach((el,i)=>imageBackground(el,hero[i%hero.length],'linear-gradient(90deg,#081629bd,#07152733 75%,transparent)'));
    document.querySelectorAll('.v18-slide-photo').forEach((el,i)=>imageBackground(el,showcase[i%showcase.length],'linear-gradient(90deg,#08172de8,#07152633 80%,transparent)'));
    document.querySelectorAll('.youtube-tile-art').forEach((el,i)=>imageBackground(el,community[i%community.length]));
-   document.querySelectorAll('.news-panel .news-story img').forEach((el,i)=>imageSource(el,editorial[i%editorial.length]));
+   document.querySelectorAll('.news-panel .news-story img').forEach((el,i)=>{if(!el.getAttribute('src')?.startsWith('https://media-rockstargames-com.akamaized.net/'))imageSource(el,editorial[i%editorial.length]);});
    document.querySelectorAll('.ranking-hero-art').forEach(el=>imageBackground(el,location.hash.includes('donaciones')?rankings[1]:rankings[0]));
    // Web-only My Game HUD: preserve native layout, local progress and all buttons.
    for(const row of document.querySelectorAll('.v120-progress-row,.progress-tile')){
