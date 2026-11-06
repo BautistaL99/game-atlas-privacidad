@@ -1,0 +1,99 @@
+{
+  "schema": 1,
+  "revision": 1,
+  "items": [
+    {
+      "id": "gta6-galeria-lanzamiento-20261105",
+      "category": "actualizaciones",
+      "status": "verified",
+      "title": {
+        "es": "Rockstar publica nuevas imágenes de GTA 6",
+        "en": "Rockstar releases new GTA VI screenshots",
+        "pt": "Rockstar publica novas imagens de GTA VI"
+      },
+      "summary": {
+        "es": "Rockstar Games presentó una galería de lanzamiento con nuevas capturas oficiales de Vice City y otras zonas del juego.",
+        "en": "Rockstar Games published a launch gallery featuring new official screenshots of Vice City and other locations.",
+        "pt": "A Rockstar Games publicou uma galeria de lançamento com novas capturas oficiais de Vice City e outras áreas."
+      },
+      "sources": [
+        {
+          "url": "https://www.rockstargames.com/newswire/article/39ak81277255o9/explore-the-grand-theft-auto-vi-launch-gallery"
+        }
+      ],
+      "publishedAt": "2026-11-05",
+      "trackable": false
+    },
+    {
+      "id": "gta6-precarga-20261103",
+      "category": "actualizaciones",
+      "status": "verified",
+      "title": {
+        "es": "La precarga de GTA 6 comenzará el 10 de noviembre",
+        "en": "GTA VI pre-load begins November 10",
+        "pt": "O pré-carregamento de GTA VI começa em 10 de novembro"
+      },
+      "summary": {
+        "es": "Rockstar anunció que la precarga de Grand Theft Auto VI comenzará el 10 de noviembre de 2026 para las plataformas indicadas en su comunicado oficial.",
+        "en": "Rockstar announced that Grand Theft Auto VI pre-load begins on November 10, 2026 for the platforms listed in its official announcement.",
+        "pt": "A Rockstar anunciou que o pré-carregamento de Grand Theft Auto VI começa em 10 de novembro de 2026 nas plataformas indicadas no comunicado oficial."
+      },
+      "sources": [
+        {
+          "url": "https://www.rockstargames.com/es/newswire/article/k4ak9okk485712/grand-theft-auto-vi-pre-load-begins-on-november-10"
+        }
+      ],
+      "publishedAt": "2026-11-03",
+      "trackable": false
+    },
+    {
+      "id": "gta6-banda-sonora-20261029",
+      "category": "actualizaciones",
+      "status": "verified",
+      "title": {
+        "es": "Rockstar presenta la música original de GTA 6",
+        "en": "Rockstar unveils GTA VI original score",
+        "pt": "Rockstar apresenta a trilha original de GTA VI"
+      },
+      "summary": {
+        "es": "Rockstar publicó información oficial sobre la música original de Grand Theft Auto VI, compuesta por Justice.",
+        "en": "Rockstar published official information about the Grand Theft Auto VI original score by Justice.",
+        "pt": "A Rockstar publicou informações oficiais sobre a trilha original de Grand Theft Auto VI, composta pelo Justice."
+      },
+      "sources": [
+        {
+          "url": "https://www.rockstargames.com/newswire/"
+        }
+      ],
+      "publishedAt": "2026-10-29",
+      "trackable": false
+    },
+    {
+      "id": "gta6-trailer-lanzamiento-20261015",
+      "category": "actualizaciones",
+      "status": "verified",
+      "title": {
+        "es": "Rockstar publicó el tráiler de lanzamiento de GTA 6",
+        "en": "Rockstar released the GTA VI launch trailer",
+        "pt": "Rockstar lançou o trailer de lançamento de GTA VI"
+      },
+      "summary": {
+        "es": "Rockstar publicó el tráiler oficial de lanzamiento de Grand Theft Auto VI y confirmó su fecha anunciada del 19 de noviembre de 2026.",
+        "en": "Rockstar released the official Grand Theft Auto VI launch trailer and reiterated its announced November 19, 2026 release date.",
+        "pt": "A Rockstar lançou o trailer oficial de Grand Theft Auto VI e reiterou a data anunciada de 19 de novembro de 2026."
+      },
+      "sources": [
+        {
+          "url": "https://www.rockstargames.com/newswire/article/517572321a549a/watch-the-grand-theft-auto-vi-launch-trailer"
+        }
+      ],
+      "publishedAt": "2026-10-15",
+      "trackable": false
+    }
+  ],
+  "routes": [],
+  "rankings": {
+    "donations": [],
+    "speedruns": []
+  }
+}
