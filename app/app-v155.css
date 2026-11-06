@@ -53,3 +53,8 @@
  .vi-news-hero{padding:20px 18px}
  .vi-news-hero h1{font-size:29px}
 }
+
+/* V159 — third tab for automatic historical news archive. No other HUD changes. */
+.vi-news-archive-counter{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:19px;margin-left:4px;padding:0 5px;border-radius:100px;background:#32515e;color:#d8f6f0;font-size:10px;font-weight:900}
+.vi-news-tabs a.is-active .vi-news-archive-counter{background:#0b342c;color:#bbfff2}
+@media(max-width:700px){.vi-news-tabs{gap:6px}.vi-news-tabs a{font-size:11px;padding:11px 8px}}

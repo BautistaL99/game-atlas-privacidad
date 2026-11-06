@@ -10,6 +10,8 @@
  const LAST='vi-signed-catalog-v143';
  const MAX=2_000_000, IMAGE_MAX=600_000, TIMEOUT=12000;
  let cfg=null,busy=false,prevCheck=0,lastRevision=-1,periodicTimer=null;
+ const VERIFIED_IMAGES='vi-verified-images-v143',KEEP_DAYS=90,MAX_CACHED_IMAGES=24;
+ const liveImageURLs=new Map();let imageRun=0;
  const decodeB64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
  const string=(v,n=1300)=>typeof v==='string'&&v.trim().length>0&&v.length<=n&&!/[<>\x00-\x1f]/.test(v);
  const translated=(t,n=1300)=>t&&typeof t==='object'&&LANG.every(l=>string(t[l],n));
@@ -90,7 +92,7 @@
   const controller=new AbortController(),time=setTimeout(()=>controller.abort(),TIMEOUT);
   try{
    // CORS required for Android's local origin. No external image is trusted without hash check.
-   const cache=typeof caches!=='undefined'?await caches.open('vi-verified-images-v143'):null;
+   const cache=typeof caches!=='undefined'?await caches.open(VERIFIED_IMAGES):null;
    let response;try{response=await fetch(url,{redirect:'error',signal:controller.signal,cache:'no-store'})}catch(err){response=cache?await cache.match(url.href):null;if(!response)throw err}
    if(!response.ok||Number(response.headers.get('content-length')||0)>IMAGE_MAX)throw Error('Image unavailable/oversized');
    const bytes=await response.arrayBuffer();if(bytes.byteLength>IMAGE_MAX)throw Error('Large image');
@@ -101,17 +103,52 @@
    if(type==='image/png'&&!(a[0]===137&&h.slice(1,4)==='PNG'))throw Error('Bad PNG');
    if(type==='image/jpeg'&&!(a[0]===255&&a[1]===216))throw Error('Bad JPEG');
    if(type==='image/webp'&&!(h.slice(0,4)==='RIFF'&&h.slice(8,12)==='WEBP'))throw Error('Bad WEBP');
-   if(cache)void cache.put(url.href,new Response(bytes.slice(0),{status:200,headers:{'Content-Type':type}})).catch(()=>{});
+   if(cache)void cache.put(url.href,new Response(bytes.slice(0),{status:200,headers:{'Content-Type':type,'X-VI-Saved-At':String(Date.now())}})).catch(()=>{});
    return URL.createObjectURL(new Blob([bytes],{type}));
   }finally{clearTimeout(time)}
  }
+ // Retain images referenced by the CURRENT signed catalog, remove expired orphan
+ // downloads, and limit retained orphan downloads to the last 24. We never touch
+ // the app's offline static cache, external Rockstar images or user localStorage.
+ async function trimVerifiedImageCache(activePaths){
+  if(typeof caches==='undefined')return;
+  try{
+   const cache=await caches.open(VERIFIED_IMAGES),keys=await cache.keys(),stale=[],now=Date.now();
+   for(const request of keys){
+    if(activePaths.has(request.url))continue;
+    const response=await cache.match(request);
+    const saved=Number(response?.headers?.get('X-VI-Saved-At')||0);
+    if(!saved||now-saved>KEEP_DAYS*86400000){await cache.delete(request);continue}
+    stale.push({request,saved});
+   }
+   stale.sort((a,b)=>b.saved-a.saved);
+   const room=Math.max(0,MAX_CACHED_IMAGES-activePaths.size);
+   for(const old of stale.slice(room))await cache.delete(old.request);
+  }catch(e){console.warn('Verified image cleanup skipped:',e.message)}
+ }
  async function photos(result){
-  const active=[];
+  const run=++imageRun,active=[],paths=new Set();
+  const endpoint=new URL(cfg.url);
   for(const rec of result.items){if(!rec.__signedPhoto)continue;
-   try{const url=await imageFor(rec,new URL(cfg.url));if(url)active.push({id:rec.id,url})}catch(e){console.warn('Signed image skipped',rec.id,e.message)}
+   try{
+    const photoPath=rec.__signedPhoto.path;
+    const source=new URL(photoPath.startsWith('updates/')?photoPath.slice(8):photoPath,endpoint);
+    paths.add(source.href);
+    const url=await imageFor(rec,endpoint);if(url)active.push({id:rec.id,url});
+   }catch(e){console.warn('Signed image skipped',rec.id,e.message)}
   }
-  // Keep safe fallback imagery for others. Never use arbitrary remote URLs.
-  if(active.length&&window.viUpdateSignedImages)window.viUpdateSignedImages(active);
+  // Never overwrite image URLs from a newer update with a slower previous fetch.
+  if(run!==imageRun){for(const item of active)URL.revokeObjectURL?.(item.url);return}
+  // New URLs become active before the old ones are released.
+  if(active.length&&window.viUpdateSignedImages){
+   window.viUpdateSignedImages(active);
+   for(const item of active){
+    const old=liveImageURLs.get(item.id);
+    liveImageURLs.set(item.id,item.url);
+    if(old&&old!==item.url)URL.revokeObjectURL?.(old);
+   }
+  }else for(const item of active)URL.revokeObjectURL?.(item.url);
+  await trimVerifiedImageCache(paths);
  }
  async function refresh(force=false){
   if(!cfg||busy||!navigator.onLine||!force&&Date.now()-prevCheck<cfg.interval)return;

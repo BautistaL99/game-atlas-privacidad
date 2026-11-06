@@ -1,15 +1,21 @@
 /* V155. Separate news destination: official verified source vs community candidate. */
 (()=>{'use strict';
 const labels={
- es:{title:'Noticias de GTA VI',sub:'Novedades, anuncios e información con su fuente original.',official:'Oficiales',other:'No oficiales',empty:'Todavía no hay noticias no oficiales listas para publicar.',note:'Las fuentes de la comunidad aparecerán aquí claramente separadas de las confirmaciones de Rockstar.',source:'Leer noticia original',detail:'Ver ficha',nodate:'Fecha por confirmar'},
- en:{title:'GTA VI News',sub:'Updates and announcements with their original sources.',official:'Official',other:'Unofficial',empty:'No unofficial stories have passed review yet.',note:'Community information will appear here, clearly separated from Rockstar confirmations.',source:'Read original article',detail:'View entry',nodate:'Date to be confirmed'},
- pt:{title:'Notícias de GTA VI',sub:'Novidades e anúncios com suas fontes originais.',official:'Oficiais',other:'Não oficiais',empty:'Ainda não há notícias não oficiais prontas para publicação.',note:'As notícias da comunidade aparecerão aqui, separadas das confirmações da Rockstar.',source:'Ler notícia original',detail:'Ver ficha',nodate:'Data a confirmar'}
+ es:{title:'Noticias de GTA VI',sub:'Novedades, anuncios e información con su fuente original.',official:'Oficiales',other:'No oficiales',empty:'Todavía no hay noticias no oficiales listas para publicar.',note:'Las fuentes de la comunidad aparecerán aquí claramente separadas de las confirmaciones de Rockstar.',source:'Leer noticia original',detail:'Ver ficha',nodate:'Fecha por confirmar',archive:'Archivo',archiveEmpty:'Todavía no hay noticias antiguas archivadas.',archiveNote:'Las publicaciones anteriores se conservarán aquí con su fecha, imagen y fuente original. No se elimina información.'},
+ en:{title:'GTA VI News',sub:'Updates and announcements with their original sources.',official:'Official',other:'Unofficial',empty:'No unofficial stories have passed review yet.',note:'Community information will appear here, clearly separated from Rockstar confirmations.',source:'Read original article',detail:'View entry',nodate:'Date to be confirmed',archive:'Archive',archiveEmpty:'No older news has been archived yet.',archiveNote:'Past announcements will remain available here with dates, images and original sources.'},
+ pt:{title:'Notícias de GTA VI',sub:'Novidades e anúncios com suas fontes originais.',official:'Oficiais',other:'Não oficiais',empty:'Ainda não há notícias não oficiais prontas para publicação.',note:'As notícias da comunidade aparecerão aqui, separadas das confirmações da Rockstar.',source:'Ler notícia original',detail:'Ver ficha',nodate:'Data a confirmar',archive:'Arquivo',archiveEmpty:'Ainda não há notícias antigas arquivadas.',archiveNote:'As notícias anteriores ficarão aqui com data, imagem e fonte original.'}
 };
 window.viNewsPage=function(route){
- const t=labels[locale]||labels.es,official=!route.endsWith('/no-oficiales');
- const relevant=records.filter(r=>r.category==='actualizaciones'&&r.status==='verified'&&
+ const t=labels[locale]||labels.es,archive=route==='/noticias/archivo',official=archive||!route.endsWith('/no-oficiales');
+ // Retention policy: keep at least 12 latest official announcements visible, and all
+ // official reports published in the last 90 days. Old items move to Archive: never delete.
+ const cut=new Date(Date.now()-90*86400000).toISOString().slice(0,10);
+ const all=records.filter(r=>r.category==='actualizaciones'&&r.status==='verified'&&
    (official?(!r.facets||r.facets.community!==1):r.facets?.community===1))
    .sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||''));
+ const recent=all.filter((r,i)=>i<12||r.publishedAt>=cut);
+ const older=all.filter((r,i)=>i>=12&&(!r.publishedAt||r.publishedAt<cut));
+ const relevant=archive?older:official?recent:all;
  const rows=relevant.map(i=>{
   const date=/^\d{4}-\d{2}-\d{2}$/.test(i.publishedAt||'')
    ?new Intl.DateTimeFormat(locale==='en'?'en-US':locale==='pt'?'pt-BR':'es-AR',
@@ -27,8 +33,9 @@ window.viNewsPage=function(route){
  return '<section class="vi-news-page"><div class="vi-news-hero"><span class="eyebrow">GAME ATLAS · NEWSWIRE</span>'+
  '<h1>'+t.title+'</h1><p>'+t.sub+'</p></div>'+
  '<nav class="vi-news-tabs" aria-label="'+t.title+'">'+
- '<a href="#/noticias/oficiales" class="'+(official?'is-active':'')+'" '+(official?'aria-current="page"':'')+'>✓ '+t.official+'</a>'+
- '<a href="#/noticias/no-oficiales" class="'+(!official?'is-active':'')+'" '+(!official?'aria-current="page"':'')+'>◇ '+t.other+'</a></nav>'+
- '<div class="vi-news-list">'+(rows||'<div class="vi-news-empty"><h2>'+t.empty+'</h2><p>'+t.note+'</p></div>')+'</div></section>';
+ '<a href="#/noticias/oficiales" class="'+(official&&!archive?'is-active':'')+'" '+(official&&!archive?'aria-current="page"':'')+'>✓ '+t.official+'</a>'+
+ '<a href="#/noticias/no-oficiales" class="'+(!official?'is-active':'')+'" '+(!official?'aria-current="page"':'')+'>◇ '+t.other+'</a>'+
+ '<a href="#/noticias/archivo" class="'+(archive?'is-active':'')+'" '+(archive?'aria-current="page"':'')+'>▣ '+t.archive+' <span class="vi-news-archive-counter">'+older.length+'</span></a></nav>'+
+ '<div class="vi-news-list">'+(rows||'<div class="vi-news-empty"><h2>'+(archive?t.archiveEmpty:t.empty)+'</h2><p>'+(archive?t.archiveNote:t.note)+'</p></div>')+'</div></section>';
 };
 })();
