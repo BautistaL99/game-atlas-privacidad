@@ -262,43 +262,42 @@
  .vi-derived-row th small{font-size:9px;max-width:150px}
 }
 
-/* V170 — visual honesty for community rumors, never substitute generic GTA art.
-   This is a domain/document thematic diagram, NOT a leaked screenshot. */
+/* V171 — clean, understated placeholders for unverified community reports.
+   No skyline, wireframe, grid or unrelated promotional photographs. */
 .vi-community-art{
- display:flex!important;position:relative;isolation:isolate;box-sizing:border-box;
- flex-direction:column;justify-content:center;align-items:center;gap:7px;
- overflow:hidden;text-align:center;padding:11px;color:#f0fffb;
- background:radial-gradient(circle at 81% 14%,#277e8880 0,transparent 34%),
- linear-gradient(135deg,#12243b 0%,#143946 56%,#121d33 100%);
- border:1px solid #41928d70;
+ display:flex!important;position:relative;box-sizing:border-box;overflow:hidden;
+ flex-direction:column;justify-content:center;align-items:center;gap:9px;
+ isolation:isolate;text-align:center;padding:15px;color:#f3f8ff;
+ background:radial-gradient(ellipse at 76% 18%,rgba(123,73,158,.35),transparent 63%),
+ linear-gradient(145deg,#18233c 0%,#242343 54%,#182d3c 100%);
+ border:1px solid rgba(151,123,196,.22);border-radius:11px;
 }
-.vi-community-art-grid{
- position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.23;
- background-image:linear-gradient(#58dbd330 1px,transparent 1px),linear-gradient(90deg,#58dbd330 1px,transparent 1px);
- background-size:27px 27px;transform:skewY(-8deg) scale(1.2);
+.vi-community-art-icon{
+ display:grid;place-items:center;width:59px;height:59px;flex:0 0 auto;
+ border-radius:18px;background:rgba(224,202,255,.10);
+ border:1px solid rgba(207,173,249,.27);box-shadow:0 10px 28px #070c1c52;
+ font-family:system-ui,sans-serif;font-weight:700;font-size:29px;line-height:1;
 }
-.vi-community-art-mark{
- display:flex;align-items:center;justify-content:center;
- font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
- font-size:clamp(23px,3.7vw,51px);letter-spacing:.025em;font-weight:900;
- color:#8ff6e0;text-shadow:0 2px 20px #50f7d333;
-}
-.vi-community-art-caption{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;min-width:0}
-.vi-community-art-caption strong{font-size:clamp(10px,1.2vw,16px);font-weight:900;letter-spacing:.11em;line-height:1.2}
-.vi-community-art-caption small{max-width:100%;color:#d0eaeb;font-size:clamp(8px,.92vw,11px);line-height:1.25;letter-spacing:.03em}
-.vi-community-art.domains,.vi-community-art-domains{border-color:#4dc9ad80}
+.vi-community-art-caption{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;max-width:100%}
+.vi-community-art-caption strong{font-size:clamp(12px,1.45vw,17px);font-weight:800;letter-spacing:0;line-height:1.22;color:#f1f5ff}
+.vi-community-art-caption small{font-size:clamp(10px,1vw,12px);line-height:1.3;color:#bcbfd5;font-weight:500}
 .vi-news-image-link .vi-community-art{width:100%;height:100%;min-height:100%;border:0;border-radius:0}
 .vi-news-card:hover .vi-community-art{transform:none!important}
 .content-card .vi-community-art{min-width:0}
 .content-card .thumb.vi-community-art,.search-result .search-thumb.vi-community-art{
- gap:2px;padding:4px;
+ padding:5px;gap:3px;justify-content:center
 }
-.content-card .thumb.vi-community-art .vi-community-art-mark,
-.search-result .vi-community-art-mark{font-size:clamp(17px,2.2vw,29px)}
-.content-card .thumb.vi-community-art .vi-community-art-caption strong,
-.search-result .vi-community-art-caption strong{font-size:8px;letter-spacing:0}
-.content-card .thumb.vi-community-art .vi-community-art-caption small,
-.search-result .vi-community-art-caption small{display:none}
+.content-card .thumb.vi-community-art .vi-community-art-icon,.search-result .search-thumb.vi-community-art .vi-community-art-icon{
+ width:32px;height:32px;font-size:17px;border-radius:10px;box-shadow:none
+}
+.content-card .thumb.vi-community-art .vi-community-art-caption strong,.search-result .search-thumb.vi-community-art .vi-community-art-caption strong{
+ font-size:9px;line-height:1.1
+}
+.content-card .thumb.vi-community-art .vi-community-art-caption small,.search-result .search-thumb.vi-community-art .vi-community-art-caption small{display:none}
+.home-v18 .v18-catalog-zone .thumb.vi-community-art{gap:10px;padding:14px}
+.home-v18 .v18-catalog-zone .thumb.vi-community-art .vi-community-art-icon{width:59px;height:59px;font-size:29px;border-radius:18px;box-shadow:0 10px 28px #070c1c52}
+.home-v18 .v18-catalog-zone .thumb.vi-community-art .vi-community-art-caption strong{font-size:14px;line-height:1.2}
+.home-v18 .v18-catalog-zone .thumb.vi-community-art .vi-community-art-caption small{display:block;font-size:11px}
 .vi-compare-direct{display:inline-flex;text-decoration:none;align-self:center}
 .vi-compare-direct:hover{color:#fff}
 @media(max-width:700px){
