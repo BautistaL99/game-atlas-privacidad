@@ -4,9 +4,9 @@
 (function(root){'use strict';
  const base=root.viDetailEnhancements;if(!base)return;
  const langText={
-  es:{title:'Comparar elementos',intro:'Velocidad, armas, propiedades o misiones. Elegí hasta 3 elementos: destacamos únicamente cifras verificadas y comparables.',choose:'Categoría',select:'Elegí un elemento',facts:'Características',missing:'—',need:'Elegí al menos dos elementos diferentes para empezar.',waiting:'Por ahora no hay dos elementos individuales verificadas en esta categoría.',section:'Datos técnicos en preparación',explainer:'Campos posibles basados en GTA V: no implica que estas características existan en GTA VI. «—» significa que aún no conocemos el valor.',more:'Comparar elementos',cta:'Elegí dos elementos y compará sus características',green:'Valor más favorable',red:'Valor menos favorable',legend:'Solo se colorean valores numéricos con unidades y criterios compatibles. Menor peso o menor duración son criterios orientativos, no prueban una calidad superior.'},
-  en:{title:'Compare items',intro:'Cars, weapons, properties or missions: compare up to three entries, with highlights only for verified compatible values.',choose:'Category',select:'Choose an item',facts:'Specifications',missing:'—',need:'Choose at least two different entries.',waiting:'Fewer than two verified individual entries in this category.',section:'Technical specifications in preparation',explainer:'Potential fields based on GTA V; GTA VI mechanics are not confirmed. «—» means the value is unknown.',more:'Compare items',cta:'Compare items in this category',green:'More favorable value',red:'Less favorable value',legend:'Only compatible verified numeric values are highlighted. Lower weight or duration is indicative and does not prove overall quality.'},
-  pt:{title:'Comparar elementos',intro:'Veículos, armas, imóveis ou missões: compare até três itens com números confirmados e compatíveis.',choose:'Categoria',select:'Escolha uma ficha',facts:'Características',missing:'—',need:'Escolha duas elementos diferentes.',waiting:'Há menos de duas fichas individuais verificadas nesta categoria.',section:'Ficha técnica em preparação',explainer:'Campos possíveis baseados em GTA V; não confirmam mecânicas de GTA VI. «—» indica valor desconhecido.',more:'Comparar elementos',cta:'Comparar elementos desta categoria',green:'Valor mais favorável',red:'Valor menos favorável',legend:'Somente valores numéricos verificados e compatíveis são coloridos. Menor peso/duração não garante qualidade superior.'}
+  es:{title:'Comparar elementos',intro:'Velocidad, armas, propiedades o misiones. Elegí hasta 3 elementos: destacamos únicamente cifras verificadas y comparables.',choose:'Categoría',select:'Elegí un elemento',facts:'Características',missing:'—',need:'Elegí al menos dos elementos diferentes para empezar.',waiting:'Por ahora no hay dos elementos individuales verificados en esta categoría.',section:'Datos técnicos en preparación',explainer:'Campos posibles basados en GTA V: no implica que estas características existan en GTA VI. «—» significa que aún no conocemos el valor.',more:'Comparar elementos',cta:'Elegí dos elementos y compará sus características',green:'Valor más favorable',red:'Valor menos favorable',legend:'Solo se colorean valores numéricos verificados y comparables. Los colores indican la dirección del valor, no cuál elemento es mejor en general.',noStats:'Todavía no hay características verificadas para comparar entre estos elementos.',pending:'Ver campos técnicos pendientes'},
+  en:{title:'Compare items',intro:'Cars, weapons, properties or missions: compare up to three entries, with highlights only for verified compatible values.',choose:'Category',select:'Choose an item',facts:'Specifications',missing:'—',need:'Choose at least two different entries.',waiting:'Fewer than two verified individual entries in this category.',section:'Technical specifications in preparation',explainer:'Potential fields based on GTA V; GTA VI mechanics are not confirmed. «—» means the value is unknown.',more:'Compare items',cta:'Compare items in this category',green:'More favorable value',red:'Less favorable value',legend:'Only compatible verified numeric values are highlighted. Color does not determine which item is best overall.',noStats:'No verified technical attributes are available for these items yet.',pending:'Show pending technical fields'},
+  pt:{title:'Comparar elementos',intro:'Veículos, armas, imóveis ou missões: compare até três itens com números confirmados e compatíveis.',choose:'Categoria',select:'Escolha um item',facts:'Características',missing:'—',need:'Escolha dois itens diferentes.',waiting:'Há menos de dois itens individuais verificados nesta categoria.',section:'Ficha técnica em preparação',explainer:'Campos possíveis baseados em GTA V; não confirmam mecânicas de GTA VI. «—» indica valor desconhecido.',more:'Comparar elementos',cta:'Comparar elementos desta categoria',green:'Valor mais favorável',red:'Valor menos favorável',legend:'Somente valores numéricos verificados e comparáveis recebem cores. A cor não determina qual item é melhor em geral.',noStats:'Ainda não há características técnicas verificadas para comparar estes itens.',pending:'Ver campos técnicos pendentes'}
  };
  const categories={
   vehiculos:['Vehículos','Vehicles','Veículos'],armas:['Armas','Weapons','Armas'],
@@ -123,22 +123,61 @@
    '<option value="'+escape(item.id)+'"'+(item.id===state.ids[i]?' selected':'')+'>'+escape(item.title?.[lang]||item.title?.es)+'</option>').join('')+'</select></label>').join('');
   const header='<section class="vi-compare-page"><div class="vi-compare-intro"><div class="vi-compare-title"><span class="eyebrow">GAME ATLAS · COMPARATIVAS</span><h1>'+escape(t.title)+'</h1><p>'+escape(t.intro)+'</p><div class="vi-compare-hero-tags"><span>◈ '+escape(categories.vehiculos[0])+'</span><span>◎ '+escape(categories.armas[0])+'</span><span>★ '+escape(categories.misiones[0])+'</span></div></div><div class="vi-compare-art" aria-hidden="true"><span>01</span><strong>⇄</strong><span>02</span></div></div><div class="vi-compare-controls">'+categoryControl+choiceControls+'</div>';
   if(selected.length<2)return header+'<p class="vi-compare-message">'+escape(choices.length<2?t.waiting:t.need)+'</p></section>';
+
   const cfg=fields[cat]||[],seen=new Set(cfg.flatMap(row=>row.slice(6).map(normalize))),extra=[];
   for(const item of selected)for(const f of facts(item))if(!seen.has(normalize(f.key))){
    seen.add(normalize(f.key));extra.push(['extra',f.key,f.key,f.key,null,null,f.key]);
   }
+  const rows=[...cfg,...extra];
+  // Keep confirmed information prominent; optional GTA V-inspired headings remain
+  // available in the collapsed section without implying GTA VI values exist.
+  const available=rows.filter(row=>selected.some(item=>{const f=fieldValue(item,row);return f&&!missing(f.value)}));
+  const pending=rows.filter(row=>!available.includes(row));
   const columns=selected.map(item=>'<th scope="col"><a href="#/ficha/'+encodeURIComponent(item.id)+'">'+escape(item.title?.[lang]||item.title?.es)+'</a></th>').join('');
-  const tableRows=[...cfg,...extra].map(row=>{
-   const score=grades(row,selected);
-   const cols=selected.map((item,i)=>{
-    const f=fieldValue(item,row),value=f&&!missing(f.value)?f.value:'—',status=score[i];
-    return '<td'+(status?' class="vi-metric-'+status+'"':'')+'><span>'+escape(value)+'</span>'+(status?'<small class="vi-metric-badge">'+escape(status==='better'?t.green:t.red)+'</small>':'')+'</td>';
+  const tableHead='<thead><tr><th scope="col">'+escape(t.facts)+'</th>'+columns+'</tr></thead>';
+  let numericHighlight=false;
+  function renderRows(toRender){
+   return toRender.map(row=>{
+    const score=grades(row,selected);
+    if(score.some(Boolean))numericHighlight=true;
+    const cols=selected.map((item,i)=>{
+     const f=fieldValue(item,row),value=f&&!missing(f.value)?f.value:'—',status=score[i];
+     return '<td'+(status?' class="vi-metric-'+status+'"':'')+'><span>'+escape(value)+'</span>'+(status?'<small class="vi-metric-badge">'+escape(status==='better'?t.green:t.red)+'</small>':'')+'</td>';
+    }).join('');
+    return '<tr><th scope="row">'+escape(row[position(lang)])+'</th>'+cols+'</tr>';
    }).join('');
-   return '<tr><th scope="row">'+escape(row[position(lang)])+'</th>'+cols+'</tr>';
-  }).join('');
-  const legend='<div class="vi-compare-legend"><span class="vi-legend-good">● '+escape(t.green)+'</span><span class="vi-legend-bad">● '+escape(t.red)+'</span><small>'+escape(t.legend)+'</small></div>';
+  }
+  let visibleRows=renderRows(available);
+
+  // Derived efficiency for missions: only calculate when BOTH individual source
+  // facts are explicitly verified and parse into compatible GTA$ and seconds.
+  // Do not display a derived metric when fewer than two missions qualify.
+  if(cat==='misiones'){
+   const rewardRow=cfg.find(row=>row[0]==='reward'),durationRow=cfg.find(row=>row[0]==='duration');
+   const amounts=selected.map(item=>{
+    const reward=fieldValue(item,rewardRow),duration=fieldValue(item,durationRow);
+    const cash=reward?metricNumber(reward.value,rewardRow):null;
+    const seconds=duration?metricNumber(duration.value,durationRow):null;
+    return Number.isFinite(cash)&&Number.isFinite(seconds)&&cash>=0&&seconds>0?cash*60/seconds:null;
+   });
+   const valid=amounts.filter(Number.isFinite);
+   if(valid.length>=2){
+    const low=Math.min(...valid),high=Math.max(...valid),fmt=new Intl.NumberFormat(lang==='pt'?'pt-BR':lang==='en'?'en-US':'es-AR',{maximumFractionDigits:1});
+    const rateLabel=lang==='en'?'Reward per minute':lang==='pt'?'Recompensa por minuto':'Recompensa por minuto';
+    const rateNote=lang==='en'?'Calculated from verified mission reward and duration. Not an official Rockstar statistic.':lang==='pt'?'Calculada com recompensa e duração verificadas. Não é uma estatística oficial da Rockstar.':'Calculada a partir de recompensa y duración verificadas. No es una estadística oficial de Rockstar.';
+    const cells=amounts.map(value=>{
+     const grade=value===null||low===high?null:value===high?'better':value===low?'worse':null;
+     if(grade)numericHighlight=true;
+     return '<td'+(grade?' class="vi-metric-'+grade+'"':'')+'><span>'+escape(value===null?'—':'GTA$ '+fmt.format(value)+'/min')+'</span>'+(grade?'<small class="vi-metric-badge">'+escape(grade==='better'?t.green:t.red)+'</small>':'')+'</td>';
+    }).join('');
+    visibleRows+='<tr class="vi-derived-row"><th scope="row">'+escape(rateLabel)+'<small>'+escape(rateNote)+'</small></th>'+cells+'</tr>';
+   }
+  }
+  const legend=numericHighlight?'<div class="vi-compare-legend"><span class="vi-legend-good">● '+escape(t.green)+'</span><span class="vi-legend-bad">● '+escape(t.red)+'</span><small>'+escape(t.legend)+'</small></div>':'';
+  const visibleTable=visibleRows?'<div class="vi-compare-scroll"><table>'+tableHead+'<tbody>'+visibleRows+'</tbody></table></div>':'<p class="vi-compare-message vi-compare-no-data">'+escape(t.noStats)+'</p>';
+  const pendingTable=pending.length?'<details class="vi-compare-pending"><summary>'+escape(t.pending)+' ('+pending.length+')</summary><p>'+escape(t.explainer)+'</p><div class="vi-compare-scroll"><table>'+tableHead+'<tbody>'+renderRows(pending)+'</tbody></table></div></details>':'';
   const sources=selected.map(item=>{const link=item.sources?.find(src=>/^https:\/\/(?:www\.)?rockstargames\.com\//.test(src.url));return link?'<a href="'+escape(link.url)+'" target="_blank" rel="noopener noreferrer">'+escape(item.title?.[lang]||item.title?.es)+' ↗</a>':''}).join('');
-  return header+legend+'<div class="vi-compare-scroll"><table><thead><tr><th scope="col">'+escape(t.facts)+'</th>'+columns+'</tr></thead><tbody>'+tableRows+'</tbody></table></div><div class="vi-compare-sources">'+sources+'</div></section>';
+  return header+legend+visibleTable+pendingTable+'<div class="vi-compare-sources">'+sources+'</div></section>';
  }
  function compareExplore(cat,lang,records){
   if(!fields[cat])return '';
