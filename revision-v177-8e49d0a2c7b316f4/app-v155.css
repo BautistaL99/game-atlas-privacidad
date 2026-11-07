@@ -441,14 +441,18 @@
  justify-content:flex-end;gap:13px;width:auto;margin:0;padding:0 0 2px;
 }
 .home-v18 .v177-discovery-section .vi-discovery-nav{
- display:inline-flex;align-items:center;gap:6px;
+ display:inline-flex;align-items:center;gap:8px;
  border:0;border-radius:0;background:transparent;
  box-shadow:none;padding:0;
 }
 .home-v18 .v177-discovery-section .vi-discovery-nav button{
- display:grid;place-items:center;width:31px;min-width:31px;height:31px;
- border:1px solid #4a6475;background:#1b2c3f;
- border-radius:8px;font-size:23px;box-shadow:none;
+ display:grid;place-items:center;width:46px;min-width:46px;height:38px;
+ border:1px solid #4d7084;background:#23384d;
+ border-radius:9px;font-size:27px;font-weight:750;box-shadow:none;
+}
+.home-v18 .v177-discovery-section .vi-discovery-nav button:hover,
+.home-v18 .v177-discovery-section .vi-discovery-nav button:focus-visible{
+ border-color:#90f2e5;background:#28605e;color:#fff;
 }
 .home-v18 .v177-discovery-section .vi-discovery-nav [data-vi-discover-count]{
  min-width:37px;font-size:12px;font-weight:800;white-space:nowrap;
@@ -498,7 +502,7 @@
  .home-v18 .v177-discovery-section{padding:18px 15px 22px}
  .home-v18 .v177-discovery-section .v18-block-header{margin-bottom:12px}
  .home-v18 .v177-discovery-section .vi-discovery-head-actions{gap:12px}
- .home-v18 .v177-discovery-section .vi-discovery-nav button{width:30px;min-width:30px;height:30px}
+ .home-v18 .v177-discovery-section .vi-discovery-nav button{width:40px;min-width:40px;height:36px;font-size:25px}
  .home-v18 .v177-discovery-section .vi-discovery-catalog{font-size:11px}
 }
 @media(max-width:380px){
