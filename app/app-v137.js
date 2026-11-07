@@ -149,7 +149,59 @@ function dailyRecommendations(items,visitorId,localDay,completed=[],recent=[],li
 
 /* DAILY_DISCOVERY_END */
 function dailyVisitor(){try{let id=localStorage.getItem("gta6-assistant:v1:visitor");if(!id){id=(globalThis.crypto?.randomUUID?.()||String(Date.now())+String(Math.random()));localStorage.setItem("gta6-assistant:v1:visitor",id)}return id}catch{return "session"}}
-function dailySelection(){const d=new Date();const day=[d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-");return dailyRecommendations(records,dailyVisitor(),day,store("done"),store("recent"),3)}
+function dailySelection(limit=3){const d=new Date();const day=[d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-");return dailyRecommendations(records,dailyVisitor(),day,store("done"),store("recent"),limit)}
+// V174: page through a daily, deterministic set without navigating or rerendering Inicio.
+// Keep only the current 1/2/3 cards in the DOM so image loading stays lightweight.
+let discoveryPage=0,discoveryDay='',discoverySize=0;
+function dailyDiscoveryPageSize(){const w=window.innerWidth||document.documentElement.clientWidth||1280;return w<=700?1:w<=1050?2:3}
+function dailyDiscoveryModel(){
+ const d=new Date(),day=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
+ const size=dailyDiscoveryPageSize();
+ if(discoveryDay!==day){discoveryDay=day;discoveryPage=0;discoverySize=size}
+ else if(discoverySize!==size){discoveryPage=Math.floor(discoveryPage*Math.max(discoverySize,1)/size);discoverySize=size}
+ const items=dailySelection(12),pages=Math.max(1,Math.ceil(items.length/size));
+ discoveryPage=Math.min(discoveryPage,pages-1);
+ return {items,size,pages,page:discoveryPage,visible:items.slice(discoveryPage*size,(discoveryPage+1)*size)};
+}
+function dailyDiscoveryControls(model){
+ const labels=locale==='en'?{prev:'Previous recommendations',next:'Next recommendations',nav:'Browse recommendations',catalog:'View catalog'}:locale==='pt'?{prev:'Recomendações anteriores',next:'Próximas recomendações',nav:'Navegar pelas recomendações',catalog:'Ver catálogo'}:{prev:'Recomendaciones anteriores',next:'Siguientes recomendaciones',nav:'Navegar recomendaciones',catalog:'Ver catálogo'};
+ return '<div class="vi-discovery-head-actions"><div class="vi-discovery-nav" aria-label="'+esc(labels.nav)+'">'
+  +'<button type="button" data-vi-discover-step="-1" aria-label="'+esc(labels.prev)+'" aria-controls="vi-discovery-cards"'+(model.pages<=1?' disabled':'')+'>‹</button>'
+  +'<span data-vi-discover-count aria-live="polite">'+(model.page+1)+' / '+model.pages+'</span>'
+  +'<button type="button" data-vi-discover-step="1" aria-label="'+esc(labels.next)+'" aria-controls="vi-discovery-cards"'+(model.pages<=1?' disabled':'')+'>›</button>'
+  +'</div><a class="v18-outline-link" '+href('/explorar')+'>'+esc(labels.catalog)+' ↗</a></div>';
+}
+function dailyDiscoverySection(){
+ const m=dailyDiscoveryModel();
+ const title=locale==='en'?'Discover something today':locale==='pt'?'Para descobrir hoje':'Para descubrir hoy';
+ const subtitle=locale==='en'?'Different recommendations each day, based on what you have yet to explore.':locale==='pt'?'Recomendações diferentes a cada dia, com base no que ainda falta descobrir.':'Recomendaciones distintas cada día, según lo que todavía te falta descubrir.';
+ return '<section class="v18-catalog-zone vi-discovery-section"><div class="v18-block-header"><div><span class="v18-section-kicker">04 / '+(locale==='en'?'OPEN ARCHIVE':locale==='pt'?'ARQUIVO ABERTO':'ARCHIVO ABIERTO')+'</span><h2>'+title+'</h2><p>'+subtitle+'</p></div>'+dailyDiscoveryControls(m)+'</div><div class="item-stack" id="vi-discovery-cards">'+m.visible.map(i=>card(i)).join('')+'</div></section>';
+}
+function refreshDailyDiscovery(){
+ const zone=document.querySelector('.home-v18 .vi-discovery-section');
+ if(!zone)return;
+ const stack=zone.querySelector('#vi-discovery-cards');if(!stack)return;
+ const resized=discoverySize!==dailyDiscoveryPageSize();
+ if(resized)stack.style.minHeight='';
+ const m=dailyDiscoveryModel(),oldY=window.scrollY;
+ const height=stack.getBoundingClientRect().height;
+ if(!resized&&height>0)stack.style.minHeight=Math.max(height,parseFloat(stack.style.minHeight)||0)+'px';
+ stack.innerHTML=m.visible.map(i=>card(i)).join('');
+ const counter=zone.querySelector('[data-vi-discover-count]');
+ if(counter)counter.textContent=(m.page+1)+' / '+m.pages;
+ zone.querySelectorAll('[data-vi-discover-step]').forEach(btn=>btn.disabled=m.pages<=1);
+ if(window.scrollY!==oldY)window.scrollTo({top:oldY,behavior:'instant'});
+}
+document.addEventListener('click',e=>{
+ const btn=e.target.closest?.('[data-vi-discover-step]');if(!btn)return;
+ e.preventDefault();
+ const m=dailyDiscoveryModel();if(m.pages<=1)return;
+ discoveryPage=(m.page+Number(btn.dataset.viDiscoverStep)+m.pages)%m.pages;
+ refreshDailyDiscovery();
+});
+window.addEventListener('resize',()=>{
+ if(document.querySelector('.home-v18 .vi-discovery-section')&&discoverySize!==dailyDiscoveryPageSize())refreshDailyDiscovery();
+});
 function homeYoutubeSection(){const art=['actualizaciones','personajes','vehiculos','mapa-lugares'];const channels=(homeYoutube[locale]||[]).map((c,i)=>`<a class="youtube-tile ${i===0?'youtube-official':''}" href="${esc(c.url)}" target="_blank" rel="noopener noreferrer"><span class="youtube-tile-art" style="background-image:linear-gradient(0deg,#0e1421dd,transparent 90%),url('${categoryArt[art[i%4]]}')"><span class="youtube-tile-play">▶</span></span><span class="youtube-tile-body"><span class="youtube-tile-tag">${esc(c.tag)}</span><b>${esc(c.name)}<span class="youtube-link-arrow">↗</span></b><small>${esc(c.description)}</small></span></a>`).join('');return `<section class="youtube-home v18-youtube v113-community"><div class="v18-block-header"><div><span class="v18-section-kicker">▶ COMMUNITY / VIDEO</span><h2>${locale==='es'?'La comunidad habla de GTA':locale==='pt'?'A comunidade fala de GTA':'The GTA community'}</h2><p>${locale==='es'?'Canales seleccionados por idioma. Solo Rockstar es fuente oficial.':locale==='pt'?'Canais selecionados por idioma. Só Rockstar é oficial.':'Channels by language; only Rockstar is official.'}</p></div><span class="v113-community-side">CANAL OFICIAL + CREADORES</span></div><div class="youtube-grid">${channels}</div></section>`}
 
 // V1.11: carrusel permanente de Inicio, separado del Newswire dinámico.
@@ -301,7 +353,7 @@ document.addEventListener('input',e=>{if(e.target.id==='mapSearchText'){mapQuery
 
 document.addEventListener('error',e=>{if(e.target?.classList?.contains('atlas-popup-photo')&&e.target.dataset.fallback){e.target.src=e.target.dataset.fallback;e.target.dataset.fallback='';}},true);
 function content(){let route=decodeURIComponent(location.hash.replace(/^#/,'')||'/').split('?')[0];const s=c();
- if(route==='/')return `<div class="home-v18 home-v111">${renderPermanentHero()}<div class="v18-news-heading"><span class="v18-section-kicker">// NEWSWIRE</span><span>${locale==='es'?'LO ÚLTIMO EN EL RADAR':locale==='pt'?'DESTAQUES RECENTES':'LATEST IN THE SPOTLIGHT'}</span></div><section class="news-duo live-news">${homeHighlights()}</section><section class="v18-search-feature"><div class="v18-search-intro"><span class="v18-section-kicker">01 / BUSCADOR DESCRIPTIVO</span><h2>${locale==='es'?'No busques por nombre. Buscá como pensás.':locale==='pt'?'Pesquise como você pensa.':'Search the way you think.'}</h2><p>${locale==='es'?'Escribí características, combiná atributos y encontrá lo que necesitás.':locale==='pt'?'Combine características e encontre o que procura, sem chatbot.':'Combine attributes to find what you need. No chatbot.'}</p><span class="v18-search-glyph">⌕</span></div><div class="v18-search-area"><span class="v18-search-area-label">${locale==='es'?'PROBÁ UNA BÚSQUEDA':locale==='pt'?'EXPERIMENTE UMA BUSCA':'TRY A SEARCH'}</span>${homeSearch()}<small>${locale==='es'?'Los resultados dependen de los atributos verificados en cada ficha.':locale==='pt'?'Resultados dependem dos atributos verificados.':'Results depend on verified attributes.'}</small></div></section><section class="v18-progress-zone"><div class="v18-progress-intro"><span class="v18-section-kicker">02 / TU HISTORIA</span><h2>${locale==='es'?'Tu partida. Tu progreso.':locale==='pt'?'Seu jogo. Seu progresso.':'Your game. Your progress.'}</h2><p>${locale==='es'?'Cada descubrimiento cuenta. Marcá lo que ya encontraste y seguí lo que te falta.':locale==='pt'?'Cada descoberta conta. Acompanhe seu progresso.':'Track discoveries and see what is left.'}</p>${homeProgressPulse()}<a class="v18-text-link" ${href('/partida')}>Mi partida ↗</a></div><div class="v18-progress-cards">${progressPanel(true)}</div></section><section class="v18-categories-zone"><div class="v18-block-header"><div><span class="v18-section-kicker">03 / EXPLORÁ LEONIDA</span><h2>${s.categories}</h2><p>${locale==='es'?'Encontrá toda la información de GTA VI: vehículos, personajes, armas, misiones, lugares, secretos y más. Explorá cada ficha a tu ritmo.':'Choose where to begin.'}</p></div><a class="v18-outline-link" ${href('/explorar')}>${s.allCategories} ↗</a></div><div class="category-grid v18-category-grid">${categories.slice(0,8).map(tile).join('')}${rankingExploreTiles()}</div></section><section class="v18-catalog-zone"><div class="v18-block-header"><div><span class="v18-section-kicker">04 / ARCHIVO ABIERTO</span><h2>${locale==='es'?'Para descubrir hoy':locale==='pt'?'Para descobrir hoje':'Discover something today'}</h2><p>${locale==='es'?'Recomendaciones distintas cada día, según lo que todavía te falta descubrir.':'Entries with sources and links.'}</p></div><a class="v18-outline-link" ${href('/explorar')}>Ver catálogo ↗</a></div><div class="item-stack">${dailySelection().map(i=>card(i)).join('')}</div></section>${homeYoutubeSection()}<section class="v18-recent-zone">${lastOpened()}</section></div>`;
+ if(route==='/')return `<div class="home-v18 home-v111">${renderPermanentHero()}<div class="v18-news-heading"><span class="v18-section-kicker">// NEWSWIRE</span><span>${locale==='es'?'LO ÚLTIMO EN EL RADAR':locale==='pt'?'DESTAQUES RECENTES':'LATEST IN THE SPOTLIGHT'}</span></div><section class="news-duo live-news">${homeHighlights()}</section><section class="v18-search-feature"><div class="v18-search-intro"><span class="v18-section-kicker">01 / BUSCADOR DESCRIPTIVO</span><h2>${locale==='es'?'No busques por nombre. Buscá como pensás.':locale==='pt'?'Pesquise como você pensa.':'Search the way you think.'}</h2><p>${locale==='es'?'Escribí características, combiná atributos y encontrá lo que necesitás.':locale==='pt'?'Combine características e encontre o que procura, sem chatbot.':'Combine attributes to find what you need. No chatbot.'}</p><span class="v18-search-glyph">⌕</span></div><div class="v18-search-area"><span class="v18-search-area-label">${locale==='es'?'PROBÁ UNA BÚSQUEDA':locale==='pt'?'EXPERIMENTE UMA BUSCA':'TRY A SEARCH'}</span>${homeSearch()}<small>${locale==='es'?'Los resultados dependen de los atributos verificados en cada ficha.':locale==='pt'?'Resultados dependem dos atributos verificados.':'Results depend on verified attributes.'}</small></div></section><section class="v18-progress-zone"><div class="v18-progress-intro"><span class="v18-section-kicker">02 / TU HISTORIA</span><h2>${locale==='es'?'Tu partida. Tu progreso.':locale==='pt'?'Seu jogo. Seu progresso.':'Your game. Your progress.'}</h2><p>${locale==='es'?'Cada descubrimiento cuenta. Marcá lo que ya encontraste y seguí lo que te falta.':locale==='pt'?'Cada descoberta conta. Acompanhe seu progresso.':'Track discoveries and see what is left.'}</p>${homeProgressPulse()}<a class="v18-text-link" ${href('/partida')}>Mi partida ↗</a></div><div class="v18-progress-cards">${progressPanel(true)}</div></section><section class="v18-categories-zone"><div class="v18-block-header"><div><span class="v18-section-kicker">03 / EXPLORÁ LEONIDA</span><h2>${s.categories}</h2><p>${locale==='es'?'Encontrá toda la información de GTA VI: vehículos, personajes, armas, misiones, lugares, secretos y más. Explorá cada ficha a tu ritmo.':'Choose where to begin.'}</p></div><a class="v18-outline-link" ${href('/explorar')}>${s.allCategories} ↗</a></div><div class="category-grid v18-category-grid">${categories.slice(0,8).map(tile).join('')}${rankingExploreTiles()}</div></section>${dailyDiscoverySection()}${homeYoutubeSection()}<section class="v18-recent-zone">${lastOpened()}</section></div>`;
  if(route==='/noticias'||route.startsWith('/noticias/'))return window.viNewsPage(route);
  if(route==='/informacion')return window.viInfoPage();
  if(route==='/explorar')return `<div class="page-header"><span class="eyebrow">CATALOG</span><h1>${s.categories}</h1><p>${s.notice}</p></div><div class="category-grid">${categories.map(tile).join('')}${rankingExploreTiles()}</div>`;
