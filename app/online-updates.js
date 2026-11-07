@@ -17,6 +17,17 @@
  const translated=(t,n=1300)=>t&&typeof t==='object'&&LANG.every(l=>string(t[l],n));
  const safeUrl=(raw,host)=>{const u=new URL(raw);if(u.protocol!=='https:'||u.username||u.password||u.port||u.hostname!==host||u.hash)throw Error('Host not allowed');return u;};
  const rockstar=(raw)=>{const u=new URL(raw);if(u.protocol!=='https:'||u.username||u.password||u.port||!['www.rockstargames.com','rockstargames.com'].includes(u.hostname))throw Error('Untrusted source');return u.href;};
+ function galleryPhotoAllowed(raw){
+  if(typeof raw!=='string'||raw.length>550)return false;
+  if(/^\.\/assets\/original\/[a-z-]+\.svg$/.test(raw))return true;
+  let u;try{u=new URL(raw)}catch{return false}
+  if(u.protocol!=='https:'||u.username||u.password||u.port||u.hash)return false;
+  if(u.hostname==='media-rockstargames-com.akamaized.net')
+   return /^\/tina-uploads\/posts\/[a-z0-9_-]+\/[a-f0-9]{40}\.(?:jpe?g|png|webp)$/.test(u.pathname)&&!u.search;
+  return u.hostname==='www.rockstargames.com'&&
+   /^\/VI\/_next\/static\/media\/[a-zA-Z0-9._~%-]+\.(?:jpe?g|png|webp)$/.test(u.pathname)&&
+   (!u.search||u.search==='?akim=1&imdensity=1&imwidth=1280');
+ }
  function validate(o,host){
   if(!o||o.schema!==1||!Number.isSafeInteger(o.revision)||o.revision<0||!Array.isArray(o.items)||o.items.length>1000)throw Error('Catalog schema');
   const seen=new Set(),items=[];let imageCount=0;
@@ -41,12 +52,33 @@
    let facets={};
    if(r.facets!==undefined){if(!r.facets||typeof r.facets!=='object'||Array.isArray(r.facets)||Object.keys(r.facets).length>35)throw Error('Facets');
     for(const [k,v] of Object.entries(r.facets)){if(!/^[a-z0-9_-]{1,60}$/.test(k)||!(typeof v==='number'&&Number.isFinite(v)||string(v,180)))throw Error('Facet value');facets[k]=v}}
+   const facts=r.facts===undefined?[]:r.facts;
+   if(!Array.isArray(facts)||facts.length>48)throw Error('Invalid facts');
+   const factKeys=new Set();
+   for(const f of facts){
+    if(!f||f.verified!==true||!string(f.key,80)||!string(f.value,200)||
+       factKeys.has(f.key.toLocaleLowerCase('es')))throw Error('Unreviewed or duplicate fact');
+    factKeys.add(f.key.toLocaleLowerCase('es'));
+   }
    const tags=Array.isArray(r.tags)?r.tags:[];
    if(tags.length>20||tags.some(t=>!string(t,55)))throw Error('Tags');
    let mapPoint;
    if(r.mapPoint!==undefined){const m=r.mapPoint;if(!MAPPABLE.has(r.category)||!m||m.mapVersion!=='map-v14-provisional'||!Number.isFinite(m.x)||!Number.isFinite(m.y)||m.x<0||m.x>100||m.y<0||m.y>100)throw Error('Map calibration');mapPoint={mapVersion:m.mapVersion,x:m.x,y:m.y}}
    const publishedAt=r.publishedAt===undefined?undefined:r.publishedAt;
    if(publishedAt!==undefined&&!/^\d{4}-\d{2}-\d{2}$/.test(publishedAt))throw Error('Bad publication date');
+   let gallery;
+   if(r.gallery!==undefined){
+    if(!['vehiculos','armas','economia','mapa-lugares','personajes'].includes(r.category)||
+       !Array.isArray(r.gallery)||r.gallery.length>10)throw Error('Invalid gallery');
+    gallery=[];const used=new Set();
+    for(const p of r.gallery){
+     if(!p||!galleryPhotoAllowed(p.src)||used.has(p.src)||!translated(p.caption,180)||
+        typeof p.sourceUrl!=='string')throw Error('Untrusted gallery image');
+     rockstar(p.sourceUrl);
+     used.add(p.src);
+     gallery.push({src:p.src,caption:p.caption,sourceUrl:p.sourceUrl});
+    }
+   }
    // Optional licensed image. Image bytes are verified separately before becoming an object URL.
    let photo,officialPhoto;
    if(r.image!==undefined){
@@ -62,7 +94,7 @@
     }
    }
    items.push({id:r.id,slug:r.id,category:r.category,status:'verified',title:r.title,summary:r.summary,desc:r.summary,facets,tags,sources,mapPoint,
-      trackable:typeof r.trackable==='boolean'?r.trackable:undefined,publishedAt,spoilerLevel:0,facts:[],image:officialPhoto,__signedPhoto:photo});
+      trackable:typeof r.trackable==='boolean'?r.trackable:undefined,publishedAt,spoilerLevel:0,facts,gallery,image:officialPhoto,__signedPhoto:photo});
   }
   const routes=o.routes===undefined?[]:o.routes;
   if(!Array.isArray(routes)||routes.length>80)throw Error('Routes');

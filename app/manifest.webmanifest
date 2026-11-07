@@ -1,7 +1,7 @@
 {
   "name": "Game Atlas Companion",
   "short_name": "Game Atlas Companion",
-  "description": "Guía independiente de GTA 6 con mapa interactivo, fichas, personajes, vehículos, favoritos y seguimiento del progreso",
+  "description": "Asistente independiente de GTA VI con mapas y fichas verificadas",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

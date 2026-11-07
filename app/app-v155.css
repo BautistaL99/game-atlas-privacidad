@@ -346,3 +346,169 @@
  .home-v18 .vi-discovery-nav [data-vi-discover-count]{font-size:12px;min-width:40px}
  .home-v18 .vi-discovery-section .vi-discovery-head-actions .v18-outline-link{font-size:11px}
 }
+
+
+
+/* V177 — aligned progress overview and compact discovery navigation. */
+.home-v18 .v177-progress-zone{
+ display:flex;flex-direction:column;gap:16px;
+ padding:25px clamp(18px,2.4vw,34px) 22px;
+ margin-bottom:38px;
+}
+.home-v18 .v177-progress-heading{
+ display:grid;grid-template-columns:minmax(240px,305px) minmax(0,1fr);
+ gap:14px 26px;align-items:end;
+}
+.home-v18 .v177-progress-heading h2{
+ margin:9px 0 0;max-width:400px;
+ font-size:clamp(25px,2.65vw,36px);
+ line-height:1.07;letter-spacing:-.04em;
+}
+.home-v18 .v177-progress-heading p{
+ margin:0 0 2px;color:#b4c5d5;
+ font-size:13px;line-height:1.55;max-width:700px;
+}
+.home-v18 .v177-progress-grid{
+ display:grid;grid-template-columns:minmax(250px,1.02fr) minmax(0,4fr);
+ gap:13px;align-items:stretch;min-width:0;
+}
+.home-v18 .v177-progress-global{min-width:0}
+.home-v18 .v177-progress-global .v113-home-pulse{
+ margin:0;width:100%;height:100%;min-height:200px;
+ box-sizing:border-box;gap:12px;padding:16px 12px;
+}
+.home-v18 .v177-progress-global .v113-pulse-ring{
+ flex:0 0 92px;width:92px;
+}
+.home-v18 .v177-progress-global .v113-pulse-ring>div{
+ width:74px;height:74px;
+}
+.home-v18 .v177-progress-global .v113-pulse-stats{
+ min-width:0;flex:1;gap:12px 8px;
+}
+.home-v18 .v177-progress-global .v113-pulse-stats b{font-size:19px}
+.home-v18 .v177-progress-grid .v18-progress-cards{min-width:0;display:flex}
+.home-v18 .v177-progress-grid .progress-dashboard.v113-progress{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:12px;width:100%;height:100%;margin:0;
+}
+.home-v18 .v177-progress-grid .progress-dashboard .progress-tile{
+ min-width:0;height:100%;box-sizing:border-box;
+}
+.home-v18 .v177-progress-actions{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:16px;min-height:38px;
+}
+.home-v18 .v177-progress-primary{
+ display:inline-flex;align-items:center;justify-content:center;gap:11px;
+ flex:0 0 auto;padding:9px 15px;min-height:36px;box-sizing:border-box;
+ border:1px solid #4bbeb1;border-radius:9px;
+ color:#e2fff9;background:#17434a;font-weight:750;font-size:12px;
+ text-decoration:none;transition:background .16s,border-color .16s;
+}
+.home-v18 .v177-progress-primary:hover,.home-v18 .v177-progress-primary:focus-visible{
+ background:#226362;border-color:#9affed;color:white;
+}
+.home-v18 .v177-progress-secondary{
+ display:inline-flex;align-items:center;gap:9px;
+ padding:7px 3px;border-bottom:1px solid #3c716c;
+ color:#a7e7dd;font-weight:750;font-size:12px;
+ text-decoration:none;transition:color .16s,border-color .16s;
+}
+.home-v18 .v177-progress-secondary span{font-size:17px;line-height:1}
+.home-v18 .v177-progress-secondary:hover,
+.home-v18 .v177-progress-secondary:focus-visible{
+ color:#fff;border-color:#b7fff2;
+}
+.home-v18 .v177-discovery-section{
+ padding:22px clamp(16px,2.4vw,32px) 25px;
+}
+.home-v18 .v177-discovery-section .v18-block-header{
+ display:flex;align-items:end;justify-content:space-between;
+ gap:15px 20px;margin:0 0 16px;
+}
+.home-v18 .v177-discovery-section .vi-discovery-heading{
+ flex:1 1 auto;min-width:0;
+}
+.home-v18 .v177-discovery-section .vi-discovery-heading h2{
+ margin:5px 0 5px;font-size:clamp(27px,3vw,43px);line-height:1.05;
+}
+.home-v18 .v177-discovery-section .vi-discovery-heading p{
+ margin:0;line-height:1.4;font-size:12px;max-width:none;
+}
+.home-v18 .v177-discovery-section .vi-discovery-head-actions{
+ display:inline-flex;align-items:center;flex:0 0 auto;
+ justify-content:flex-end;gap:13px;width:auto;margin:0;padding:0 0 2px;
+}
+.home-v18 .v177-discovery-section .vi-discovery-nav{
+ display:inline-flex;align-items:center;gap:8px;
+ border:0;border-radius:0;background:transparent;
+ box-shadow:none;padding:0;
+}
+.home-v18 .v177-discovery-section .vi-discovery-nav button{
+ display:grid;place-items:center;width:46px;min-width:46px;height:38px;
+ border:1px solid #4d7084;background:#23384d;
+ border-radius:9px;font-size:27px;font-weight:750;box-shadow:none;
+}
+.home-v18 .v177-discovery-section .vi-discovery-nav button:hover,
+.home-v18 .v177-discovery-section .vi-discovery-nav button:focus-visible{
+ border-color:#90f2e5;background:#28605e;color:#fff;
+}
+.home-v18 .v177-discovery-section .vi-discovery-nav [data-vi-discover-count]{
+ min-width:37px;font-size:12px;font-weight:800;white-space:nowrap;
+}
+.home-v18 .v177-discovery-section .vi-discovery-catalog{
+ display:inline-flex;align-items:center;justify-content:center;gap:5px;
+ padding:5px 0;min-height:31px;margin:0;
+ border:0;border-bottom:1px solid #4d857e;border-radius:0;
+ background:transparent;box-shadow:none;
+ font-size:12px;font-weight:700;color:#a4eee1;
+}
+.home-v18 .v177-discovery-section .vi-discovery-catalog:hover,
+.home-v18 .v177-discovery-section .vi-discovery-catalog:focus-visible{
+ border-bottom-color:#b0fff1;background:none;color:#fff;
+}
+.home-v18 .v177-discovery-section #vi-discovery-cards{margin-top:0}
+@media(max-width:1190px){
+ .home-v18 .v177-progress-grid{grid-template-columns:minmax(240px,1fr) minmax(0,3fr)}
+ .home-v18 .v177-progress-grid .progress-dashboard.v113-progress{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .home-v18 .v177-progress-grid .v18-progress-cards{display:block}
+ .home-v18 .v177-progress-grid .progress-dashboard .progress-tile{min-height:160px}
+}
+@media(max-width:850px){
+ .home-v18 .v177-progress-heading{grid-template-columns:1fr;gap:6px}
+ .home-v18 .v177-progress-heading p{max-width:680px}
+ .home-v18 .v177-progress-grid{grid-template-columns:minmax(215px,.9fr) minmax(0,2fr)}
+ .home-v18 .v177-progress-global .v113-home-pulse{flex-wrap:wrap;align-content:center}
+ .home-v18 .v177-discovery-section .v18-block-header{
+  display:flex;flex-wrap:wrap;align-items:flex-start;gap:10px;
+ }
+ .home-v18 .v177-discovery-section .vi-discovery-heading{flex:1 1 100%}
+ .home-v18 .v177-discovery-section .vi-discovery-head-actions{
+  width:100%;justify-content:flex-end;padding:0;
+ }
+}
+@media(max-width:620px){
+ .home-v18 .v177-progress-zone{padding:19px 15px;gap:14px}
+ .home-v18 .v177-progress-grid{grid-template-columns:1fr;gap:12px}
+ .home-v18 .v177-progress-global .v113-home-pulse{min-height:128px;flex-wrap:nowrap;gap:16px}
+ .home-v18 .v177-progress-global .v113-pulse-ring{flex:0 0 92px;width:92px}
+ .home-v18 .v177-progress-grid .progress-dashboard.v113-progress{
+  grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;
+ }
+ .home-v18 .v177-progress-actions{flex-wrap:wrap;gap:8px;justify-content:space-between}
+ .home-v18 .v177-progress-primary{padding:9px 12px}
+ .home-v18 .v177-progress-secondary{font-size:11px}
+ .home-v18 .v177-discovery-section{padding:18px 15px 22px}
+ .home-v18 .v177-discovery-section .v18-block-header{margin-bottom:12px}
+ .home-v18 .v177-discovery-section .vi-discovery-head-actions{gap:12px}
+ .home-v18 .v177-discovery-section .vi-discovery-nav button{width:40px;min-width:40px;height:36px;font-size:25px}
+ .home-v18 .v177-discovery-section .vi-discovery-catalog{font-size:11px}
+}
+@media(max-width:380px){
+ .home-v18 .v177-progress-actions{align-items:flex-start;flex-direction:column}
+ .home-v18 .v177-discovery-section .vi-discovery-head-actions{justify-content:space-between}
+}
+@media(prefers-reduced-motion:reduce){
+ .home-v18 .v177-progress-primary,.home-v18 .v177-progress-secondary{transition:none}
+}
