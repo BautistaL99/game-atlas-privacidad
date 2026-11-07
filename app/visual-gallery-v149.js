@@ -155,6 +155,43 @@
    img.referrerPolicy='strict-origin-when-cross-origin';
    img.loading='lazy';
  };
+ // Safety net for previous releases: remove generic landscape thumbnails
+ // from unconfirmed community stories, even if an old catalog script was cached.
+ // Uses no remote media and does not mutate the catalog or user data.
+ function repairCommunityRumorCovers(){
+  const lang=['es','en','pt'].includes(document.documentElement.lang)?document.documentElement.lang:'es';
+  const labels={
+   es:{domains:['🌐','Rumor sobre dominios','Sin imagen verificada'],devkit:['⚙','Rumor sobre desarrollo','Sin imagen verificada'],general:['✦','Rumor de la comunidad','Sin imagen verificada']},
+   en:{domains:['🌐','Domain rumour','No verified image'],devkit:['⚙','Development rumour','No verified image'],general:['✦','Community rumour','No verified image']},
+   pt:{domains:['🌐','Rumor sobre domínios','Sem imagem verificada'],devkit:['⚙','Rumor sobre desenvolvimento','Sem imagem verificada'],general:['✦','Rumor da comunidade','Sem imagem verificada']}
+  };
+  function replaceCover(host,id){
+   const current=host.querySelector('.thumb,.search-thumb,.detail-thumb,.vi-news-image');
+   if(!current||current.querySelector?.('.vi-community-art-icon'))return;
+   const group=/domains?/.test(id)?'domains':/devkit|development/.test(id)?'devkit':'general';
+   const [icon,label,note]=labels[lang][group];
+   const span=document.createElement('span');
+   span.className=[...current.classList].filter(c=>c!=='vi-news-rumor-photo').join(' ')+' vi-community-art vi-community-art-'+group;
+   span.setAttribute('role','img');
+   span.setAttribute('aria-label',label+' — '+note);
+   const symbol=document.createElement('span');symbol.className='vi-community-art-icon';symbol.setAttribute('aria-hidden','true');symbol.textContent=icon;
+   const caption=document.createElement('span');caption.className='vi-community-art-caption';
+   const strong=document.createElement('strong');strong.textContent=label;
+   const small=document.createElement('small');small.textContent=note;
+   caption.append(strong,small);span.append(symbol,caption);
+   current.replaceWith(span);
+  }
+  const visited=new Set();
+  for(const link of document.querySelectorAll('a[href*="/ficha/community-"]')){
+   const host=link.closest('.content-card,.search-result,.vi-news-card,.detail-card');
+   if(!host||visited.has(host))continue;
+   const id=(link.getAttribute('href')||'').match(/\/ficha\/(community-[a-z0-9_-]+)/)?.[1];
+   if(!id)continue;
+   visited.add(host);replaceCover(host,id);
+  }
+  const detail=location.hash.match(/^#\/ficha\/(community-[a-z0-9_-]+)/)?.[1];
+  if(detail)for(const host of document.querySelectorAll('.detail-card'))replaceCover(host,detail);
+ }
  function apply(){
    if(window.Capacitor?.isNativePlatform?.())return;
    document.documentElement.classList.add('vi-real-gallery');
@@ -181,6 +218,7 @@
    document.querySelectorAll('.youtube-tile-art').forEach((el,i)=>imageBackground(el,community[i%community.length]));
    document.querySelectorAll('.news-panel .news-story img').forEach((el,i)=>{if(!el.getAttribute('src')?.startsWith('https://media-rockstargames-com.akamaized.net/'))imageSource(el,editorial[i%editorial.length]);});
    document.querySelectorAll('.ranking-hero-art').forEach(el=>imageBackground(el,location.hash.includes('donaciones')?rankings[1]:rankings[0]));
+   repairCommunityRumorCovers();
    // Web-only My Game HUD: preserve native layout, local progress and all buttons.
    for(const row of document.querySelectorAll('.v120-progress-row,.progress-tile')){
      const link=row.getAttribute('href')||'';
