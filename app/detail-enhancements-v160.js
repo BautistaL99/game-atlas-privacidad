@@ -4,7 +4,7 @@
  */
 (function(root){'use strict';
  const supported=['vehiculos','armas','economia','mapa-lugares','misiones'];
- const names={es:{title:'Comparar fichas',intro:'Compará hasta tres elementos de la misma categoría. Solo se muestran datos publicados y verificados: no se inventan estadísticas.',choose:'Elegí una categoría',item:'Elegí una ficha',missing:'Sin datos verificados',notEnough:'Elegí al menos dos fichas distintas para comparar.',facts:'Características verificadas',gallery:'Imágenes de la ficha',photo:'Imagen',caption:'Imagen ilustrativa',compare:'⇄ Comparar con otro',source:'Consultar fuente',none:'Todavía no hay parámetros técnicos comparables para estas fichas.',available:'La galería tendrá más imágenes cuando se verifiquen fotografías adicionales del mismo elemento.'},en:{title:'Compare entries',intro:'Compare up to three entries from the same category. Only published, verified data is shown.',choose:'Choose a category',item:'Choose an entry',missing:'No verified data',notEnough:'Choose at least two different entries.',facts:'Verified specifications',gallery:'Entry images',photo:'Image',caption:'Illustrative image',compare:'⇄ Compare with another',source:'View source',none:'No verified comparable specifications yet.',available:'More images appear when additional pictures of this exact item are reviewed.'},pt:{title:'Comparar fichas',intro:'Compare até três itens da mesma categoria. Somente dados publicados e verificados são exibidos.',choose:'Escolha uma categoria',item:'Escolha uma ficha',missing:'Dados não verificados',notEnough:'Escolha duas fichas diferentes.',facts:'Características verificadas',gallery:'Imagens da ficha',photo:'Imagem',caption:'Imagem ilustrativa',compare:'⇄ Comparar com outro',source:'Ver fonte',none:'Ainda não há informações técnicas verificadas para comparar.',available:'Novas imagens aparecerão quando fotos do mesmo item forem verificadas.'}};
+ const names={es:{title:'Comparar elementos',intro:'Compará hasta tres elementos de la misma categoría. Solo se muestran datos publicados y verificados: no se inventan estadísticas.',choose:'Elegí una categoría',item:'Elegí un elemento',missing:'Sin datos verificados',notEnough:'Elegí al menos dos elementos distintos para comparar.',facts:'Características verificadas',gallery:'Imágenes de la ficha',photo:'Imagen',caption:'Imagen ilustrativa',compare:'⇄ Comparar con otro',source:'Consultar fuente',none:'Todavía no hay parámetros técnicos comparables para estas elementos.',available:'La galería tendrá más imágenes cuando se verifiquen fotografías adicionales del mismo elemento.'},en:{title:'Compare items',intro:'Compare up to three entries from the same category. Only published, verified data is shown.',choose:'Choose a category',item:'Choose an item',missing:'No verified data',notEnough:'Choose at least two different entries.',facts:'Verified specifications',gallery:'Entry images',photo:'Image',caption:'Illustrative image',compare:'⇄ Compare with another',source:'View source',none:'No verified comparable specifications yet.',available:'More images appear when additional pictures of this exact item are reviewed.'},pt:{title:'Comparar elementos',intro:'Compare até três itens da mesma categoria. Somente dados publicados e verificados são exibidos.',choose:'Escolha uma categoria',item:'Escolha uma ficha',missing:'Dados não verificados',notEnough:'Escolha duas elementos diferentes.',facts:'Características verificadas',gallery:'Imagens da ficha',photo:'Imagem',caption:'Imagem ilustrativa',compare:'⇄ Comparar com outro',source:'Ver fonte',none:'Ainda não há informações técnicas verificadas para comparar.',available:'Novas imagens aparecerão quando fotos do mesmo item forem verificadas.'}};
  const cats={misiones:{es:'Misiones',en:'Missions',pt:'Missões'},vehiculos:{es:'Vehículos',en:'Vehicles',pt:'Veículos'},armas:{es:'Armas',en:'Weapons',pt:'Armas'},economia:{es:'Propiedades y negocios',en:'Properties and businesses',pt:'Imóveis e negócios'},'mapa-lugares':{es:'Lugares y edificios',en:'Places and buildings',pt:'Lugares e edifícios'}};
  const safe=s=>String(s===undefined||s===null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const tr=(obj,lang)=>typeof obj==='string'?obj:obj&&typeof obj==='object'?(obj[lang]||obj.es||obj.en||''):'';
@@ -100,17 +100,28 @@
   for(const thumb of box.querySelectorAll('[data-vi-gallery-index]'))thumb.setAttribute('aria-pressed',String(Number(thumb.dataset.viGalleryIndex)===next));
   const counter=box.querySelector('.vi-gallery-counter');if(counter)counter.textContent=(next+1)+' / '+n;
  }
+ // A comparison filter is local UI state, not a new page navigation.
+ // replaceState avoids hashchange, which globally resets scroll and the whole viewport.
  function updateCompare(e){
   const cat=e.target.closest?.('[data-vi-compare-cat]');
-  if(cat){root.location.hash='#/comparar?cat='+encodeURIComponent(cat.value);return}
   const select=e.target.closest?.('[data-vi-compare-slot]');
-  if(!select)return;
-  const all=[...document.querySelectorAll('[data-vi-compare-slot]')];
-  const ids=all.map(x=>x.value).filter(Boolean);
-  const unique=[...new Set(ids)].slice(0,3);
-  const catVal=document.querySelector('[data-vi-compare-cat]')?.value||'vehiculos';
-  root.location.hash='#/comparar?cat='+encodeURIComponent(catVal)+'&ids='+encodeURIComponent(unique.join(','));
-  if(root.viRefreshApp)root.viRefreshApp();
+  if(!cat&&!select)return;
+  if(!root.location.hash.startsWith('#/comparar'))return;
+  const controls=document.querySelector('.vi-compare-controls');
+  const before=controls?.getBoundingClientRect().top;
+  const previousY=root.scrollY;
+  const catVal=cat?.value||document.querySelector('[data-vi-compare-cat]')?.value||'vehiculos';
+  const ids=cat?[]:[...new Set([...document.querySelectorAll('[data-vi-compare-slot]')].map(x=>x.value).filter(Boolean))].slice(0,3);
+  const next='#/comparar?cat='+encodeURIComponent(catVal)+(ids.length?'&ids='+encodeURIComponent(ids.join(',')):'');
+  root.history.replaceState(root.history.state,'',next);
+  if(!root.viRefreshComparison?.())root.viRefreshApp?.();
+  const restore=()=>{
+   const replacement=document.querySelector('.vi-compare-controls');
+   const target=before!=null&&replacement?root.scrollY+replacement.getBoundingClientRect().top-before:previousY;
+   root.scrollTo({top:Math.max(0,target),behavior:'instant'});
+  };
+  restore();
+  root.requestAnimationFrame(restore);
  }
  if(typeof document!=='undefined'){
   document.addEventListener('change',updateCompare);
