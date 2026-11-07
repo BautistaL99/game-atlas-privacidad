@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url><loc>https://bautistal99.github.io/game-atlas-privacidad/app/</loc></url>
   <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/mapa/</loc></url>
   <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/personajes/</loc></url>
@@ -18,4 +18,7 @@
   <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/noticias/9k2kaa1o3297k9-grand-theft-auto-vi-an-extended-look/</loc></url>
   <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/noticias/5171972o3ak5oa-pre-order-grand-theft-auto-vi-on-june-25/</loc></url>
   <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/noticias/517oa135328155-grand-theft-auto-vi-pre-orders-begin-on-june-25/</loc></url>
+  <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/</loc><xhtml:link rel="alternate" hreflang="es" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/"/><xhtml:link rel="alternate" hreflang="en" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/en/"/><xhtml:link rel="alternate" hreflang="pt" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/pt/"/></url>
+  <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/en/</loc><xhtml:link rel="alternate" hreflang="es" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/"/><xhtml:link rel="alternate" hreflang="en" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/en/"/><xhtml:link rel="alternate" hreflang="pt" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/pt/"/></url>
+  <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/pt/</loc><xhtml:link rel="alternate" hreflang="es" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/"/><xhtml:link rel="alternate" hreflang="en" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/en/"/><xhtml:link rel="alternate" hreflang="pt" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/pt/"/></url>
 </urlset>
