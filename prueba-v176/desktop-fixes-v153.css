@@ -1,0 +1,19 @@
+/* V153 — Desktop fixes reported on 2026-11-06; never override mobile HUD. */
+@media (min-width:701px){
+  /* Header: real space between the heart and donation label. */
+  .topbar .mobile-actions .mobile-donate{display:inline-flex!important;align-items:center!important;gap:9px!important;column-gap:9px!important;letter-spacing:normal!important}
+  .topbar .mobile-actions .mobile-donate span{display:inline-block!important;margin-left:2px!important}
+  /* Hero CTA must remain visible on every carousel slide, including after transitions. */
+  .home-v111 .home-permanent-frame{isolation:isolate!important}
+  .home-v111 .home-permanent-slide{z-index:1!important}
+  .home-v111 .home-permanent-slide:not(.is-active){z-index:0!important;pointer-events:none!important}
+  .home-v111 .vi-hero-footer{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:15!important;pointer-events:none!important}
+  .home-v111 .vi-hero-footer .home-permanent-cta{position:absolute!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;left:4.75%!important;top:auto!important;bottom:58px!important;transform:none!important;z-index:20!important;pointer-events:auto!important;opacity:1!important;visibility:visible!important;white-space:nowrap!important;min-height:44px!important;padding:11px 19px!important}
+  .home-v111 .vi-hero-footer .home-permanent-arrows{position:absolute!important;bottom:18px!important;right:19px!important;z-index:20!important;display:flex!important;align-items:center!important;gap:9px!important;pointer-events:auto!important}
+  .home-v111 .home-permanent-arrows button{display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:0!important;line-height:1!important}
+  .home-v111 .home-permanent-arrows button svg{display:block!important;width:20px!important;height:20px!important;flex:none!important}
+  .home-v111 .vi-hero-footer .home-permanent-dots{pointer-events:auto!important}
+  /* Sidebar: notice sits below menu, above image without overlapping the photo. */
+  .sidebar .sidebar-note{position:relative!important;z-index:5!important;align-self:stretch!important;margin:18px 17px 0!important;width:calc(100% - 34px)!important;max-width:none!important;padding:11px 12px!important;background:#0d2234!important;border:1px solid #426578!important;box-shadow:0 5px 20px #0005!important}
+  html.vi-real-gallery .sidebar::before{bottom:0!important;height:160px!important;opacity:.48!important;background-position:center bottom!important;mask-image:linear-gradient(to bottom,transparent 0%,black 28%,black 100%)!important}
+}

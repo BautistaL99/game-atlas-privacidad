@@ -1,0 +1,27 @@
+/* Desktop V151: precise fixes based on November 5 screenshots. */
+@media(min-width:701px){
+  .topbar{display:flex!important;justify-content:space-between!important;gap:18px!important}
+  .topbar>.mobile-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:16px!important;flex:0 0 auto!important;white-space:nowrap!important}
+  .topbar>.mobile-actions>.mobile-donate{position:static!important;transform:none!important;margin:0!important;display:inline-flex!important;align-items:center!important;white-space:nowrap!important;padding:8px 12px!important}
+  .topbar>.mobile-actions>.lang-badge{position:static!important;transform:none!important;margin:0!important;display:inline-flex!important;align-items:center!important;padding:10px 14px!important}
+  .sidebar{position:relative!important}
+  .sidebar .sidebar-note{position:relative!important;z-index:3!important;display:block!important;box-sizing:border-box!important;margin:14px 14px 0!important;padding:10px 11px!important;width:calc(100% - 28px)!important;max-width:none!important;font-size:11px!important;line-height:1.4!important;overflow-wrap:anywhere!important;background:#091a2bf2!important;border:1px solid #376071!important;border-radius:10px!important}
+  html.vi-real-gallery .sidebar::before{opacity:.26!important;bottom:0!important;background-position:center bottom!important}
+  .v120-overview-stats{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;align-items:stretch!important}
+  .v120-overview-stats>.v120-stat-card{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:5px!important;min-width:0!important;min-height:82px!important;padding:12px 8px!important;box-sizing:border-box!important;background:#10283a!important;color:#effaff!important;border:1px solid #2b5669!important;border-radius:12px!important;text-decoration:none!important;cursor:pointer!important}
+  .v120-overview-stats>.v120-stat-card>span{display:block!important;font-size:16px!important;color:#64eee0!important;line-height:1.1!important}
+  .v120-overview-stats>.v120-stat-card>strong{display:block!important;font-size:25px!important;line-height:1.15!important;color:#fff!important}
+  .v120-overview-stats>.v120-stat-card>small{display:block!important;font-size:12px!important;line-height:1.3!important;color:#a9c8d7!important;text-align:center!important}
+  .atlas-v119 .vi-map-fullscreen-btn{background:#0b293a!important;isolation:isolate!important;z-index:150!important}
+  .atlas-v119 .vi-map-fullscreen-btn svg{display:block!important}
+  .atlas-v119 .atlas-controls{top:64px!important}
+  /* Use an actual fixed viewport overlay for the desktop fullscreen view. */
+  .atlas-v119.vi-fullscreen-map{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;margin:0!important;padding:12px!important;z-index:2147482000!important;background:#071424!important;overflow:hidden!important;display:flex!important;flex-direction:column!important}
+  .atlas-v119.vi-fullscreen-map>.atlas-toolbar{flex:0 0 auto!important;margin-bottom:8px!important}
+  .atlas-v119.vi-fullscreen-map>.atlas-layout{display:grid!important;grid-template-columns:290px minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important;flex:1 1 auto!important;min-height:0!important;width:100%!important;gap:12px!important;overflow:hidden!important}
+  .atlas-v119.vi-fullscreen-map>.atlas-layout>.atlas-filters{display:block!important;position:relative!important;grid-column:1!important;grid-row:1!important;width:100%!important;height:100%!important;max-height:none!important;overflow-y:auto!important;order:0!important;z-index:2!important}
+  .atlas-v119.vi-fullscreen-map>.atlas-layout>.atlas-center{display:block!important;position:relative!important;grid-column:2!important;grid-row:1!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;inset:auto!important}
+  .atlas-v119.vi-fullscreen-map .atlas-map{height:100%!important;width:100%!important;max-height:none!important}
+  .atlas-v119.vi-fullscreen-map .vi-map-fullscreen-btn{position:absolute!important;right:10px!important;top:10px!important}
+  .atlas-v119.vi-fullscreen-map .atlas-controls{top:64px!important}
+}
