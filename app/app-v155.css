@@ -305,3 +305,44 @@
  .vi-community-art-caption small{font-size:9px}
  .vi-community-art-mark{font-size:33px}
 }
+
+/* V174 — Daily discoveries: compact arrows, three cards on desktop,
+   two at tablet widths, one on mobile; no full page rerenders. */
+.home-v18 .vi-discovery-section .vi-discovery-head-actions{
+ display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:10px;flex:0 0 auto;
+}
+.home-v18 .vi-discovery-nav{
+ display:inline-flex;align-items:center;gap:8px;
+ padding:4px 6px;border:1px solid #4b526c;border-radius:12px;
+ background:#151d2de8;
+}
+.home-v18 .vi-discovery-nav button{
+ display:grid;place-items:center;width:37px;height:37px;min-width:37px;
+ padding:0;border:1px solid #425b72;border-radius:9px;
+ background:#26334c;color:#8ef7e7;font-family:inherit;
+ font-size:27px;font-weight:700;line-height:1;cursor:pointer;
+}
+.home-v18 .vi-discovery-nav button:hover,.home-v18 .vi-discovery-nav button:focus-visible{
+ border-color:#7ceade;background:#23514e;color:#fff;
+}
+.home-v18 .vi-discovery-nav button:disabled{
+ opacity:.35;cursor:default;
+}
+.home-v18 .vi-discovery-nav [data-vi-discover-count]{
+ min-width:44px;text-align:center;font-variant-numeric:tabular-nums;
+ font-size:13px;font-weight:850;color:#d0e9ee;white-space:nowrap;
+}
+.home-v18 .vi-discovery-section #vi-discovery-cards{
+ width:100%;box-sizing:border-box;align-items:stretch;
+}
+@media(max-width:850px){
+ .home-v18 .vi-discovery-section .v18-block-header{flex-wrap:wrap;align-items:flex-start}
+ .home-v18 .vi-discovery-section .vi-discovery-head-actions{width:100%;justify-content:space-between}
+}
+@media(max-width:700px){
+ .home-v18 .vi-discovery-section .vi-discovery-head-actions{gap:8px}
+ .home-v18 .vi-discovery-nav{gap:5px;padding:3px 5px}
+ .home-v18 .vi-discovery-nav button{width:35px;height:35px;min-width:35px;font-size:24px}
+ .home-v18 .vi-discovery-nav [data-vi-discover-count]{font-size:12px;min-width:40px}
+ .home-v18 .vi-discovery-section .vi-discovery-head-actions .v18-outline-link{font-size:11px}
+}
