@@ -187,33 +187,60 @@
 .vi-detail-compare-row .vi-detail-compare{margin:0!important;display:inline-flex!important;width:max-content;max-width:100%;box-sizing:border-box}
 @media(max-width:600px){.vi-detail-compare-row .vi-detail-compare{width:100%;justify-content:center}}
 
-/* V165: select up to three elements inside Explore, without changing route or scroll. */
+/* V166: one-line comparison bar; catalogue items stay the focus. */
+.vi-explore-compare.vi-compare-bar{
+ box-sizing:border-box;display:flex;flex-direction:row;align-items:center;justify-content:space-between;
+ gap:14px;margin:-12px 0 18px;padding:10px 15px;min-height:60px;
+ border:1px solid #3e807f;border-radius:12px;
+ background:linear-gradient(100deg,#142d3b,#192a40);box-shadow:none;
+}
+.vi-compare-bar .vi-compare-bar-title{
+ display:flex;flex-direction:row;align-items:center;gap:9px;min-width:0;flex:0 1 auto;
+}
+.vi-compare-bar-title>span{font-size:23px!important;color:#82e8dd!important;line-height:1!important;flex-shrink:0}
+.vi-compare-bar-title strong{
+ font-size:clamp(14px,1.6vw,18px);font-weight:850;color:#f2fffc;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.vi-explore-compare.vi-compare-bar .vi-compare-count{
+ display:inline-flex;align-items:center;white-space:nowrap;
+ margin-left:auto;color:#bad7df;font-size:12px;font-weight:750;
+}
+.vi-explore-compare.vi-compare-bar .vi-compare-bar-cta{
+ box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;
+ flex:0 0 auto;min-height:38px;min-width:118px;padding:8px 13px;
+ border:1px solid #65dcc6;border-radius:9px;background:#239781;
+ color:#fff;font-weight:850;font-size:12px;text-decoration:none;white-space:nowrap;
+}
+.vi-explore-compare.vi-compare-bar .vi-compare-bar-cta[href]:hover{background:#32ad93}
+.vi-explore-compare.vi-compare-bar .vi-compare-bar-cta[aria-disabled="true"]{
+ cursor:not-allowed;opacity:.48;border-color:#476d77;background:#2b4654;color:#b9cbd2;
+ pointer-events:none;
+}
+/* Per-item selection stays in the catalogue cards, unchanged in purpose. */
 .content-card.vi-compare-ready:has(.vi-compare-pick) .content-card-link{padding-right:350px}
 .vi-compare-pick{display:inline-flex;align-items:center;justify-content:center;min-width:103px;min-height:39px;padding:8px 12px;border:1px solid #55d5ca;border-radius:10px;background:#163a4f;color:#e8fffa;font-family:inherit;font-weight:800;font-size:12px;line-height:1.2;white-space:nowrap;cursor:pointer}
 .vi-compare-pick:hover,.vi-compare-pick:focus-visible{background:#205565;border-color:#7ff8e9}
 .vi-compare-pick.is-picked{background:#286f5b;color:#fff;border-color:#93f7d0;box-shadow:inset 0 0 0 1px #9cffe63f}
-.vi-compare-pick-tray{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;width:min(650px,calc(100vw - 36px));box-sizing:border-box;z-index:1006;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:14px 16px;border-radius:16px;border:1px solid #7ce7d2;background:linear-gradient(110deg,#122e40,#102337);box-shadow:0 14px 42px #000c;color:#f5fff9}
-.vi-pick-tray-info{display:flex;flex-direction:column;gap:4px;min-width:0}
-.vi-pick-tray-info strong{font-size:14px}.vi-pick-tray-info span{font-size:12px;color:#b9d9de}
-.vi-pick-tray-actions{display:flex;gap:8px;flex-shrink:0;align-items:center}
-.vi-pick-tray-actions a,.vi-pick-tray-actions button,.vi-pick-tray-disabled{border:1px solid #82e8d4;padding:10px 13px;border-radius:10px;color:#fff;font-weight:850;font-size:12px;text-decoration:none;white-space:nowrap}
-.vi-pick-tray-actions a{background:#278f78}.vi-pick-tray-actions a:hover{background:#3aac91}
-.vi-pick-tray-actions button{background:transparent;color:#c4ece9;cursor:pointer;border-color:#476c77}
-.vi-pick-tray-actions button:hover{border-color:#b0fff0}
-.vi-pick-tray-disabled{opacity:.58;border-color:#41606e;background:#233c4b;pointer-events:none}
 @media(max-width:950px){
  .content-card.vi-compare-ready:has(.vi-compare-pick) .content-card-link{padding-right:6px!important;padding-bottom:60px!important}
  .content-card.vi-compare-ready:has(.vi-compare-pick) .card-inline-actions{top:auto!important;bottom:9px!important;right:10px!important;left:auto!important;transform:none!important}
 }
 @media(max-width:700px){
- .vi-compare-pick-tray{bottom:calc(84px + env(safe-area-inset-bottom,0px));width:calc(100vw - 24px);padding:11px 12px;gap:9px}
- .vi-pick-tray-info strong{font-size:12px}.vi-pick-tray-info span{font-size:11px}
- .vi-pick-tray-actions a,.vi-pick-tray-actions button,.vi-pick-tray-disabled{padding:9px 10px;font-size:11px}
+ .vi-explore-compare.vi-compare-bar{flex-direction:row;align-items:center;gap:8px;padding:9px 10px;min-height:54px}
+ .vi-compare-bar .vi-compare-bar-title{flex-direction:row;gap:5px}
+ .vi-compare-bar-title>span{font-size:19px!important}
+ .vi-compare-bar-title strong{font-size:12px}
+ .vi-explore-compare.vi-compare-bar .vi-compare-count{font-size:11px}
+ .vi-explore-compare.vi-compare-bar .vi-compare-bar-cta{min-height:34px;min-width:76px;padding:7px 8px;font-size:11px}
  .vi-compare-pick{min-width:93px;min-height:34px;padding:7px 8px;font-size:11px}
 }
 @media(max-width:410px){
- .vi-pick-tray-actions{flex-direction:column;align-items:stretch}
- .vi-pick-tray-actions a,.vi-pick-tray-actions button,.vi-pick-tray-disabled{text-align:center;padding:7px 8px}
+ .vi-explore-compare.vi-compare-bar{gap:6px;padding:8px 8px}
+ .vi-compare-bar-title>span{font-size:17px!important}
+ .vi-compare-bar-title strong{font-size:11px}
+ .vi-explore-compare.vi-compare-bar .vi-compare-count{font-size:10px}
+ .vi-explore-compare.vi-compare-bar .vi-compare-bar-cta{min-width:68px;font-size:10px;padding:6px}
  .content-card.vi-compare-ready .quick-complete{min-width:99px}
  .content-card.vi-compare-ready:has(.vi-compare-pick) .card-inline-actions{gap:6px}
 }
