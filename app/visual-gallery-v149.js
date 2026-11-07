@@ -146,6 +146,10 @@
  };
  const imageSource=(img,k)=>{
    if(!img||!photo(k)||img.dataset.viPhoto===k)return;
+   // An explicitly reviewed official Newswire image is the source image.
+   // Never silently replace it with a context photo from this presentation map.
+   const actual=img.getAttribute('src')||'';
+   if(/^https:\/\/media-rockstargames-com\.akamaized\.net\/tina-uploads\/posts\//i.test(actual))return;
    img.dataset.viPhoto=k;
    const fallback=img.getAttribute('src')||'./assets/original/scene.svg';
    img.addEventListener('error',function onFail(){
