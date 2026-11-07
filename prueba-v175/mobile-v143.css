@@ -1,7 +1,0 @@
-/* V1.43 — uniform branding, keep V1.41-approved navigation and rankings unchanged. */
-.brand-mark{background:#fff url('./icons/icon-512.png') center / 90% 90% no-repeat!important;color:transparent!important;text-indent:-9999px!important;overflow:hidden!important;border-radius:17px!important;box-shadow:0 2px 15px rgba(192,75,200,.13)!important;}
-@media(max-width:700px){.mobile-brand .brand-mark{background-size:92% 92%!important;}}
-/* Map hint must stay above decorative overlays but outside quick-filter controls. */
-@media(max-width:700px){.atlas:not(.vi-marker-editing) .vi-map-empty-hint{pointer-events:none;}}
-
-.vi-report{margin-top:18px}.vi-report textarea{display:block;width:100%;margin-top:14px;box-sizing:border-box;padding:12px;background:#0e1b2c;color:#e4ebf5;border:1px solid #50707b;border-radius:10px}.vi-report textarea[hidden]{display:none}.vi-report .primary-btn{cursor:pointer}

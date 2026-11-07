@@ -1,7 +1,0 @@
-/* V1.42: correction approved for final web+Android package.
-   Floating empty-state message is above quick filters, never underneath them. */
-@media(max-width:700px){
-  .atlas-map .atlas-hint,.atlas-map .atlas-empty-tip,.atlas-map .atlas-map-empty{
-    bottom:132px!important;max-width:min(80%,300px)!important;pointer-events:none!important;
-  }
-}
