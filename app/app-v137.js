@@ -568,10 +568,32 @@ window.viRefreshComparison=()=>{
  if(!previous||!location.hash.startsWith('#/comparar'))return false;
  const markup=window.viDetailEnhancements?.comparePage(records,locale);
  if(typeof markup!=='string')return false;
- const fragment=document.createElement('template');fragment.innerHTML=markup.trim();
- const updated=fragment.content.firstElementChild;
- if(!updated)return false;
- previous.replaceWith(updated);
+ const template=document.createElement('template');
+ template.innerHTML=markup.trim();
+ const updated=template.content.firstElementChild;
+ const controls=previous.querySelector('.vi-compare-controls');
+ const nextControls=updated?.querySelector('.vi-compare-controls');
+ if(!updated||!controls||!nextControls)return false;
+ // Preserve the original controls and the page height. Replacing the whole
+ // section used to blur the active select and shrink the page, clamping scrollY.
+ const oldY=window.scrollY;
+ const before=previous.getBoundingClientRect();
+ const minHeight=Math.max(before.height,oldY+window.innerHeight-(oldY+before.top)+48);
+ previous.style.minHeight=Math.ceil(minHeight)+'px';
+ const oldSelects=controls.querySelectorAll('select');
+ const newSelects=nextControls.querySelectorAll('select');
+ if(oldSelects.length!==newSelects.length)return false;
+ oldSelects.forEach((select,i)=>{
+  const desired=newSelects[i];
+  if(select.innerHTML!==desired.innerHTML)select.innerHTML=desired.innerHTML;
+  if(select.value!==desired.value)select.value=desired.value;
+ });
+ const replacement=document.createDocumentFragment();
+ for(let node=nextControls.nextSibling;node;node=node.nextSibling)replacement.appendChild(node.cloneNode(true));
+ while(controls.nextSibling)controls.nextSibling.remove();
+ previous.appendChild(replacement);
+ // No navigation, lost select focus, or full-screen rerender.
+ if(window.scrollY!==oldY)window.scrollTo({top:oldY,behavior:'instant'});
  return true;
 };
 window.viApplySignedRankings=(next)=>{if(!next||!Array.isArray(next.donations)||!Array.isArray(next.speedruns))return;
