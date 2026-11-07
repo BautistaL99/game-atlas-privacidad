@@ -148,5 +148,73 @@
   const shortcuts=picks.map(item=>'<a class="vi-compare-shortcut" href="#/comparar?cat='+encodeURIComponent(cat)+'&ids='+encodeURIComponent(item.id)+'" title="'+escape(t.more)+'">'+escape(item.title?.[lang]||item.title?.es||item.id)+' <span>⇄</span></a>').join('');
   return '<aside class="vi-explore-compare vi-explore-compare-featured"><div class="vi-compare-featured-head"><div><small>GAME ATLAS · VS</small><b>⇄ '+escape(t.more)+'</b><span>'+escape(count<2?t.waiting:t.cta)+'</span></div><a class="vi-compare-primary" href="#/comparar?cat='+encodeURIComponent(cat)+'">'+escape(t.more)+' ↗</a></div>'+(shortcuts?'<div class="vi-compare-picks"><span>'+escape(lang==='en'?'Start with an entry':lang==='pt'?'Comece com uma ficha':'Empezá desde una ficha')+'</span><div>'+shortcuts+'</div></div>':'')+'</aside>';
  }
- Object.assign(base,{specGrid,comparePage,compareExplore,grades,metricNumber,fields});
+
+ // Quick compare from category cards. Ephemeral UI state only: never touches
+ // favorites, progress, signed catalogs or stored user data.
+ const chosenByCategory=new Map();
+ const cardWording={
+  es:{pick:'Comparar',selected:'Seleccionado',count:'elementos seleccionados',one:'Elegí otro elemento de esta categoría.',ready:'Listo para comparar.',go:'Comparar ahora',clear:'Limpiar'},
+  en:{pick:'Compare',selected:'Selected',count:'items selected',one:'Choose another item in this category.',ready:'Ready to compare.',go:'Compare now',clear:'Clear'},
+  pt:{pick:'Comparar',selected:'Selecionado',count:'itens selecionados',one:'Escolha outro item desta categoria.',ready:'Pronto para comparar.',go:'Comparar agora',clear:'Limpar'}
+ };
+ const getLanguage=()=>['es','en','pt'].includes(document.documentElement.lang)?document.documentElement.lang:'es';
+ const activeCategory=()=>{const match=/^#\/explorar\/([^?]+)/.exec(root.location.hash||'');return match?decodeURIComponent(match[1]):null};
+ const chosen=cat=>{if(!chosenByCategory.has(cat))chosenByCategory.set(cat,new Map());return chosenByCategory.get(cat)};
+ const pickText=(lang,active)=>{const t=cardWording[lang]||cardWording.es;return active?t.selected:t.pick};
+ function comparePickButton(item,lang){
+  if(item?.status!=='verified'||item.recordType==='story_overview'||!fields[item.category])return '';
+  const t=cardWording[lang]||cardWording.es;
+  const active=chosen(item.category).has(item.id);
+  const label=active?t.selected:t.pick;
+  return '<button type="button" class="vi-compare-pick'+(active?' is-picked':'')+'" data-vi-compare-pick="'+escape(item.id)+'" data-vi-compare-category="'+escape(item.category)+'" data-vi-compare-name="'+escape(item.title?.[lang]||item.title?.es||item.id)+'" aria-pressed="'+active+'" aria-label="'+escape(label+': '+(item.title?.[lang]||item.title?.es||item.id))+'">⇄ '+escape(label)+'</button>';
+ }
+ function syncPickButtons(){
+  if(typeof document==='undefined')return;
+  const lang=getLanguage();
+  for(const button of document.querySelectorAll('[data-vi-compare-pick]')){
+   const active=chosen(button.dataset.viCompareCategory).has(button.dataset.viComparePick);
+   button.classList.toggle('is-picked',active);
+   button.setAttribute('aria-pressed',String(active));
+   button.textContent='⇄ '+pickText(lang,active);
+   button.setAttribute('aria-label',pickText(lang,active)+': '+(button.dataset.viCompareName||''));
+  }
+ }
+ function syncPickTray(){
+  if(typeof document==='undefined')return;
+  const cat=activeCategory(),selected=cat&&fields[cat]?chosen(cat):null;
+  let tray=document.getElementById('vi-compare-pick-tray');
+  if(!selected?.size){tray?.remove();return}
+  if(!tray){tray=document.createElement('aside');tray.id='vi-compare-pick-tray';tray.className='vi-compare-pick-tray';document.body.appendChild(tray)}
+  const lang=getLanguage(),t=cardWording[lang]||cardWording.es;
+  const ids=[...selected.keys()].slice(0,3);
+  const categoryLabel=categories[cat]?.[lang==='en'?1:lang==='pt'?2:0]||cat;
+  tray.innerHTML='<div class="vi-pick-tray-info"><strong>⇄ '+escape(String(ids.length))+'/3 · '+escape(categoryLabel)+'</strong><span>'+escape(ids.length<2?t.one:t.ready)+'</span></div>'
+   +'<div class="vi-pick-tray-actions"><button type="button" data-vi-compare-clear>'+escape(t.clear)+'</button>'
+   +(ids.length>=2?'<a href="#/comparar?cat='+encodeURIComponent(cat)+'&ids='+encodeURIComponent(ids.join(','))+'">'+escape(t.go)+' ↗</a>':'<span class="vi-pick-tray-disabled">'+escape(t.go)+'</span>')+'</div>';
+ }
+ if(typeof document!=='undefined'){
+  document.addEventListener('click',event=>{
+   const pick=event.target.closest?.('[data-vi-compare-pick]');
+   if(pick){
+    event.preventDefault();event.stopPropagation();
+    const cat=pick.dataset.viCompareCategory,id=pick.dataset.viComparePick;
+    if(!fields[cat]||!id||cat!==activeCategory())return;
+    const list=chosen(cat);
+    if(list.has(id))list.delete(id);
+    else if(list.size<3)list.set(id,pick.dataset.viCompareName||id);
+    syncPickButtons();syncPickTray();return;
+   }
+   if(event.target.closest?.('[data-vi-compare-clear]')){
+    event.preventDefault();
+    const cat=activeCategory();if(cat)chosen(cat).clear();
+    syncPickButtons();syncPickTray();return;
+   }
+  });
+  root.addEventListener('hashchange',()=>root.requestAnimationFrame(()=>{syncPickButtons();syncPickTray()}));
+  document.addEventListener('click',event=>{
+   if(event.target.closest?.('#vi-compare-pick-tray a'))root.setTimeout(syncPickTray,0);
+  });
+ }
+
+ Object.assign(base,{specGrid,comparePage,compareExplore,grades,metricNumber,fields,comparePickButton});
 })(typeof window!=='undefined'?window:globalThis);
