@@ -204,12 +204,18 @@
  const activeCategory=()=>{const match=/^#\/explorar\/([^?]+)/.exec(root.location.hash||'');return match?decodeURIComponent(match[1]):null};
  const chosen=cat=>{if(!chosenByCategory.has(cat))chosenByCategory.set(cat,new Map());return chosenByCategory.get(cat)};
  const pickText=(lang,active)=>{const t=cardWording[lang]||cardWording.es;return active?t.selected:t.pick};
- function comparePickButton(item,lang){
+ function comparePickButton(item,lang,mode='pick'){
   if(item?.status!=='verified'||item.recordType==='story_overview'||!fields[item.category])return '';
   const t=cardWording[lang]||cardWording.es;
+  const name=item.title?.[lang]||item.title?.es||item.id;
+  if(mode==='open'){
+   // Home and Mi partida are not a category selection workspace. Take the
+   // user straight to the comparator with this individual item preselected.
+   return '<a class="vi-compare-pick vi-compare-direct" href="#/comparar?cat='+encodeURIComponent(item.category)+'&ids='+encodeURIComponent(item.id)+'" aria-label="'+escape(t.pick+': '+name)+'">⇄ '+escape(t.pick)+'</a>';
+  }
   const active=chosen(item.category).has(item.id);
   const label=active?t.selected:t.pick;
-  return '<button type="button" class="vi-compare-pick'+(active?' is-picked':'')+'" data-vi-compare-pick="'+escape(item.id)+'" data-vi-compare-category="'+escape(item.category)+'" data-vi-compare-name="'+escape(item.title?.[lang]||item.title?.es||item.id)+'" aria-pressed="'+active+'" aria-label="'+escape(label+': '+(item.title?.[lang]||item.title?.es||item.id))+'">⇄ '+escape(label)+'</button>';
+  return '<button type="button" class="vi-compare-pick'+(active?' is-picked':'')+'" data-vi-compare-pick="'+escape(item.id)+'" data-vi-compare-category="'+escape(item.category)+'" data-vi-compare-name="'+escape(name)+'" aria-pressed="'+active+'" aria-label="'+escape(label+': '+name)+'">⇄ '+escape(label)+'</button>';
  }
  function syncPickButtons(){
   if(typeof document==='undefined')return;
