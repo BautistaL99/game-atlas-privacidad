@@ -163,3 +163,26 @@
 /* Keep the rumor illustration notice legible on narrow screens, V161. */
 .vi-news-community .vi-rumor-overlay small{letter-spacing:normal!important;word-spacing:normal!important;text-transform:none!important;overflow-wrap:normal;word-break:normal;max-width:100%;font-family:inherit;line-height:1.5!important;display:block}
 .vi-news-community .vi-rumor-overlay{gap:5px;align-items:flex-start}
+
+/* V162: discoverable comparison hub with direct entry shortcuts. */
+.vi-explore-compare.vi-explore-compare-featured{display:block;margin-top:-12px;padding:19px 22px;background:radial-gradient(circle at 93% 0%,#2af5d133,transparent 42%),linear-gradient(115deg,#102d3f,#17364b 55%,#19243f);border:1px solid #62dcd0;box-shadow:0 10px 30px #0004,inset 0 1px #a3fff030}
+.vi-explore-compare-featured .vi-compare-featured-head{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:18px}
+.vi-explore-compare-featured .vi-compare-featured-head>div{display:flex;flex-direction:column;gap:5px}
+.vi-explore-compare-featured .vi-compare-featured-head small{color:#77f5e8;font-size:10px;font-weight:900;letter-spacing:.18em}
+.vi-explore-compare-featured .vi-compare-featured-head b{font-size:clamp(19px,2.2vw,25px);color:#fff}
+.vi-explore-compare-featured .vi-compare-primary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:1px solid #a7fff0;border-radius:12px;background:#26a58c;color:white;text-decoration:none;font-weight:900;padding:11px 20px;box-shadow:0 5px 19px #0004;white-space:nowrap}
+.vi-explore-compare-featured .vi-compare-primary:hover{background:#39bfa4;transform:translateY(-1px)}
+.vi-explore-compare-featured .vi-compare-picks{border-top:1px solid #a4f9e735;margin-top:15px;padding-top:12px;display:flex;flex-direction:column;gap:9px}
+.vi-explore-compare-featured .vi-compare-picks>span{color:#bedce8;font-size:11px}
+.vi-explore-compare-featured .vi-compare-picks>div{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px}
+.vi-explore-compare-featured .vi-compare-shortcut{display:inline-flex;gap:9px;align-items:center;color:#eafffc;text-decoration:none;border:1px solid #85d6d75c;border-radius:999px;background:#071d2d9a;padding:8px 12px;font-size:12px;font-weight:750}
+.vi-explore-compare-featured .vi-compare-shortcut:hover{border-color:#82ffe0;background:#1f625e}
+.vi-explore-compare-featured .vi-compare-shortcut span{color:#76fff0;font-size:15px}
+.vi-detail-compare{display:inline-flex!important;align-items:center;gap:5px;border:1px solid #82f5df!important;background:#176958!important;color:#fff!important;border-radius:10px;padding:10px 15px;font-weight:850;text-decoration:none!important;margin:8px 0}
+.vi-detail-compare:hover{background:#238e78!important}
+@media(max-width:600px){.vi-explore-compare.vi-explore-compare-featured{padding:16px}.vi-explore-compare-featured .vi-compare-featured-head{flex-direction:column;align-items:stretch}.vi-explore-compare-featured .vi-compare-primary{width:100%;box-sizing:border-box}.vi-explore-compare-featured .vi-compare-picks>div{flex-direction:row}}
+
+/* V163: comparison action is a separate, intentional row below the verification badge. */
+.vi-detail-compare-row{display:flex;align-items:center;margin:15px 0 17px;clear:both}
+.vi-detail-compare-row .vi-detail-compare{margin:0!important;display:inline-flex!important;width:max-content;max-width:100%;box-sizing:border-box}
+@media(max-width:600px){.vi-detail-compare-row .vi-detail-compare{width:100%;justify-content:center}}
