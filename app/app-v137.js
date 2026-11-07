@@ -47,17 +47,17 @@ const categoryArtHQ={"vehiculos":"./assets/original/scene.svg","armas":"./assets
 /* CATEGORY_HQ_END */
 function tile(x){const desc=categoryNotes[x.id]?.[locale]||"";return `<a class="category-tile" ${href('/explorar/'+x.id)}><span class="category-art" style="background-image:url('${categoryArtHQ[x.id]}'),url('${categoryArt[x.id]}')" aria-hidden="true"></span><span class="category-info"><b>${esc(tr(x.label))}</b><small>${esc(desc)}</small></span><span class="arrow" aria-hidden="true">↗</span></a>`}
 function communityArtwork(i,cl){
- // A topic-specific original schematic, NOT an image of leaked GTA VI content.
- // Community records without a verified media asset must never inherit generic skyline art.
- const name=String(i.id||'');
- const kind=/domains?/.test(name)?'domains':/devkit|development/.test(name)?'development':/video|footage/.test(name)?'footage':/animation/.test(name)?'animation':'report';
+ // Neutral, topic-aware placeholders only. Never imply an unverified rumor
+ // has a real screenshot or use a photograph unrelated to the report.
+ const id=String(i.id||'');
+ const kind=/domains?/.test(id)?'domains':/devkit|development/.test(id)?'development':/video|footage/.test(id)?'footage':/animation/.test(id)?'animation':'report';
  const labels={
-  es:{domains:['DOMINIOS','www. ?','Ilustración conceptual · Rumor'],development:['DESARROLLO','{ ? }','Ilustración conceptual · Rumor'],footage:['VIDEO REPORTADO','▶ ?','Ilustración conceptual · Rumor'],animation:['ANIMACIONES','◇ ?','Ilustración conceptual · Rumor'],report:['REPORTE','?','Ilustración conceptual · Rumor']},
-  en:{domains:['DOMAINS','www. ?','Concept illustration · Rumour'],development:['DEVELOPMENT','{ ? }','Concept illustration · Rumour'],footage:['REPORTED VIDEO','▶ ?','Concept illustration · Rumour'],animation:['ANIMATIONS','◇ ?','Concept illustration · Rumour'],report:['REPORT','?','Concept illustration · Rumour']},
-  pt:{domains:['DOMÍNIOS','www. ?','Ilustração conceitual · Rumor'],development:['DESENVOLVIMENTO','{ ? }','Ilustração conceitual · Rumor'],footage:['VÍDEO RELATADO','▶ ?','Ilustração conceitual · Rumor'],animation:['ANIMAÇÕES','◇ ?','Ilustração conceitual · Rumor'],report:['RELATO','?','Ilustração conceitual · Rumor']}
+  es:{domains:['🌐','Rumor sobre dominios','Sin imagen verificada'],development:['⚙','Rumor sobre desarrollo','Sin imagen verificada'],footage:['▶','Video no confirmado','Sin imagen verificada'],animation:['◇','Rumor sobre animaciones','Sin imagen verificada'],report:['✦','Rumor de la comunidad','Sin imagen verificada']},
+  en:{domains:['🌐','Domain rumour','No verified image'],development:['⚙','Development rumour','No verified image'],footage:['▶','Unconfirmed video','No verified image'],animation:['◇','Animation rumour','No verified image'],report:['✦','Community rumour','No verified image']},
+  pt:{domains:['🌐','Rumor sobre domínios','Sem imagem verificada'],development:['⚙','Rumor sobre desenvolvimento','Sem imagem verificada'],footage:['▶','Vídeo não confirmado','Sem imagem verificada'],animation:['◇','Rumor sobre animações','Sem imagem verificada'],report:['✦','Rumor da comunidade','Sem imagem verificada']}
  };
- const [label,graphic,note]=(labels[locale]||labels.es)[kind];
- return '<span class="'+esc(cl)+' vi-community-art vi-community-art-'+kind+'" role="img" aria-label="'+esc(label+' — '+note)+'"><span class="vi-community-art-grid" aria-hidden="true"></span><span class="vi-community-art-mark" aria-hidden="true">'+esc(graphic)+'</span><span class="vi-community-art-caption"><strong>'+esc(label)+'</strong><small>'+esc(note)+'</small></span></span>';
+ const [icon,label,note]=(labels[locale]||labels.es)[kind];
+ return '<span class="'+esc(cl)+' vi-community-art vi-community-art-'+kind+'" role="img" aria-label="'+esc(label+' — '+note)+'"><span class="vi-community-art-icon" aria-hidden="true">'+esc(icon)+'</span><span class="vi-community-art-caption"><strong>'+esc(label)+'</strong><small>'+esc(note)+'</small></span></span>';
 }
 function thumb(i,cl='thumb'){if(i.facets?.community===1&&!i.image)return communityArtwork(i,cl);const fallback=categoryArt[i.category]||'./assets/original/scene.svg';const officialPhoto=typeof i.image?.remote==='string'&&/^https:\/\/media-rockstargames-com\.akamaized\.net\/tina-uploads\/posts\/[a-z0-9]+\/[a-f0-9]{40}\.(?:jpg|jpeg|png|webp)$/.test(i.image.remote)?i.image.remote:null;const provided=typeof i.image?.data==='string'&&i.image.data.startsWith('blob:')?i.image.data:(officialPhoto||(typeof i.image?.path==='string'&&i.image.path.startsWith('./assets/original/')?i.image.path:fallback));return `<img class="${cl}" src="${esc(provided)}" alt="${esc(tr(i.title))}" loading="lazy" referrerpolicy="no-referrer">`;}
 function fave(i,small=true){const yes=store('fav').includes(i.id);return `<button type="button" class="quick-fav ${yes?'is-fav':''}" data-toggle="fav" data-id="${i.id}" aria-label="${yes?'Quitar de favoritos':'Marcar como favorito'}: ${esc(tr(i.title))}" title="${yes?'Quitar de favoritos':'Marcar como favorito'}">${yes?'★':'☆'}</button>`}
