@@ -293,7 +293,7 @@ function content(){let route=decodeURIComponent(location.hash.replace(/^#/,'')||
  if(route==='/informacion')return window.viInfoPage();
  if(route==='/explorar')return `<div class="page-header"><span class="eyebrow">CATALOG</span><h1>${s.categories}</h1><p>${s.notice}</p></div><div class="category-grid">${categories.map(tile).join('')}${rankingExploreTiles()}</div>`;
  if(route.startsWith('/explorar/')){let id=route.split('/')[2],ct=cat(id);if(!ct)return unknown();let its=records.filter(x=>x.category===id);return `<div class="category-cover" style="background-image:linear-gradient(90deg,#0d1225f0 0%,#101526ba 52%,#12182a14 100%),url('${categoryArtHQ[ct.id]}'),url('${categoryArt[ct.id]}')"><span class="eyebrow">${s.catalog}</span><h1>${esc(tr(ct.label))}</h1><p>${esc(categoryNotes[ct.id]?.[locale]||'')}</p></div>${window.viDetailEnhancements?.compareExplore(id,locale,records)||''}${its.length?categoryList(id,its):`<div class="empty-state"><h3>${id==='secretos'?'Todavía no hay secretos confirmados':id==='herramientas'?'Herramientas disponibles':'Sin fichas verificadas por ahora'}</h3><p>${id==='secretos'?'Publicaremos trucos y hallazgos cuando puedan comprobarse. No vamos a mezclar rumores con datos reales.':id==='herramientas'?'Podés usar el buscador y administrar tus favoritos desde Mi partida. Podés comparar los datos verificados disponibles; si faltan estadísticas, no se inventan.':s.noData2}</p>${id==='herramientas'?`<div class="actions"><a class="primary-btn" ${href('/buscar')}>Abrir buscador ↗</a><a class="ghost-btn" ${href('/partida')}>Mis favoritos ↗</a></div>`:''}</div>`}`}
- if(route.startsWith('/ficha/')){let id=route.split('/')[2],i=records.find(x=>x.id===id);if(!i)return unknown();if(!store('recent').includes(id)){save('recent',[id,...store('recent')].slice(0,15))}else{save('recent',[id,...store('recent').filter(v=>v!==id)].slice(0,15))}const fav=store('fav').includes(id),done=store('done').includes(id),read=store('read').includes(id);const isOverview=i.recordType==='story_overview';const canTrack=trackable(i);const progressLabel=isOverview?(read?'✓ Leída':'○ Por leer'):(canTrack?(done?'✓ '+itemStatusLabel(i):'○ '+itemStatusLabel(i)):'Ficha informativa');const progressClass=(isOverview?read:(canTrack&&done))?'progress-complete':'progress-pending';const progressButton=isOverview?(read?'Marcar como no leída':'Marcar como leída'):(canTrack?(done?(i.category==='misiones'?'Marcar como pendiente':'Quitar del progreso'):'Marcar '+(i.category==='misiones'?'como completada':'como registrado')):'');return `<div class="detail-card"><div class="detail-image">${window.viDetailEnhancements?.gallery(i,locale,thumb(i,'detail-thumb'))||thumb(i,'detail-thumb')}<div class="image-caption"><span>${i.image?esc(tr(i.image.caption)):'Imagen aún no disponible.'}</span>${i.image?.remote&&i.image?.type==='official'?` <a href="${esc(i.image.officialPage||'https://www.rockstargames.com/VI/media/screenshots')}" target="_blank" rel="noopener noreferrer" class="source-link">Ver imágenes oficiales ↗</a>`:''}</div></div><span class="eyebrow">${s.details} · ${esc(tr(cat(i.category).label))}</span><h1>${esc(tr(i.title))}</h1><p>${esc(tr(i.desc))}</p><span class="pill ${i.facets?.community===1?'pill-warning':i.status==='verified'?'pill-official':'pill-warning'}">${newsStatusLabel(i)}</span>${window.viDetailEnhancements?.compareLink(i,locale)||''}<section class="progress-panel" aria-label="Estado personal"><div class="progress-info"><span class="progress-label">${isOverview?'RESUMEN INFORMATIVO · NO ES UNA MISIÓN JUGABLE':i.category==='misiones'?'PROGRESO DE LA MISIÓN':'MI SEGUIMIENTO'}</span><span class="progress-badge ${progressClass}">${progressLabel}</span></div><div class="actions"><button data-toggle="fav" data-id="${id}">${fav?'★ '+s.unfav:'☆ '+s.fav}</button>${(isOverview||canTrack)?`<button class="progress-action ${progressClass}" data-toggle="${isOverview?'read':'done'}" data-id="${id}">${progressButton}</button>`:""}</div></section><div class="divider"></div>${window.viDetailEnhancements?.specGrid(i,locale)||(i.facts&&i.facts.length?`<h3>Datos confirmados</h3><div class="fact-grid">${i.facts.filter(f=>f.verified).map(f=>`<div><small>${esc(f.key)}</small><strong>${esc(f.value)}</strong></div>`).join('')}</div>`:'')}<h3>${s.sources}</h3>${i.sources.length?i.sources.map(src=>`<p><a class="source-link" href="${esc(src.url)}" target="_blank" rel="noopener noreferrer">${esc(src.label)} ↗</a><br><small class="muted">Revisado: ${esc(src.checkedAt||'')}</small></p>`).join(''):`<p>${s.noSources}</p>`}</div>`}
+ if(route.startsWith('/ficha/')){let id=route.split('/')[2],i=records.find(x=>x.id===id);if(!i)return unknown();if(!store('recent').includes(id)){save('recent',[id,...store('recent')].slice(0,15))}else{save('recent',[id,...store('recent').filter(v=>v!==id)].slice(0,15))}const fav=store('fav').includes(id),done=store('done').includes(id),read=store('read').includes(id);const isOverview=i.recordType==='story_overview';const canTrack=trackable(i);const progressLabel=isOverview?(read?'✓ Leída':'○ Por leer'):(canTrack?(done?'✓ '+itemStatusLabel(i):'○ '+itemStatusLabel(i)):'Ficha informativa');const progressClass=(isOverview?read:(canTrack&&done))?'progress-complete':'progress-pending';const progressButton=isOverview?(read?'Marcar como no leída':'Marcar como leída'):(canTrack?(done?(i.category==='misiones'?'Marcar como pendiente':'Quitar del progreso'):'Marcar '+(i.category==='misiones'?'como completada':'como registrado')):'');return `<div class="detail-card"><div class="detail-image">${window.viDetailEnhancements?.gallery(i,locale,thumb(i,'detail-thumb'))||thumb(i,'detail-thumb')}<div class="image-caption"><span>${i.image?esc(tr(i.image.caption)):'Imagen aún no disponible.'}</span>${i.image?.remote&&i.image?.type==='official'?` <a href="${esc(i.image.officialPage||'https://www.rockstargames.com/VI/media/screenshots')}" target="_blank" rel="noopener noreferrer" class="source-link">Ver imágenes oficiales ↗</a>`:''}</div></div><span class="eyebrow">${s.details} · ${esc(tr(cat(i.category).label))}</span><h1>${esc(tr(i.title))}</h1><p>${esc(tr(i.desc))}</p><span class="pill ${i.facets?.community===1?'pill-warning':i.status==='verified'?'pill-official':'pill-warning'}">${newsStatusLabel(i)}</span><div class="vi-detail-compare-row">${window.viDetailEnhancements?.compareLink(i,locale)||''}</div><section class="progress-panel" aria-label="Estado personal"><div class="progress-info"><span class="progress-label">${isOverview?'RESUMEN INFORMATIVO · NO ES UNA MISIÓN JUGABLE':i.category==='misiones'?'PROGRESO DE LA MISIÓN':'MI SEGUIMIENTO'}</span><span class="progress-badge ${progressClass}">${progressLabel}</span></div><div class="actions"><button data-toggle="fav" data-id="${id}">${fav?'★ '+s.unfav:'☆ '+s.fav}</button>${(isOverview||canTrack)?`<button class="progress-action ${progressClass}" data-toggle="${isOverview?'read':'done'}" data-id="${id}">${progressButton}</button>`:""}</div></section><div class="divider"></div>${window.viDetailEnhancements?.specGrid(i,locale)||(i.facts&&i.facts.length?`<h3>Datos confirmados</h3><div class="fact-grid">${i.facts.filter(f=>f.verified).map(f=>`<div><small>${esc(f.key)}</small><strong>${esc(f.value)}</strong></div>`).join('')}</div>`:'')}<h3>${s.sources}</h3>${i.sources.length?i.sources.map(src=>`<p><a class="source-link" href="${esc(src.url)}" target="_blank" rel="noopener noreferrer">${esc(src.label)} ↗</a><br><small class="muted">Revisado: ${esc(src.checkedAt||'')}</small></p>`).join(''):`<p>${s.noSources}</p>`}</div>`}
  if(route==='/comparar')return window.viDetailEnhancements?.comparePage(records,locale)||unknown();
  if(route==='/buscar')return `<div class="page-header"><span class="eyebrow">UNIVERSAL SEARCH</span><h1>${s.search}</h1></div><div class="search-box"><span>⌕</span><input id="searchInput" placeholder="${esc(s.searchHint)}" value="${esc(searchText)}" aria-label="${s.search}"><button type="button" id="clearSearch" title="Clear">×</button></div><div class="search-chips">${(locale==='en'?['fastest car','most expensive house','where to find a motorcycle','Lucia Caminos']:locale==='pt'?['carro mais rápido','casa mais cara','onde encontrar moto','Lucia Caminos']:['personaje negro','personaje empresario negro','arma revólver','auto más rápido']).map(q=>`<button data-query="${esc(q)}">${esc(q)}</button>`).join('')}</div>${filterGuide()}<p class="muted small">${s.notice}</p><div id="searchResults"></div>`;
  if(route==='/mapa')return `<div class="page-header map-page-header"><span class="eyebrow">LEONIDA · MAPA INTERACTIVO</span><div class="map-heading-line"><h1>Explorá el mapa</h1></div></div><div id="mapApp">${renderMap()}</div><div id="vi-route-manager" class="vi-route-manager" aria-live="polite"></div>`;
@@ -563,6 +563,17 @@ window.viRouteContext=()=>({locale,mapVersion:MAP_VERSION,pins:allMapPins().map(
 window.viRouteFocusPin=(id)=>{mapFocusPin(id);document.getElementById('mapCanvas')?.scrollIntoView({behavior:'smooth',block:'center'});};
 window.viCatalogRouteItems=()=>records.filter(r=>r.mapPoint?.mapVersion===MAP_VERSION&&r.status==='verified').map(r=>r.id);
 window.viRefreshApp=()=>render();
+window.viRefreshComparison=()=>{
+ const previous=document.querySelector('.vi-compare-page');
+ if(!previous||!location.hash.startsWith('#/comparar'))return false;
+ const markup=window.viDetailEnhancements?.comparePage(records,locale);
+ if(typeof markup!=='string')return false;
+ const fragment=document.createElement('template');fragment.innerHTML=markup.trim();
+ const updated=fragment.content.firstElementChild;
+ if(!updated)return false;
+ previous.replaceWith(updated);
+ return true;
+};
 window.viApplySignedRankings=(next)=>{if(!next||!Array.isArray(next.donations)||!Array.isArray(next.speedruns))return;
  publicRankings.speedruns.splice(0,publicRankings.speedruns.length,...next.speedruns);
  publicRankings.donations.splice(0,publicRankings.donations.length,...next.donations);
@@ -570,7 +581,43 @@ window.viApplySignedRankings=(next)=>{if(!next||!Array.isArray(next.donations)||
 };
 
 
-window.addEventListener('hashchange' ,()=>{window.scrollTo(0,0);render();const route=decodeURIComponent(location.hash.replace(/^#/,'')||'/').split('?')[0];if(route==='/partida'&&/[?&]estado=(favoritos|completados|pendientes)/.test(location.hash)){requestAnimationFrame(()=>document.getElementById('playthroughFilteredList')?.scrollIntoView({behavior:'smooth',block:'start'}));}});render();
+// Comparisons are an in-page workspace. Intercept hash links before the browser
+// performs native anchor scrolling, then focus the controls after rendering.
+document.addEventListener('click',event=>{
+ const link=event.target.closest?.('a[href^="#/comparar"]');
+ if(!link||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+ const href=link.getAttribute('href');
+ if(!href)return;
+ event.preventDefault();
+ const wasCompare=location.hash.startsWith('#/comparar');
+ const oldY=window.scrollY;
+ history.pushState(history.state,'',href);
+ if(wasCompare&&window.viRefreshComparison?.())return;
+ render();
+ requestAnimationFrame(()=>{
+  const anchor=document.querySelector('.vi-compare-controls');
+  if(anchor){
+   const y=anchor.getBoundingClientRect().top+window.scrollY-24;
+   window.scrollTo({top:Math.max(0,y),behavior:'instant'});
+  }else window.scrollTo({top:oldY,behavior:'instant'});
+ });
+},true);
+window.addEventListener('hashchange',()=>{
+ const comparing=location.hash.startsWith('#/comparar');
+ if(!comparing)window.scrollTo(0,0);
+ const previousY=window.scrollY;
+ render();
+ if(comparing)requestAnimationFrame(()=>{
+  const controls=document.querySelector('.vi-compare-controls');
+  if(controls&&previousY===0)controls.scrollIntoView({block:'start',behavior:'instant'});
+  else window.scrollTo({top:previousY,behavior:'instant'});
+ });
+ const route=decodeURIComponent(location.hash.replace(/^#/,'')||'/').split('?')[0];
+ if(route==='/partida'&&/[?&]estado=(favoritos|completados|pendientes)/.test(location.hash)){
+  requestAnimationFrame(()=>document.getElementById('playthroughFilteredList')?.scrollIntoView({behavior:'smooth',block:'start'}));
+ }
+});
+render();
 
 // V1.21: tab navigation; prevents reinitializing progress or changing user data.
 document.addEventListener('click',e=>{const b=e.target.closest('[data-play-scroll]');if(!b)return;e.preventDefault();document.getElementById('play-category-list')?.scrollIntoView({behavior:'smooth',block:'start'});});
