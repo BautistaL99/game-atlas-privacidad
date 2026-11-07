@@ -1,5 +1,5 @@
 /* Web-only offline fallback. JavaScript, CSS and HTML are network-first so new releases propagate. */
-const CACHE='game-atlas-safe-v177';
+const CACHE='game-atlas-safe-v181';
 const OLD_PREFIXES=['vi-game-assistant-','game-atlas-safe-'];
 const OFFLINE=['./','./index.html','./privacy.html','./news-v155.js','./info-v158.js','./detail-enhancements-v160.js','./compare-metrics-v161.js','./info-v158.css','./app-v155.css','./desktop-fixes-v156.css','./desktop-fixes-v157.css','./app-v137.js','./app-v137.css','./mobile-v137.css','./mobile-v140.css','./mobile-v141.css','./mobile-v142.css','./mobile-v143.css','./mobile-v144.css','./routes-v145.css','./routes-v145.js','./vi-i18n.js','./diagnostics-v143.js','./online-updates.js','./online-config.json','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/vi-logo.svg','./visual-web-v148.css','./visual-gallery-v149.js'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(OFFLINE)).then(()=>self.skipWaiting())));
