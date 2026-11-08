@@ -12,10 +12,17 @@
       get length(){return keys().length}};
   }
   const local=isolate(window.localStorage),session=isolate(window.sessionStorage);
-  Object.defineProperty(window,'localStorage',{configurable:true,value:local});
-  Object.defineProperty(window,'sessionStorage',{configurable:true,value:session});
-  if(window.localStorage!==local||window.sessionStorage!==session)
-    throw Error('Preview storage isolation could not be activated');
+  try {
+    Object.defineProperty(window,'localStorage',{configurable:true,value:local});
+    Object.defineProperty(window,'sessionStorage',{configurable:true,value:session});
+    if(window.localStorage!==local||window.sessionStorage!==session)throw Error('Storage isolation failed');
+  } catch (error) {
+    window.stop();
+    document.open();
+    document.write('<!doctype html><html lang="es"><meta charset="utf-8"><title>Vista de prueba no disponible</title><body><p>Esta vista de prueba no puede aislar tus datos en este navegador. No se cargó la aplicación ni se modificó tu partida.</p></body></html>');
+    document.close();
+    throw error;
+  }
 })();
 </script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Game Atlas Companion · No oficial — PREVIEW V195</title><meta name="theme-color" content="#101321"><meta name="vi-android-build" content="1.47.0"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Game Atlas Companion"><link rel="icon" type="image/svg+xml" href="./icons/vi-logo.svg"><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icons/icon-180.png"><meta name="description" content="Guía independiente de GTA VI: fichas, mapa, seguimiento y fuentes verificadas. No afiliada a Rockstar Games."><link rel="stylesheet" href="./app-v137.css"><link rel="stylesheet" href="./app-v155.css?rev=20261108-v194-home2"><link rel="stylesheet" href="./desktop-fixes-v156.css"><link rel="stylesheet" href="./desktop-fixes-v157.css"><link rel="stylesheet" href="./info-v158.css"><script>function viMobileRouteClass(){document.documentElement.classList.toggle('vi-route-map', /(?:^|\/)mapa(?:\/|$|\?)/.test(location.hash)||/\/mapa(?:\/|$)/.test(location.pathname));}window.addEventListener('hashchange',viMobileRouteClass);document.addEventListener('DOMContentLoaded',viMobileRouteClass);</script><style>@media(max-width:700px){html.vi-route-map .top-search-wrap{display:none!important}html.vi-route-map .topbar{min-height:76px!important;grid-template-areas:'brand settings'!important;grid-template-rows:auto!important}}</style><style id="vi-android-v130">
 @media(max-width:700px){
