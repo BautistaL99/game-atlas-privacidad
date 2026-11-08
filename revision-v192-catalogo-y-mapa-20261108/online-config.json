@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "manifestUrl": "https://bautistal99.github.io/game-atlas-privacidad/revision-v192-catalogo-y-mapa-20261108/updates/catalog-envelope.json",
+  "publicKeyEd25519Base64": "qxnlUBqCBknS8KL/Bymrx4COzWN9TpPJAfdHohv/ugI=",
+  "schema": 1,
+  "minCheckMinutes": 30
+}
