@@ -1,0 +1,499 @@
+/* V155: News destination and high-contrast progress HUD. Applies to web and future native bundles. */
+.vi-news-page{max-width:1320px;margin:0 auto;color:#f4f8ff}
+.vi-news-hero{padding:27px clamp(18px,4vw,40px);border-radius:22px;background:linear-gradient(110deg,#0f1d35,#18364a 66%,#102139);border:1px solid #42677977;margin:7px 0 20px}
+.vi-news-hero .eyebrow{letter-spacing:.18em;color:#4ee4db;font-weight:900}
+.vi-news-hero h1{font-size:clamp(30px,4vw,48px);margin:10px 0 8px;line-height:1.08;color:#fff}
+.vi-news-hero p{font-size:15px;color:#ccdae9;line-height:1.6;margin:0}
+.vi-news-tabs{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px}
+.vi-news-tabs a{border:1px solid #415d72;border-radius:12px;padding:12px 19px;color:#cadbe7;background:#102134;font-weight:850;text-decoration:none}
+.vi-news-tabs a.is-active{background:#22584f;color:#eafff9;border-color:#4bdebe;box-shadow:0 0 0 1px #52d8cd44 inset}
+.vi-news-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:19px}
+.vi-news-card{min-width:0;overflow:hidden;background:#171c30;border:1px solid #42566b99;border-radius:17px;display:flex;flex-direction:column;box-shadow:0 8px 25px #0003}
+.vi-news-image-link{display:block;position:relative;overflow:hidden;aspect-ratio:16 / 9;background:#081525}
+.vi-news-card .vi-news-image{display:block;width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .3s ease;border-radius:0}
+.vi-news-card:hover .vi-news-image{transform:scale(1.025)}
+.vi-news-body{padding:18px 19px 20px;display:flex;flex:1;flex-direction:column}
+.vi-news-date{color:#72e2d5;letter-spacing:.04em;font-size:11px;font-weight:800;margin-bottom:10px}
+.vi-news-body h2{font-size:clamp(18px,1.7vw,22px);line-height:1.25;margin:0 0 12px}
+.vi-news-body h2 a{color:#fff}
+.vi-news-body p{font-size:13px;color:#c4d4e7;line-height:1.6;margin:0 0 17px;flex:1}
+.vi-news-actions{border-top:1px solid #4a67808a;padding-top:14px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.vi-news-actions a{color:#6ff3df;font-size:12px;font-weight:800}
+.vi-news-actions a+ a{color:#e6eafa}
+.vi-news-empty{grid-column:1/-1;background:#132339;border:1px solid #36596b;padding:34px 28px;border-radius:16px}
+.vi-news-empty h2{margin:0 0 10px;font-size:20px}.vi-news-empty p{margin:0;color:#c6d5e7}
+.v120-next-milestone,.v120-next-milestone>b,.v120-next-milestone p{color:#eefbff!important}
+.v120-next-milestone{background:linear-gradient(135deg,#103148,#092132)!important;border-color:#4f8996!important}
+.v120-next-milestone>b{font-weight:950!important;text-shadow:0 1px 8px #0005}
+.v120-next-milestone p{font-weight:650!important}
+.v120-next-milestone>small{color:#65f7e4!important}
+/* Desktop web-only: true image panel below the menu, never behind links. */
+@media(min-width:701px){
+ html.vi-real-gallery .sidebar{overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:thin!important}
+ html.vi-real-gallery .sidebar::before{display:none!important;content:none!important}
+ html.vi-real-gallery .sidebar-nav{flex:0 0 auto!important}
+ html.vi-real-gallery .sidebar-rankings{flex:0 0 auto!important;position:relative!important;z-index:2!important;background:#111321!important;backdrop-filter:none!important;margin-bottom:0!important}
+ html.vi-real-gallery .sidebar-photo{display:block!important;position:relative!important;flex:1 0 125px!important;max-height:200px!important;min-height:110px!important;margin:7px -17px 0!important;width:calc(100% + 34px)!important;background-image:linear-gradient(180deg,#111321 0%,#11132144 13%,#11132100 35%,#11132145 100%),var(--vi-sidebar-photo)!important;background-position:center,center center!important;background-size:cover,cover!important;background-repeat:no-repeat!important}
+ html.vi-real-gallery .sidebar-note{display:block!important;position:relative!important;inset:auto!important;z-index:3!important;flex:0 0 auto!important;width:auto!important;max-width:none!important;margin:0 -17px -27px!important;padding:10px 15px 14px!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#111321!important;color:#bdccda!important;font-size:10px!important;line-height:1.35!important;font-weight:450!important;text-align:center!important;text-shadow:none!important}
+ html.vi-real-gallery .my-game-hero .my-game-hero-art{background-image:url("https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_01.0naeahss9-1x6.jpg")!important;background-position:72% 48%!important;background-size:cover!important;opacity:1!important}
+ html.vi-real-gallery .my-game-hero:before{background:linear-gradient(90deg,#0b122af5 0%,#0b1529e6 31%,#0a1729ad 55%,#09162644 100%)!important}
+}
+/* Bottom HUD: five primary tabs plus the more-menu. */
+@media(max-width:700px){
+ .bottom-nav{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:1px!important}
+ .bottom-nav>a,.bottom-nav .mobile-more{min-width:0!important}
+ .bottom-nav>a{font-size:9px!important;overflow:hidden!important;white-space:nowrap}
+ .bottom-nav .nav-symbol{font-size:20px!important}
+ .vi-news-card .vi-news-body{padding:15px}
+ .vi-news-page{padding-bottom:14px}
+ .vi-news-list{grid-template-columns:1fr;gap:14px}
+ .vi-news-tabs a{flex:1;text-align:center;font-size:12px;padding:12px 6px}
+}
+@media(max-width:480px){
+ .vi-news-hero{padding:20px 18px}
+ .vi-news-hero h1{font-size:29px}
+}
+
+/* V159 — third tab for automatic historical news archive. No other HUD changes. */
+.vi-news-archive-counter{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:19px;margin-left:4px;padding:0 5px;border-radius:100px;background:#32515e;color:#d8f6f0;font-size:10px;font-weight:900}
+.vi-news-tabs a.is-active .vi-news-archive-counter{background:#0b342c;color:#bbfff2}
+@media(max-width:700px){.vi-news-tabs{gap:6px}.vi-news-tabs a{font-size:11px;padding:11px 8px}}
+
+/* Community-source cards: explicit original artwork instead of misusing Rockstar screenshots. */
+.vi-news-rumor-cover{display:flex;width:100%;height:100%;min-height:200px;flex-direction:column;justify-content:center;align-items:center;gap:14px;padding:24px;text-align:center;color:#e7fbfa;background:radial-gradient(circle at 78% 18%,#6b3a8b8a 0,transparent 44%),linear-gradient(130deg,#0d2539,#17474b 72%,#132235)}
+.vi-news-rumor-cover>span{font-size:clamp(35px,5vw,68px);letter-spacing:.12em;font-weight:950;line-height:1}
+.vi-news-rumor-cover>strong{border:1px solid #b6e8a777;border-radius:9px;color:#fcf5bb;background:#303324e0;padding:7px 11px;font-size:12px;letter-spacing:.08em}
+.vi-news-rumor-cover>small{font-size:11px;letter-spacing:.18em;color:#b4d7da}
+.vi-news-rumor-label{align-self:flex-start;margin:0 0 12px;font-weight:850;font-size:11px;color:#ffeaa4}
+
+/* V160: topic-illustrated community reports; pictures are remote Rockstar promotional
+   material used only as context, never represented as the source of the allegation.
+   The page keeps URLs rather than storing or duplicating image files. */
+.vi-news-community .vi-news-rumor-cover{position:relative;display:block;width:100%;height:100%;min-height:0;padding:0;overflow:hidden;background:linear-gradient(135deg,#123a43,#1d3551 65%,#482e61)}
+.vi-news-community .vi-news-rumor-cover .vi-news-rumor-photo{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.88) brightness(.72);transform:scale(1.01);transition:transform .3s ease}
+.vi-news-community .vi-news-rumor-cover:hover .vi-news-rumor-photo{transform:scale(1.04)}
+.vi-news-community .vi-news-rumor-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#071a2be9 0%,#101b2780 34%,transparent 80%);pointer-events:none}
+.vi-news-community .vi-rumor-overlay{position:absolute;z-index:1;bottom:12px;left:14px;right:14px;display:flex;align-items:flex-start;flex-direction:column;gap:5px;text-align:left}
+.vi-news-community .vi-rumor-overlay strong{background:#172720df;border:1px solid #c5d68e9c;border-radius:7px;padding:5px 9px;color:#fff6ad;font-size:10px;letter-spacing:.07em;font-weight:850}
+.vi-news-community .vi-rumor-overlay small{font-size:10px;line-height:1.3;font-weight:700;color:#eef7f9;text-shadow:0 1px 3px #000}
+.vi-news-archive-note{background:#10283c;border:1px solid #39718477;border-radius:14px;color:#d2edf3;padding:15px 18px;font-size:13px;line-height:1.5;margin:0 0 19px}
+
+/* V160: gallery / verified item comparison. Images are curated; no wiki photos imported. */
+.vi-gallery{width:100%;min-width:0}
+.vi-gallery-stage{position:relative;overflow:hidden;border-radius:14px;touch-action:pan-y}
+.vi-gallery-slide[hidden]{display:none!important}
+.vi-gallery-slide{position:relative}
+.vi-gallery-slide .detail-thumb{border-radius:14px;margin:0}
+.vi-gallery-slide-caption{padding:8px 11px;background:#14273d;color:#deebf9;font-size:12px;line-height:1.35}
+.vi-gallery-slide-caption a{float:right;color:#7bf0dc;font-size:14px}
+.vi-gallery-nav{position:absolute;top:45%;transform:translateY(-50%);z-index:2;border:1px solid #d7f9f355;border-radius:50%;width:38px;height:38px;display:grid;place-items:center;background:#071927c7;color:#fff;font-size:31px;cursor:pointer}
+.vi-gallery-nav.vi-prev{left:10px}.vi-gallery-nav.vi-next{right:10px}
+.vi-gallery-nav:focus-visible,.vi-gallery-thumbs button:focus-visible{outline:3px solid #63e8e5;outline-offset:2px}
+.vi-gallery-counter{position:absolute;right:12px;top:10px;color:#fff;background:#071927de;font-size:12px;font-weight:850;border-radius:9px;padding:6px 9px}
+.vi-gallery-thumbs{display:flex;overflow-x:auto;gap:9px;padding:10px 2px 3px}
+.vi-gallery-thumbs button{flex:0 0 70px;height:49px;overflow:hidden;border:2px solid #48657d;border-radius:10px;padding:0;background:#101d30;cursor:pointer}
+.vi-gallery-thumbs button[aria-pressed="true"]{border-color:#5cebd2;box-shadow:0 0 0 1px #5cebd244}
+.vi-gallery-thumbs img{width:100%;height:100%;object-fit:cover}
+.vi-detail-compare{display:inline-flex;text-decoration:none;border:1px solid #56c6b7;border-radius:10px;color:#d4fffa;background:#19493f;padding:10px 15px;font-size:13px;font-weight:800;margin:17px 0 0}
+.vi-detail-compare:hover{background:#266c5c}
+.vi-compare-page{max-width:1250px;margin:0 auto;color:#f3f7fc}
+.vi-compare-intro{padding:24px 28px;border:1px solid #406b7b;border-radius:18px;background:linear-gradient(120deg,#0e2036,#183e49)}
+.vi-compare-intro .eyebrow{letter-spacing:.15em;color:#77e9dc}
+.vi-compare-intro h1{font-size:clamp(26px,4vw,42px);margin:8px 0 10px;color:#fff}
+.vi-compare-intro p{color:#cee3ee;line-height:1.55;margin:0}
+.vi-compare-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;margin:19px 0}
+.vi-compare-controls label{display:flex;flex-direction:column;gap:7px;color:#cbe4ed;font-size:13px;font-weight:800}
+.vi-compare-controls select{width:100%;background:#152438;border:1px solid #517187;border-radius:11px;padding:12px 10px;color:#fff;min-height:44px}
+.vi-compare-message{padding:26px 20px;background:#182638;border:1px solid #3b5a72;border-radius:15px;color:#d7e2ed;line-height:1.55}
+.vi-compare-scroll{max-width:100%;overflow-x:auto;border:1px solid #436375;border-radius:15px;background:#101e30}
+.vi-compare-scroll table{width:100%;min-width:600px;border-collapse:collapse;text-align:left;font-size:14px}
+.vi-compare-scroll th,.vi-compare-scroll td{border-bottom:1px solid #314b61;padding:14px 15px;vertical-align:top;min-width:155px}
+.vi-compare-scroll thead th{background:#20374b;color:#edffff;font-weight:900}
+.vi-compare-scroll th[scope="row"]{font-weight:750;color:#97eedf;min-width:175px}
+.vi-compare-scroll th a{color:#fff;text-decoration:underline;text-decoration-color:#65d9c5}
+.vi-compare-scroll td{color:#e7eef7}
+.vi-compare-scroll tr:last-child td,.vi-compare-scroll tr:last-child th{border-bottom:0}
+.vi-compare-sources{display:flex;flex-wrap:wrap;gap:13px;margin-top:18px}
+.vi-compare-sources a{color:#7ce9d7;font-weight:800;font-size:12px}
+@media(max-width:700px){.vi-compare-intro{padding:18px}.vi-gallery-nav{width:33px;height:33px;font-size:26px}.vi-gallery-thumbs button{flex-basis:60px}}
+
+.vi-reviewed-single-photo small{display:block;color:#bed3dd;font-size:11px;margin-top:7px;padding:4px 3px}
+
+/* V161 - compact visual comparison cockpit, progressive specs, and metric grading */
+.vi-compare-page{padding-bottom:28px}
+.vi-compare-intro{position:relative;isolation:isolate;overflow:hidden;min-height:290px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+ background:linear-gradient(100deg,#071829f9 3%,#0a1f33e8 38%,#09182769 70%,#11202a5e 100%),
+ url('https://www.rockstargames.com/VI/_next/static/media/Vice_City_11.09paum3g942sc.jpg?akim=1&imdensity=1&imwidth=1280') center 45%/cover,
+ linear-gradient(120deg,#0e2639,#184e52)!important;border-color:#69a4aa8c;box-shadow:0 20px 45px #0005}
+.vi-compare-intro:after{content:'';position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at 80% 50%,#56e4d329,transparent 45%)}
+.vi-compare-title{max-width:670px;position:relative;z-index:2}
+.vi-compare-title .eyebrow{font-weight:950;letter-spacing:.2em;color:#73fff0}
+.vi-compare-intro h1{font-size:clamp(34px,4.7vw,58px);line-height:1.08;text-shadow:0 4px 14px #000b}
+.vi-compare-intro p{max-width:640px;color:#f0fcff;font-size:clamp(14px,1.3vw,17px);text-shadow:0 2px 9px #000a}
+.vi-compare-hero-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.vi-compare-hero-tags span{border:1px solid #bafce079;color:#e4fff7;background:#081a27cd;border-radius:30px;padding:7px 11px;font-size:11px;letter-spacing:.035em;font-weight:850}
+.vi-compare-art{display:flex;align-items:center;justify-content:center;position:relative;z-index:1;flex:0 0 260px;filter:drop-shadow(0 10px 18px #0009)}
+.vi-compare-art span{font-size:34px;font-weight:1000;color:#bcfff7;background:#0d2941e8;border:1px solid #8bfffbb1;padding:26px 15px;border-radius:18px;transform:rotate(-8deg)}
+.vi-compare-art span:last-child{transform:rotate(8deg);background:#103e43ea}
+.vi-compare-art strong{font-size:48px;color:#fff;background:#116c69;border:2px solid #a9fff1;border-radius:50%;width:76px;height:76px;display:grid;place-items:center;z-index:2;margin:0 -14px}
+.vi-compare-legend{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 15px;margin-bottom:13px;border:1px solid #3c6675;border-radius:12px;background:#122438}
+.vi-compare-legend span{border-radius:9px;padding:5px 9px;font-size:12px;font-weight:850}
+.vi-legend-good{color:#96f8b2;background:#123e2f}.vi-legend-bad{color:#ffb4b6;background:#542629}
+.vi-compare-legend small{font-size:11px;color:#c4dbe4;line-height:1.4}
+.vi-compare-scroll tbody td.vi-metric-better{background:#124932c7;color:#e5ffec;box-shadow:inset 0 0 0 1px #39b87044}
+.vi-compare-scroll tbody td.vi-metric-worse{background:#4c242ac7;color:#ffe6e8;box-shadow:inset 0 0 0 1px #e4757544}
+.vi-metric-badge{display:block;margin-top:5px;font-weight:850;font-size:10px;opacity:.95}
+.vi-spec-panel{margin-top:25px;border-top:1px solid #38516a;padding-top:15px}
+.vi-spec-panel h3{margin:3px 0 9px;color:#f2fbff}
+.vi-spec-panel>p{margin:0 0 18px;color:#bcd0df;font-size:12px;line-height:1.5}
+.vi-spec-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.vi-spec-cell{border:1px solid #375064;background:#1c3043;border-radius:12px;padding:13px 14px;min-width:0}
+.vi-spec-cell small,.vi-spec-cell strong{display:block}.vi-spec-cell small{font-size:11px;color:#a8d3db;margin-bottom:8px}
+.vi-spec-cell strong{color:#f3fbff;font-size:15px;overflow-wrap:anywhere}
+.vi-spec-cell.vi-spec-pending{background:#172739;border-color:#304659}
+.vi-spec-cell.vi-spec-pending strong{color:#889eae}
+.vi-explore-compare{margin:-12px 0 20px;border:1px solid #4aafad99;background:linear-gradient(120deg,#133a45,#1d2942);padding:15px 17px;border-radius:13px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.vi-explore-compare div{display:flex;flex-direction:column;gap:4px}
+.vi-explore-compare b{font-size:15px;color:#eafffb}.vi-explore-compare span{color:#bddee2;font-size:12px;line-height:1.45}
+.vi-explore-compare>a{background:#2f907e;border:1px solid #82f6d9;border-radius:10px;padding:10px 14px;color:#f9fffd;font-weight:900;text-decoration:none;white-space:nowrap;font-size:13px}
+.vi-explore-compare>a:hover{background:#46ae9b}
+@media(max-width:780px){.vi-compare-intro{min-height:230px}.vi-compare-art{flex-basis:150px}.vi-compare-art span{font-size:19px;padding:17px 9px}.vi-compare-art strong{font-size:29px;width:52px;height:52px}}
+@media(max-width:600px){.vi-compare-intro{min-height:260px;padding:23px!important;background-position:center!important}.vi-compare-art{display:none}.vi-compare-title{width:100%}.vi-compare-hero-tags{gap:6px}.vi-compare-hero-tags span{font-size:10px}.vi-spec-grid{grid-template-columns:1fr 1fr;gap:8px}.vi-spec-cell{padding:10px}.vi-explore-compare{flex-direction:column;align-items:stretch;margin-top:-12px}.vi-explore-compare>a{text-align:center}}
+
+/* Keep the rumor illustration notice legible on narrow screens, V161. */
+.vi-news-community .vi-rumor-overlay small{letter-spacing:normal!important;word-spacing:normal!important;text-transform:none!important;overflow-wrap:normal;word-break:normal;max-width:100%;font-family:inherit;line-height:1.5!important;display:block}
+.vi-news-community .vi-rumor-overlay{gap:5px;align-items:flex-start}
+
+/* V162: discoverable comparison hub with direct entry shortcuts. */
+.vi-explore-compare.vi-explore-compare-featured{display:block;margin-top:-12px;padding:19px 22px;background:radial-gradient(circle at 93% 0%,#2af5d133,transparent 42%),linear-gradient(115deg,#102d3f,#17364b 55%,#19243f);border:1px solid #62dcd0;box-shadow:0 10px 30px #0004,inset 0 1px #a3fff030}
+.vi-explore-compare-featured .vi-compare-featured-head{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:18px}
+.vi-explore-compare-featured .vi-compare-featured-head>div{display:flex;flex-direction:column;gap:5px}
+.vi-explore-compare-featured .vi-compare-featured-head small{color:#77f5e8;font-size:10px;font-weight:900;letter-spacing:.18em}
+.vi-explore-compare-featured .vi-compare-featured-head b{font-size:clamp(19px,2.2vw,25px);color:#fff}
+.vi-explore-compare-featured .vi-compare-primary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:1px solid #a7fff0;border-radius:12px;background:#26a58c;color:white;text-decoration:none;font-weight:900;padding:11px 20px;box-shadow:0 5px 19px #0004;white-space:nowrap}
+.vi-explore-compare-featured .vi-compare-primary:hover{background:#39bfa4;transform:translateY(-1px)}
+.vi-explore-compare-featured .vi-compare-picks{border-top:1px solid #a4f9e735;margin-top:15px;padding-top:12px;display:flex;flex-direction:column;gap:9px}
+.vi-explore-compare-featured .vi-compare-picks>span{color:#bedce8;font-size:11px}
+.vi-explore-compare-featured .vi-compare-picks>div{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px}
+.vi-explore-compare-featured .vi-compare-shortcut{display:inline-flex;gap:9px;align-items:center;color:#eafffc;text-decoration:none;border:1px solid #85d6d75c;border-radius:999px;background:#071d2d9a;padding:8px 12px;font-size:12px;font-weight:750}
+.vi-explore-compare-featured .vi-compare-shortcut:hover{border-color:#82ffe0;background:#1f625e}
+.vi-explore-compare-featured .vi-compare-shortcut span{color:#76fff0;font-size:15px}
+.vi-detail-compare{display:inline-flex!important;align-items:center;gap:5px;border:1px solid #82f5df!important;background:#176958!important;color:#fff!important;border-radius:10px;padding:10px 15px;font-weight:850;text-decoration:none!important;margin:8px 0}
+.vi-detail-compare:hover{background:#238e78!important}
+@media(max-width:600px){.vi-explore-compare.vi-explore-compare-featured{padding:16px}.vi-explore-compare-featured .vi-compare-featured-head{flex-direction:column;align-items:stretch}.vi-explore-compare-featured .vi-compare-primary{width:100%;box-sizing:border-box}.vi-explore-compare-featured .vi-compare-picks>div{flex-direction:row}}
+
+/* V163: comparison action is a separate, intentional row below the verification badge. */
+.vi-detail-compare-row{display:flex;align-items:center;margin:15px 0 17px;clear:both}
+.vi-detail-compare-row .vi-detail-compare{margin:0!important;display:inline-flex!important;width:max-content;max-width:100%;box-sizing:border-box}
+@media(max-width:600px){.vi-detail-compare-row .vi-detail-compare{width:100%;justify-content:center}}
+
+/* V166: one-line comparison bar; catalogue items stay the focus. */
+.vi-explore-compare.vi-compare-bar{
+ box-sizing:border-box;display:flex;flex-direction:row;align-items:center;justify-content:space-between;
+ gap:14px;margin:-12px 0 18px;padding:10px 15px;min-height:60px;
+ border:1px solid #3e807f;border-radius:12px;
+ background:linear-gradient(100deg,#142d3b,#192a40);box-shadow:none;
+}
+.vi-compare-bar .vi-compare-bar-title{
+ display:flex;flex-direction:row;align-items:center;gap:9px;min-width:0;flex:0 1 auto;
+}
+.vi-compare-bar-title>span{font-size:23px!important;color:#82e8dd!important;line-height:1!important;flex-shrink:0}
+.vi-compare-bar-title strong{
+ font-size:clamp(14px,1.6vw,18px);font-weight:850;color:#f2fffc;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.vi-explore-compare.vi-compare-bar .vi-compare-count{
+ display:inline-flex;align-items:center;white-space:nowrap;
+ margin-left:auto;color:#bad7df;font-size:12px;font-weight:750;
+}
+.vi-explore-compare.vi-compare-bar .vi-compare-bar-cta{
+ box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;
+ flex:0 0 auto;min-height:38px;min-width:118px;padding:8px 13px;
+ border:1px solid #65dcc6;border-radius:9px;background:#239781;
+ color:#fff;font-weight:850;font-size:12px;text-decoration:none;white-space:nowrap;
+}
+.vi-explore-compare.vi-compare-bar .vi-compare-bar-cta[href]:hover{background:#32ad93}
+.vi-explore-compare.vi-compare-bar .vi-compare-bar-cta[aria-disabled="true"]{
+ cursor:not-allowed;opacity:.48;border-color:#476d77;background:#2b4654;color:#b9cbd2;
+ pointer-events:none;
+}
+/* Per-item selection stays in the catalogue cards, unchanged in purpose. */
+.content-card.vi-compare-ready:has(.vi-compare-pick) .content-card-link{padding-right:350px}
+.vi-compare-pick{display:inline-flex;align-items:center;justify-content:center;min-width:103px;min-height:39px;padding:8px 12px;border:1px solid #55d5ca;border-radius:10px;background:#163a4f;color:#e8fffa;font-family:inherit;font-weight:800;font-size:12px;line-height:1.2;white-space:nowrap;cursor:pointer}
+.vi-compare-pick:hover,.vi-compare-pick:focus-visible{background:#205565;border-color:#7ff8e9}
+.vi-compare-pick.is-picked{background:#286f5b;color:#fff;border-color:#93f7d0;box-shadow:inset 0 0 0 1px #9cffe63f}
+@media(max-width:950px){
+ .content-card.vi-compare-ready:has(.vi-compare-pick) .content-card-link{padding-right:6px!important;padding-bottom:60px!important}
+ .content-card.vi-compare-ready:has(.vi-compare-pick) .card-inline-actions{top:auto!important;bottom:9px!important;right:10px!important;left:auto!important;transform:none!important}
+}
+@media(max-width:700px){
+ .vi-explore-compare.vi-compare-bar{flex-direction:row;align-items:center;gap:8px;padding:9px 10px;min-height:54px}
+ .vi-compare-bar .vi-compare-bar-title{flex-direction:row;gap:5px}
+ .vi-compare-bar-title>span{font-size:19px!important}
+ .vi-compare-bar-title strong{font-size:12px}
+ .vi-explore-compare.vi-compare-bar .vi-compare-count{font-size:11px}
+ .vi-explore-compare.vi-compare-bar .vi-compare-bar-cta{min-height:34px;min-width:76px;padding:7px 8px;font-size:11px}
+ .vi-compare-pick{min-width:93px;min-height:34px;padding:7px 8px;font-size:11px}
+}
+@media(max-width:410px){
+ .vi-explore-compare.vi-compare-bar{gap:6px;padding:8px 8px}
+ .vi-compare-bar-title>span{font-size:17px!important}
+ .vi-compare-bar-title strong{font-size:11px}
+ .vi-explore-compare.vi-compare-bar .vi-compare-count{font-size:10px}
+ .vi-explore-compare.vi-compare-bar .vi-compare-bar-cta{min-width:68px;font-size:10px;padding:6px}
+ .content-card.vi-compare-ready .quick-complete{min-width:99px}
+ .content-card.vi-compare-ready:has(.vi-compare-pick) .card-inline-actions{gap:6px}
+}
+
+/* V167: verified comparison facts first, technical placeholders opt-in. */
+.vi-compare-no-data{border:1px solid #365267;background:#15263a;color:#dbe8ef;padding:16px 18px;border-radius:12px;line-height:1.5}
+.vi-compare-pending{margin:14px 0 18px;border:1px solid #3a5c6d;border-radius:12px;background:#12263a;overflow:hidden}
+.vi-compare-pending>summary{cursor:pointer;padding:13px 17px;font-weight:800;font-size:13px;color:#a4eee2;list-style-position:inside;outline-offset:-3px}
+.vi-compare-pending>summary:hover,.vi-compare-pending>summary:focus-visible{background:#1a3a4d;color:#d0fff6}
+.vi-compare-pending[open]>summary{border-bottom:1px solid #375c6d}
+.vi-compare-pending>p{font-size:12px;color:#b9ccd7;line-height:1.55;padding:10px 15px 0;margin:0}
+.vi-compare-pending .vi-compare-scroll{margin:12px 12px 14px;overflow-x:auto}
+.vi-compare-pending .vi-compare-scroll tbody td{color:#8ca7b7}
+.vi-derived-row{background:#173d3f}
+.vi-derived-row th small{display:block;font-size:10px;font-weight:500;max-width:250px;line-height:1.45;color:#b5dedc;margin-top:5px}
+.vi-derived-row td span{font-weight:800}
+@media(max-width:600px){
+ .vi-compare-pending>summary{font-size:12px;padding:12px}
+ .vi-derived-row th small{font-size:9px;max-width:150px}
+}
+
+/* V193 — original generic cover for unconfirmed community news. */
+.vi-community-art{
+ display:flex!important;position:relative;box-sizing:border-box;overflow:hidden;
+ flex-direction:column;justify-content:flex-end;align-items:flex-start;
+ isolation:isolate;text-align:left;padding:12px;color:#f3f8ff;
+ background:linear-gradient(0deg,#080e20a8,transparent 58%),url('./assets/original/community-coast-v193.webp') center/cover;
+ border:1px solid #9caed329;border-radius:11px;
+}
+.vi-community-art-icon{display:none!important}
+.vi-community-art-caption{display:flex;max-width:100%;padding:5px 9px;background:#0c1429c9;border:1px solid #ffffff26;border-radius:6px}
+.vi-community-art-caption strong{display:none}
+.vi-community-art-caption small{display:block;font-size:10px;line-height:1.25;color:#eef0ff;font-weight:500}
+.vi-news-image-link .vi-community-art{width:100%;height:100%;min-height:100%;border:0;border-radius:0;padding:14px}
+.vi-news-card:hover .vi-community-art{transform:none!important}
+.content-card .vi-community-art{min-width:0}
+.search-result .search-thumb.vi-community-art{padding:4px}
+.search-result .vi-community-art-caption{padding:3px}
+.search-result .vi-community-art-caption small{font-size:8px}
+.vi-home-community-cover{width:133px;min-width:133px;min-height:96px;align-self:stretch;padding:7px}
+.detail-thumb.vi-community-art{min-height:240px}
+.vi-compare-direct{display:inline-flex;text-decoration:none;align-self:center}
+.vi-compare-direct:hover{color:#fff}
+@media(max-width:700px){
+ .vi-community-art-caption strong{font-size:12px}
+ .vi-community-art-caption small{font-size:9px}
+ .vi-community-art-mark{font-size:33px}
+}
+
+/* V174 — Daily discoveries: compact arrows, three cards on desktop,
+   two at tablet widths, one on mobile; no full page rerenders. */
+.home-v18 .vi-discovery-section .vi-discovery-head-actions{
+ display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:10px;flex:0 0 auto;
+}
+.home-v18 .vi-discovery-nav{
+ display:inline-flex;align-items:center;gap:8px;
+ padding:4px 6px;border:1px solid #4b526c;border-radius:12px;
+ background:#151d2de8;
+}
+.home-v18 .vi-discovery-nav button{
+ display:grid;place-items:center;width:37px;height:37px;min-width:37px;
+ padding:0;border:1px solid #425b72;border-radius:9px;
+ background:#26334c;color:#8ef7e7;font-family:inherit;
+ font-size:27px;font-weight:700;line-height:1;cursor:pointer;
+}
+.home-v18 .vi-discovery-nav button:hover,.home-v18 .vi-discovery-nav button:focus-visible{
+ border-color:#7ceade;background:#23514e;color:#fff;
+}
+.home-v18 .vi-discovery-nav button:disabled{
+ opacity:.35;cursor:default;
+}
+.home-v18 .vi-discovery-nav [data-vi-discover-count]{
+ min-width:44px;text-align:center;font-variant-numeric:tabular-nums;
+ font-size:13px;font-weight:850;color:#d0e9ee;white-space:nowrap;
+}
+.home-v18 .vi-discovery-section #vi-discovery-cards{
+ width:100%;box-sizing:border-box;align-items:stretch;
+}
+@media(max-width:850px){
+ .home-v18 .vi-discovery-section .v18-block-header{flex-wrap:wrap;align-items:flex-start}
+ .home-v18 .vi-discovery-section .vi-discovery-head-actions{width:100%;justify-content:space-between}
+}
+@media(max-width:700px){
+ .home-v18 .vi-discovery-section .vi-discovery-head-actions{gap:8px}
+ .home-v18 .vi-discovery-nav{gap:5px;padding:3px 5px}
+ .home-v18 .vi-discovery-nav button{width:35px;height:35px;min-width:35px;font-size:24px}
+ .home-v18 .vi-discovery-nav [data-vi-discover-count]{font-size:12px;min-width:40px}
+ .home-v18 .vi-discovery-section .vi-discovery-head-actions .v18-outline-link{font-size:11px}
+}
+
+
+
+/* V177 — aligned progress overview and compact discovery navigation. */
+.home-v18 .v177-progress-zone{
+ display:flex;flex-direction:column;gap:16px;
+ padding:25px clamp(18px,2.4vw,34px) 22px;
+ margin-bottom:38px;
+}
+.home-v18 .v177-progress-heading{
+ display:grid;grid-template-columns:minmax(240px,305px) minmax(0,1fr);
+ gap:14px 26px;align-items:end;
+}
+.home-v18 .v177-progress-heading h2{
+ margin:9px 0 0;max-width:400px;
+ font-size:clamp(25px,2.65vw,36px);
+ line-height:1.07;letter-spacing:-.04em;
+}
+.home-v18 .v177-progress-heading p{
+ margin:0 0 2px;color:#b4c5d5;
+ font-size:13px;line-height:1.55;max-width:700px;
+}
+.home-v18 .v177-progress-grid{
+ display:grid;grid-template-columns:minmax(250px,1.02fr) minmax(0,4fr);
+ gap:13px;align-items:stretch;min-width:0;
+}
+.home-v18 .v177-progress-global{min-width:0}
+.home-v18 .v177-progress-global .v113-home-pulse{
+ margin:0;width:100%;height:100%;min-height:200px;
+ box-sizing:border-box;gap:12px;padding:16px 12px;
+}
+.home-v18 .v177-progress-global .v113-pulse-ring{
+ flex:0 0 92px;width:92px;
+}
+.home-v18 .v177-progress-global .v113-pulse-ring>div{
+ width:74px;height:74px;
+}
+.home-v18 .v177-progress-global .v113-pulse-stats{
+ min-width:0;flex:1;gap:12px 8px;
+}
+.home-v18 .v177-progress-global .v113-pulse-stats b{font-size:19px}
+.home-v18 .v177-progress-grid .v18-progress-cards{min-width:0;display:flex}
+.home-v18 .v177-progress-grid .progress-dashboard.v113-progress{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:12px;width:100%;height:100%;margin:0;
+}
+.home-v18 .v177-progress-grid .progress-dashboard .progress-tile{
+ min-width:0;height:100%;box-sizing:border-box;
+}
+.home-v18 .v177-progress-actions{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:16px;min-height:38px;
+}
+.home-v18 .v177-progress-primary{
+ display:inline-flex;align-items:center;justify-content:center;gap:11px;
+ flex:0 0 auto;padding:9px 15px;min-height:36px;box-sizing:border-box;
+ border:1px solid #4bbeb1;border-radius:9px;
+ color:#e2fff9;background:#17434a;font-weight:750;font-size:12px;
+ text-decoration:none;transition:background .16s,border-color .16s;
+}
+.home-v18 .v177-progress-primary:hover,.home-v18 .v177-progress-primary:focus-visible{
+ background:#226362;border-color:#9affed;color:white;
+}
+.home-v18 .v177-progress-secondary{
+ display:inline-flex;align-items:center;gap:9px;
+ padding:7px 3px;border-bottom:1px solid #3c716c;
+ color:#a7e7dd;font-weight:750;font-size:12px;
+ text-decoration:none;transition:color .16s,border-color .16s;
+}
+.home-v18 .v177-progress-secondary span{font-size:17px;line-height:1}
+.home-v18 .v177-progress-secondary:hover,
+.home-v18 .v177-progress-secondary:focus-visible{
+ color:#fff;border-color:#b7fff2;
+}
+.home-v18 .v177-discovery-section{
+ padding:22px clamp(16px,2.4vw,32px) 25px;
+}
+.home-v18 .v177-discovery-section .v18-block-header{
+ display:flex;align-items:end;justify-content:space-between;
+ gap:15px 20px;margin:0 0 16px;
+}
+.home-v18 .v177-discovery-section .vi-discovery-heading{
+ flex:1 1 auto;min-width:0;
+}
+.home-v18 .v177-discovery-section .vi-discovery-heading h2{
+ margin:5px 0 5px;font-size:clamp(27px,3vw,43px);line-height:1.05;
+}
+.home-v18 .v177-discovery-section .vi-discovery-heading p{
+ margin:0;line-height:1.4;font-size:12px;max-width:none;
+}
+.home-v18 .v177-discovery-section .vi-discovery-head-actions{
+ display:inline-flex;align-items:center;flex:0 0 auto;
+ justify-content:flex-end;gap:13px;width:auto;margin:0;padding:0 0 2px;
+}
+.home-v18 .v177-discovery-section .vi-discovery-nav{
+ display:inline-flex;align-items:center;gap:8px;
+ border:0;border-radius:0;background:transparent;
+ box-shadow:none;padding:0;
+}
+.home-v18 .v177-discovery-section .vi-discovery-nav button{
+ display:grid;place-items:center;width:46px;min-width:46px;height:38px;
+ border:1px solid #4d7084;background:#23384d;
+ border-radius:9px;font-size:27px;font-weight:750;box-shadow:none;
+}
+.home-v18 .v177-discovery-section .vi-discovery-nav button:hover,
+.home-v18 .v177-discovery-section .vi-discovery-nav button:focus-visible{
+ border-color:#90f2e5;background:#28605e;color:#fff;
+}
+.home-v18 .v177-discovery-section .vi-discovery-nav [data-vi-discover-count]{
+ min-width:37px;font-size:12px;font-weight:800;white-space:nowrap;
+}
+.home-v18 .v177-discovery-section .vi-discovery-catalog{
+ display:inline-flex;align-items:center;justify-content:center;gap:5px;
+ padding:5px 0;min-height:31px;margin:0;
+ border:0;border-bottom:1px solid #4d857e;border-radius:0;
+ background:transparent;box-shadow:none;
+ font-size:12px;font-weight:700;color:#a4eee1;
+}
+.home-v18 .v177-discovery-section .vi-discovery-catalog:hover,
+.home-v18 .v177-discovery-section .vi-discovery-catalog:focus-visible{
+ border-bottom-color:#b0fff1;background:none;color:#fff;
+}
+.home-v18 .v177-discovery-section #vi-discovery-cards{margin-top:0}
+@media(max-width:1190px){
+ .home-v18 .v177-progress-grid{grid-template-columns:minmax(240px,1fr) minmax(0,3fr)}
+ .home-v18 .v177-progress-grid .progress-dashboard.v113-progress{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .home-v18 .v177-progress-grid .v18-progress-cards{display:block}
+ .home-v18 .v177-progress-grid .progress-dashboard .progress-tile{min-height:160px}
+}
+@media(max-width:850px){
+ .home-v18 .v177-progress-heading{grid-template-columns:1fr;gap:6px}
+ .home-v18 .v177-progress-heading p{max-width:680px}
+ .home-v18 .v177-progress-grid{grid-template-columns:minmax(215px,.9fr) minmax(0,2fr)}
+ .home-v18 .v177-progress-global .v113-home-pulse{flex-wrap:wrap;align-content:center}
+ .home-v18 .v177-discovery-section .v18-block-header{
+  display:flex;flex-wrap:wrap;align-items:flex-start;gap:10px;
+ }
+ .home-v18 .v177-discovery-section .vi-discovery-heading{flex:1 1 100%}
+ .home-v18 .v177-discovery-section .vi-discovery-head-actions{
+  width:100%;justify-content:flex-end;padding:0;
+ }
+}
+@media(max-width:620px){
+ .home-v18 .v177-progress-zone{padding:19px 15px;gap:14px}
+ .home-v18 .v177-progress-grid{grid-template-columns:1fr;gap:12px}
+ .home-v18 .v177-progress-global .v113-home-pulse{min-height:128px;flex-wrap:nowrap;gap:16px}
+ .home-v18 .v177-progress-global .v113-pulse-ring{flex:0 0 92px;width:92px}
+ .home-v18 .v177-progress-grid .progress-dashboard.v113-progress{
+  grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;
+ }
+ .home-v18 .v177-progress-actions{flex-wrap:wrap;gap:8px;justify-content:space-between}
+ .home-v18 .v177-progress-primary{padding:9px 12px}
+ .home-v18 .v177-progress-secondary{font-size:11px}
+ .home-v18 .v177-discovery-section{padding:18px 15px 22px}
+ .home-v18 .v177-discovery-section .v18-block-header{margin-bottom:12px}
+ .home-v18 .v177-discovery-section .vi-discovery-head-actions{gap:12px}
+ .home-v18 .v177-discovery-section .vi-discovery-nav button{width:40px;min-width:40px;height:36px;font-size:25px}
+ .home-v18 .v177-discovery-section .vi-discovery-catalog{font-size:11px}
+}
+@media(max-width:380px){
+ .home-v18 .v177-progress-actions{align-items:flex-start;flex-direction:column}
+ .home-v18 .v177-discovery-section .vi-discovery-head-actions{justify-content:space-between}
+}
+@media(prefers-reduced-motion:reduce){
+ .home-v18 .v177-progress-primary,.home-v18 .v177-progress-secondary{transition:none}
+}
+
