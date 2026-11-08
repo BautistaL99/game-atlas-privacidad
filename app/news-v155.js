@@ -1,9 +1,9 @@
 /* V155. Separate news destination: official verified source vs community candidate. */
 (()=>{'use strict';
 const labels={
- es:{title:'Noticias de GTA VI',sub:'Novedades, anuncios e información con su fuente original.',official:'Oficiales',other:'No oficiales',empty:'Todavía no hay noticias no oficiales listas para publicar.',note:'Las fuentes de la comunidad aparecerán aquí claramente separadas de las confirmaciones de Rockstar.',source:'Leer noticia original',detail:'Ver ficha',nodate:'Fecha por confirmar',archive:'Archivo histórico',archiveEmpty:'Todavía no hay noticias antiguas archivadas.',archiveNote:'Aquí aparecen noticias viejas que salieron de las novedades. Se conserva el texto, la fecha y el enlace original; las fotos se muestran mediante enlaces, sin guardar copias nuevas en nuestro servidor.',imageNotice:'Ilustración conceptual: no confirma el rumor.',unconfirmed:'RUMOR · NO CONFIRMADO',communityVisual:'FUENTE COMUNITARIA',collectionNote:'Fuente: recopilación general. No es una prueba independiente de este rumor.',collectionLink:'Consultar recopilación'},
- en:{title:'GTA VI News',sub:'Updates and announcements with their original sources.',official:'Official',other:'Unofficial',empty:'No unofficial stories have passed review yet.',note:'Community information will appear here, clearly separated from Rockstar confirmations.',source:'Read original article',detail:'View entry',nodate:'Date to be confirmed',archive:'Historical archive',archiveEmpty:'No older news has been archived yet.',archiveNote:'Older reports move here from recent news. Text, date and source links remain available; image URLs are referenced, not downloaded into our hosting.',imageNotice:'Concept illustration: it does not confirm this rumour.',unconfirmed:'RUMOUR · UNCONFIRMED',communityVisual:'COMMUNITY SOURCE',collectionNote:'Source: general compilation, not independent evidence for this rumour.',collectionLink:'View compilation'},
- pt:{title:'Notícias de GTA VI',sub:'Novidades e anúncios com suas fontes originais.',official:'Oficiais',other:'Não oficiais',empty:'Ainda não há notícias não oficiais prontas para publicação.',note:'As notícias da comunidade aparecerão aqui, separadas das confirmações da Rockstar.',source:'Ler notícia original',detail:'Ver ficha',nodate:'Data a confirmar',archive:'Arquivo histórico',archiveEmpty:'Ainda não há notícias antigas arquivadas.',archiveNote:'Notícias antigas saem das novidades e permanecem aqui com texto, data e fonte; imagens são referenciadas, não copiadas para nossa hospedagem.',imageNotice:'Ilustração conceitual: não confirma o rumor.',unconfirmed:'RUMOR · NÃO CONFIRMADO',communityVisual:'FONTE COMUNITÁRIA',collectionNote:'Fonte: compilação geral, não é prova individual deste rumor.',collectionLink:'Consultar compilação'}
+ es:{title:'Noticias de GTA VI',sub:'Novedades, anuncios e información con su fuente original.',all:'Todas',official:'Oficiales',other:'No confirmadas',empty:'Todavía no hay noticias no oficiales listas para publicar.',note:'Las fuentes de la comunidad aparecerán aquí claramente separadas de las confirmaciones de Rockstar.',source:'Leer noticia original',detail:'Ver ficha',nodate:'Fecha por confirmar',archive:'Archivo histórico',archiveEmpty:'Todavía no hay noticias antiguas archivadas.',archiveNote:'Aquí aparecen noticias viejas que salieron de las novedades. Se conserva el texto, la fecha y el enlace original; las fotos se muestran mediante enlaces, sin guardar copias nuevas en nuestro servidor.',imageNotice:'Ilustración conceptual: no confirma el rumor.',unconfirmed:'RUMOR · NO CONFIRMADO',communityVisual:'FUENTE COMUNITARIA',collectionNote:'Fuente: recopilación general. No es una prueba independiente de este rumor.',collectionLink:'Consultar recopilación'},
+ en:{title:'GTA VI News',sub:'Updates and announcements with their original sources.',all:'All',official:'Official',other:'Unconfirmed',empty:'No unofficial stories have passed review yet.',note:'Community information will appear here, clearly separated from Rockstar confirmations.',source:'Read original article',detail:'View entry',nodate:'Date to be confirmed',archive:'Historical archive',archiveEmpty:'No older news has been archived yet.',archiveNote:'Older reports move here from recent news. Text, date and source links remain available; image URLs are referenced, not downloaded into our hosting.',imageNotice:'Concept illustration: it does not confirm this rumour.',unconfirmed:'RUMOUR · UNCONFIRMED',communityVisual:'COMMUNITY SOURCE',collectionNote:'Source: general compilation, not independent evidence for this rumour.',collectionLink:'View compilation'},
+ pt:{title:'Notícias de GTA VI',sub:'Novidades e anúncios com suas fontes originais.',all:'Todas',official:'Oficiais',other:'Não confirmadas',empty:'Ainda não há notícias não oficiais prontas para publicação.',note:'As notícias da comunidade aparecerão aqui, separadas das confirmações da Rockstar.',source:'Ler notícia original',detail:'Ver ficha',nodate:'Data a confirmar',archive:'Arquivo histórico',archiveEmpty:'Ainda não há notícias antigas arquivadas.',archiveNote:'Notícias antigas saem das novidades e permanecem aqui com texto, data e fonte; imagens são referenciadas, não copiadas para nossa hospedagem.',imageNotice:'Ilustração conceitual: não confirma o rumor.',unconfirmed:'RUMOR · NÃO CONFIRMADO',communityVisual:'FONTE COMUNITÁRIA',collectionNote:'Fonte: compilação geral, não é prova individual deste rumor.',collectionLink:'Consultar compilação'}
 };
 // Community reports do not receive unrelated Rockstar photos.
 // Use the same visibly labeled, topic-specific conceptual art in News,
@@ -16,19 +16,25 @@ function splitArchive(items,cut){
  const older=items.filter((r,i)=>i>=12&&(!r.publishedAt||r.publishedAt<cut));
  return {latest,older};
 }
+window.viNewsItems=function(community=null){
+ return records.filter(r=>r.category==='actualizaciones'&&r.status==='verified'&&
+  (community===null||(r.facets?.community===1)===community))
+  .sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||''));
+};
 window.viNewsPage=function(route){
- const t=labels[locale]||labels.es,archive=route==='/noticias/archivo',official=archive||!route.endsWith('/no-oficiales');
+ const t=labels[locale]||labels.es,archive=route==='/noticias/archivo',all=route==='/noticias',official=route==='/noticias/oficiales';
  // Retention policy: keep at least 12 latest official announcements visible, and all
  // official reports published in the last 90 days. Old items move to Archive: never delete.
  const cut=new Date(Date.now()-90*86400000).toISOString().slice(0,10);
- const officialItems=records.filter(r=>r.category==='actualizaciones'&&r.status==='verified'&&r.facets?.community!==1)
-  .sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||''));
- const communityItems=records.filter(r=>r.category==='actualizaciones'&&r.status==='verified'&&r.facets?.community===1)
-  .sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||''));
+ const officialItems=window.viNewsItems(false);
+ const communityItems=window.viNewsItems(true);
  const olderOfficial=splitArchive(officialItems,cut),olderCommunity=splitArchive(communityItems,cut);
  const older=[...olderOfficial.older,...olderCommunity.older]
   .sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||''));
- const relevant=archive?older:official?olderOfficial.latest:olderCommunity.latest;
+ let relevant=archive?older:all?[...olderOfficial.latest,...olderCommunity.latest].sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||'')):official?olderOfficial.latest:olderCommunity.latest;
+ // Preserve existing saved category links that filter favorites.
+ const favorites=typeof location!=='undefined'&&/[?&]estado=favoritos(?:&|$)/.test(location.hash);
+ if(favorites)relevant=relevant.filter(item=>store('fav').includes(item.id));
  const rows=relevant.map(i=>{
   const date=/^\d{4}-\d{2}-\d{2}$/.test(i.publishedAt||'')
    ?new Intl.DateTimeFormat(locale==='en'?'en-US':locale==='pt'?'pt-BR':'es-AR',
@@ -51,10 +57,12 @@ window.viNewsPage=function(route){
  return '<section class="vi-news-page"><div class="vi-news-hero"><span class="eyebrow">GAME ATLAS · NEWSWIRE</span>'+
  '<h1>'+t.title+'</h1><p>'+t.sub+'</p></div>'+
  '<nav class="vi-news-tabs" aria-label="'+t.title+'">'+
+ '<a href="#/noticias" class="'+(all?'is-active':'')+'" '+(all?'aria-current="page"':'')+'>'+t.all+'</a>'+
  '<a href="#/noticias/oficiales" class="'+(official&&!archive?'is-active':'')+'" '+(official&&!archive?'aria-current="page"':'')+'>✓ '+t.official+'</a>'+
- '<a href="#/noticias/no-oficiales" class="'+(!official?'is-active':'')+'" '+(!official?'aria-current="page"':'')+'>◇ '+t.other+'</a>'+
+ '<a href="#/noticias/no-oficiales" class="'+(!official&&!all&&!archive?'is-active':'')+'" '+(!official&&!all&&!archive?'aria-current="page"':'')+'>◇ '+t.other+'</a>'+
  '<a href="#/noticias/archivo" class="'+(archive?'is-active':'')+'" '+(archive?'aria-current="page"':'')+'>▣ '+t.archive+' <span class="vi-news-archive-counter">'+older.length+'</span></a></nav>'+
  (archive?'<div class="vi-news-archive-note">'+t.archiveNote+'</div>':'')+
  '<div class="vi-news-list">'+(rows||'<div class="vi-news-empty"><h2>'+(archive?t.archiveEmpty:t.empty)+'</h2><p>'+(archive?t.archiveNote:t.note)+'</p></div>')+'</div></section>';
 };
 })();
+

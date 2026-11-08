@@ -165,9 +165,9 @@
  function repairCommunityRumorCovers(){
   const lang=['es','en','pt'].includes(document.documentElement.lang)?document.documentElement.lang:'es';
   const labels={
-   es:{domains:['🌐','Rumor sobre dominios','Sin imagen verificada'],devkit:['⚙','Rumor sobre desarrollo','Sin imagen verificada'],general:['✦','Rumor de la comunidad','Sin imagen verificada']},
-   en:{domains:['🌐','Domain rumour','No verified image'],devkit:['⚙','Development rumour','No verified image'],general:['✦','Community rumour','No verified image']},
-   pt:{domains:['🌐','Rumor sobre domínios','Sem imagem verificada'],devkit:['⚙','Rumor sobre desenvolvimento','Sem imagem verificada'],general:['✦','Rumor da comunidade','Sem imagem verificada']}
+   es:{domains:['🌐','Rumor sobre dominios','Ilustración genérica'],devkit:['⚙','Rumor sobre desarrollo','Ilustración genérica'],general:['✦','Rumor de la comunidad','Ilustración genérica']},
+   en:{domains:['🌐','Domain rumour','Generic illustration'],devkit:['⚙','Development rumour','Generic illustration'],general:['✦','Community rumour','Generic illustration']},
+   pt:{domains:['🌐','Rumor sobre domínios','Ilustração genérica'],devkit:['⚙','Rumor sobre desenvolvimento','Ilustração genérica'],general:['✦','Rumor da comunidade','Ilustração genérica']}
   };
   function replaceCover(host,id){
    const current=host.querySelector('.thumb,.search-thumb,.detail-thumb,.vi-news-image');
@@ -249,3 +249,4 @@
  document.addEventListener('vi:catalog-refresh',schedule);
  window.viGalleryPhotoMap=()=>({records:Object.keys(cards).length,categories:Object.keys(categories).length,officialImages:Object.keys(assets).length});
 })();
+
