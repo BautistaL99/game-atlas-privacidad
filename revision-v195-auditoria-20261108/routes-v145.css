@@ -1,0 +1,35 @@
+/* V1.45: route manager beneath the map – respects existing colors / typography. */
+.vi-route-manager{margin:22px 0 28px;color:#e9f3f6}
+.vi-routes{background:#101e2c;border:1px solid #3b6073;border-radius:18px;padding:18px;box-shadow:0 8px 26px #0003}
+.vi-routes-header{display:flex;align-items:start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.vi-routes h2,.vi-routes h3{margin:0 0 10px;color:#ecfaff}
+.vi-routes p,.vi-routes small{color:#a9c4d2;line-height:1.55}
+.vi-routes button,.vi-routes select,.vi-routes input{font:inherit}
+.vi-routes button{min-height:36px;padding:8px 12px;background:#173343;color:#dbf4f4;border:1px solid #467888;border-radius:10px;cursor:pointer}
+.vi-routes button:focus-visible,.vi-routes input:focus-visible{outline:3px solid #68ecdb;outline-offset:2px}
+.vi-routes button:hover,.vi-routes button.is-active{border-color:#67deca;background:#1e5260}
+.vi-routes button[disabled]{opacity:.45;cursor:default}
+.vi-routes .vi-route-primary{border-color:#65d4ba;color:#fff;background:#136659}
+.vi-route-list{display:flex;flex-wrap:wrap;gap:9px;margin:15px 0}
+.vi-route-list h3{width:100%}
+.vi-route-choice{display:flex;flex-direction:column;text-align:left;min-width:140px;max-width:100%}
+.vi-route-choice small{font-size:12px}
+.vi-route-detail{padding:14px;background:#142939;border:1px solid #30586c;border-radius:14px}
+.vi-route-detail ol{padding:0;list-style:none;display:grid;gap:10px}
+.vi-route-step{padding:10px;border:1px solid #31576c;border-radius:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#142d40}
+.vi-route-step.done{border-color:#4bcfa6}
+.vi-route-number{background:#245879;border-radius:50%;width:31px;height:31px;display:grid;place-items:center;font-weight:bold}
+.vi-route-step-detail{flex:1 1 140px;display:grid;gap:3px;min-width:0}
+.vi-route-step-detail a{font-size:12px;color:#63dfdb}
+.vi-route-step-actions{display:flex;flex-wrap:wrap;gap:5px}
+.vi-route-step-actions button{font-size:12px;min-height:35px;padding:6px 9px}
+.vi-route-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin:12px 0}
+.vi-route-controls label{display:grid;gap:4px;font-size:13px}
+.vi-route-controls select,.vi-routes input[type=text]{background:#0b2333;border:1px solid #477084;border-radius:8px;color:#fff;padding:10px;max-width:100%}
+#vi-route-create,.vi-route-import{margin:14px 0;padding:14px;border-radius:12px;background:#112d3d;border:1px solid #4d8191}
+#vi-route-create>label{display:grid;gap:5px;max-width:430px}
+.vi-route-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;max-height:280px;overflow:auto;margin:12px 0}
+.vi-route-choices label{display:flex;align-items:center;gap:9px;padding:9px;border:1px solid #37637a;border-radius:8px;cursor:pointer}
+.vi-route-warning,.vi-route-alert{color:#e9cc93!important}
+.vi-route-message{color:#8be4ce!important}
+@media(max-width:720px){.vi-routes{padding:12px}.vi-routes-header{display:block}.vi-routes-header>button{width:100%;margin-top:8px}.vi-route-step-actions{width:100%}.vi-route-step-actions button{flex-grow:1}}
