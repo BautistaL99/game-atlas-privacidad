@@ -54,3 +54,6 @@ html.vi-real-gallery .progress-dashboard.v113-progress .progress-tile::before{
     border-radius:9px!important;line-height:1.45!important;font-size:10px!important
   }
 }
+
+/* V194: Noticias has its own route after unification; keep a local cover on its Explore tile. */
+.category-tile[href="#/noticias"] .category-art{background-image:url('./assets/original/community-coast-v193.webp')!important}
