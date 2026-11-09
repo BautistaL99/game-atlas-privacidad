@@ -40,6 +40,36 @@ Object.assign(VI_UI_DICTIONARY,{
  'Describí lo que buscás…':{en:'Describe what you are looking for…',pt:'Descreva o que você procura…'},
  'Buscar en todo el catálogo':{en:'Search the entire catalog',pt:'Pesquisar em todo o catálogo'}
 });
+// Visible strings inventoried from the current page markup. Only UI copy;
+// descriptions supplied by editors, Rockstar and users remain untouched.
+Object.assign(VI_UI_DICTIONARY,{
+ 'Tu aporte puede ayudar a mantener el mapa, las fichas y las próximas actualizaciones. El contenido principal seguirá siendo accesible sin donar.':{en:'Your support can help maintain the map, entries, and future updates. The main content will remain available without a donation.',pt:'Seu apoio pode ajudar a manter o mapa, as fichas e as próximas atualizações. O conteúdo principal continuará acessível sem doar.'},
+ '🔐 Los cobros todavía no están habilitados. Ninguna opción solicita tus datos de pago en esta beta.':{en:'🔐 Payments are not enabled yet. No option asks for payment details in this beta.',pt:'🔐 Os pagamentos ainda não estão habilitados. Nenhuma opção solicita seus dados de pagamento nesta versão beta.'},
+ 'Categoría:':{en:'Category:',pt:'Categoria:'},
+ 'Sin categorías verificadas':{en:'No verified categories',pt:'Sem categorias verificadas'},
+ 'CANAL OFICIAL + CREADORES':{en:'OFFICIAL CHANNEL + CREATORS',pt:'CANAL OFICIAL + CRIADORES'},
+ '🧩 Lista de filtros avanzados':{en:'🧩 Advanced filters',pt:'🧩 Filtros avançados'},
+ 'Categoría':{en:'Category',pt:'Categoria'},
+ 'Elegí varios filtros: entre grupos se combinan; dentro de un grupo alcanza con uno. Los sinónimos siguen activos en las búsquedas escritas.':{en:'Choose several filters: groups are combined, and one match within each group is enough. Synonyms also work in typed searches.',pt:'Escolha vários filtros: os grupos são combinados e basta uma opção em cada grupo. Sinônimos também funcionam nas buscas digitadas.'},
+ 'Todos los grupos deben coincidir.':{en:'All groups must match.',pt:'Todos os grupos devem corresponder.'},
+ '📱 Tu partida, sin cuenta':{en:'📱 Your game, no account required',pt:'📱 Seu jogo, sem conta'},
+ '↓ Guardar copia de Mi partida':{en:'↓ Save My game backup',pt:'↓ Salvar cópia do Meu jogo'},
+ 'Ver en mapa ↗':{en:'View on map ↗',pt:'Ver no mapa ↗'},
+ 'Cancelar marcador ✕':{en:'Cancel marker ✕',pt:'Cancelar marcador ✕'},
+ 'Tocá un punto del mapa para crear tu marcador.':{en:'Tap a spot on the map to add your marker.',pt:'Toque em um ponto do mapa para criar seu marcador.'},
+ '📍 TU MARCADOR':{en:'📍 YOUR MARKER',pt:'📍 SEU MARCADOR'},
+ 'El punto se guarda solo en este navegador. Poné un nombre y una descripción para recordarlo.':{en:'This marker is saved only in this browser. Add a name and description to remember it.',pt:'Este marcador fica salvo apenas neste navegador. Adicione um nome e uma descrição para identificá-lo.'},
+ 'Ficha relacionada (opcional)':{en:'Related entry (optional)',pt:'Ficha relacionada (opcional)'},
+ 'Sin vínculo':{en:'No linked entry',pt:'Sem vínculo'},
+ '✓ Guardar marcador':{en:'✓ Save marker',pt:'✓ Salvar marcador'},
+ 'La ubicación visual es orientativa, no la posición exacta del juego.':{en:'The position shown is illustrative, not an exact in-game location.',pt:'A posição mostrada é ilustrativa, não a localização exata no jogo.'},
+ 'Ver ficha completa ↗':{en:'View full entry ↗',pt:'Ver ficha completa ↗'},
+ 'Filtros del mapa':{en:'Map filters',pt:'Filtros do mapa'},
+ 'Combiná categorías para mostrar sus puntos.':{en:'Combine categories to display their markers.',pt:'Combine categorias para mostrar seus marcadores.'},
+ 'Mis favoritos ↗':{en:'My favorites ↗',pt:'Meus favoritos ↗'},
+ '⌕ Buscar':{en:'⌕ Search',pt:'⌕ Buscar'},
+ '🗑 Eliminar':{en:'🗑 Delete',pt:'🗑 Excluir'}
+});
 // V196 — exact UI labels left untranslated; do not translate user-authored data.
 Object.assign(VI_UI_DICTIONARY,{
  'Comunidad':{en:'Community',pt:'Comunidade'},
