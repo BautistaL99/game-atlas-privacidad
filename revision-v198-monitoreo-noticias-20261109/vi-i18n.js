@@ -43,6 +43,24 @@ Object.assign(VI_UI_DICTIONARY,{
  'Leer noticia original':{en:'Read original article',pt:'Ler notícia original'}
 });
 (function(){
+ // Keep the Spanish source of text/attributes so a language switch can be
+ // repeated without leaving stale translations from the previous language.
+ const originalText=new WeakMap();
+ const originalAttributes=new WeakMap();
+ function translateComposite(value,lang){
+   // Several controls join independent labels with a visual separator. Only
+   // translate known labels: never machine-translate catalogue or user content.
+   const parts=value.split(/(\s+[·|—]\s+)/u);
+   if(parts.length<3)return null;
+   let changed=false;
+   const result=parts.map((part,i)=>{
+     if(i%2)return part;
+     const translated=translateText(part,lang);
+     if(translated!==null){changed=true;return translated;}
+     return part;
+   });
+   return changed?result.join(''):null;
+ }
  function translateText(value,lang){const trimmed=value.trim();if(!trimmed)return null;
    let translated=VI_UI_DICTIONARY[trimmed]?.[lang];
    if(translated===undefined){
@@ -69,15 +87,45 @@ Object.assign(VI_UI_DICTIONARY,{
     const positions=trimmed.match(/^(\d+) puntos visibles · posiciones ilustrativas$/);
     if(positions)translated=lang==='en'?`${positions[1]} visible markers · illustrative positions`:`${positions[1]} marcadores visíveis · posições ilustrativas`;
    }
-   if(translated===undefined)return null;
+   if(translated===undefined)return translateComposite(value,lang);
    return value.slice(0,value.indexOf(trimmed))+translated+value.slice(value.indexOf(trimmed)+trimmed.length);
  }
- window.viApplyI18n=function(){const lang=localStorage.getItem('vi_demo_locale')||'es';document.documentElement.lang=lang;
-  if(lang==='es')return;
+ window.viApplyI18n=function(){
+  const selected=localStorage.getItem('vi_demo_locale')||'es';
+  const lang=['es','en','pt'].includes(selected)?selected:'es';
+  document.documentElement.lang=lang;
   const root=document.getElementById('root');if(!root)return;
-  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){return n.parentElement?.closest('script,style,textarea,input,[contenteditable]')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}});
-  let node;while(node=walker.nextNode()){const t=translateText(node.nodeValue,lang);if(t!==null)node.nodeValue=t}
-  for(const el of root.querySelectorAll('[placeholder],[aria-label],[title]')){for(const attr of ['placeholder','aria-label','title']){const orig=el.getAttribute(attr);if(!orig)continue;const trans=translateText(orig,lang);if(trans!==null)el.setAttribute(attr,trans)}}
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
+   acceptNode(n){return n.parentElement?.closest('script,style,textarea,input,[contenteditable]')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}
+  });
+  let node;
+  while((node=walker.nextNode())){
+   const previous=originalText.get(node);
+   const source=previous===undefined?node.nodeValue:previous;
+   // If another renderer changed the text, regard it as new Spanish input.
+   const last=previous===undefined?null:translateText(previous,'en');
+   const lastPt=previous===undefined?null:translateText(previous,'pt');
+   const isManaged=previous!==undefined&&(node.nodeValue===previous||node.nodeValue===last||node.nodeValue===lastPt);
+   const original=isManaged?previous:node.nodeValue;
+   const translated=lang==='es'?null:translateText(original,lang);
+   originalText.set(node,original);
+   const next=translated===null?original:translated;
+   if(node.nodeValue!==next)node.nodeValue=next;
+  }
+  for(const el of root.querySelectorAll('[placeholder],[aria-label],[title],[alt]')){
+   let originals=originalAttributes.get(el);
+   if(!originals){originals={};originalAttributes.set(el,originals);}
+   for(const attr of ['placeholder','aria-label','title','alt']){
+    const value=el.getAttribute(attr);if(value===null)continue;
+    const prior=originals[attr];
+    const managed=prior!==undefined&&[prior,translateText(prior,'en'),translateText(prior,'pt')].includes(value);
+    const source=managed?prior:value;
+    originals[attr]=source;
+    const translated=lang==='es'?null:translateText(source,lang);
+    const next=translated===null?source:translated;
+    if(value!==next)el.setAttribute(attr,next);
+   }
+  }
  };
  window.viApplyI18n();
 })();
