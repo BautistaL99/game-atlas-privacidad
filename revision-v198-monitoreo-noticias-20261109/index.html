@@ -755,6 +755,18 @@ body.vi-map-modal-active{overflow:hidden!important}
  #root .atlas-v119.vi-fullscreen-map .vi-personal-manager{
   position:relative!important;flex:0 0 auto!important;margin-top:9px!important;z-index:1!important
  }
+ #root .atlas-v119.vi-fullscreen-map .atlas-search-context small{display:none!important}
+ #root .atlas-v119.vi-fullscreen-map .atlas-toolbar{margin-bottom:4px!important;min-height:0!important}
+ #root .atlas-v119.vi-fullscreen-map .vi-map-integrity-note{
+  flex:0 0 auto!important;padding:4px 8px!important;margin:2px 0 4px!important
+ }
+ /* Live map-search matches must not consume half of the map's fullscreen height. */
+ #root .atlas-v119.vi-fullscreen-map .atlas-search-results{
+  position:absolute!important;top:72px!important;left:12px!important;
+  right:calc(335px + 24px)!important;z-index:1350!important;
+  max-height:min(34dvh,240px)!important;overflow-y:auto!important;
+  box-sizing:border-box!important;box-shadow:0 12px 32px #000b!important
+ }
  #root .atlas-v119.vi-fullscreen-map .atlas-card{flex:0 0 auto!important}
  #root .atlas-v119.vi-fullscreen-map .atlas-map .atlas-popup{z-index:60!important}
  /* Home descriptive search: keep helper and no-match message in a readable vertical flow. */
