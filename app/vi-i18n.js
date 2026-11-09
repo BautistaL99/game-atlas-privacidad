@@ -22,6 +22,54 @@ Object.assign(VI_UI_DICTIONARY,{
     pt:'. Eles não são sincronizados automaticamente com outros dispositivos. Você pode exportar uma cópia e restaurá-la em outro dispositivo. A importação substitui o progresso atual.'
   }
 });
+// Home page labels missed by the original exact-match dictionary. The resume
+// section is also rendered natively for each locale in app-v137.js.
+Object.assign(VI_UI_DICTIONARY,{
+ 'Seguir explorando':{en:'Keep exploring',pt:'Continue explorando'},
+ 'Abrí una ficha y te aparecerá acá para retomarla rápidamente.':{en:'Open an entry and it will appear here so you can quickly return to it.',pt:'Abra uma ficha e ela aparecerá aqui para você retomar rapidamente.'},
+ 'Mi partida →':{en:'My game →',pt:'Meu jogo →'},
+ 'Ver más resultados ↗':{en:'View more results ↗',pt:'Ver mais resultados ↗'},
+ 'Ver ficha ↗':{en:'View entry ↗',pt:'Ver ficha ↗'},
+ 'Buscar ↗':{en:'Search ↗',pt:'Buscar ↗'},
+ 'Ej.: personaje masculino de pelo largo':{en:'E.g.: male character with long hair',pt:'Ex.: personagem masculino de cabelo comprido'},
+ 'Probá con otra descripción':{en:'Try a different description',pt:'Tente outra descrição'},
+ 'personaje negro':{en:'Black character',pt:'personagem negro'},
+ 'personaje empresario negro':{en:'Black business owner',pt:'empresário negro'},
+ 'arma con más daño':{en:'highest-damage weapon',pt:'arma com maior dano'},
+ 'qué me falta en vehículos':{en:'which vehicles am I missing?',pt:'quais veículos ainda faltam?'},
+ 'Describí lo que buscás…':{en:'Describe what you are looking for…',pt:'Descreva o que você procura…'},
+ 'Buscar en todo el catálogo':{en:'Search the entire catalog',pt:'Pesquisar em todo o catálogo'}
+});
+// Visible strings inventoried from the current page markup. Only UI copy;
+// descriptions supplied by editors, Rockstar and users remain untouched.
+Object.assign(VI_UI_DICTIONARY,{
+ 'Tu aporte puede ayudar a mantener el mapa, las fichas y las próximas actualizaciones. El contenido principal seguirá siendo accesible sin donar.':{en:'Your support can help maintain the map, entries, and future updates. The main content will remain available without a donation.',pt:'Seu apoio pode ajudar a manter o mapa, as fichas e as próximas atualizações. O conteúdo principal continuará acessível sem doar.'},
+ '🔐 Los cobros todavía no están habilitados. Ninguna opción solicita tus datos de pago en esta beta.':{en:'🔐 Payments are not enabled yet. No option asks for payment details in this beta.',pt:'🔐 Os pagamentos ainda não estão habilitados. Nenhuma opção solicita seus dados de pagamento nesta versão beta.'},
+ 'Categoría:':{en:'Category:',pt:'Categoria:'},
+ 'Sin categorías verificadas':{en:'No verified categories',pt:'Sem categorias verificadas'},
+ 'CANAL OFICIAL + CREADORES':{en:'OFFICIAL CHANNEL + CREATORS',pt:'CANAL OFICIAL + CRIADORES'},
+ '🧩 Lista de filtros avanzados':{en:'🧩 Advanced filters',pt:'🧩 Filtros avançados'},
+ 'Categoría':{en:'Category',pt:'Categoria'},
+ 'Elegí varios filtros: entre grupos se combinan; dentro de un grupo alcanza con uno. Los sinónimos siguen activos en las búsquedas escritas.':{en:'Choose several filters: groups are combined, and one match within each group is enough. Synonyms also work in typed searches.',pt:'Escolha vários filtros: os grupos são combinados e basta uma opção em cada grupo. Sinônimos também funcionam nas buscas digitadas.'},
+ 'Todos los grupos deben coincidir.':{en:'All groups must match.',pt:'Todos os grupos devem corresponder.'},
+ '📱 Tu partida, sin cuenta':{en:'📱 Your game, no account required',pt:'📱 Seu jogo, sem conta'},
+ '↓ Guardar copia de Mi partida':{en:'↓ Save My game backup',pt:'↓ Salvar cópia do Meu jogo'},
+ 'Ver en mapa ↗':{en:'View on map ↗',pt:'Ver no mapa ↗'},
+ 'Cancelar marcador ✕':{en:'Cancel marker ✕',pt:'Cancelar marcador ✕'},
+ 'Tocá un punto del mapa para crear tu marcador.':{en:'Tap a spot on the map to add your marker.',pt:'Toque em um ponto do mapa para criar seu marcador.'},
+ '📍 TU MARCADOR':{en:'📍 YOUR MARKER',pt:'📍 SEU MARCADOR'},
+ 'El punto se guarda solo en este navegador. Poné un nombre y una descripción para recordarlo.':{en:'This marker is saved only in this browser. Add a name and description to remember it.',pt:'Este marcador fica salvo apenas neste navegador. Adicione um nome e uma descrição para identificá-lo.'},
+ 'Ficha relacionada (opcional)':{en:'Related entry (optional)',pt:'Ficha relacionada (opcional)'},
+ 'Sin vínculo':{en:'No linked entry',pt:'Sem vínculo'},
+ '✓ Guardar marcador':{en:'✓ Save marker',pt:'✓ Salvar marcador'},
+ 'La ubicación visual es orientativa, no la posición exacta del juego.':{en:'The position shown is illustrative, not an exact in-game location.',pt:'A posição mostrada é ilustrativa, não a localização exata no jogo.'},
+ 'Ver ficha completa ↗':{en:'View full entry ↗',pt:'Ver ficha completa ↗'},
+ 'Filtros del mapa':{en:'Map filters',pt:'Filtros do mapa'},
+ 'Combiná categorías para mostrar sus puntos.':{en:'Combine categories to display their markers.',pt:'Combine categorias para mostrar seus marcadores.'},
+ 'Mis favoritos ↗':{en:'My favorites ↗',pt:'Meus favoritos ↗'},
+ '⌕ Buscar':{en:'⌕ Search',pt:'⌕ Buscar'},
+ '🗑 Eliminar':{en:'🗑 Delete',pt:'🗑 Excluir'}
+});
 // V196 — exact UI labels left untranslated; do not translate user-authored data.
 Object.assign(VI_UI_DICTIONARY,{
  'Comunidad':{en:'Community',pt:'Comunidade'},
@@ -43,6 +91,24 @@ Object.assign(VI_UI_DICTIONARY,{
  'Leer noticia original':{en:'Read original article',pt:'Ler notícia original'}
 });
 (function(){
+ // Keep the Spanish source of text/attributes so a language switch can be
+ // repeated without leaving stale translations from the previous language.
+ const originalText=new WeakMap();
+ const originalAttributes=new WeakMap();
+ function translateComposite(value,lang){
+   // Several controls join independent labels with a visual separator. Only
+   // translate known labels: never machine-translate catalogue or user content.
+   const parts=value.split(/(\s+[·|—]\s+)/u);
+   if(parts.length<3)return null;
+   let changed=false;
+   const result=parts.map((part,i)=>{
+     if(i%2)return part;
+     const translated=translateText(part,lang);
+     if(translated!==null){changed=true;return translated;}
+     return part;
+   });
+   return changed?result.join(''):null;
+ }
  function translateText(value,lang){const trimmed=value.trim();if(!trimmed)return null;
    let translated=VI_UI_DICTIONARY[trimmed]?.[lang];
    if(translated===undefined){
@@ -62,6 +128,18 @@ Object.assign(VI_UI_DICTIONARY,{
     if(n){const terms={visitados:['visited','visitados'],descubiertos:['discovered','descobertos'],conocidos:['known','conhecidos'],registradas:['registered','registradas'],adquiridos:['acquired','adquiridos'],encontrados:['found','encontrados'],realizadas:['completed','realizadas'],completadas:['completed','concluídas']};translated=`${n[1]} / ${n[2]} ${terms[n[3]][lang==='en'?0:1]}${n[4]?(lang==='en'?' · no trackable entries':' · sem fichas contabilizáveis'):''}`;}
    }
    if(translated===undefined){
+    const result=trimmed.match(/^Resultados para «(.+)»$/);
+    if(result)translated=lang==='en'?`Results for «${result[1]}»`:`Resultados para «${result[1]}»`;
+   }
+   if(translated===undefined){
+    const result=trimmed.match(/^No encontramos coincidencias para «(.+)»$/);
+    if(result)translated=lang==='en'?`No matches for «${result[1]}»`:`Nenhum resultado para «${result[1]}»`;
+   }
+   if(translated===undefined){
+    const result=trimmed.match(/^(\d+) coincidencia\(s\) visibles$/);
+    if(result)translated=lang==='en'?`${result[1]} visible matches`:`${result[1]} correspondências visíveis`;
+   }
+   if(translated===undefined){
     const suffix=trimmed.match(/^(.*?)( · OFICIAL)$/);
     if(suffix&&lang==='en')translated=suffix[1]+' · OFFICIAL';
    }
@@ -69,15 +147,45 @@ Object.assign(VI_UI_DICTIONARY,{
     const positions=trimmed.match(/^(\d+) puntos visibles · posiciones ilustrativas$/);
     if(positions)translated=lang==='en'?`${positions[1]} visible markers · illustrative positions`:`${positions[1]} marcadores visíveis · posições ilustrativas`;
    }
-   if(translated===undefined)return null;
+   if(translated===undefined)return translateComposite(value,lang);
    return value.slice(0,value.indexOf(trimmed))+translated+value.slice(value.indexOf(trimmed)+trimmed.length);
  }
- window.viApplyI18n=function(){const lang=localStorage.getItem('vi_demo_locale')||'es';document.documentElement.lang=lang;
-  if(lang==='es')return;
+ window.viApplyI18n=function(){
+  const selected=localStorage.getItem('vi_demo_locale')||'es';
+  const lang=['es','en','pt'].includes(selected)?selected:'es';
+  document.documentElement.lang=lang;
   const root=document.getElementById('root');if(!root)return;
-  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){return n.parentElement?.closest('script,style,textarea,input,[contenteditable]')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}});
-  let node;while(node=walker.nextNode()){const t=translateText(node.nodeValue,lang);if(t!==null)node.nodeValue=t}
-  for(const el of root.querySelectorAll('[placeholder],[aria-label],[title]')){for(const attr of ['placeholder','aria-label','title']){const orig=el.getAttribute(attr);if(!orig)continue;const trans=translateText(orig,lang);if(trans!==null)el.setAttribute(attr,trans)}}
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
+   acceptNode(n){return n.parentElement?.closest('script,style,textarea,input,[contenteditable]')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}
+  });
+  let node;
+  while((node=walker.nextNode())){
+   const previous=originalText.get(node);
+   const source=previous===undefined?node.nodeValue:previous;
+   // If another renderer changed the text, regard it as new Spanish input.
+   const last=previous===undefined?null:translateText(previous,'en');
+   const lastPt=previous===undefined?null:translateText(previous,'pt');
+   const isManaged=previous!==undefined&&(node.nodeValue===previous||node.nodeValue===last||node.nodeValue===lastPt);
+   const original=isManaged?previous:node.nodeValue;
+   const translated=lang==='es'?null:translateText(original,lang);
+   originalText.set(node,original);
+   const next=translated===null?original:translated;
+   if(node.nodeValue!==next)node.nodeValue=next;
+  }
+  for(const el of root.querySelectorAll('[placeholder],[aria-label],[title],[alt]')){
+   let originals=originalAttributes.get(el);
+   if(!originals){originals={};originalAttributes.set(el,originals);}
+   for(const attr of ['placeholder','aria-label','title','alt']){
+    const value=el.getAttribute(attr);if(value===null)continue;
+    const prior=originals[attr];
+    const managed=prior!==undefined&&[prior,translateText(prior,'en'),translateText(prior,'pt')].includes(value);
+    const source=managed?prior:value;
+    originals[attr]=source;
+    const translated=lang==='es'?null:translateText(source,lang);
+    const next=translated===null?source:translated;
+    if(value!==next)el.setAttribute(attr,next);
+   }
+  }
  };
  window.viApplyI18n();
 })();
