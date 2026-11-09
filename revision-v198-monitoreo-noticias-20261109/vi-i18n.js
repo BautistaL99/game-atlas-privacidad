@@ -22,6 +22,24 @@ Object.assign(VI_UI_DICTIONARY,{
     pt:'. Eles não são sincronizados automaticamente com outros dispositivos. Você pode exportar uma cópia e restaurá-la em outro dispositivo. A importação substitui o progresso atual.'
   }
 });
+// Home page labels missed by the original exact-match dictionary. The resume
+// section is also rendered natively for each locale in app-v137.js.
+Object.assign(VI_UI_DICTIONARY,{
+ 'Seguir explorando':{en:'Keep exploring',pt:'Continue explorando'},
+ 'Abrí una ficha y te aparecerá acá para retomarla rápidamente.':{en:'Open an entry and it will appear here so you can quickly return to it.',pt:'Abra uma ficha e ela aparecerá aqui para você retomar rapidamente.'},
+ 'Mi partida →':{en:'My game →',pt:'Meu jogo →'},
+ 'Ver más resultados ↗':{en:'View more results ↗',pt:'Ver mais resultados ↗'},
+ 'Ver ficha ↗':{en:'View entry ↗',pt:'Ver ficha ↗'},
+ 'Buscar ↗':{en:'Search ↗',pt:'Buscar ↗'},
+ 'Ej.: personaje masculino de pelo largo':{en:'E.g.: male character with long hair',pt:'Ex.: personagem masculino de cabelo comprido'},
+ 'Probá con otra descripción':{en:'Try a different description',pt:'Tente outra descrição'},
+ 'personaje negro':{en:'Black character',pt:'personagem negro'},
+ 'personaje empresario negro':{en:'Black business owner',pt:'empresário negro'},
+ 'arma con más daño':{en:'highest-damage weapon',pt:'arma com maior dano'},
+ 'qué me falta en vehículos':{en:'which vehicles am I missing?',pt:'quais veículos ainda faltam?'},
+ 'Describí lo que buscás…':{en:'Describe what you are looking for…',pt:'Descreva o que você procura…'},
+ 'Buscar en todo el catálogo':{en:'Search the entire catalog',pt:'Pesquisar em todo o catálogo'}
+});
 // V196 — exact UI labels left untranslated; do not translate user-authored data.
 Object.assign(VI_UI_DICTIONARY,{
  'Comunidad':{en:'Community',pt:'Comunidade'},
@@ -78,6 +96,18 @@ Object.assign(VI_UI_DICTIONARY,{
    if(translated===undefined){
     const n=trimmed.match(/^(\d+)\s*\/\s*(\d+)\s+(visitados|descubiertos|conocidos|registradas|adquiridos|encontrados|realizadas|completadas)(\s*·\s*sin fichas contabilizables)?$/);
     if(n){const terms={visitados:['visited','visitados'],descubiertos:['discovered','descobertos'],conocidos:['known','conhecidos'],registradas:['registered','registradas'],adquiridos:['acquired','adquiridos'],encontrados:['found','encontrados'],realizadas:['completed','realizadas'],completadas:['completed','concluídas']};translated=`${n[1]} / ${n[2]} ${terms[n[3]][lang==='en'?0:1]}${n[4]?(lang==='en'?' · no trackable entries':' · sem fichas contabilizáveis'):''}`;}
+   }
+   if(translated===undefined){
+    const result=trimmed.match(/^Resultados para «(.+)»$/);
+    if(result)translated=lang==='en'?`Results for «${result[1]}»`:`Resultados para «${result[1]}»`;
+   }
+   if(translated===undefined){
+    const result=trimmed.match(/^No encontramos coincidencias para «(.+)»$/);
+    if(result)translated=lang==='en'?`No matches for «${result[1]}»`:`Nenhum resultado para «${result[1]}»`;
+   }
+   if(translated===undefined){
+    const result=trimmed.match(/^(\d+) coincidencia\(s\) visibles$/);
+    if(result)translated=lang==='en'?`${result[1]} visible matches`:`${result[1]} correspondências visíveis`;
    }
    if(translated===undefined){
     const suffix=trimmed.match(/^(.*?)( · OFICIAL)$/);
