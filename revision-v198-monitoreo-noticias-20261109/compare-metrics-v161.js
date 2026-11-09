@@ -126,7 +126,13 @@
 
   const cfg=fields[cat]||[],seen=new Set(cfg.flatMap(row=>row.slice(6).map(normalize))),extra=[];
   for(const item of selected)for(const f of facts(item))if(!seen.has(normalize(f.key))){
-   seen.add(normalize(f.key));extra.push(['extra',f.key,f.key,f.key,null,null,f.key]);
+   seen.add(normalize(f.key));
+   const labels={
+    en:{'contenido anunciado':'Announced content','tipo':'Type','estado':'Status','región':'Region','ubicación':'Location','descripción':'Description','lanzamiento':'Release','edición':'Edition','fabricante':'Manufacturer'},
+    pt:{'contenido anunciado':'Conteúdo anunciado','tipo':'Tipo','estado':'Estado','región':'Região','ubicación':'Localização','descripción':'Descrição','lanzamiento':'Lançamento','edición':'Edição','fabricante':'Fabricante'}
+   };
+   const caption=key=>labels[key]?.[normalize(f.key)]||f.key;
+   extra.push(['extra',f.key,caption('en'),caption('pt'),null,null,f.key]);
   }
   const rows=[...cfg,...extra];
   // Keep confirmed information prominent; optional GTA V-inspired headings remain
@@ -261,6 +267,11 @@
     const list=chosen(cat);
     if(list.has(id))list.delete(id);
     else if(list.size<3)list.set(id,pick.dataset.viCompareName||id);
+    if(list.size===3){
+     // Open the completed three-item selection immediately. Do not alter saved progress.
+     root.location.hash='#/comparar?cat='+encodeURIComponent(cat)+'&ids='+encodeURIComponent([...list.keys()].join(','));
+     return;
+    }
     syncPickButtons();syncCompareBar();return;
    }
    if(event.target.closest?.('[data-vi-compare-clear]')){
