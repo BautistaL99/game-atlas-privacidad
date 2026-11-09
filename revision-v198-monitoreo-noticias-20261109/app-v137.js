@@ -240,8 +240,13 @@ function refreshHomeShowcase(){const el=document.querySelector('.v18-showcase');
  document.addEventListener('click',e=>{if(Date.now()<blockClickUntil&&e.target.closest('.home-permanent-frame,.v18-showcase-frame')){e.preventDefault();e.stopImmediatePropagation()}},true);
 })();
 document.addEventListener('click',e=>{const b=e.target.closest('[data-slide],[data-slide-go]');if(!b)return;e.preventDefault();homeSlide=b.dataset.slideGo!==undefined?Number(b.dataset.slideGo):(homeSlide+Number(b.dataset.slide)+homeShowcaseConfig.length)%homeShowcaseConfig.length;refreshHomeShowcase()});
-function homeSearch(){return `<form id="homeSearchForm" class="home-smart-search" role="search"><span aria-hidden="true">⌕</span><input id="homeSearchInput" placeholder="Describí lo que buscás…" aria-label="Buscar en todo el catálogo" value="${esc(searchText)}"><button type="submit">Buscar ↗</button></form><div class="vi-home-search-example">Ej.: personaje masculino de pelo largo</div><div class="search-chips">${['personaje negro','personaje empresario negro','arma con más daño','qué me falta en vehículos'].map(q=>`<button data-home-query="${esc(q)}">${esc(q)}</button>`).join('')}</div><div class="home-inline-results" id="homeInlineResults" aria-live="polite"></div>`}
-function showHomeResults(){const box=document.getElementById('homeInlineResults');if(!box)return;const q=searchText.trim();if(!q){box.innerHTML='';return;}const found=detectIntent(q);const rows=found.results.slice(0,6);box.innerHTML=`<div class="home-result-heading"><strong>${rows.length?`Resultados para «${esc(q)}»`:`No encontramos coincidencias para «${esc(q)}»`}</strong><span>${rows.length?`${rows.length} coincidencia(s) visibles`:'Probá con otra descripción'}</span></div>${found.explanation?`<p class="home-result-note">${esc(found.explanation)}</p>`:''}${rows.map(i=>`<a class="home-result-card" ${href('/ficha/'+i.id)}><span>${esc(tr(i.title))}</span><small>${esc(tr(cat(i.category).label))}</small><b>Ver ficha ↗</b></a>`).join('')}${found.results.length>6?`<a class="home-result-more" ${href('/buscar')}>Ver más resultados ↗</a>`:''}`}
+const homeSearchCopy={
+ es:{placeholder:'Describí lo que buscás…',aria:'Buscar en todo el catálogo',button:'Buscar ↗',example:'Ej.: personaje masculino de pelo largo',chips:['personaje negro','personaje empresario negro','arma con más daño','qué me falta en vehículos'],for:'Resultados para',nothing:'No encontramos coincidencias para',visible:'coincidencia(s) visibles',try:'Probá con otra descripción',details:'Ver ficha ↗',more:'Ver más resultados ↗'},
+ en:{placeholder:'Describe what you are looking for…',aria:'Search the entire catalog',button:'Search ↗',example:'E.g.: male character with long hair',chips:['black character','black business owner character','highest damage weapon','what vehicles am I missing'],for:'Results for',nothing:'No matches for',visible:'visible matches',try:'Try a different description',details:'View entry ↗',more:'View more results ↗'},
+ pt:{placeholder:'Descreva o que você procura…',aria:'Pesquisar em todo o catálogo',button:'Buscar ↗',example:'Ex.: personagem masculino de cabelo comprido',chips:['personagem negro','personagem empresário negro','arma com mais dano','quais veículos me faltam'],for:'Resultados para',nothing:'Nenhum resultado para',visible:'correspondências visíveis',try:'Tente outra descrição',details:'Ver ficha ↗',more:'Ver mais resultados ↗'}
+};
+function homeSearch(){const t=homeSearchCopy[locale]||homeSearchCopy.es;return `<form id="homeSearchForm" class="home-smart-search" role="search"><span aria-hidden="true">⌕</span><input id="homeSearchInput" placeholder="${esc(t.placeholder)}" aria-label="${esc(t.aria)}" value="${esc(searchText)}"><button type="submit">${t.button}</button></form><div class="vi-home-search-example">${t.example}</div><div class="search-chips">${t.chips.map(q=>`<button data-home-query="${esc(q)}">${esc(q)}</button>`).join('')}</div><div class="home-inline-results" id="homeInlineResults" aria-live="polite"></div>`}
+function showHomeResults(){const box=document.getElementById('homeInlineResults');if(!box)return;const q=searchText.trim();if(!q){box.innerHTML='';return;}const t=homeSearchCopy[locale]||homeSearchCopy.es;const found=detectIntent(q);const rows=found.results.slice(0,6);box.innerHTML=`<div class="home-result-heading"><strong>${rows.length?`${t.for} «${esc(q)}»`:`${t.nothing} «${esc(q)}»`}</strong><span>${rows.length?`${rows.length} ${t.visible}`:t.try}</span></div>${found.explanation?`<p class="home-result-note">${esc(found.explanation)}</p>`:''}${rows.map(i=>`<a class="home-result-card" ${href('/ficha/'+i.id)}><span>${esc(tr(i.title))}</span><small>${esc(tr(cat(i.category).label))}</small><b>${t.details}</b></a>`).join('')}${found.results.length>6?`<a class="home-result-more" ${href('/buscar')}>${t.more}</a>`:''}`}
 
 function lastOpened(){const recent=store('recent').map(id=>records.find(x=>x.id===id)).filter(Boolean).slice(0,2);const copy={es:{title:'Seguir explorando',note:'Abrí una ficha y te aparecerá acá para retomarla rápidamente.'},en:{title:'Keep exploring',note:'Open an entry and it will appear here so you can quickly return to it.'},pt:{title:'Continue explorando',note:'Abra uma ficha e ela aparecerá aqui para você retomar rapidamente.'}}[locale]||{title:'Seguir explorando',note:'Abrí una ficha y te aparecerá acá para retomarla rápidamente.'};return `<div class="section-head"><h2>${copy.title}</h2><a ${href('/partida')}>${esc(c().library)} →</a></div>${recent.length?`<div class="item-stack">${recent.map(resultCard).join('')}</div>`:`<p class="muted small">${copy.note}</p>`}`}
 function filterGuideGroups(){const groups=SEARCH_FILTERS[filterGuideCategory]||{};
@@ -431,6 +436,58 @@ const SEARCH_FILTERS={
  actualizaciones:{tipo:{trailer:['trailer','avance','video'],fecha:['fecha','lanzamiento'],ediciones:['ediciones','reservas','versiones'],musica:['musica','radio','emisoras'],parche:['parche','patch','actualizacion'],noticia:['noticia','anuncio','novedad']},fuente:{oficial:['rockstar','oficial','confirmado'],comunidad:['comunidad','fans'],rumor:['rumor','filtracion']},plataforma:{ps5:['ps5','playstation'],xbox:['xbox','series x'],pc:['pc','ordenador','computadora']}},
  herramientas:{tipo:{mapa:['mapa','mapa interactivo'],progreso:['progreso','seguimiento'],comparador:['comparador','comparar'],calculadora:['calculadora','calcular'],favoritos:['favoritos','guardar'],buscador:['buscador','buscar']},estado:{disponible:['disponible','lista'],planeada:['planeada','futura']}}
 };
+/* Multilingual query aliases: search interpretation must not depend on the
+ * selected interface language. Never infer a missing facet from an image. */
+const addSearchAliases=(category,field,value,aliases)=>{
+ const values=SEARCH_FILTERS[category]?.[field]?.[value];
+ if(values)for(const alias of aliases)if(!values.includes(alias))values.push(alias);
+};
+const EXTENDED_SEARCH_ALIASES=[
+ ['personajes','tono_piel','negra',['black','dark skinned','dark-skinned','pele negra','pele escura','negro','negra']],
+ ['personajes','tono_piel','clara',['fair skin','light skinned','pele clara','pele branca']],
+ ['personajes','genero','hombre',['homem','masculino','male character','personagem masculino']],
+ ['personajes','genero','mujer',['mulher','feminina','female character','personagem feminina']],
+ ['personajes','pelo','largo',['long hair','cabelo comprido','cabelo longo','cabelos longos']],
+ ['personajes','pelo','corto',['short hair','cabelo curto','cabelos curtos']],
+ ['personajes','pelo','rizado',['curly hair','cabelo cacheado','cabelo encaracolado']],
+ ['personajes','pelo','oscuro',['black hair','dark hair','cabelo preto','cabelo escuro']],
+ ['personajes','pelo','rubio',['blond hair','blonde hair','cabelo loiro']],
+ ['personajes','barba','con_barba',['with beard','bearded','com barba']],
+ ['personajes','barba','sin_barba',['without beard','clean shaven','sem barba']],
+ ['personajes','rol','empresario',['entrepreneur','businessperson','business owner','empresario','empresaria','empresário','empresária']],
+ ['personajes','rol','protagonista',['main character','lead character','personagem principal']],
+ ['personajes','rol','criminal',['outlaw','criminoso','criminosa']],
+ ['personajes','rol','policia',['police officer','cop','policial']],
+ ['vehiculos','tipo','auto',['automobile','automovel','automóvel','carro esportivo']],
+ ['vehiculos','tipo','moto',['motorbike','motociclo','motocicleta']],
+ ['vehiculos','tipo','camion',['caminhao','caminhões','camion']],
+ ['vehiculos','color','negro',['black','preto','preta']],
+ ['vehiculos','color','rojo',['red','vermelho','vermelha']],
+ ['vehiculos','color','azul',['blue']],
+ ['vehiculos','color','verde',['green']],
+ ['vehiculos','color','blanco',['white','branco','branca']],
+ ['vehiculos','combustible','electrico',['electric vehicle','eletrico','elétrico','eletrica','elétrica']],
+ ['vehiculos','uso','policial',['police','policia','polícia']],
+ ['armas','tipo','pistola',['pistol']],
+ ['armas','tipo','escopeta',['espingarda','shotguns']],
+ ['armas','tipo','fusil',['assault rifle']],
+ ['armas','accesorio','silenciador',['silencer','silenciador','supressor']],
+ ['armas','accesorio','mira',['sight','scope']],
+ ['armas','color','negro',['black','preto','preta']],
+ ['misiones','tipo','principal',['main mission','missao principal','missão principal']],
+ ['misiones','tipo','secundaria',['side mission','missao secundaria','missão secundária']],
+ ['misiones','tipo','atraco',['robbery','assalto']],
+ ['mapa-lugares','tipo','ciudad',['cidade']],
+ ['mapa-lugares','tipo','playa',['beach','praia']],
+ ['mapa-lugares','tipo','isla',['island','ilha']],
+ ['mapa-lugares','tipo','pantano',['swamp','pantano','pântano']],
+ ['mapa-lugares','tipo','taller',['workshop','oficina']],
+ ['economia','tipo','casa',['house','home']],
+ ['economia','tipo','negocio',['business','empresa']],
+ ['actualizaciones','tipo','noticia',['news','noticia','notícias']],
+ ['actividades','tipo','deporte',['sport','sports','esporte']]
+];
+for(const [category,field,value,aliases]of EXTENDED_SEARCH_ALIASES)addSearchAliases(category,field,value,aliases);
 
 function normalizeSearch(value=''){
  return String(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -449,7 +506,26 @@ const CATEGORY_ALIASES={
  actualizaciones:['actualizacion','actualizaciones','update','updates','novedades','noticias'],
  herramientas:['herramienta','herramientas','tool','tools']
 };
+for(const [cat,aliases] of Object.entries({
+ vehiculos:['automoveis','automoveis','veiculos','veículo','veículos','motociclos','carros','caminhoes','caminhões'],
+ armas:['armamento','armas de fogo','pistolas','espingardas'],
+ misiones:['missao','missões','missoes','tarefas'],
+ economia:['negocios','negócios','propriedades','imoveis','imóveis'],
+ personajes:['personagem','personagens','people','person','personas'],
+ 'mapa-lugares':['local','locais','lugares','lugar','cidade','cidades','praia','praias'],
+ coleccionables:['colecionavel','colecionáveis','itens colecionaveis'],
+ secretos:['segredo','segredos','misterios','mistérios'],
+ actividades:['atividade','atividades','corrida','corridas'],
+ mundo:['animais','radio','rádio','natureza'],
+ actualizaciones:['atualizacao','atualizações','noticias','notícias'],
+ herramientas:['ferramentas','ferramenta']
+}))CATEGORY_ALIASES[cat].push(...aliases);
 const SUBTYPES={auto:['auto','autos','automovil','automoviles','coche','coches','carro','carros','car','cars','sedan','sedanes','coupe','deportivo','deportivos'],camioneta:['camioneta','camionetas','pickup','pickups','pick up','suv','todoterreno'],camion:['camion','camiones','truck','trucks','lorry'],moto:['moto','motos','motocicleta','motocicletas','motorcycle','motorcycles','bike','bikes'],furgoneta:['furgoneta','furgonetas','van','vans'],buggy:['buggy'],lancha:['lancha','barco','embarcacion','bote'],kayak:['kayak','canoa'],avion:['avion','aviones'],helicoptero:['helicoptero','heli'],bicicleta:['bicicleta','bici']};
+for(const [kind,aliases] of Object.entries({
+ auto:['automovel','automóvel'],camion:['caminhao','caminhão'],moto:['motorbike','motociclo'],
+ bicicleta:['bicycle','bicicleta'],lancha:['boat','barco','lancha'],avion:['plane','airplane','avião'],
+ helicoptero:['helicopter','helicóptero'],camioneta:['suv','pickup','caminhonete']
+}))SUBTYPES[kind].push(...aliases);
 const METRICS=[
  {key:'speed',names:['velocidad','rapido','rapida','rapidos','rapidas','veloz','mas rapido','corre','fast','fastest','quick','quickest','speed','rapidez']},
  {key:'height',names:['altura','alto','alta','altos','altas','height','tall','tallest']},
@@ -468,17 +544,38 @@ const METRICS=[
  {key:'recoil',names:['retroceso','recoil']},
  {key:'accuracy',names:['precision numerica','accuracy']}
 ];
+for(const [key,names]of Object.entries({
+ speed:['rapido','rápido','velocidade','mais rapido','mais rápido','quickest','mais veloz'],
+ price:['preco','preço','custo','mais barato','mais caro','cheap','cheaper'],
+ damage:['dano','danos','mais dano','maior dano','highest damage','damage'],
+ weight:['peso','pesado','leve','mais leve'],
+ length:['comprimento'],height:['altura'],width:['largura'],
+ horsepower:['potencia','potência','cavalos'],capacity:['capacidade'],
+ acceleration:['aceleracao','aceleração'],fireRate:['taxa de disparo']
+})){const metric=METRICS.find(m=>m.key===key);if(metric)metric.names.push(...names);}
 const STOP=new Set(`a al algo alguna algunos ante bajo cada como con cual cuales cuando cuanto cuantos de del desde donde el ella en entre era es esa ese esta estas esto estos fue hay la las lo los mas me mi mis no nos o para pero por porque que quien quienes se ser si sin sobre su sus te tengo tiene un una unas uno unos y ya yo quiero busco buscamos mostrar muestra dame dime decir saber necesito encontrar encuentro encontre encuentra encontrados encontradas encontraste ver verlos verlas los las which what where who whose would please show find does do the are is of in for with and or most more less me my have has this that uma um mais qual quais como onde que quero tem nao tenho encontrar mostrar todos todas registrado registradas registrados registrada pendientes pendiente faltante faltantes falta faltan faltaria completado completada completados completadas descubiertos descubierto descubiertas descubierta me falta no tengo sin completar sin descubrir comparacion comparar comparame compare comparison vs versus entre partida buscar busca buscame busqueda dame uno alguna algun que sean sepas`.split(' '));
+for(const word of `i am ive i m have haven t not found missing still yet my mine need needs needed
+ do does did your are these those show search look looking please find me which what who with the of from to
+ e o os as uma um em por para com sem no na nos nas do da dos das mais menor maior
+ tenho tem tinha estou esta esse essa quero queria gostaria saber mostrar procurando buscar encontrei
+ ainda faltam faltando falta pendente pendentes nao não concluido concluida concluídos concluidas
+ causa causar possui possuem tem voce vocês você qual quais que faltaria fichas fotos itens elementos 
+ mais rápida rapido rapida rápidos rapidas quantidade e um umas ele ela eles elas eu vamos vejam
+ missing pending not completed incomplete havent haven found yet `.split(/\s+/).filter(Boolean))STOP.add(word);
 function phrase(q,alias){const s=normalizeSearch(alias);return !!s&&(` ${q} `).includes(` ${s} `)}
 function distance(a,b,limit=1){if(Math.abs(a.length-b.length)>limit)return limit+1;let prev=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){let curr=[i],best=i;for(let j=1;j<=b.length;j++){const v=Math.min(prev[j]+1,curr[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));curr.push(v);best=Math.min(best,v)}if(best>limit)return limit+1;prev=curr}return prev[b.length]}
 function singular(t){return t.length>4&&t.endsWith('s')?t.slice(0,-1):t}
 function tokensSimilar(a,b){if(a===b||singular(a)===singular(b))return true;if(a.length>=5&&b.length>=5&&Math.abs(a.length-b.length)<=2&&(a.startsWith(b)||b.startsWith(a)))return true;const n=Math.max(a.length,b.length);return n>=5&&distance(a,b,n>=9?2:1)<=(n>=9?2:1)}
 const aliasEntries=Object.entries(CATEGORY_ALIASES).flatMap(([cat,words])=>words.filter(w=>!w.includes(' ')).map(w=>({cat,w:normalizeSearch(w)})));
-function detectCategory(q){const found=Object.entries(CATEGORY_ALIASES).flatMap(([cat,a])=>a.map(w=>({cat,pos:(` ${q} `).indexOf(` ${normalizeSearch(w)} `)}))).filter(x=>x.pos>=0).sort((a,b)=>a.pos-b.pos);if(found.length)return found[0].cat;for(const t of q.split(' ').filter(t=>t.length>=5&&!STOP.has(t))){const m=aliasEntries.filter(x=>x.w.length>=5&&tokensSimilar(t,x.w));const cats=[...new Set(m.map(x=>x.cat))];if(cats.length===1)return cats[0]}return undefined}
+function detectCategory(q){
+ // An explicit character/person term takes precedence over secondary words
+ // such as “business”, avoiding misclassification of “business owner character”.
+ if(['character','characters','personaje','personajes','personagem','personagens'].some(w=>phrase(q,w)))return 'personajes';
+ const found=Object.entries(CATEGORY_ALIASES).flatMap(([cat,a])=>a.map(w=>({cat,pos:(` ${q} `).indexOf(` ${normalizeSearch(w)} `)}))).filter(x=>x.pos>=0).sort((a,b)=>a.pos-b.pos);if(found.length)return found[0].cat;for(const t of q.split(' ').filter(t=>t.length>=5&&!STOP.has(t))){const m=aliasEntries.filter(x=>x.w.length>=5&&tokensSimilar(t,x.w));const cats=[...new Set(m.map(x=>x.cat))];if(cats.length===1)return cats[0]}return undefined}
 function detectSubtype(q){for(const [key,list]of Object.entries(SUBTYPES))if(list.some(v=>phrase(q,v)))return key;for(const t of q.split(' ').filter(x=>x.length>=6)){const found=Object.entries(SUBTYPES).filter(([,list])=>list.some(v=>!v.includes(' ')&&v.length>=6&&tokensSimilar(t,v)));if(found.length===1)return found[0][0]}return undefined}
 function detectMetric(q,items,category){if(phrase(q,'potencia'))return category==='vehiculos'?METRICS.find(m=>m.key==='horsepower'):category==='armas'?METRICS.find(m=>m.key==='damage'):null;for(const metric of METRICS)if(metric.names.some(w=>phrase(q,w)))return metric;const keys=new Set(items.flatMap(i=>Object.keys(i.stats||{})));for(const key of keys){const name=normalizeSearch(key.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/_/g,' '));if(phrase(q,name))return{key,names:[name]}}return null}
-function lowerDirection(q,metric){return /\b(menos|menor|menores|minimum|minimo|minima|lowest|least|smallest|shortest|lighter|lightest|less)\b/.test(q)||(metric?.key==='price'&&/\b(barato|barata|baratos|baratas|economico|economica|cheap|cheapest)\b/.test(q))||(metric?.key==='weight'&&/\b(liviano|liviana|ligero|ligera|lightest)\b/.test(q))||(metric?.key==='size'&&/\b(pequeno|pequena|smallest)\b/.test(q))}
-function isRank(q,metric){return !!metric&&(/\b(mas|mayor|mayores|menor|menores|menos|maximo|maxima|minimo|minima|cual es|cuales son|top|mejor|peor|most|least|highest|lowest|biggest|smallest|largest|tallest|fastest|cheapest|heaviest|longest|widest|quickest)\b/.test(q)||/\b(rapido|veloz|caro|barato|grande|alto)\b/.test(q))}
+function lowerDirection(q,metric){return /\b(menos|menor|menores|minimum|minimo|minima|lowest|least|smallest|shortest|lighter|lightest|less|leve|mais leve|mais barato|mais barata|mais baratos|mais baratas)\b/.test(q)||(metric?.key==='price'&&/\b(barato|barata|baratos|baratas|economico|economica|cheap|cheapest)\b/.test(q))||(metric?.key==='weight'&&/\b(liviano|liviana|ligero|ligera|lightest)\b/.test(q))||(metric?.key==='size'&&/\b(pequeno|pequena|smallest)\b/.test(q))}
+function isRank(q,metric){return !!metric&&(/\b(mais|mas|mayor|mayores|menor|menores|menos|maximo|maxima|minimo|minima|cual es|cuales son|top|mejor|peor|most|least|highest|lowest|biggest|smallest|largest|tallest|fastest|cheapest|heaviest|longest|widest|quickest)\b/.test(q)||/\b(rapido|veloz|caro|barato|grande|alto)\b/.test(q))}
 function isTrackable(i){return i.status==='verified'&&i.trackable!==false&&i.recordType!=='story_overview'&&['misiones','vehiculos','armas','economia','mapa-lugares','coleccionables','personajes','actividades'].includes(i.category)}
 function facetMatches(i,f){const values=i.facets?.[f.field];const explicit=Array.isArray(values)?values:values===undefined?[]:[values];if(explicit.length)return explicit.some(v=>normalizeSearch(v)===normalizeSearch(f.value));
  // Compatibilidad hacia atrás: los tipos existentes pueden vivir en tags/vehicleType.
@@ -564,7 +661,7 @@ function residualWords(q,subtype,metric){const discard=new Set(STOP);
  for(const list of Object.values(CATEGORY_ALIASES))for(const alias of list)for(const t of normalizeSearch(alias).split(' '))discard.add(t);
  for(const list of Object.values(SUBTYPES))for(const alias of list)for(const t of normalizeSearch(alias).split(' '))discard.add(t);
  for(const m of METRICS)for(const alias of m.names)for(const t of normalizeSearch(alias).split(' '))discard.add(t);
- for(const t of 'mas mayor mayores menos menor menores mejor mejores peor peores grande grandes alto alta altos altas rapido rapida caros caro baratas barato veloz fast fastest cheapest highest lowest more most top'.split(' '))discard.add(t);
+ for(const t of 'mas mais mayor maiores mayores menos menor menores melhor mejor mejores peor peores grande grandes alto alta altos altas rapido rapida rapidos rapidas caros caro baratas barato baratos barato veloz fast fastest cheapest highest lowest more most top biggest fastest highest best'.split(' '))discard.add(t);
  return q.split(' ').filter(t=>t.length>1&&!discard.has(t)&&!(subtype&&(SUBTYPES[subtype]||[]).some(v=>!v.includes(' ')&&tokensSimilar(t,normalizeSearch(v)))));}
 function matchScore(i,words){if(!words.length)return 1;
  const title=normalizeSearch(Object.values(i.title||{}).join(' '));const tags=normalizeSearch([...(i.tags||[]),...(i.searchTerms||[])].join(' '));const detail=normalizeSearch([...Object.values(i.summary||i.desc||{}),...(i.facts||[]).filter(f=>f.verified).flatMap(f=>[f.key,f.value]),...Object.entries(i.stats||{}).map(([k,v])=>`${k} ${v}`),...leafAttributes(i).map(x=>`${x.path.join(' ')} ${x.value}`)].join(' '));
@@ -572,9 +669,9 @@ function matchScore(i,words){if(!words.length)return 1;
 }
 function searchCatalogCore(query,items,completed=[]){const q=normalizeSearch(query);const verified=items.filter(i=>i.status==='verified');if(!q)return{intent:'text',results:verified.slice(0,7),needsData:false,filters:[]};
  const category=detectCategory(q),subtype=category==='vehiculos'?detectSubtype(q):undefined,metric=detectMetric(q,items,category),ranking=isRank(q,metric);
- const missing=/\b(me falta|me faltan|no tengo|no encontre|no descubri|sin completar|sin descubrir|pendientes|pendiente|faltante|faltantes|missing|not found|nao tenho|nao encontrei)\b/.test(q);
- const location=/\b(donde|ubicacion|ubicaciones|localizacion|localizaciones|where|find|encontrar|encuentro|aparece|aparecen|onde)\b/.test(q);
- const comparison=/\b(comparar|comparacion|comparame|versus|vs|compare|comparison)\b/.test(q);
+ const missing=/\b(me falta|me faltan|no tengo|no encontre|no descubri|sin completar|sin descubrir|pendientes|pendiente|faltante|faltantes|missing|not found|not completed|not collected|have not found|havent found|still need|nao tenho|nao encontrei|nao completei|me faltam|faltam|ainda falta|ainda nao tenho|ainda nao encontrei|nao achei|por completar)\b/.test(q);
+ const location=/\b(donde|ubicacion|ubicaciones|localizacion|localizaciones|where|find|encontrar|encuentro|aparece|aparecen|onde|onde fica|localizacao|encontrar em)\b/.test(q);
+ const comparison=/\b(comparar|comparacion|comparame|versus|vs|compare|comparison|comparacao|comparações|comparar com)\b/.test(q);
  const dynamic=dynamicFilters(q,verified.filter(i=>!category||i.category===category));
  const parsed=extractFilters(dynamic.remaining,category);
  let pool=verified.filter(i=>(!category||i.category===category)&&(!subtype||facetMatches(i,{field:'tipo',value:subtype}))&&parsed.filters.every(f=>facetMatches(i,f))&&matchesDynamic(i,dynamic.filters));
@@ -588,23 +685,35 @@ function searchCatalogCore(query,items,completed=[]){const q=normalizeSearch(que
 }
 
 /* SHARED_SEARCH_ENGINE_END */
+const searchResultCopy={
+ es:{ranking:'Ranking',location:'Ubicación',comparison:'Comparación',search:'Búsqueda',noRanking:'Sin ranking hasta tener estadísticas verificadas.',noStats:'Entendí que querés ordenar por',noStatsAfter:', pero todavía no hay estadísticas comparables verificadas. No voy a inventar resultados.',sorted:'Ranking por',highest:'mayor a menor',lowest:'menor a mayor',data:'con cifras disponibles',missing:'Elementos sin registrar',mark:'Podés marcarlos directamente desde la lista.',locationNote:'Mostramos fichas relacionadas; no inventamos ubicaciones ni coordenadas.',comparisonNote:'Fichas relacionadas; solo comparamos estadísticas verificadas.',matches:'coincidencias verificadas.',filters:'Filtros:',empty:'No hay fichas verificadas que cumplan esos filtros.',recognized:'Filtros reconocidos:'},
+ en:{ranking:'Ranking',location:'Location',comparison:'Comparison',search:'Search',noRanking:'No ranking until verified statistics are available.',noStats:'I understood you want to sort by',noStatsAfter:', but there are no comparable verified stats yet. No data will be invented.',sorted:'Ranking by',highest:'highest to lowest',lowest:'lowest to highest',data:'verified values',missing:'Untracked items',mark:'You can mark them directly in the list.',locationNote:'These entries are related; we do not invent locations or coordinates.',comparisonNote:'Related entries; we compare verified stats only.',matches:'verified matches.',filters:'Filters:',empty:'No verified entries match these filters.',recognized:'Recognized filters:'},
+ pt:{ranking:'Classificação',location:'Localização',comparison:'Comparação',search:'Busca',noRanking:'Não há classificação sem estatísticas verificadas.',noStats:'Entendi que você quer ordenar por',noStatsAfter:', mas ainda não existem estatísticas verificadas comparáveis. Não vamos inventar resultados.',sorted:'Classificação por',highest:'do maior para o menor',lowest:'do menor para o maior',data:'valores verificados',missing:'Itens ainda não registrados',mark:'Você pode marcá-los diretamente na lista.',locationNote:'Mostramos fichas relacionadas; não inventamos locais nem coordenadas.',comparisonNote:'Fichas relacionadas; comparamos somente estatísticas verificadas.',matches:'resultados verificados.',filters:'Filtros:',empty:'Nenhuma ficha verificada corresponde a esses filtros.',recognized:'Filtros reconhecidos:'}
+};
+const searchMetricNames={
+ speed:{es:'velocidad',en:'speed',pt:'velocidade'},price:{es:'precio',en:'price',pt:'preço'},
+ damage:{es:'daño',en:'damage',pt:'dano'},weight:{es:'peso',en:'weight',pt:'peso'},
+ height:{es:'altura',en:'height',pt:'altura'},width:{es:'ancho',en:'width',pt:'largura'},
+ length:{es:'largo',en:'length',pt:'comprimento'},horsepower:{es:'potencia',en:'horsepower',pt:'potência'}
+};
 function detectIntent(query){
  const answer=searchCatalogCore(query,records,store('done'));
- const metric=answer.metric||'atributo';
+ const t=searchResultCopy[locale]||searchResultCopy.es;
+ const metric=searchMetricNames[answer.metric]?.[locale]||answer.metric||'atributo';
  const criteria=(answer.filters||[]).map(f=>f.field.replaceAll('_',' ')+': '+f.value.replaceAll('_',' ')).join(' · ');
- const explanation=answer.intent==='ranking'?(answer.needsData?`Entendí que querés ordenar por ${metric}, pero todavía no hay estadísticas comparables verificadas. No voy a inventar resultados.`:`Ranking por ${metric} (${answer.order==='asc'?'menor a mayor':'mayor a menor'}), con cifras disponibles (${answer.results.length}).`):answer.intent==='missing'?`Elementos sin registrar (${answer.results.length}). Podés marcarlos directamente desde la lista.`:answer.intent==='location'?'Mostramos fichas relacionadas; no inventamos ubicaciones ni coordenadas.':answer.intent==='comparison'?'Fichas relacionadas; solo comparamos estadísticas verificadas.':answer.results.length?`${answer.results.length} coincidencias verificadas.${criteria?' Filtros: '+criteria+'.':''}`:`No hay fichas verificadas que cumplan esos filtros.${criteria?' Filtros reconocidos: '+criteria+'.':''}`;
+ const explanation=answer.intent==='ranking'?(answer.needsData?`${t.noStats} ${metric}${t.noStatsAfter}`:`${t.sorted} ${metric} (${answer.order==='asc'?t.lowest:t.highest}), ${t.data} (${answer.results.length}).`):answer.intent==='missing'?`${t.missing} (${answer.results.length}). ${t.mark}`:answer.intent==='location'?t.locationNote:answer.intent==='comparison'?t.comparisonNote:answer.results.length?`${answer.results.length} ${t.matches}${criteria?' '+t.filters+' '+criteria+'.':''}`:`${t.empty}${criteria?' '+t.recognized+' '+criteria+'.':''}`;
  return {...answer,kind:answer.intent,explanation};
 }
-function showResults(){const target=document.getElementById('searchResults');if(!target)return;const query=searchText.trim();const answer=detectIntent(query);const ct=cat(answer.category);const badge=answer.kind==='ranking'?'↗ Ranking':answer.kind==='location'?'⌖ Ubicación':answer.kind==='comparison'?'⇄ Comparación':'⌕ Búsqueda';const note=query&&answer.explanation?`<div class="search-intent"><strong>${badge}</strong><p>${esc(answer.explanation)}</p>${ct?`<a ${href('/explorar/'+ct.id)}>↗ ${esc(tr(ct.label))}</a>`:''}</div>`:'';
+function showResults(){const target=document.getElementById('searchResults');if(!target)return;const query=searchText.trim();const answer=detectIntent(query);const ct=cat(answer.category);const t=searchResultCopy[locale]||searchResultCopy.es;const badge=answer.kind==='ranking'?'↗ '+t.ranking:answer.kind==='location'?'⌖ '+t.location:answer.kind==='comparison'?'⇄ '+t.comparison:'⌕ '+t.search;const note=query&&answer.explanation?`<div class="search-intent"><strong>${badge}</strong><p>${esc(answer.explanation)}</p>${ct?`<a ${href('/explorar/'+ct.id)}>↗ ${esc(tr(ct.label))}</a>`:''}</div>`:'';
 const matchingFacet=(i,f)=>{if(f.field.startsWith('atributo:')){const keys=f.field.slice(9).split('.');let v=i.attributes;for(const k of keys){if(!v||typeof v!=='object')return false;v=v[k]}return (Array.isArray(v)?v:[v]).some(x=>normalizeSearch(String(x??''))===normalizeSearch(f.value));}return facetMatches(i,f)};
  const groups=multiFilters.reduce((a,f)=>((a[f.field]??=[]).push(f),a),{});
  const base=query?answer.results:multiFilters.length?records.filter(i=>i.status==='verified'&&i.category===filterGuideCategory):records.filter(i=>i.status==='verified').slice(0,7);
  const found=multiFilters.length?base.filter(i=>i.category===filterGuideCategory&&Object.values(groups).every(filters=>filters.some(f=>matchingFacet(i,f)))):base;
-const list=found.length?`<div class="item-stack">${found.map(resultCard).join('')}</div>`:`<div class="empty-state">${answer.kind==='ranking'?'Sin ranking hasta tener estadísticas verificadas.':esc(c().noResults)}</div>`;
+const list=found.length?`<div class="item-stack">${found.map(resultCard).join('')}</div>`:`<div class="empty-state">${answer.kind==='ranking'?t.noRanking:esc(c().noResults)}</div>`;
 target.innerHTML=note+list;}
 let lastRenderedRoute='';
 function render(){const s=c();const current=decodeURIComponent(location.hash.replace(/^#/,'')||'/').split('?')[0];let html=`<div class="shell"><aside class="sidebar"><a class="brand" ${href('/')}><span class="brand-mark">VI</span><span><b>GAME ASSISTANT</b><small>${s.title}</small></span></a><div class="sidebar-nav">${routes.map(([key,path,icon])=>`<a ${href(path)} class="${isActive(path,current)?'nav-active':''}" ${isActive(path,current)?'aria-current="page"':''}><span>${icon}</span>${key==='news'?(locale==='en'?'News':locale==='pt'?'Notícias':'Noticias'):s[key]}</a>`).join('')}<a ${href('/buscar')} class="${isActive('/buscar',current)?'nav-active':''}" ${isActive('/buscar',current)?'aria-current="page"':''}><span>⌕</span>${s.search}</a><a ${href('/comparar')} class="${current==='/comparar'?'nav-active':''}" ${current==='/comparar'?'aria-current="page"':''}><span>⇄</span>${locale==='en'?'Compare':locale==='pt'?'Comparar':'Comparar'}</a></div><div class="sidebar-rankings"><a ${href('/rankings/speedruns')}>🏁 Top speedruns</a><a ${href('/rankings/donaciones')}>💚 Top donaciones</a><a ${href('/apoyar')}>♡ Apoyar proyecto</a></div><div class="sidebar-photo" role="img" aria-label="Imagen oficial de Grand Theft Auto VI"></div><div class="sidebar-note">${s.unofficial}</div></aside><main class="main"><header class="topbar"><a class="mobile-brand" ${href('/')}><span class="brand-mark">VI</span><span>GAME ASSISTANT</span></a><div class="top-search-wrap"><form id="headerSearchForm" role="search" autocomplete="off"><span aria-hidden="true">⌕</span><input id="headerSearchInput" value="${esc(searchText)}" placeholder="${esc(locale==='es'?'Buscar: auto más rápido':locale==='pt'?'Buscar: carro mais rápido':'Search: fastest car')}" aria-label="${esc(s.search)}" aria-autocomplete="list" aria-controls="headerSuggestions" autocomplete="off"><button type="submit" class="top-search-submit" title="Ver todos los resultados">↗</button></form><div id="headerSuggestions" class="top-search-suggestions" aria-live="polite" hidden></div></div><div class="mobile-actions"><a class="mobile-donate" ${href('/apoyar')} aria-label="Donar al proyecto">♥ <span>Donar</span></a><a class="lang-badge" ${href('/ajustes')}>${locale.toUpperCase()} ⚙</a></div></header><div class="container ${current==='/'?'container-home-v111':''}">${content()}</div><footer class="footer">${s.unofficial} · <a href="./privacy.html" target="_blank" rel="noopener noreferrer">${locale==='en'?'Privacy policy':locale==='pt'?'Política de privacidade':'Política de privacidad'}</a> · <a class="vi-footer-info" ${href('/informacion')}>${locale==='en'?'GTA VI guide':locale==='pt'?'Guia GTA VI':'Guía e información GTA 6'}</a></footer></main><nav class="bottom-nav">${routes.map(([key,path,icon])=>`<a ${href(path)} class="${isActive(path,current)?'nav-active':''}" ${isActive(path,current)?'aria-current="page"':''}><span class="nav-symbol">${icon}</span><span>${key==='news'?(locale==='en'?'News':locale==='pt'?'Notícias':'Noticias'):s[key]}</span></a>`).join('')}<details class="mobile-more"><summary aria-label="Más secciones"><span class="nav-symbol" aria-hidden="true">☰</span><span>Más</span></summary><div class="mobile-more-panel"><span class="mobile-more-label">Más secciones</span><a ${href('/buscar')}>⌕ Buscar</a><a ${href('/comparar')}>⇄ Comparar</a><a ${href('/rankings/speedruns')}>🏁 Top speedruns</a><a ${href('/rankings/donaciones')}>💚 Top donaciones</a><a ${href('/apoyar')}>♡ Apoyar proyecto</a><a ${href('/ajustes')}>⚙ Ajustes</a><a class="vi-more-info" ${href('/informacion')}>ⓘ ${locale==='en'?'GTA VI guide':locale==='pt'?'Guia GTA VI':'Guía e información GTA 6'}</a></div></details></nav></div>`;document.getElementById('root').innerHTML=html;if(location.hash==='#/buscar')showResults();if(current==='/mapa'){mapBind();}lastRenderedRoute=current;queueMicrotask(()=>window.viRenderRoutes?.());updateHeaderSuggestions(false);startHomeCarousel();if(current==='/')showHomeResults();queueMicrotask(()=>window.viApplyI18n?.())}
-function updateHeaderSuggestions(show=true){const box=document.getElementById('headerSuggestions');if(!box)return;const q=searchText.trim();if(!show||!q){box.hidden=true;box.innerHTML='';return;}const a=detectIntent(q);const results=a.results.slice(0,5);const notice=a.explanation?`<div class="suggestion-notice">${esc(a.explanation)}</div>`:'';box.innerHTML=`${notice}${results.map(i=>`<a class="suggestion-row" ${href('/ficha/'+i.id)}>${cat(i.category).icon} <span><b>${esc(tr(i.title))}</b><small>${esc(tr(cat(i.category).label))}</small></span> ↗</a>`).join('')}${!results.length&&!a.explanation?`<div class="suggestion-notice">${esc(c().noResults)}</div>`:''}<a class="suggestion-more" ${href('/buscar')}>Ver búsqueda completa ↗</a>`;box.hidden=false;}
+function updateHeaderSuggestions(show=true){const box=document.getElementById('headerSuggestions');if(!box)return;const q=searchText.trim();if(!show||!q){box.hidden=true;box.innerHTML='';return;}const a=detectIntent(q);const results=a.results.slice(0,5);const notice=a.explanation?`<div class="suggestion-notice">${esc(a.explanation)}</div>`:'';box.innerHTML=`${notice}${results.map(i=>`<a class="suggestion-row" ${href('/ficha/'+i.id)}>${cat(i.category).icon} <span><b>${esc(tr(i.title))}</b><small>${esc(tr(cat(i.category).label))}</small></span> ↗</a>`).join('')}${!results.length&&!a.explanation?`<div class="suggestion-notice">${esc(c().noResults)}</div>`:''}<a class="suggestion-more" ${href('/buscar')}>${locale==='en'?'View full search':locale==='pt'?'Ver busca completa':'Ver búsqueda completa'} ↗</a>`;box.hidden=false;}
 document.addEventListener('error',event=>{const im=event.target;if(im?.tagName==='IMG' && im.dataset.fallback && !im.dataset.failed){im.dataset.failed='1';im.src=im.dataset.fallback;im.title='Imagen externa no disponible; se muestra imagen ilustrativa del prototipo.';const label=im.parentElement?.querySelector('.image-caption span');if(label)label.textContent='No se pudo cargar la imagen externa. Se muestra una imagen ilustrativa local; no es una captura del juego.'}},true);
 document.addEventListener('click',event=>{const view=event.target.closest('[data-play-view]');if(view){const previousScroll=window.scrollY;playProgressView=view.dataset.playView;render();window.scrollTo(0,previousScroll);return;}if(event.target.closest('[data-multi-clear]')){multiFilters=[];render();return;}const toggle=event.target.closest('[data-toggle]');if(toggle){event.preventDefault();const k=toggle.dataset.toggle,id=toggle.dataset.id;const old=store(k);save(k,old.includes(id)?old.filter(v=>v!==id):[...old,id]);render();return}const homeChip=event.target.closest('[data-home-query]');if(homeChip){searchText=homeChip.dataset.homeQuery;const input=document.getElementById('homeSearchInput');if(input)input.value=searchText;showHomeResults();document.getElementById('homeInlineResults')?.scrollIntoView({block:'nearest',behavior:'smooth'});return}const chip=event.target.closest('[data-query]');if(chip){searchText=chip.dataset.query;render();document.getElementById('searchInput')?.focus();return}const lang=event.target.closest('[data-lang]');if(lang){event.preventDefault();locale=lang.dataset.lang;localStorage.setItem('vi_demo_locale',locale);document.documentElement.lang=locale;if(location.hash!=='#/'){location.hash='#/'}else{render()}requestAnimationFrame(()=>window.scrollTo(0,0))}if(event.target.id==='clearSearch'){searchText='';render();document.getElementById('searchInput')?.focus()}if(!event.target.closest('.top-search-wrap'))updateHeaderSuggestions(false)});
 document.addEventListener('change',event=>{if(event.target.id==='playProgressSort'){const previousScroll=window.scrollY;playProgressSort=event.target.value;render();window.scrollTo(0,previousScroll);return;}if(event.target.id==='filterGuideCategory'){filterGuideCategory=event.target.value;multiFilters=[];render();return}if(event.target.matches('[data-facet-field]')){const field=event.target.dataset.facetField,value=event.target.dataset.facetValue;multiFilters=event.target.checked?[...multiFilters,{field,value}]:multiFilters.filter(f=>!(f.field===field&&f.value===value));const curr=document.getElementById('filterGuideGroups');const openGroups=curr?[...curr.querySelectorAll('details')].filter(e=>e.open).map(e=>e.querySelector('summary')?.textContent):[];const focus=document.activeElement;render();const details=[...document.querySelectorAll('#filterGuideGroups details')];for(const d of details)if(openGroups.includes(d.querySelector('summary')?.textContent))d.open=true;const guide=document.querySelector('.search-filter-guide');if(guide)guide.open=true;return}});
