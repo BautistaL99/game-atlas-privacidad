@@ -690,8 +690,94 @@ body.vi-map-modal-active{overflow:hidden!important}
   transform:none;
   pointer-events:none;
 }
+</style><style id="vi-v200-pdf-audit">
+/* PDF audit V200: scoped desktop fixes; keep the separate Android/mobile layout unchanged. */
+@media(min-width:701px){
+ #root .my-game .item-stack .content-card{
+  display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;gap:12px!important;min-width:0!important;
+  padding:14px 16px!important;overflow:visible!important
+ }
+ #root .my-game .item-stack .content-card .content-card-link,
+ #root .my-game .item-stack .content-card.has-quick .content-card-link{
+  min-width:0!important;width:100%!important;padding:0!important;gap:12px!important;
+  display:flex!important;align-items:center!important;overflow:hidden!important
+ }
+ #root .my-game .item-stack .content-card .content-card-link .pill{
+  flex:0 0 auto!important;position:static!important;margin-left:7px!important;
+  white-space:nowrap!important;max-width:110px!important;overflow:visible!important
+ }
+ #root .my-game .item-stack .content-card .content-card-link .arrow{display:none!important}
+ #root .my-game .item-stack .content-card .card-inline-actions{
+  grid-column:2!important;position:static!important;inset:auto!important;
+  transform:none!important;display:flex!important;gap:8px!important;
+  align-items:center!important;justify-content:flex-end!important;width:auto!important;
+  max-width:100%!important;min-width:0!important;margin:0!important;z-index:2!important
+ }
+ #root .my-game .item-stack .content-card .card-inline-actions .quick-fav{
+  position:static!important;transform:none!important;flex:0 0 38px!important;
+  width:38px!important;height:38px!important;margin:0!important
+ }
+ #root .my-game .item-stack .content-card .card-inline-actions .quick-complete{
+  min-width:0!important;max-width:160px!important;white-space:normal!important;
+  text-align:center!important;padding:8px 10px!important;line-height:1.25!important
+ }
+ #root .my-game .item-stack .content-card .card-inline-actions .vi-compare-pick{
+  flex:0 0 auto!important;white-space:nowrap!important
+ }
+ /* Mobile-only fast filter chips must not appear as unstyled white HTML buttons on desktop. */
+ #root .atlas-v119 .atlas-map .vi-map-filter-chips{display:none!important}
+ /* Fullscreen: allow the map to fill available height while the filter pane scrolls independently. */
+ #root .atlas-v119.vi-fullscreen-map .atlas-layout{
+  display:grid!important;grid-template-columns:minmax(0,1fr) minmax(285px,335px)!important;
+  grid-template-rows:minmax(0,1fr)!important;gap:12px!important;
+  align-items:stretch!important;overflow:hidden!important
+ }
+ #root .atlas-v119.vi-fullscreen-map .atlas-center{
+  display:flex!important;flex-direction:column!important;min-width:0!important;
+  min-height:0!important;height:100%!important;overflow-y:auto!important;
+  overscroll-behavior:contain!important
+ }
+ #root .atlas-v119.vi-fullscreen-map .atlas-map{
+  display:block!important;flex:1 0 350px!important;
+  min-height:350px!important;height:auto!important;width:100%!important;
+  overflow:hidden!important
+ }
+ #root .atlas-v119.vi-fullscreen-map .atlas-layout>.atlas-filters{
+  display:flex!important;flex-direction:column!important;
+  min-height:0!important;max-height:100%!important;height:100%!important;
+  overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-width:thin!important;
+  align-self:stretch!important;position:relative!important
+ }
+ #root .atlas-v119.vi-fullscreen-map .atlas-layout>.atlas-filters .atlas-filter-scroll{
+  flex:0 0 auto!important;max-height:none!important;overflow:visible!important
+ }
+ #root .atlas-v119.vi-fullscreen-map .vi-personal-manager{
+  position:relative!important;flex:0 0 auto!important;margin-top:9px!important;z-index:1!important
+ }
+ #root .atlas-v119.vi-fullscreen-map .atlas-card{flex:0 0 auto!important}
+ #root .atlas-v119.vi-fullscreen-map .atlas-map .atlas-popup{z-index:60!important}
+ /* Home descriptive search: keep helper and no-match message in a readable vertical flow. */
+ #root .home-v18 .v18-search-area{padding-top:31px!important;padding-bottom:34px!important}
+ #root .home-v18 .vi-home-search-example{margin-top:11px!important;margin-bottom:11px!important}
+ #root .home-v18 .v18-search-area>.search-chips{margin:12px 0 18px!important;row-gap:9px!important}
+ #root .home-v18 .home-inline-results{margin-top:22px!important}
+ #root .home-v18 .home-result-heading{
+  display:flex!important;flex-direction:column!important;align-items:flex-start!important;
+  justify-content:flex-start!important;gap:7px!important;line-height:1.5!important
+ }
+ #root .home-v18 .home-result-heading span{position:static!important;margin:0!important}
+ #root .home-v18 .home-result-note{margin:6px 0 12px!important;line-height:1.55!important}
+}
+@media(min-width:701px) and (max-width:1120px){
+ #root .my-game .item-stack .content-card{grid-template-columns:minmax(0,1fr)!important}
+ #root .my-game .item-stack .content-card .card-inline-actions{
+  grid-column:1!important;justify-content:flex-end!important;
+  padding-top:5px!important;border-top:1px solid #303d51!important
+ }
+}
 </style></head>
-<body><div id="root"></div><script src="./news-v155.js?rev=20261108-v196"></script><script src="./info-v158.js"></script><script src="./detail-enhancements-v160.js"></script><script src="./compare-metrics-v161.js"></script><script src="./guest-import-safe.js"></script><script src="./app-v137.js?rev=20261109-v199-finalqa"></script><script src="./vi-i18n.js?rev=20261109-i18n-search-audit"></script><script src="./diagnostics-v143.js?rev=20261109-v197"></script><script src="./online-updates.js"></script><script src="./routes-v145.js"></script>
+<body><div id="root"></div><script src="./news-v155.js?rev=20261108-v196"></script><script src="./info-v158.js"></script><script src="./detail-enhancements-v160.js"></script><script src="./compare-metrics-v161.js?rev=20261109-v200-pdf"></script><script src="./guest-import-safe.js"></script><script src="./app-v137.js?rev=20261109-v200-pdf"></script><script src="./vi-i18n.js?rev=20261109-i18n-search-audit"></script><script src="./diagnostics-v143.js?rev=20261109-v197"></script><script src="./online-updates.js"></script><script src="./routes-v145.js"></script>
 
 <script id="vi-cache-policy-v136">
 (function(){
