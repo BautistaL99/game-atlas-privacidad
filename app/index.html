@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Game Atlas Companion · No oficial</title><meta name="theme-color" content="#101321"><meta name="vi-android-build" content="1.47.0"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Game Atlas Companion"><link rel="icon" type="image/svg+xml" href="./icons/vi-logo.svg"><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icons/icon-180.png"><meta name="description" content="Guía independiente de GTA VI: fichas, mapa, seguimiento y fuentes verificadas. No afiliada a Rockstar Games."><link rel="stylesheet" href="./app-v137.css"><link rel="stylesheet" href="./app-v155.css?rev=20261108-v196-news"><link rel="stylesheet" href="./desktop-fixes-v156.css"><link rel="stylesheet" href="./desktop-fixes-v157.css"><link rel="stylesheet" href="./info-v158.css"><script>function viMobileRouteClass(){document.documentElement.classList.toggle('vi-route-map', /(?:^|\/)mapa(?:\/|$|\?)/.test(location.hash)||/\/mapa(?:\/|$)/.test(location.pathname));}window.addEventListener('hashchange',viMobileRouteClass);document.addEventListener('DOMContentLoaded',viMobileRouteClass);</script><style>@media(max-width:700px){html.vi-route-map .top-search-wrap{display:none!important}html.vi-route-map .topbar{min-height:76px!important;grid-template-areas:'brand settings'!important;grid-template-rows:auto!important}}</style><style id="vi-android-v130">
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Game Atlas Companion · No oficial</title><meta name="theme-color" content="#101321"><meta name="vi-android-build" content="1.47.0"><meta name="vi-web-release" content="V197"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Game Atlas Companion"><link rel="icon" type="image/svg+xml" href="./icons/vi-logo.svg"><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icons/icon-180.png"><meta name="description" content="Guía independiente de GTA VI: fichas, mapa, seguimiento y fuentes verificadas. No afiliada a Rockstar Games."><link rel="stylesheet" href="./app-v137.css?rev=20261109-v197-layoutfix"><link rel="stylesheet" href="./app-v155.css?rev=20261108-v196-news"><link rel="stylesheet" href="./desktop-fixes-v156.css"><link rel="stylesheet" href="./desktop-fixes-v157.css"><link rel="stylesheet" href="./info-v158.css"><script>function viMobileRouteClass(){document.documentElement.classList.toggle('vi-route-map', /(?:^|\/)mapa(?:\/|$|\?)/.test(location.hash)||/\/mapa(?:\/|$)/.test(location.pathname));}window.addEventListener('hashchange',viMobileRouteClass);document.addEventListener('DOMContentLoaded',viMobileRouteClass);</script><style>@media(max-width:700px){html.vi-route-map .top-search-wrap{display:none!important}html.vi-route-map .topbar{min-height:76px!important;grid-template-areas:'brand settings'!important;grid-template-rows:auto!important}}</style><style id="vi-android-v130">
 @media(max-width:700px){
 /* Status-bar clearance: Android WebView can return zero CSS safe-area inset. */
 :root{--vi-native-status:32px;--vi-tabs:76px}
@@ -104,7 +104,7 @@ async function configure(){try{
  .v120-next-milestone p{font-size:12px!important;min-height:0!important;margin:0!important;grid-column:2!important;white-space:normal!important}
  .v120-next-milestone .v120-meter,.v120-next-milestone progress{grid-column:1/-1!important;max-width:100%!important}
  .v120-overview-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:8px!important;gap:6px!important}
- .v120-overview-stats>div{min-height:0!important;padding:8px!important}
+ .v120-overview-stats>button{min-height:0!important;padding:8px!important}
  .v120-progress-list{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
  .v120-progress-row{min-height:0!important;height:auto!important;padding:9px!important;gap:6px!important;align-items:start!important}
  .v120-progress-row *{min-width:0!important;overflow-wrap:break-word!important}
@@ -156,7 +156,7 @@ async function configure(){try{
  .v120-next-milestone p{grid-column:2!important;display:block!important;width:auto!important;font-size:12px!important;line-height:1.3!important;white-space:normal!important}
  .v120-next-milestone .v120-meter,.v120-next-milestone progress{grid-column:1/-1!important;width:100%!important}
  .v120-overview-stats{padding:7px!important;gap:6px!important}
- .v120-overview-stats>div{padding:7px!important;min-height:0!important}
+ .v120-overview-stats>button{padding:7px!important;min-height:0!important}
  .v120-progress-row{min-height:0!important;height:auto!important;padding:10px!important}
  .v121-podium{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
  .v121-podium-place{min-width:0!important;min-height:0!important;padding:9px 4px!important}
@@ -316,11 +316,11 @@ async function configure(){try{
   .v120-next-milestone .v120-mini-track{grid-column:1/-1!important;margin-top:3px!important}
   .v120-next-milestone>small{grid-column:1/-1!important;font-size:9px!important;margin-top:0!important}
   .v120-overview-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;padding:7px!important}
-  .v120-overview-stats>a,.v120-overview-stats>div{display:grid!important;grid-template-columns:27px minmax(0,1fr)!important;grid-template-rows:auto auto!important;column-gap:6px!important;align-content:center!important;min-width:0!important;min-height:54px!important;padding:7px!important;border-radius:8px!important;background:#0e2334db!important;border:1px solid #3b607355!important;color:#f3f7ff!important;text-decoration:none!important}
+  .v120-overview-stats>a,.v120-overview-stats>button{display:grid!important;grid-template-columns:27px minmax(0,1fr)!important;grid-template-rows:auto auto!important;column-gap:6px!important;align-content:center!important;min-width:0!important;min-height:54px!important;padding:7px!important;border-radius:8px!important;background:#0e2334db!important;border:1px solid #3b607355!important;color:#f3f7ff!important;text-decoration:none!important}
   .v120-overview-stats>a:active{border-color:#62e4d3!important;background:#173c46!important}
-  .v120-overview-stats>a>span,.v120-overview-stats>div>span{grid-row:1/3!important;font-size:18px!important}
-  .v120-overview-stats>a>strong,.v120-overview-stats>div>strong{font-size:17px!important;line-height:1.1!important}
-  .v120-overview-stats>a>small,.v120-overview-stats>div>small{font-size:9px!important;line-height:1.15!important}
+  .v120-overview-stats>a>span,.v120-overview-stats>button>span{grid-row:1/3!important;font-size:18px!important}
+  .v120-overview-stats>a>strong,.v120-overview-stats>button>strong{font-size:17px!important;line-height:1.1!important}
+  .v120-overview-stats>a>small,.v120-overview-stats>button>small{font-size:9px!important;line-height:1.15!important}
   .v120-list-heading{margin:13px 0 8px!important;gap:7px!important}
   .v120-list-heading h3{font-size:17px!important}
   .v120-list-tools{flex-wrap:wrap!important;gap:5px!important}
@@ -469,7 +469,7 @@ async function configure(){try{
   .v120-next-milestone{padding:6px 8px!important;min-height:0!important;gap:2px 5px!important}
   .v120-next-milestone p{white-space:normal!important;word-break:normal!important;max-width:none!important;min-width:0!important;grid-column:2!important}
   .v120-overview-stats{padding:6px!important;gap:5px!important}
-  .v120-overview-stats>a,.v120-overview-stats>div{min-height:48px!important;padding:5px!important}
+  .v120-overview-stats>a,.v120-overview-stats>button{min-height:48px!important;padding:5px!important}
   .v120-overview-stats>a{cursor:pointer!important}
   /* Map filter drawer over image, keep it accessible with keyboard and touch. */
   .atlas-v119 .atlas-layout{position:relative!important;display:block!important}
@@ -632,7 +632,7 @@ body.vi-map-modal-active{overflow:hidden!important}
 #root .atlas-v119 .atlas-map>.atlas-controls{top:62px!important;right:10px!important}
 }
 </style></head>
-<body><div id="root"></div><script src="./news-v155.js?rev=20261108-v196"></script><script src="./info-v158.js"></script><script src="./detail-enhancements-v160.js"></script><script src="./compare-metrics-v161.js"></script><script src="./guest-import-safe.js"></script><script src="./app-v137.js?rev=20261108-v193"></script><script src="./vi-i18n.js?rev=20261109-v196-langfix"></script><script src="./diagnostics-v143.js"></script><script src="./online-updates.js"></script><script src="./routes-v145.js"></script>
+<body><div id="root"></div><script src="./news-v155.js?rev=20261108-v196"></script><script src="./info-v158.js"></script><script src="./detail-enhancements-v160.js"></script><script src="./compare-metrics-v161.js"></script><script src="./guest-import-safe.js"></script><script src="./app-v137.js?rev=20261108-v193"></script><script src="./vi-i18n.js?rev=20261109-v196-langfix"></script><script src="./diagnostics-v143.js?rev=20261109-v197"></script><script src="./online-updates.js"></script><script src="./routes-v145.js"></script>
 
 <script id="vi-cache-policy-v136">
 (function(){
