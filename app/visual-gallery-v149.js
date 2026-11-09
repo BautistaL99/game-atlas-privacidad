@@ -144,7 +144,13 @@
    element.style.backgroundSize='cover';
    element.style.backgroundPosition='center';
  };
- const imageSource=(img,k)=>{
+ const contextualSubjects=new Set(['crest-kayak','dinka-enduro','afro-bank-fm','back-country-radio','gta-vi-the-album']);
+ const photoCaptions={
+  es:{general:'Imagen promocional de GTA VI © Rockstar Games / Take-Two. Referencia visual; no implica identificación exacta.',context:'Imagen promocional contextual © Rockstar Games / Take-Two. No se ha confirmado que muestre el elemento específico de esta ficha.',alt:'Imagen promocional contextual de Rockstar Games asociada a '},
+  en:{general:'GTA VI promotional image © Rockstar Games / Take-Two. Visual reference; not necessarily an exact identification.',context:'Contextual promotional image © Rockstar Games / Take-Two. It has not been confirmed to show this specific item.',alt:'Contextual Rockstar Games promotional image associated with '},
+  pt:{general:'Imagem promocional de GTA VI © Rockstar Games / Take-Two. Referência visual, sem identificação exata garantida.',context:'Imagem promocional contextual © Rockstar Games / Take-Two. Não foi confirmado que mostre este item específico.',alt:'Imagem promocional contextual da Rockstar Games associada a '}
+ };
+ const imageSource=(img,k,id='')=>{
    if(!img||!photo(k)||img.dataset.viPhoto===k)return;
    // An explicitly reviewed official Newswire image is the source image.
    // Never silently replace it with a context photo from this presentation map.
@@ -152,8 +158,25 @@
    if(/^https:\/\/media-rockstargames-com\.akamaized\.net\/tina-uploads\/posts\//i.test(actual))return;
    img.dataset.viPhoto=k;
    const fallback=img.getAttribute('src')||'./assets/original/scene.svg';
+   const originalAlt=img.getAttribute('alt')||'';
+   const cap=img.closest('.detail-image')?.querySelector('.image-caption > span');
+   const originalCaption=cap?.textContent;
+   const setContext=()=>{
+     if(img.dataset.viPhoto!==k)return;
+     const lang=photoCaptions[document.documentElement.lang]||photoCaptions.es;
+     // The image belongs to Rockstar, but its specific subject is not verified
+     // merely because it was mapped to a catalog record.
+     img.alt=lang.alt+originalAlt;
+     if(cap){const text=contextualSubjects.has(id)?lang.context:lang.general;if(cap.textContent!==text)cap.textContent=text;}
+   };
+   img.addEventListener('load',setContext,{once:true});
    img.addEventListener('error',function onFail(){
-     if(img.dataset.viPhoto===k){img.dataset.viPhoto='failed:'+k;img.src=fallback}
+     if(img.dataset.viPhoto===k){
+       img.dataset.viPhoto='failed:'+k;
+       img.alt=originalAlt;
+       if(cap&&originalCaption!==undefined)cap.textContent=originalCaption;
+       img.src=fallback;
+     }
    },{once:true});
    img.src=photo(k);
    img.referrerPolicy='strict-origin-when-cross-origin';
@@ -215,7 +238,7 @@
      const url=img.closest('a[href*="/ficha/"]')?.getAttribute('href')||host?.querySelector('a[href*="/ficha/"]')?.getAttribute('href')||'';
      const current=img.matches('.detail-thumb') ? (location.hash.match(/\/ficha\/([a-z0-9_-]+)/)||[])[1] : null;
      const id=(url.match(/\/ficha\/([a-z0-9_-]+)/)||[])[1]||current;
-     if(id && cards[id])imageSource(img,cards[id]);
+     if(id && cards[id])imageSource(img,cards[id],id);
    }
    document.querySelectorAll('.home-permanent-art').forEach((el,i)=>imageBackground(el,hero[i%hero.length],'linear-gradient(90deg,#081629bd,#07152733 75%,transparent)'));
    document.querySelectorAll('.v18-slide-photo').forEach((el,i)=>imageBackground(el,showcase[i%showcase.length],'linear-gradient(90deg,#08172de8,#07152633 80%,transparent)'));

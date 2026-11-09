@@ -502,3 +502,12 @@
  .home-v18 .v177-progress-primary,.home-v18 .v177-progress-secondary{transition:none}
 }
 
+
+/* V196 — compact related-coverage disclosure: preserves both linked records. */
+.vi-news-related{margin-top:12px;padding:10px 12px;border:1px solid rgba(143,188,202,.28);border-radius:10px;background:rgba(13,31,47,.54);font-size:.88rem}
+.vi-news-related summary{cursor:pointer;color:#c9f9f0;font-weight:700;list-style-position:inside}
+.vi-news-related summary:focus-visible{outline:2px solid #7ce7df;outline-offset:3px;border-radius:4px}
+.vi-news-related p{margin:7px 0;color:#b8c6d0}
+.vi-news-related ul{margin:5px 0 0;padding-left:19px}
+.vi-news-related li{margin:6px 0;line-height:1.45}
+.vi-news-related a{color:#a5eaf2;text-decoration:underline}
