@@ -451,7 +451,7 @@
 
 /* V1.12 · cambios restringidos a Mi partida, rankings y fondos HD vectoriales del carrusel. */
 .my-game-hero{min-height:250px;position:relative;overflow:hidden;border:1px solid #52658680;border-radius:22px;background:linear-gradient(110deg,#171d3a,#203149);display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:7px 0 27px;padding:35px 35px 32px;isolation:isolate}
-.my-game-hero-art{position:absolute;inset:0;z-index:-2;background:url('/ranking-art/donaciones.svg') center 48%/cover no-repeat;opacity:.67}
+.my-game-hero-art{position:absolute;inset:0;z-index:-2;background:url('./assets/original/donaciones.svg') center 48%/cover no-repeat;opacity:.67}
 .my-game-hero:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#10152beF 0%,#12172ad9 44%,#1116296e 100%),linear-gradient(0deg,#09182790,transparent 75%)}
 .my-game-hero-copy{max-width:640px;position:relative}
 .my-game-hero h1{font-size:clamp(32px,4vw,54px);margin:15px 0 12px;letter-spacing:-.038em;line-height:1.08;color:#fff}
@@ -896,7 +896,7 @@
 .v120-playthrough .v120-section-title h2 span,.v120-playthrough .v120-list-heading h3 span{color:#49e6de;margin-right:7px}
 .v120-playthrough .v120-section-title>span{font-size:12px;color:#a7bdd4}
 .v120-overview{border:1px solid #157e90;border-radius:15px;background:linear-gradient(100deg,#071d2eef 0%,#102b3cef 52%,#0b1729 100%);overflow:hidden;box-shadow:0 12px 45px #0005;position:relative}
-.v120-overview::before{content:'';pointer-events:none;position:absolute;inset:0 0 95px;background:linear-gradient(90deg,#071c30bc,#09192cbd),url('/category-art/mapa-lugares.webp') center 48%/cover no-repeat;opacity:.31}
+.v120-overview::before{content:'';pointer-events:none;position:absolute;inset:0 0 95px;background:linear-gradient(90deg,#071c30bc,#09192cbd),url('./assets/original/mapa-lugares.svg') center 48%/cover no-repeat;opacity:.31}
 .v120-overview-top{position:relative;display:grid;grid-template-columns:170px minmax(125px,1fr) minmax(210px,1.35fr) minmax(150px,.88fr);gap:21px;align-items:center;padding:25px 21px 18px}
 .v120-ring{width:156px;height:156px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#40e6dd var(--ring-percent),#243b52 var(--ring-percent));box-shadow:0 0 0 7px #0c1c2aa8,0 0 18px #42dec438;flex:0 0 auto}
 .v120-ring>div{background:#0b1d30;border-radius:50%;width:121px;height:121px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid #41647b}
