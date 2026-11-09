@@ -843,11 +843,14 @@ document.addEventListener('click',event=>{
 window.addEventListener('hashchange',()=>{
  const comparing=location.hash.startsWith('#/comparar');
  const newsSwitch=location.hash.startsWith('#/noticias')&&lastRenderedRoute.startsWith('/noticias');
+ const nextRoute=decodeURIComponent(location.hash.replace(/^#\//,'/')).split('?')[0];
+ const categorySwitch=nextRoute.startsWith('/explorar/')&&nextRoute===lastRenderedRoute;
  const previousY=viPendingTabScroll?.scrollY??window.scrollY;
  const tabTop=viPendingTabScroll?.tabTop;
  viPendingTabScroll=null;
- if(!comparing&&!newsSwitch)window.scrollTo(0,0);
+ if(!comparing&&!newsSwitch&&!categorySwitch)window.scrollTo(0,0);
  render();
+ if(categorySwitch)requestAnimationFrame(()=>window.scrollTo({top:previousY,behavior:'instant'}));
  if(newsSwitch)requestAnimationFrame(()=>{
   const next=document.querySelector('.vi-news-tabs');
   const offset=next&&tabTop!==null?(next.getBoundingClientRect().top-tabTop):0;
