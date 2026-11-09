@@ -423,6 +423,32 @@
 @media(prefers-reduced-motion:reduce){.home-v111 .home-permanent-slide{transition:none}}
 
 
+/* V197 stability — permanently anchored CTA/navigation; never outside the clipped hero.
+   The previous absolute top:301px could place CTA outside a 260px hero. */
+.home-v111 .home-permanent-frame .vi-hero-footer .vi-hero-cta{
+ position:absolute;left:clamp(18px,4.15%,65px);bottom:20px;top:auto;
+ z-index:6;display:inline-flex;align-items:center;justify-content:center;
+ min-height:40px;max-width:calc(100% - 165px);box-sizing:border-box;
+ margin:0;padding:9px 16px;line-height:1.25;white-space:normal
+}
+.home-v111 .home-permanent-frame .vi-hero-footer .home-permanent-arrows{
+ position:absolute;left:auto;right:20px;top:auto;bottom:20px;z-index:7;
+ display:flex;align-items:center;gap:8px
+}
+.home-v111 .home-permanent-frame .home-permanent-slide{
+ transition:none;/* CTA/copy must never refer to different slides during a fade. */
+}
+@media(max-width:700px){
+ .home-v111 .home-permanent-frame .vi-hero-footer .vi-hero-cta{
+  position:absolute!important;left:12px!important;right:auto!important;top:auto!important;
+  bottom:12px!important;max-width:calc(100% - 110px)!important;
+  min-height:34px!important;padding:6px 10px!important;font-size:12px!important
+ }
+ .home-v111 .home-permanent-frame .vi-hero-footer .home-permanent-arrows{
+  position:absolute!important;left:auto!important;right:12px!important;top:auto!important;bottom:12px!important
+ }
+}
+
 /* V1.12 · cambios restringidos a Mi partida, rankings y fondos HD vectoriales del carrusel. */
 .my-game-hero{min-height:250px;position:relative;overflow:hidden;border:1px solid #52658680;border-radius:22px;background:linear-gradient(110deg,#171d3a,#203149);display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:7px 0 27px;padding:35px 35px 32px;isolation:isolate}
 .my-game-hero-art{position:absolute;inset:0;z-index:-2;background:url('/ranking-art/donaciones.svg') center 48%/cover no-repeat;opacity:.67}
@@ -885,7 +911,19 @@
 .v120-category-overview>small,.v120-next-milestone>small{display:block;font-size:11px;color:#55e1d8;text-align:right;margin-top:6px}
 .v120-next-milestone{border:1px solid #4560777a;border-radius:12px;min-height:178px;padding:13px 12px;background:#091b2ce0;text-align:center}.v120-next-milestone .v120-trophy{display:block;font-size:36px;margin-bottom:4px}.v120-next-milestone>b{display:block;font-size:11px;letter-spacing:.07em}.v120-next-milestone p{min-height:35px;margin:8px 0}
 .v120-overview-stats{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:8px 12px 12px;border-top:1px solid #3261745c;background:#06172577}
-.v120-overview-stats>div{display:grid;grid-template-columns:38px 1fr;grid-template-rows:auto auto;column-gap:8px;align-content:center;background:#0e2334db;border:1px solid #3b607355;border-radius:9px;padding:8px 10px}.v120-overview-stats>div>span{grid-row:1/3;display:grid;place-items:center;font-size:23px;color:#47e5d6}.v120-overview-stats>div:nth-child(2)>span{color:#8aa3bf}.v120-overview-stats>div:nth-child(3)>span{color:#e2bf56}.v120-overview-stats>div:nth-child(4)>span{color:#ae82f5}.v120-overview-stats strong{font-size:20px;line-height:1.2}.v120-overview-stats small{font-size:11px;color:#b5cbde}
+/* V197 stability: these four summary cards are three links and one button.
+   Earlier rules only targeted div and left the interactive elements unstyled. */
+.v120-overview-stats>:is(a,button,div){display:grid;grid-template-columns:38px minmax(0,1fr);grid-template-rows:auto auto;column-gap:8px;row-gap:2px;align-content:center;min-width:0;min-height:64px;box-sizing:border-box;background:#0e2334db;border:1px solid #3b607355;border-radius:9px;padding:8px 10px;color:#eaf6ff;text-decoration:none;text-align:left;font:inherit;cursor:pointer}
+.v120-overview-stats>:is(a,button,div)>span{grid-row:1/3;display:grid;place-items:center;font-size:23px;color:#47e5d6}
+.v120-overview-stats>:is(a,button,div):nth-child(2)>span{color:#8aa3bf}
+.v120-overview-stats>:is(a,button,div):nth-child(3)>span{color:#e2bf56}
+.v120-overview-stats>:is(a,button,div):nth-child(4)>span{color:#ae82f5}
+.v120-overview-stats>:is(a,button,div)>strong{grid-column:2;grid-row:1;min-width:0;font-size:20px;line-height:1.2;font-weight:800}
+.v120-overview-stats>:is(a,button,div)>small{grid-column:2;grid-row:2;min-width:0;font-size:11px;color:#b5cbde}
+.v120-overview-stats>:is(a,button):is(:hover,:focus-visible){border-color:#6cdecf}
+.v120-overview-stats>:is(a,button):focus-visible{outline:2px solid #77f5e8;outline-offset:2px}
+.v120-overview-stats>.v120-stat-card:last-child{grid-template-columns:minmax(0,1fr);text-align:center;justify-items:center}
+.v120-overview-stats>.v120-stat-card:last-child>strong,.v120-overview-stats>.v120-stat-card:last-child>small{grid-column:1;text-align:center}
 .v120-list-heading{margin:28px 0 14px!important}.v120-list-tools{display:flex;gap:7px;align-items:center}.v120-list-tools label{color:#b2c7dc;font-size:11px;display:flex;align-items:center;gap:7px}.v120-list-tools select,.v120-list-tools button{background:#15253a;border:1px solid #4b6888;color:#e7f2fe;border-radius:8px;min-height:34px;padding:5px 11px;font-size:11px}.v120-list-tools button{font-size:18px;width:35px;padding:0}.v120-list-tools button.active{border-color:#39e0d5;color:#3ce5d9;box-shadow:0 0 9px #38dcd338}
 .v120-progress-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
 .v120-progress-row{position:relative;display:flex;align-items:center;gap:11px;min-width:0;min-height:93px;border:1px solid color-mix(in srgb,var(--progress-color) 60%,#263f5f);border-left:3px solid var(--progress-color);border-radius:12px;overflow:hidden;padding:10px 13px;background:#102034;transition:transform .16s,border-color .16s}
