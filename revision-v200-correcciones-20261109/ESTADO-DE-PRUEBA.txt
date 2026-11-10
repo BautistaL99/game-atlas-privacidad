@@ -1,0 +1,6 @@
+Game Atlas Companion - vista de prueba V200
+
+Esta carpeta es la vista temporal de prueba. No es la version oficial.
+Se prueban correcciones de Mi partida, mapa, comparador, busqueda, idiomas y navegacion.
+Favoritos, rutas y progreso quedan separados mediante almacenamiento local prefijado V200.
+Fecha: 2026-11-10.
