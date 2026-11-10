@@ -90,6 +90,217 @@ Object.assign(VI_UI_DICTIONARY,{
  'Ver fuente':{en:'View source',pt:'Ver fonte'},
  'Leer noticia original':{en:'Read original article',pt:'Ler notícia original'}
 });
+// V201 launch-candidate cross-screen strings: navigation, cards, summaries and accessible labels.
+Object.assign(VI_UI_DICTIONARY, {
+ "🏁 Top speedruns": {
+  "en": "🏁 Top speedruns",
+  "pt": "🏁 Melhores speedruns"
+ },
+ "💚 Top donaciones": {
+  "en": "💚 Top donations",
+  "pt": "💚 Maiores doações"
+ },
+ "♡ Apoyar proyecto": {
+  "en": "♡ Support the project",
+  "pt": "♡ Apoiar o projeto"
+ },
+ "⇄ Comparar": {
+  "en": "⇄ Compare",
+  "pt": "⇄ Comparar"
+ },
+ "⚙ Ajustes": {
+  "en": "⚙ Settings",
+  "pt": "⚙ Configurações"
+ },
+ "Donar al proyecto": {
+  "en": "Donate to the project",
+  "pt": "Doar para o projeto"
+ },
+ "Ver todos los resultados": {
+  "en": "View all results",
+  "pt": "Ver todos os resultados"
+ },
+ "Imagen oficial de Grand Theft Auto VI": {
+  "en": "Official Grand Theft Auto VI image",
+  "pt": "Imagem oficial de Grand Theft Auto VI"
+ },
+ "Marcar como favorito": {
+  "en": "Add to favorites",
+  "pt": "Adicionar aos favoritos"
+ },
+ "Quitar de favoritos": {
+  "en": "Remove from favorites",
+  "pt": "Remover dos favoritos"
+ },
+ "Filtrar contenido": {
+  "en": "Filter content",
+  "pt": "Filtrar conteúdo"
+ },
+ "Me faltan": {
+  "en": "Missing",
+  "pt": "Pendentes"
+ },
+ "Registrados": {
+  "en": "Tracked",
+  "pt": "Registrados"
+ },
+ "No visitado": {
+  "en": "Not visited",
+  "pt": "Não visitado"
+ },
+ "No conocido": {
+  "en": "Not known",
+  "pt": "Não conhecido"
+ },
+ "No descubierto": {
+  "en": "Not discovered",
+  "pt": "Não descoberto"
+ },
+ "No registrada": {
+  "en": "Not tracked",
+  "pt": "Não registrado"
+ },
+ "No encontrado": {
+  "en": "Not found",
+  "pt": "Não encontrado"
+ },
+ "No completado": {
+  "en": "Not completed",
+  "pt": "Não concluído"
+ },
+ "Funciones del asistente": {
+  "en": "Assistant features",
+  "pt": "Recursos do assistente"
+ },
+ "Anterior": {
+  "en": "Previous",
+  "pt": "Anterior"
+ },
+ "Siguiente": {
+  "en": "Next",
+  "pt": "Próximo"
+ },
+ "Ver categorías para completar el siguiente hito": {
+  "en": "View categories to reach the next milestone",
+  "pt": "Ver categorias para alcançar a próxima meta"
+ },
+ "Ver elementos completados": {
+  "en": "View completed items",
+  "pt": "Ver itens concluídos"
+ },
+ "Ver elementos pendientes": {
+  "en": "View pending items",
+  "pt": "Ver itens pendentes"
+ },
+ "Ver favoritos": {
+  "en": "View favorites",
+  "pt": "Ver favoritos"
+ },
+ "Ir a las categorías para ver cuáles están completas": {
+  "en": "Go to categories to see which are completed",
+  "pt": "Ir às categorias para ver quais estão concluídas"
+ },
+ "Ver ficha →": {
+  "en": "View entry →",
+  "pt": "Ver ficha →"
+ },
+ "Explorar catálogo ↗": {
+  "en": "Explore catalog ↗",
+  "pt": "Explorar catálogo ↗"
+ },
+ "Ver catálogo": {
+  "en": "View catalog",
+  "pt": "Ver catálogo"
+ },
+ "Explorar Leonida ↗": {
+  "en": "Explore Leonida ↗",
+  "pt": "Explorar Leonida ↗"
+ },
+ "Buscar ↗": {
+  "en": "Search ↗",
+  "pt": "Buscar ↗"
+ },
+ "Copiar diagnóstico": {
+  "en": "Copy diagnostics",
+  "pt": "Copiar diagnóstico"
+ },
+ "Cobertura relacionada": {
+  "en": "Related coverage",
+  "pt": "Cobertura relacionada"
+ },
+ "Ordenar por": {
+  "en": "Sort by",
+  "pt": "Ordenar por"
+ },
+ "VERIFICADO": {
+  "en": "VERIFIED",
+  "pt": "VERIFICADO"
+ },
+ "Catálogo": {
+  "en": "Catalog",
+  "pt": "Catálogo"
+ },
+ "Top speedruns": {
+  "en": "Top speedruns",
+  "pt": "Melhores speedruns"
+ },
+ "Top donaciones": {
+  "en": "Top donations",
+  "pt": "Maiores doações"
+ },
+ "Comparar:": {
+  "en": "Compare:",
+  "pt": "Comparar:"
+ },
+ "visitas": {
+  "en": "visits",
+  "pt": "visitas"
+ },
+ "seguimiento personal": {
+  "en": "personal tracking",
+  "pt": "acompanhamento pessoal"
+ },
+ "Progreso general": {
+  "en": "Overall progress",
+  "pt": "Progresso geral"
+ },
+ "Mi partida": {
+  "en": "My game",
+  "pt": "Meu jogo"
+ },
+ "Propiedades y negocios": {
+  "en": "Properties and businesses",
+  "pt": "Propriedades e negócios"
+ },
+ "Lugares": {
+  "en": "Places",
+  "pt": "Lugares"
+ },
+ "Armas": {
+  "en": "Weapons",
+  "pt": "Armas"
+ },
+ "Vehículos": {
+  "en": "Vehicles",
+  "pt": "Veículos"
+ },
+ "Personajes": {
+  "en": "Characters",
+  "pt": "Personagens"
+ },
+ "Misiones": {
+  "en": "Missions",
+  "pt": "Missões"
+ },
+ "Coleccionables": {
+  "en": "Collectibles",
+  "pt": "Colecionáveis"
+ },
+ "Actividades": {
+  "en": "Activities",
+  "pt": "Atividades"
+ }
+});
 (function(){
  // Keep the Spanish source of text/attributes so a language switch can be
  // repeated without leaving stale translations from the previous language.
@@ -111,6 +322,45 @@ Object.assign(VI_UI_DICTIONARY,{
  }
  function translateText(value,lang){const trimmed=value.trim();if(!trimmed)return null;
    let translated=VI_UI_DICTIONARY[trimmed]?.[lang];
+   // Dynamic strings must be translated as patterns; never translate the item's proper name.
+   if(translated===undefined){
+    const m=trimmed.match(/^Marcar como favorito: (.+)$/u);
+    if(m)translated=(lang==='en'?'Add to favorites: ':'Adicionar aos favoritos: ')+m[1];
+   }
+   if(translated===undefined){
+    const m=trimmed.match(/^Quitar de favoritos: (.+)$/u);
+    if(m)translated=(lang==='en'?'Remove from favorites: ':'Remover dos favoritos: ')+m[1];
+   }
+   if(translated===undefined){
+    const m=trimmed.match(/^Comparar: (.+)$/u);
+    if(m)translated=(lang==='en'?'Compare: ':'Comparar: ')+m[1];
+   }
+   if(translated===undefined){
+    const m=trimmed.match(/^Ver diapositiva (\d+)$/u);
+    if(m)translated=(lang==='en'?'View slide ':'Ver slide ')+m[1];
+   }
+   if(translated===undefined){
+    const m=trimmed.match(/^Progreso general (\d+) de (\d+)$/u);
+    if(m)translated=(lang==='en'?'Overall progress ':'Progresso geral ')+m[1]+(lang==='en'?' of ':' de ')+m[2];
+   }
+   if(translated===undefined){
+    const m=trimmed.match(/^(Vehículos|Armas|Lugares|Personajes|Misiones|Propiedades y negocios|Coleccionables|Actividades) (\d+) de (\d+); ver (todos|categoría)$/u);
+    if(m){const label=VI_UI_DICTIONARY[m[1]]?.[lang]||m[1],end=m[4]==='todos'?(lang==='en'?'view all':'ver todos'):(lang==='en'?'view category':'ver categoria');
+     translated=label+' '+m[2]+(lang==='en'?' of ':' de ')+m[3]+'; '+end;}
+   }
+   if(translated===undefined){
+    const m=trimmed.match(/^(Vehículos|Armas|Lugares|Personajes|Misiones|Propiedades y negocios|Coleccionables|Actividades) (\d+)\/(\d+)$/u);
+    if(m)translated=(VI_UI_DICTIONARY[m[1]]?.[lang]||m[1])+' '+m[2]+'/'+m[3];
+   }
+   if(translated===undefined){
+    const m=trimmed.match(/^(\d+)\s*\/\s*(\d+) · seguimiento personal$/u);
+    if(m)translated=m[1]+' / '+m[2]+(lang==='en'?' · personal tracking':' · acompanhamento pessoal');
+   }
+   if(translated===undefined){
+    const m=trimmed.match(/^Cobertura relacionada \((\d+)\)$/u);
+    if(m)translated=(lang==='en'?'Related coverage':'Cobertura relacionada')+' ('+m[1]+')';
+   }
+
    if(translated===undefined){
     const chip=trimmed.match(/^([◈▰◆●★☷◇✚⚙✦✧★☆🏆📱↑↓🧩]\s*)(Regiones|Vehículos|Misiones|Lugares y servicios|Mis marcadores|Filtros sobre el mapa|Tus favoritos aparecerán acá|Tu partida, sin cuenta|Guardar copia de Mi partida|Recuperar desde un archivo|Lista de filtros avanzados|Esperando primer récord verificado|Esperando primer donante público)$/u);
     if(chip)translated=chip[1]+(VI_UI_DICTIONARY[chip[2]]?.[lang]||chip[2]);
