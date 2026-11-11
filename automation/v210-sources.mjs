@@ -19,7 +19,7 @@ export function clean(s,max=180){
 export function publicationDate(value,now=Date.now()){
  if(!value)return null;
  const at=Date.parse(String(value));
- if(!Number.isFinite(at)||at>Date.now()+86400000||at<Date.parse('2024-01-01T00:00:00Z'))return null;
+ if(!Number.isFinite(at)||at>now+86400000||at<Date.parse('2024-01-01T00:00:00Z'))return null;
  return new Date(at).toISOString().slice(0,10);
 }
 function allowUrl(input,host,route){
