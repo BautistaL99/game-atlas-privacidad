@@ -143,7 +143,11 @@ export function mergeWiki(previous,staged){
  const byId=new Map(previous.fiches.map(row=>[row.id,row]));let changed=0;
  for(const row of staged){
   const old=byId.get(row.id);
-  if(!old||row.wikiRevision>old.wikiRevision){byId.set(row.id,old?.specs?{...row,specs:old.specs}:row);changed++}
+  if(!old||row.wikiRevision>old.wikiRevision){
+   // Old infobox values may no longer describe the new Wiki revision: drop
+   // them until the new revision is parsed and signed, never show stale specs.
+   byId.set(row.id,row);changed++
+  }
  }
  if(!changed)return {next:previous,changed:0};
  const next={...previous,revision:previous.revision+1,fiches:[...byId.values()]};
