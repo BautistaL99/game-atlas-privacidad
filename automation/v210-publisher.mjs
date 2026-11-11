@@ -120,6 +120,7 @@ export async function independentEntry(source,fetchFn=fetch){
  const en=clean(source.title,140);
  if(!VI.test(en))throw Error('RSS unrelated to GTA VI');
  const es=await myMemory(en,'es',fetchFn),pt=await myMemory(en,'pt',fetchFn);
+ if(es.length>155||pt.length>155)throw Error('Translated headline exceeds the signed news card limit');
  return {id:'community-report-'+sha(source.url).slice(0,24),
   title:{es:'Según RockstarINTEL: '+es,en:'RockstarINTEL reports: '+en,pt:'Segundo a RockstarINTEL: '+pt},
   summary:{
