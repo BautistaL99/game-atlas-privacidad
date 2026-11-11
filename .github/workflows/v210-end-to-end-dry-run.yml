@@ -1,0 +1,54 @@
+name: V210 ensayo final firmado: noticias y Wiki SIN PUBLICAR
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/v210-end-to-end-dry-run.yml']
+permissions:
+  contents: read
+jobs:
+  test-news:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      CATALOG_SIGNING_KEY_PEM_BASE64: ${{ secrets.CATALOG_SIGNING_KEY_PEM_BASE64 }}
+      GAME_ATLAS_MODE: news
+      GAME_ATLAS_DRY_RUN: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Integridad de archivos y fechas
+        run: node --test automation/v210-publisher.test.mjs
+      - name: Ensayar noticias de Rockstar y RockstarINTEL con firma original, sin publicar
+        run: |
+          node automation/v210-publisher.mjs
+          node --input-type=module - <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const d=JSON.parse(readFileSync('automation/v210-last-check.json','utf8'));
+          if(d.publisher!=='DRY_RUN_SIGNED_CHECK')throw Error('Unsigned dry run');
+          console.log('SAFE DRY RUN',JSON.stringify({official:d.newOfficial,community:d.newIndependent,pendingReview:d.quarantined.length,warnings:d.warnings}));
+          NODE
+  test-wiki:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      CATALOG_SIGNING_KEY_PEM_BASE64: ${{ secrets.CATALOG_SIGNING_KEY_PEM_BASE64 }}
+      GAME_ATLAS_MODE: wiki
+      GAME_ATLAS_DRY_RUN: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Ensayar Wiki dinámicas con firma original, sin publicar
+        run: |
+          node automation/v210-publisher.mjs
+          node --input-type=module - <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const d=JSON.parse(readFileSync('automation/v210-last-check.json','utf8'));
+          if(d.publisher!=='DRY_RUN_SIGNED_CHECK')throw Error('Unsigned wiki dry run');
+          console.log('SAFE WIKI DRY RUN',JSON.stringify({newOrChangedWiki:d.newWiki,withSpecs:d.withWikiSpecifications,inspected:d.specsInspected,warnings:d.warnings}));
+          NODE
