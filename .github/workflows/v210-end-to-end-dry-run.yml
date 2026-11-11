@@ -1,4 +1,4 @@
-name: V210 ensayo final firmado: noticias y Wiki SIN PUBLICAR
+name: "V210 ensayo final firmado: noticias y Wiki SIN PUBLICAR"
 on:
   push:
     branches: [main]
