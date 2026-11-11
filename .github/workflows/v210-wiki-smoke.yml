@@ -18,8 +18,8 @@ jobs:
         run: |
           node --input-type=module - <<'NODE'
           import {getWikiBatch} from './automation/v210-sources.mjs';
-          const result=await getWikiBatch({});
+          const result=await getWikiBatch({},fetch,{withSpecifications:true});
           const categories=[...new Set(result.items.map(x=>x.category))];
-          console.log('PASS WIKI',JSON.stringify({validPages:result.items.length,categories,errors:result.errors.length}));
-          if(result.items.length<10||categories.length<2)throw Error('Wiki incomplete: preserve old public archive');
+          console.log('PASS WIKI',JSON.stringify({validPages:result.items.length,categories,errors:result.errors.length,withSpecs:result.withSpecs,specsInspected:result.specsInspected}));
+          if(result.items.length<10||categories.length<2||result.withSpecs<10)throw Error('Wiki incomplete: preserve old public archive');
           NODE
