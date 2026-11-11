@@ -1,5 +1,8 @@
 name: Game Atlas - novedades GRATIS y fichas recuperables V210
 on:
+  push:
+    branches: [main]
+    paths: ['automation/v210-publish-once.txt']
   schedule:
     # 14:29 and 20:29 Argentina (UTC-3). Avoid :00 when GitHub is busy.
     - cron: '29 17,23 * * *'
