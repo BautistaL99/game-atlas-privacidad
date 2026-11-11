@@ -1,0 +1,34 @@
+name: V210 diagnosticar fuentes Rockstar sin publicar
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/v210-official-source-diagnostics.yml']
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: |
+          node --input-type=module - <<'NODE'
+          import {boundedText,extractRockstarGraph,officialLinksFromHtml,publicationDate} from './automation/v210-sources.mjs';
+          const query='{posts(locale:"en_us",limit:80){results{id title url created}}}';
+          try{
+           const raw=await boundedText('https://graph.rockstargames.com/',fetch,{method:'POST',max:1400000,
+            headers:{Accept:'application/json','Content-Type':'application/json',Origin:'https://www.rockstargames.com','User-Agent':'GameAtlasReadOnlyV210/1.0'},body:JSON.stringify({query})});
+           const doc=JSON.parse(raw);
+           console.log('Graph keys',JSON.stringify({errors:doc.errors?.length||0,count:doc.data?.posts?.results?.length||0}));
+           const rows=doc.data?.posts?.results||[];
+           console.log('Recent public titles',JSON.stringify(rows.slice(0,12).map(x=>({title:x.title,url:x.url,created:x.created,asDate:publicationDate(x.created)}))));
+           console.log('Filtered official count',extractRockstarGraph(doc).length);
+          }catch(e){console.log('Graph failed:',e.message)}
+          for(const url of ['https://www.rockstargames.com/newswire?tag=722','https://www.rockstargames.com/VI']){
+           try{const raw=await boundedText(url,fetch,{max:2000000,headers:{Accept:'text/html'}});
+            console.log('HTML index',url,'bytes',raw.length,'links',officialLinksFromHtml(raw).length)
+           }catch(e){console.log('Index error',url,e.message)}
+          }
+          NODE
