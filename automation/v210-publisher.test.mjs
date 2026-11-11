@@ -128,3 +128,14 @@ test('V210 detects a fresh Rockstar source even when GraphQL temporarily fails, 
  assert.equal(rows.length,1);
  assert.equal(rows[0].publishedAt,'2026-11-10');
 });
+
+test('V210 normalizes Rockstar GraphQL relative Newswire URLs without accepting different hosts',()=>{
+ const doc={data:{posts:{results:[
+  {title:'Grand Theft Auto VI Launch Information',url:'/newswire/article/a123456/new-grand-theft-auto-vi-information',created:'11/10/26, 3:00 PM'},
+  {title:'Grand Theft Auto VI Fake',url:'//evil.example/newswire/article/a123456/fake',created:'11/10/26, 3:00 PM'}
+ ]}}};
+ const entries=extractRockstarGraph(doc);
+ assert.equal(entries.length,1);
+ assert.equal(entries[0].url,'https://www.rockstargames.com/newswire/article/a123456/new-grand-theft-auto-vi-information');
+ assert.equal(entries[0].publishedAt,'2026-11-10');
+});
