@@ -1,0 +1,32 @@
+name: V210 verificar recuperacion segura GRATIS (sin publicar)
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'automation/v210-*.mjs'
+      - '.github/workflows/v210-ci.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificar código nuevo y catálogos públicos firmados
+        run: |
+          node --check automation/v210-sources.mjs
+          node --check automation/v210-publisher.mjs
+          node --test automation/v210-publisher.test.mjs
+      - name: Probar deteccion sin escribir datos ni necesitar secretos
+        env:
+          GAME_ATLAS_MODE: news
+          GAME_ATLAS_DRY_RUN: 'true'
+        run: |
+          node automation/v210-publisher.mjs
+          test -s automation/v210-last-check.json
+          node -e 'const x=require("./automation/v210-last-check.json");if(x.publisher!=="SIGNER_SETUP_REQUIRED")process.exit(1)'
