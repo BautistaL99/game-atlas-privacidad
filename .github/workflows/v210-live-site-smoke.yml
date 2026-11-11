@@ -28,7 +28,7 @@ jobs:
           done
           grep -q 'Actualizaciones automáticas' /tmp/status.html
           curl -fsSL --max-time 12 "$BASE/automation/v210-last-check.json" > /tmp/health.json
-          node -e 'const s=require("/tmp/health.json");if(s.publisher!=="SIGNER_SETUP_REQUIRED")throw Error("Unexpected source status "+s.publisher)'
+          node -e 'const s=require("/tmp/health.json");if(s.publisher!=="SIGNED_READY_TO_COMMIT"&&s.publisher!=="UNCHANGED_SIGNED_ARCHIVES_PRESERVED")throw Error("Unexpected source status "+s.publisher)'
           curl -fsSL --max-time 12 "$BASE/app/index.html" > /tmp/live.html
           grep -q 'community-v206.js?rev=20261111-v208-wiki-url-validation' /tmp/live.html
           curl -fsSL --max-time 12 "$BASE/updates/catalog-envelope.json" > /tmp/official.json
@@ -38,6 +38,10 @@ jobs:
           import {verifyFeed} from './automation/v210-publisher.mjs';
           const a=verifyFeed(JSON.parse(readFileSync('/tmp/official.json','utf8')),1);
           const b=verifyFeed(JSON.parse(readFileSync('/tmp/community.json','utf8')),205);
-          console.log('PASS LIVE V210',JSON.stringify({officialRevision:a.revision,independentNews:b.news.length,wikiFiches:b.fiches.length,
-           status:'signer setup required',liveWeb:'V208 unchanged'}));
+          const specCount=b.fiches.filter(x=>Array.isArray(x.specs)&&x.specs.length).length;
+          if(a.items.length<19||b.revision<7||b.news.length<10||b.fiches.length<296||specCount<56)
+           throw Error('Signed V210 production data not fully deployed');
+          console.log('PASS LIVE V210',JSON.stringify({officialRevision:a.revision,communityRevision:b.revision,
+           independentNews:b.news.length,wikiFiches:b.fiches.length,wikiSpecs:specCount,
+           status:'original Ed25519 signature verified',liveWeb:'V208 unchanged'}));
           NODE
