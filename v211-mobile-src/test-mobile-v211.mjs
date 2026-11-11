@@ -160,8 +160,21 @@ try{
      }
     }
    }
-   if(['home','explore','news','map','library','settings'].includes(name)&&['android','iphone'].includes(device.name))
+   if(['home','explore','news','map','library','settings'].includes(name)&&['android','iphone'].includes(device.name)){
     await page.screenshot({path:'qa/v211/'+device.name+'-'+name+'-after.png',fullPage:false});
+    const landmarks=name==='home'
+      ?[{id:'home-progress',sel:'.v177-progress-zone'},{id:'home-discovery',sel:'.vi-discovery-section'}]
+      :name==='library'?[{id:'library-stats',sel:'.v120-overview-stats'}]
+      :name==='settings'?[{id:'settings-privacy',sel:'.vi-privacy'}]:[];
+    for(const item of landmarks){
+      const el=page.locator(item.sel).first();
+      if(await el.count()){
+       await el.scrollIntoViewIfNeeded();
+       await page.waitForTimeout(220);
+       await page.screenshot({path:'qa/v211/'+device.name+'-'+item.id+'-after.png',fullPage:false});
+      }
+    }
+   }
   }
   // Follow existing SPA navigation rather than replacing its handlers.
   await page.locator('.bottom-nav>a[href="#/noticias"]').click();
