@@ -44,12 +44,52 @@ export function extractRockstarGraph(json){
  }
  return [...new Map(result.map(r=>[r.url,r])).values()];
 }
+export function officialLinksFromHtml(html){
+ const src=String(html||'').replace(/\\\//g,'/').replace(/\\u002[fF]/g,'/');
+ const links=new Set();
+ for(const match of src.matchAll(/(?:^|[^a-zA-Z0-9._/-])((?:https?:\/\/(?:www\.)?rockstargames\.com)?\/newswire\/article\/[a-z0-9_-]+\/[a-z0-9_-]+)/gi)){
+  const raw=match[1].startsWith('/')?'https://www.rockstargames.com'+match[1]:match[1];
+  const url=official(raw);
+  if(url)links.add(url);
+ }
+ return [...links].slice(0,30);
+}
+function articleMeta(html,name){
+ for(const m of String(html).matchAll(/<meta\b[^>]{0,1000}>/gi)){
+  if(!new RegExp('(?:name|property)\\s*=\\s*["\\x27]'+name+'["\\x27]','i').test(m[0]))continue;
+  const match=m[0].match(/\bcontent\s*=\s*(["'])([\s\S]*?)\1/i);
+  if(match)return clean(match[2],180);
+ }
+ return '';
+}
 export async function getOfficial(fetchFn=fetch){
- const query='{posts(locale:"en_us",limit:80){results{id title url created}}}';
- const raw=await boundedText('https://graph.rockstargames.com/',fetchFn,{method:'POST',max:1400000,
-  headers:{Accept:'application/json','Content-Type':'application/json',Origin:'https://www.rockstargames.com','User-Agent':'GameAtlasReadOnlyV210/1.0'},
-  body:JSON.stringify({query})});
- return extractRockstarGraph(JSON.parse(raw));
+ const candidates=new Map(),issues=[];
+ try{
+  const query='{posts(locale:"en_us",limit:80){results{id title url created}}}';
+  const raw=await boundedText('https://graph.rockstargames.com/',fetchFn,{method:'POST',max:1400000,
+   headers:{Accept:'application/json','Content-Type':'application/json',Origin:'https://www.rockstargames.com','User-Agent':'GameAtlasReadOnlyV210/1.0'},
+   body:JSON.stringify({query})});
+  for(const row of extractRockstarGraph(JSON.parse(raw)))candidates.set(row.url,row);
+ }catch(e){issues.push('Official GraphQL unavailable: '+e.message)}
+ // Independently check Rockstar's Newswire and GTA VI page. JavaScript shell
+ // pages are allowed to return zero links; they never cause false new stories.
+ for(const indexUrl of ['https://www.rockstargames.com/newswire?tag=722','https://www.rockstargames.com/VI']){
+  try{
+   const html=await boundedText(indexUrl,fetchFn,{max:2000000,headers:{Accept:'text/html'}});
+   for(const link of officialLinksFromHtml(html)){
+    if(candidates.has(link))continue;
+    // Only Rockstar's own dated article metadata can establish publication.
+    try{
+     const article=await boundedText(link,fetchFn,{max:1600000,headers:{Accept:'text/html'}});
+     const title=articleMeta(article,'og:title');
+     const publishedAt=publicationDate(articleMeta(article,'article:published_time'));
+     if(title&&GVI.test(title)&&publishedAt)candidates.set(link,{url:link,title,publishedAt});
+    }catch{}
+   }
+  }catch(e){issues.push('Official index unavailable: '+e.message)}
+ }
+ if(!candidates.size)throw Error('All verified Rockstar sources unavailable: '+issues.join('; '));
+ return [...candidates.values()].sort((a,b)=>a.publishedAt.localeCompare(b.publishedAt));
 }
 function xmlField(item,tag){
  const m=String(item).match(new RegExp('<'+tag+'(?:\\s[^>]*)?>([\\s\\S]*?)<\\/'+tag+'\\s*>','i'));
