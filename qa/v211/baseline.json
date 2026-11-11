@@ -1,0 +1,1942 @@
+[
+  {
+    "device": "android",
+    "route": "home",
+    "vw": 360,
+    "ww": 360,
+    "body": 360,
+    "topbar": {
+      "x": 0,
+      "y": 0,
+      "w": 360,
+      "h": 107,
+      "display": "grid",
+      "position": "sticky"
+    },
+    "bottomNav": {
+      "x": 0,
+      "y": 724,
+      "w": 360,
+      "h": 76,
+      "display": "grid",
+      "position": "fixed"
+    },
+    "search": {
+      "x": 14,
+      "y": 55,
+      "w": 332,
+      "h": 43,
+      "display": "block",
+      "position": "relative"
+    },
+    "cards": [
+      {
+        "x": 23,
+        "y": 2911,
+        "w": 314,
+        "h": 169,
+        "display": "grid",
+        "position": "relative"
+      }
+    ],
+    "filters": null,
+    "map": null,
+    "buttons": [
+      {
+        "text": "⌂\nInicio",
+        "x": 2,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▦\nExplorar",
+        "x": 62,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "⌖\nMapa",
+        "x": 121,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▤\nNoticias",
+        "x": 181,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☆\nMi partida",
+        "x": 240,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☰\nMás",
+        "x": 300,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 387,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 441,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 495,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 549,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 603,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 657,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 711,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      }
+    ],
+    "heading": "Un mundo por descubrir",
+    "errors": []
+  },
+  {
+    "device": "android",
+    "route": "explore",
+    "vw": 360,
+    "ww": 360,
+    "body": 360,
+    "topbar": {
+      "x": 0,
+      "y": 0,
+      "w": 360,
+      "h": 107,
+      "display": "grid",
+      "position": "sticky"
+    },
+    "bottomNav": {
+      "x": 0,
+      "y": 724,
+      "w": 360,
+      "h": 76,
+      "display": "grid",
+      "position": "fixed"
+    },
+    "search": {
+      "x": 14,
+      "y": 55,
+      "w": 332,
+      "h": 43,
+      "display": "block",
+      "position": "relative"
+    },
+    "cards": [
+      {
+        "x": 12,
+        "y": 509,
+        "w": 336,
+        "h": 233,
+        "display": "flex",
+        "position": "relative"
+      },
+      {
+        "x": 12,
+        "y": 754,
+        "w": 336,
+        "h": 233,
+        "display": "flex",
+        "position": "relative"
+      }
+    ],
+    "filters": null,
+    "map": null,
+    "buttons": [
+      {
+        "text": "⌂\nInicio",
+        "x": 2,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▦\nExplorar",
+        "x": 62,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "⌖\nMapa",
+        "x": 121,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▤\nNoticias",
+        "x": 181,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☆\nMi partida",
+        "x": 240,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☰\nMás",
+        "x": 300,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 387,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 441,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 495,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 549,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 603,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 657,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 711,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      }
+    ],
+    "heading": "Vehículos",
+    "errors": []
+  },
+  {
+    "device": "android",
+    "route": "news",
+    "vw": 360,
+    "ww": 360,
+    "body": 360,
+    "topbar": {
+      "x": 0,
+      "y": 0,
+      "w": 360,
+      "h": 107,
+      "display": "grid",
+      "position": "sticky"
+    },
+    "bottomNav": {
+      "x": 0,
+      "y": 724,
+      "w": 360,
+      "h": 76,
+      "display": "grid",
+      "position": "fixed"
+    },
+    "search": {
+      "x": 14,
+      "y": 55,
+      "w": 332,
+      "h": 43,
+      "display": "block",
+      "position": "relative"
+    },
+    "cards": [],
+    "filters": null,
+    "map": null,
+    "buttons": [
+      {
+        "text": "⌂\nInicio",
+        "x": 2,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▦\nExplorar",
+        "x": 62,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "⌖\nMapa",
+        "x": 121,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▤\nNoticias",
+        "x": 181,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☆\nMi partida",
+        "x": 240,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☰\nMás",
+        "x": 300,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 387,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 441,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 495,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 549,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 603,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 657,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 711,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      }
+    ],
+    "heading": "Noticias de GTA VI",
+    "errors": []
+  },
+  {
+    "device": "android",
+    "route": "map",
+    "vw": 360,
+    "ww": 360,
+    "body": 360,
+    "topbar": {
+      "x": 0,
+      "y": 0,
+      "w": 360,
+      "h": 76,
+      "display": "grid",
+      "position": "sticky"
+    },
+    "bottomNav": {
+      "x": 0,
+      "y": 724,
+      "w": 360,
+      "h": 76,
+      "display": "grid",
+      "position": "fixed"
+    },
+    "search": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "display": "none",
+      "position": "relative"
+    },
+    "cards": [],
+    "filters": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "display": "none",
+      "position": "absolute"
+    },
+    "map": {
+      "x": 12,
+      "y": 304,
+      "w": 336,
+      "h": 384,
+      "display": "block",
+      "position": "relative"
+    },
+    "buttons": [
+      {
+        "text": "⌂\nInicio",
+        "x": 2,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▦\nExplorar",
+        "x": 62,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "⌖\nMapa",
+        "x": 121,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▤\nNoticias",
+        "x": 181,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☆\nMi partida",
+        "x": 240,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☰\nMás",
+        "x": 300,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 387,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 441,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 495,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 549,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 603,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 657,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 711,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      }
+    ],
+    "heading": "Explorá el mapa",
+    "errors": []
+  },
+  {
+    "device": "android",
+    "route": "library",
+    "vw": 360,
+    "ww": 360,
+    "body": 360,
+    "topbar": {
+      "x": 0,
+      "y": 0,
+      "w": 360,
+      "h": 107,
+      "display": "grid",
+      "position": "sticky"
+    },
+    "bottomNav": {
+      "x": 0,
+      "y": 724,
+      "w": 360,
+      "h": 76,
+      "display": "grid",
+      "position": "fixed"
+    },
+    "search": {
+      "x": 14,
+      "y": 55,
+      "w": 332,
+      "h": 43,
+      "display": "block",
+      "position": "relative"
+    },
+    "cards": [],
+    "filters": null,
+    "map": null,
+    "buttons": [
+      {
+        "text": "⌂\nInicio",
+        "x": 2,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▦\nExplorar",
+        "x": 62,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "⌖\nMapa",
+        "x": 121,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▤\nNoticias",
+        "x": 181,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☆\nMi partida",
+        "x": 240,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☰\nMás",
+        "x": 300,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 387,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 441,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 495,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 549,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 603,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 657,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 711,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      }
+    ],
+    "heading": "Tu partida, en un solo lugar",
+    "errors": []
+  },
+  {
+    "device": "android",
+    "route": "search",
+    "vw": 360,
+    "ww": 360,
+    "body": 360,
+    "topbar": {
+      "x": 0,
+      "y": 0,
+      "w": 360,
+      "h": 107,
+      "display": "grid",
+      "position": "sticky"
+    },
+    "bottomNav": {
+      "x": 0,
+      "y": 724,
+      "w": 360,
+      "h": 76,
+      "display": "grid",
+      "position": "fixed"
+    },
+    "search": {
+      "x": 14,
+      "y": 55,
+      "w": 332,
+      "h": 43,
+      "display": "block",
+      "position": "relative"
+    },
+    "cards": [],
+    "filters": null,
+    "map": null,
+    "buttons": [
+      {
+        "text": "⌂\nInicio",
+        "x": 2,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▦\nExplorar",
+        "x": 62,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "⌖\nMapa",
+        "x": 121,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▤\nNoticias",
+        "x": 181,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☆\nMi partida",
+        "x": 240,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☰\nMás",
+        "x": 300,
+        "y": 737,
+        "w": 59,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 387,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 441,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 495,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 549,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 603,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 657,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 81,
+        "y": 711,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      }
+    ],
+    "heading": "Buscar",
+    "errors": []
+  },
+  {
+    "device": "ios",
+    "route": "home",
+    "vw": 393,
+    "ww": 393,
+    "body": 393,
+    "topbar": {
+      "x": 0,
+      "y": 0,
+      "w": 393,
+      "h": 107,
+      "display": "grid",
+      "position": "sticky"
+    },
+    "bottomNav": {
+      "x": 0,
+      "y": 776,
+      "w": 393,
+      "h": 76,
+      "display": "grid",
+      "position": "fixed"
+    },
+    "search": {
+      "x": 14,
+      "y": 55,
+      "w": 365,
+      "h": 43,
+      "display": "block",
+      "position": "relative"
+    },
+    "cards": [
+      {
+        "x": 23,
+        "y": 2839,
+        "w": 347,
+        "h": 169,
+        "display": "grid",
+        "position": "relative"
+      }
+    ],
+    "filters": null,
+    "map": null,
+    "buttons": [
+      {
+        "text": "⌂\nInicio",
+        "x": 2,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▦\nExplorar",
+        "x": 67,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "⌖\nMapa",
+        "x": 132,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▤\nNoticias",
+        "x": 197,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☆\nMi partida",
+        "x": 262,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☰\nMás",
+        "x": 327,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 439,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 493,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 547,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 601,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 655,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 709,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 763,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      }
+    ],
+    "heading": "Un mundo por descubrir",
+    "errors": []
+  },
+  {
+    "device": "ios",
+    "route": "explore",
+    "vw": 393,
+    "ww": 393,
+    "body": 393,
+    "topbar": {
+      "x": 0,
+      "y": 0,
+      "w": 393,
+      "h": 107,
+      "display": "grid",
+      "position": "sticky"
+    },
+    "bottomNav": {
+      "x": 0,
+      "y": 776,
+      "w": 393,
+      "h": 76,
+      "display": "grid",
+      "position": "fixed"
+    },
+    "search": {
+      "x": 14,
+      "y": 55,
+      "w": 365,
+      "h": 43,
+      "display": "block",
+      "position": "relative"
+    },
+    "cards": [
+      {
+        "x": 12,
+        "y": 509,
+        "w": 369,
+        "h": 236,
+        "display": "flex",
+        "position": "relative"
+      },
+      {
+        "x": 12,
+        "y": 757,
+        "w": 369,
+        "h": 236,
+        "display": "flex",
+        "position": "relative"
+      }
+    ],
+    "filters": null,
+    "map": null,
+    "buttons": [
+      {
+        "text": "⌂\nInicio",
+        "x": 2,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▦\nExplorar",
+        "x": 67,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "⌖\nMapa",
+        "x": 132,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▤\nNoticias",
+        "x": 197,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☆\nMi partida",
+        "x": 262,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☰\nMás",
+        "x": 327,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 439,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 493,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 547,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 601,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 655,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 709,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 763,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      }
+    ],
+    "heading": "Vehículos",
+    "errors": []
+  },
+  {
+    "device": "ios",
+    "route": "news",
+    "vw": 393,
+    "ww": 393,
+    "body": 393,
+    "topbar": {
+      "x": 0,
+      "y": 0,
+      "w": 393,
+      "h": 107,
+      "display": "grid",
+      "position": "sticky"
+    },
+    "bottomNav": {
+      "x": 0,
+      "y": 776,
+      "w": 393,
+      "h": 76,
+      "display": "grid",
+      "position": "fixed"
+    },
+    "search": {
+      "x": 14,
+      "y": 55,
+      "w": 365,
+      "h": 43,
+      "display": "block",
+      "position": "relative"
+    },
+    "cards": [],
+    "filters": null,
+    "map": null,
+    "buttons": [
+      {
+        "text": "⌂\nInicio",
+        "x": 2,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▦\nExplorar",
+        "x": 67,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "⌖\nMapa",
+        "x": 132,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▤\nNoticias",
+        "x": 197,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☆\nMi partida",
+        "x": 262,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☰\nMás",
+        "x": 327,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 439,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 493,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 547,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 601,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 655,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 709,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 763,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      }
+    ],
+    "heading": "Noticias de GTA VI",
+    "errors": []
+  },
+  {
+    "device": "ios",
+    "route": "map",
+    "vw": 393,
+    "ww": 393,
+    "body": 393,
+    "topbar": {
+      "x": 0,
+      "y": 0,
+      "w": 393,
+      "h": 76,
+      "display": "grid",
+      "position": "sticky"
+    },
+    "bottomNav": {
+      "x": 0,
+      "y": 776,
+      "w": 393,
+      "h": 76,
+      "display": "grid",
+      "position": "fixed"
+    },
+    "search": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "display": "none",
+      "position": "relative"
+    },
+    "cards": [],
+    "filters": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "display": "none",
+      "position": "absolute"
+    },
+    "map": {
+      "x": 12,
+      "y": 304,
+      "w": 369,
+      "h": 409,
+      "display": "block",
+      "position": "relative"
+    },
+    "buttons": [
+      {
+        "text": "⌂\nInicio",
+        "x": 2,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▦\nExplorar",
+        "x": 67,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "⌖\nMapa",
+        "x": 132,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▤\nNoticias",
+        "x": 197,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☆\nMi partida",
+        "x": 262,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☰\nMás",
+        "x": 327,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 439,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 493,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 547,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 601,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 655,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 709,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 763,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      }
+    ],
+    "heading": "Explorá el mapa",
+    "errors": []
+  },
+  {
+    "device": "ios",
+    "route": "library",
+    "vw": 393,
+    "ww": 393,
+    "body": 393,
+    "topbar": {
+      "x": 0,
+      "y": 0,
+      "w": 393,
+      "h": 107,
+      "display": "grid",
+      "position": "sticky"
+    },
+    "bottomNav": {
+      "x": 0,
+      "y": 776,
+      "w": 393,
+      "h": 76,
+      "display": "grid",
+      "position": "fixed"
+    },
+    "search": {
+      "x": 14,
+      "y": 55,
+      "w": 365,
+      "h": 43,
+      "display": "block",
+      "position": "relative"
+    },
+    "cards": [],
+    "filters": null,
+    "map": null,
+    "buttons": [
+      {
+        "text": "⌂\nInicio",
+        "x": 2,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▦\nExplorar",
+        "x": 67,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "⌖\nMapa",
+        "x": 132,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▤\nNoticias",
+        "x": 197,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☆\nMi partida",
+        "x": 262,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☰\nMás",
+        "x": 327,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 439,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 493,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 547,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 601,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 655,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 709,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 763,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      }
+    ],
+    "heading": "Tu partida, en un solo lugar",
+    "errors": []
+  },
+  {
+    "device": "ios",
+    "route": "search",
+    "vw": 393,
+    "ww": 393,
+    "body": 393,
+    "topbar": {
+      "x": 0,
+      "y": 0,
+      "w": 393,
+      "h": 107,
+      "display": "grid",
+      "position": "sticky"
+    },
+    "bottomNav": {
+      "x": 0,
+      "y": 776,
+      "w": 393,
+      "h": 76,
+      "display": "grid",
+      "position": "fixed"
+    },
+    "search": {
+      "x": 14,
+      "y": 55,
+      "w": 365,
+      "h": 43,
+      "display": "block",
+      "position": "relative"
+    },
+    "cards": [],
+    "filters": null,
+    "map": null,
+    "buttons": [
+      {
+        "text": "⌂\nInicio",
+        "x": 2,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▦\nExplorar",
+        "x": 67,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "⌖\nMapa",
+        "x": 132,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "▤\nNoticias",
+        "x": 197,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☆\nMi partida",
+        "x": 262,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "☰\nMás",
+        "x": 327,
+        "y": 789,
+        "w": 64,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 439,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 493,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 547,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 601,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 655,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 709,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      },
+      {
+        "text": "",
+        "x": 114,
+        "y": 763,
+        "w": 264,
+        "h": 49,
+        "display": "flex",
+        "position": "static"
+      }
+    ],
+    "heading": "Buscar",
+    "errors": []
+  }
+]
