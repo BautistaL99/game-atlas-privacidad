@@ -176,7 +176,7 @@ async function run(){
   }
   report.publisher='SIGNER_SETUP_REQUIRED';
   report.changesSigned=false;
-  await writeFile('automation/v210-last-check.json',JSON.stringify(report,null,2)+'\\n');
+  await writeFile('automation/v210-last-check.json',JSON.stringify(report,null,2)+'\n');
   console.log('V210 REPORT',JSON.stringify(report));
   return;
  }
