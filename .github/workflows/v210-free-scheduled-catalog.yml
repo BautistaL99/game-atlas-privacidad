@@ -1,8 +1,5 @@
 name: Game Atlas - novedades GRATIS y fichas recuperables V210
 on:
-  push:
-    branches: [main]
-    paths: ['automation/v210-publish-once.txt', 'automation/v210-wiki-publish-once.txt']
   schedule:
     # 14:29 and 20:29 Argentina (UTC-3). Avoid :00 when GitHub is busy.
     - cron: '29 17,23 * * *'
@@ -32,7 +29,7 @@ jobs:
     env:
       CATALOG_SIGNING_KEY_PEM_BASE64: ${{ secrets.CATALOG_SIGNING_KEY_PEM_BASE64 }}
       GAME_ATLAS_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
-      GAME_ATLAS_MODE: ${{ ((github.event_name == 'schedule' && github.event.schedule == '43 8 * * *') || (github.event_name == 'workflow_dispatch' && inputs.wiki_scan) || (github.event_name == 'push' && contains(github.event.head_commit.message, 'V210_WIKI_ONCE'))) && 'wiki' || 'news' }}
+      GAME_ATLAS_MODE: ${{ ((github.event_name == 'schedule' && github.event.schedule == '43 8 * * *') || (github.event_name == 'workflow_dispatch' && inputs.wiki_scan)) && 'wiki' || 'news' }}
     steps:
       - name: Recuperar solo los archivos públicos sin tocar la aplicación
         uses: actions/checkout@v4
