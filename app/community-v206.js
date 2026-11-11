@@ -1,4 +1,4 @@
-/* V206 — read-only independent reports and community wiki sidecar.
+/* V208 — signed independent reports and wiki; accept short valid source URLs.
  * No map markers, favorites, progress, category records or official updater changes.
  * Render only after checking Ed25519 and a strict allowlist of publisher domains.
  */
@@ -14,7 +14,7 @@
   try{
    const url=new URL(raw);
    return url.protocol==='https:'&&!url.username&&!url.password&&!url.port&&!url.hash&&!url.search&&
-      allowed.includes(url.hostname)&&url.pathname.length>8;
+      allowed.includes(url.hostname)&&url.pathname.length>=8;
   }catch{return false}
  };
  function validate(data){
