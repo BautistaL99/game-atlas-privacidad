@@ -1,0 +1,25 @@
+name: V210 comprobar Wiki real gratis y sin publicar
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/v210-wiki-smoke.yml']
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Probar recuperacion incremental del contenido real
+        run: |
+          node --input-type=module - <<'NODE'
+          import {getWikiBatch} from './automation/v210-sources.mjs';
+          const result=await getWikiBatch({});
+          const categories=[...new Set(result.items.map(x=>x.category))];
+          console.log('PASS WIKI',JSON.stringify({validPages:result.items.length,categories,errors:result.errors.length}));
+          if(result.items.length<10||categories.length<2)throw Error('Wiki incomplete: preserve old public archive');
+          NODE
