@@ -366,10 +366,8 @@
   .topbar .mobile-brand>span:last-child{font-size:10px!important;}
   .vi-news-hero h1{font-size:27px!important;}
 }
-@media (prefers-reduced-motion:reduce){
-  @media (max-width:700px){
-    .bottom-nav *,
-    .vi-news-card *,
-    .filter-tabs *{animation:none!important;transition:none!important;}
-  }
+@media (prefers-reduced-motion:reduce) and (max-width:700px){
+  .bottom-nav *,
+  .vi-news-card *,
+  .filter-tabs *{animation:none!important;transition:none!important;}
 }
