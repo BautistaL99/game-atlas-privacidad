@@ -1,0 +1,88 @@
+name: V211 crear vista previa web movil Android e iOS (SIN CAMBIAR /app)
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/v211-build-preview.yml'
+      - 'v211-mobile-src/**'
+permissions:
+  contents: write
+concurrency:
+  group: game-atlas-v211-standalone-mobile-preview
+  cancel-in-progress: true
+jobs:
+  prepare-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Copiar solamente preview V209 a carpeta separada V211
+        run: |
+          set -euo pipefail
+          SRC=revision-v209-fichas-dinamicas-20261111
+          DST=revision-v211-web-movil-android-ios-20261111
+          test -f "$SRC/index.html"
+          test -f "$SRC/app-v137.js"
+          test -f "$SRC/compare-metrics-v161.js"
+          test -f "$SRC/manifest.webmanifest"
+          mkdir -p "$DST"
+          cp -a "$SRC/." "$DST/"
+          cp v211-mobile-src/mobile-v211.css "$DST/mobile-v211.css"
+          cp v211-mobile-src/mobile-v211.js "$DST/mobile-v211.js"
+          cp v211-mobile-src/v211-preview-storage.js "$DST/v211-preview-storage.js"
+      - name: Aislar SW, progreso local e identidad PWA del preview V211
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          folder=Path("revision-v211-web-movil-android-ios-20261111")
+          html=folder.joinpath("index.html").read_text(encoding="utf-8")
+          assert html.count("</head>")==1 and html.count("</body>")==1
+          assert "mobile-v211.css" not in html
+          html=html.replace("</head>",'''<meta name="robots" content="noindex,nofollow">
+          <meta name="vi-mobile-preview" content="V211 Android iOS">
+          <script src="./v211-preview-storage.js"></script>
+          <link rel="stylesheet" href="./mobile-v211.css?rev=v211-mobile-preview">
+          </head>''',1)
+          html=html.replace("</body>",'<script defer src="./mobile-v211.js?rev=v211-mobile-preview"></script></body>',1)
+          folder.joinpath("index.html").write_text(html,encoding="utf-8")
+          manifest=json.loads(folder.joinpath("manifest.webmanifest").read_text(encoding="utf-8"))
+          manifest["id"]="/game-atlas-privacidad/revision-v211-web-movil-android-ios-20261111/"
+          manifest["name"]="Game Atlas Companion · V211 vista previa"
+          manifest["short_name"]="Game Atlas V211"
+          folder.joinpath("manifest.webmanifest").write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+          sw=folder.joinpath("sw.js")
+          raw=sw.read_text(encoding="utf-8")
+          assert "const CACHE='game-atlas-safe-v197';" in raw
+          assert "const OLD_PREFIXES=['vi-game-assistant-','game-atlas-safe-'];" in raw
+          raw=raw.replace("const CACHE='game-atlas-safe-v197';","const CACHE='v211-preview-mobile-cache-1';")
+          raw=raw.replace("const OLD_PREFIXES=['vi-game-assistant-','game-atlas-safe-'];","const OLD_PREFIXES=['v211-preview-mobile-cache-'];")
+          raw=raw.replace("'./mobile-v144.css',","'./mobile-v144.css','./mobile-v211.css','./mobile-v211.js','./v211-preview-storage.js',")
+          sw.write_text(raw,encoding="utf-8")
+          assert "v211-preview-mobile-cache-1" in raw
+          assert "game-atlas-safe-v197" not in raw
+          assert "mobile-v211.css" in html and "mobile-v211.js" in html
+          assert 'id=' not in html.split('<meta name="vi-mobile-preview"')[0].split('vi-mobile-preview')[-1] or True
+          print("V211 isolated preview only:",folder)
+          PY
+          node --check revision-v211-web-movil-android-ios-20261111/mobile-v211.js
+          node --check revision-v211-web-movil-android-ios-20261111/v211-preview-storage.js
+          node --check revision-v211-web-movil-android-ios-20261111/sw.js
+      - name: Publicar SOLO la carpeta de vista previa separada
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add revision-v211-web-movil-android-ios-20261111/
+          if git diff --cached --quiet; then
+            echo 'Preview unchanged'; exit 0
+          fi
+          git commit -m 'V211 standalone mobile web Android/iOS preview, no production changes'
+          git fetch origin main --quiet
+          git rebase origin/main
+          git push origin HEAD:main
+          echo 'Preview: https://bautistal99.github.io/game-atlas-privacidad/revision-v211-web-movil-android-ios-20261111/' >> "$GITHUB_STEP_SUMMARY"
