@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-11-11T17:56:33.245Z",
+  "mode": "news",
+  "runner": "public-free",
+  "publisher": "SIGNER_SETUP_REQUIRED",
+  "officialRevision": 4,
+  "communityRevision": 5,
+  "previousOfficialCount": 19,
+  "previousIndependentCount": 8,
+  "previousWikiCount": 286,
+  "newOfficial": 0,
+  "newIndependent": 0,
+  "newWiki": 0,
+  "quarantined": [],
+  "warnings": [],
+  "detectedUnpublishedOfficial": 0,
+  "detectedUnpublishedIndependent": 2,
+  "changesSigned": false
+}
