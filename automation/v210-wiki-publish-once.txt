@@ -1,1 +1,2 @@
 Publish source-revision-linked, signed, independently labeled Wiki specification updates after clean live dry runs. 2026-11-11.
+Retry after fixing test that incorrectly assumed news archive never grows. Wiki release attempt 2.
