@@ -26,7 +26,9 @@ export function verifyFeed(envelope,expected){
 }
 export function signFeed(data,secretBase64){
  if(!secretBase64)throw Error('SIGNING_KEY_NOT_CONFIGURED');
- const pem=Buffer.from(secretBase64,'base64').toString('utf8');
+ const provided=secretBase64.trim();
+ const pem=provided.startsWith('-----BEGIN PRIVATE KEY-----')
+  ?provided:Buffer.from(provided,'base64').toString('utf8');
  const key=createPrivateKey(pem);
  if(key.asymmetricKeyType!=='ed25519')throw Error('Signer must be Ed25519');
  const derived=createPublicKey(key).export({format:'der',type:'spki'}).subarray(-32).toString('base64');
