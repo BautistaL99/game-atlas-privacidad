@@ -1,0 +1,66 @@
+name: V211 inspeccion visual Android/iOS V209 (solo medicion)
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/v211-mobile-baseline.yml']
+permissions:
+  contents: write
+jobs:
+  mobile-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Preparar navegador de prueba
+        run: |
+          npm install --no-save --ignore-scripts playwright-core@1.56.1
+          test -x /usr/bin/google-chrome
+      - name: Medir seis pantallas de Android y iOS; capturar vistas de referencia
+        run: |
+          mkdir -p qa/v211
+          node --input-type=module - <<'NODE'
+          import {chromium} from 'playwright-core';
+          import {writeFileSync} from 'node:fs';
+          const base='https://bautistal99.github.io/game-atlas-privacidad/revision-v209-fichas-dinamicas-20261111/';
+          const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
+          const configs=[
+           {name:'android',width:360,height:800,isMobile:true,hasTouch:true,deviceScaleFactor:1},
+           {name:'ios',width:393,height:852,isMobile:true,hasTouch:true,deviceScaleFactor:1}
+          ];
+          let data=[];
+          for(const conf of configs){
+           const page=await browser.newPage({viewport:{width:conf.width,height:conf.height},isMobile:true,hasTouch:true,deviceScaleFactor:1,
+             userAgent:conf.name==='ios'?'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1':'Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Mobile Safari/537.36'});
+           const errors=[];
+           page.on('pageerror',x=>errors.push(x.message.slice(0,160)));
+           for(const [label,route] of Object.entries({home:'/',explore:'/explorar/vehiculos',news:'/noticias',map:'/mapa',library:'/partida',search:'/buscar'})){
+            await page.goto(base+'#'+route,{waitUntil:'domcontentloaded',timeout:40000});
+            await page.waitForTimeout(1600);
+            const metrics=await page.evaluate(()=>{
+             const r=e=>{if(!e)return null;const b=e.getBoundingClientRect(),s=getComputedStyle(e);return {x:Math.round(b.x),y:Math.round(b.y),w:Math.round(b.width),h:Math.round(b.height),display:s.display,position:s.position}};
+             const root=document.documentElement,nav=document.querySelector('.bottom-nav'),tb=document.querySelector('.topbar');
+             const buttons=[...document.querySelectorAll('.bottom-nav a,.bottom-nav summary')].map(el=>({text:el.innerText.slice(0,22),...r(el)}));
+             return {vw:innerWidth,ww:root.scrollWidth,body:document.body.scrollWidth,
+              topbar:r(tb),bottomNav:r(nav),search:r(document.querySelector('.top-search-wrap')),
+              cards:[...document.querySelectorAll('.content-card')].slice(0,2).map(r),
+              filters:r(document.querySelector('.atlas-filters')),map:r(document.querySelector('.atlas-map')),buttons,
+              heading:document.querySelector('h1')?.innerText?.slice(0,70)};
+            });
+            data.push({device:conf.name,route:label,...metrics,errors:errors.slice(-4)});
+            if(['home','explore','news','map'].includes(label))await page.screenshot({path:'qa/v211/'+conf.name+'-'+label+'-before.png',fullPage:false});
+           }
+           await page.close();
+          }
+          await browser.close();
+          writeFileSync('qa/v211/baseline.json',JSON.stringify(data,null,2));
+          console.log('V211 MOBILE BASELINE',JSON.stringify(data));
+          NODE
+      - name: Guardar unicamente capturas publicas de prueba; no modificar /app
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add qa/v211/
+          git commit -m 'V211 baseline mobile Android/iOS public preview screenshots' || exit 0
+          git push origin HEAD:main
