@@ -1,0 +1,86 @@
+name: Game Atlas - novedades GRATIS y fichas recuperables V210
+on:
+  schedule:
+    # 14:29 and 20:29 Argentina (UTC-3). Avoid :00 when GitHub is busy.
+    - cron: '29 17,23 * * *'
+    # Wiki once daily (05:43 Argentina), bounded to 50 titles/category.
+    - cron: '43 8 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Solo verificar (no escribir los catalogos)'
+        type: boolean
+        default: true
+        required: true
+      wiki_scan:
+        description: 'Comprobar fichas de GTA Wiki en lugar de noticias'
+        type: boolean
+        default: false
+        required: false
+permissions:
+  contents: write
+concurrency:
+  group: atlas-v210-public-automated-data
+  cancel-in-progress: false
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      CATALOG_SIGNING_KEY_PEM_BASE64: ${{ secrets.CATALOG_SIGNING_KEY_PEM_BASE64 }}
+      GAME_ATLAS_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
+      GAME_ATLAS_MODE: ${{ (github.event_name == 'schedule' && github.event.schedule == '43 8 * * *') || (github.event_name == 'workflow_dispatch' && inputs.wiki_scan) && 'wiki' || 'news' }}
+    steps:
+      - name: Recuperar solo los archivos públicos sin tocar la aplicación
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Comprobar modelo de firmas, fuentes y fecha original
+        run: |
+          node --test automation/v210-publisher.test.mjs
+          node --check automation/v210-sources.mjs
+          node --check automation/v210-publisher.mjs
+      - name: Recuperar novedades de origen original y conservar archivo previo
+        run: node automation/v210-publisher.mjs
+      - name: Reportar los hallazgos sin secretos ni textos privados
+        run: |
+          node --input-type=module - <<'NODE'
+          import {readFileSync,appendFileSync} from 'node:fs';
+          const x=JSON.parse(readFileSync('automation/v210-last-check.json','utf8'));
+          const summary=[
+           '## Game Atlas V210 - '+x.publisher,
+           'Noticias nuevas: Rockstar '+x.newOfficial+'; independientes '+x.newIndependent,
+           'Fichas wiki incorporadas/actualizadas: '+x.newWiki,
+           'Fuentes en revisión: '+x.quarantined.length+'; avisos: '+x.warnings.length,
+           'Una incidencia en la fuente nunca borra un artículo firmado anterior.',
+           'No se ha modificado /app/, Firebase, mapas, favoritos ni datos del usuario.'
+          ].join('\n');
+          appendFileSync(process.env.GITHUB_STEP_SUMMARY,summary+'\n');
+          NODE
+      - name: Publicar SOLO los archivos de datos firmados o el diagnóstico público
+        if: ${{ github.event_name != 'workflow_dispatch' || !inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          # Allow the public repo to receive other owner commits without overwriting
+          # a newer signed feed from another approved publisher.
+          git fetch origin main --quiet
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo 'Repository changed during collection; postpone until next scheduled pass'
+            exit 1
+          fi
+          git add automation/v210-last-check.json
+          git add updates/catalog-envelope.json updates/community-envelope-v205.json
+          if [ -f automation/v210-wiki-state.json ]; then git add automation/v210-wiki-state.json; fi
+          if git diff --cached --quiet; then
+            echo 'No change, no commit'
+            exit 0
+          fi
+          git commit -m 'Game Atlas V210: verified source check and signed incremental data'
+          # No force-push and no rewrite if someone else won the race.
+          git push origin HEAD:main
