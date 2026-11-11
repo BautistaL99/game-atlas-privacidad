@@ -23,7 +23,7 @@ export function publicationDate(value,now=Date.now()){
  return new Date(at).toISOString().slice(0,10);
 }
 function allowUrl(input,host,route){
- try{const u=new URL(input);if(u.protocol!=='https:'||u.username||u.password||u.port||u.search||u.hash||u.hostname!==host||!route.test(u.pathname))return null;
+ try{const u=new URL(input,'https://'+host);if(u.protocol!=='https:'||u.username||u.password||u.port||u.search||u.hash||u.hostname!==host||!route.test(u.pathname))return null;
   return 'https://'+host+u.pathname.replace(/\/$/,'')
  }catch{return null}
 }
