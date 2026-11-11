@@ -1,0 +1,60 @@
+name: Game Atlas V209 - verificar noticias publicas y preview
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/check-v209-preview-news.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Comprobar noticias por navegador real (solo lectura)
+        run: |
+          cd "$RUNNER_TEMP"
+          npm install --no-save --ignore-scripts playwright-core@1.56.1
+          cat > checker.mjs <<'NODE'
+          import {chromium} from 'playwright-core';
+          const browser=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome',args:['--no-sandbox','--disable-dev-shm-usage']});
+          let failures=0;
+          for(const site of [
+           ['V209 preview','https://bautistal99.github.io/game-atlas-privacidad/revision-v209-fichas-dinamicas-20261111/'],
+           ['Live Pages','https://bautistal99.github.io/game-atlas-privacidad/app/']
+          ]){
+           const page=await browser.newPage({viewport:{width:1280,height:900}});
+           const errors=[],requests=[];
+           page.on('pageerror',e=>errors.push('JS '+e.message));
+           page.on('console',m=>{if(['warning','error'].includes(m.type()))errors.push(m.type()+': '+m.text())});
+           page.on('response',r=>{if(/(?:catalog|community)-envelope\.json|community-envelope-v205\.json/.test(r.url()))requests.push({status:r.status(),url:r.url()})});
+           for(const route of ['#/noticias','#/noticias/oficiales','#/noticias/no-oficiales']){
+            await page.goto(site[1]+route,{waitUntil:'domcontentloaded',timeout:45000});
+            await page.waitForTimeout(4500);
+            const result=await page.evaluate(async()=>{
+             const cfg=await fetch('./online-config.json',{cache:'no-store'}).then(r=>r.json()).catch(e=>({error:e.message}));
+             const url=cfg.manifestUrl;
+             const sources=await Promise.all([url,url?.replace('/catalog-envelope.json','/community-envelope-v205.json')].map(async u=>{
+              if(!u)return null;
+              try{const r=await fetch(u,{cache:'no-store'});const env=await r.json();const p=JSON.parse(atob(env.payload));
+                return {url:u,status:r.status,revision:p.revision,items:p.items?.length,news:p.news?.length}}catch(e){return{url:u,error:e.message}}
+             }));
+             return {route:location.hash,visibleOfficial:document.querySelectorAll('.vi-news-card:not(.vi-news-community)').length,
+              visibleIndependent:document.querySelectorAll('.vi-v206-editorial').length,
+              signedOfficial:window.viNewsItems?.(false).length,signedCommunity:window.viNewsItems?.(true).length,
+              independentTemplateLength:window.viCommunityNewsCards?.('/noticias/no-oficiales','es')?.length,
+              hasNewsPage:!!document.querySelector('.vi-news-page'),
+              sources};
+            });
+            console.log('NEWS-PROBE',JSON.stringify({site:site[0],...result,recentRequests:requests.slice(-4),errors:errors.slice(-8)}));
+            if(!result.hasNewsPage)failures++;
+           }
+           await page.close();
+          }
+          await browser.close();
+          if(failures)process.exitCode=1;
+          NODE
+          node checker.mjs
