@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Estado automático de Game Atlas</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;background:#101321;color:#eef3fb}
+*{box-sizing:border-box}body{margin:0;padding:24px 16px}.wrap{max-width:860px;margin:auto}
+h1{font-size:clamp(24px,4vw,34px);margin:10px 0}p{color:#aebbd0;line-height:1.55}
+a{color:#86cdf3}a:focus-visible{outline:2px solid #80cdf0}
+.info{border:1px solid #38536a;border-radius:16px;padding:18px 20px;background:#192638;margin:20px 0}
+.status{font-weight:750;font-size:19px;color:#f6d591}.status.ok{color:#8ee6b1}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.stats article{border:1px solid #334a61;border-radius:14px;padding:16px;background:#172435;min-width:0}
+.stats strong{font-size:24px;display:block;margin-top:7px}
+small{color:#a7bdd0}h2{font-size:18px;margin-top:27px}
+.note{font-size:14px}noscript{color:#f8d69a}
+</style></head><body><main class="wrap">
+<small>GAME ATLAS COMPANION · ESTADO PÚBLICO</small>
+<h1>Actualizaciones automáticas</h1>
+<p>Noticias oficiales de Rockstar, noticias de medios independientes y fichas de GTA Wiki. Este panel indica la salud del <strong>sistema de recopilación</strong>, no confirma la veracidad de noticias no oficiales.</p>
+<section class="info" aria-live="polite"><div id="status" class="status">Comprobando el último registro…</div>
+<p id="detail">Sin cambios sobre la aplicación, el mapa, los favoritos ni el progreso.</p></section>
+<div class="stats">
+ <article><small>Última revisión</small><strong id="last">—</strong></article>
+ <article><small>Noticias oficiales nuevas</small><strong id="official">—</strong></article>
+ <article><small>Noticias independientes nuevas</small><strong id="community">—</strong></article>
+ <article><small>Fichas Wiki incorporadas o revisadas</small><strong id="wiki">—</strong></article>
+</div>
+<h2>Horarios establecidos (Argentina)</h2>
+<p>Noticias: 14:29 y 20:29. Wiki: 05:43 una vez al día. Los horarios de GitHub son aproximados. Si un chequeo no se ejecuta, el siguiente vuelve a consultar las fuentes y conserva el historial firmado anterior.</p>
+<h2>Protección contra errores</h2>
+<p>Los enlaces identifican artículos, la fecha original evita que un artículo viejo se registre como publicado hoy y los datos comunitarios nunca se elevan a confirmación oficial. Solo se publican archivos firmados con la clave correspondiente a la web.</p>
+<p class="note">Última actualización del panel: <span id="load-time">—</span>. <a href="https://github.com/BautistaL99/game-atlas-privacidad/actions/workflows/v210-free-scheduled-catalog.yml">Ver ejecuciones en GitHub</a>.</p>
+<noscript>Se necesita JavaScript para cargar los datos de estado.</noscript>
+</main><script>
+(async()=>{
+ const by=id=>document.getElementById(id),status=by('status');
+ try{
+  const response=await fetch('./automation/v210-last-check.json?ts='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw Error('HTTP '+response.status);
+  const x=await response.json();
+  if(!x||typeof x!=='object'||!x.checkedAt||!x.publisher)throw Error('Incomplete status');
+  const date=new Date(x.checkedAt);
+  by('last').textContent=date.toLocaleString('es-AR',{timeZone:'America/Argentina/Buenos_Aires',
+   day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  by('official').textContent=String(x.newOfficial??0);
+  by('community').textContent=String(x.newIndependent??0);
+  by('wiki').textContent=String(x.newWiki??0);
+  const views={
+   SIGNER_SETUP_REQUIRED:['Pendiente: configurar la firma de publicación','El ejecutor gratuito comprueba las fuentes, pero NO publica noticias ni fichas nuevas hasta que esté instalada la clave de firma.'],
+   SIGNED_READY_TO_COMMIT:['Datos firmados y preparados en GitHub','Se prepararon nuevas revisiones. La actualización en GitHub Pages puede demorarse hasta que termine su despliegue.'],
+   UNCHANGED_SIGNED_ARCHIVES_PRESERVED:['Chequeo correcto, sin cambios publicados','Se revisaron las fuentes y se conservaron los últimos datos firmados sin duplicaciones.'],
+   DRY_RUN_SIGNED_CHECK:['Prueba completada sin publicar','Esta ejecución solo verificó los cambios, sin alterar los catálogos.']
+  };
+  const entry=views[x.publisher]||['Estado de publicación: '+x.publisher,'Consultar la última ejecución antes de atribuirle un resultado.'];
+  status.textContent=entry[0];status.className='status'+(x.publisher.startsWith('UNCHANGED')?' ok':'');
+  by('detail').textContent=entry[1]+
+    (x.detectedUnpublishedIndependent||x.detectedUnpublishedOfficial
+     ?' Pendientes detectados: '+Number(x.detectedUnpublishedOfficial||0)+' oficiales y '+
+       Number(x.detectedUnpublishedIndependent||0)+' independientes.':'')+
+    (x.warnings?.length?' Avisos de fuentes: '+x.warnings.length+'.':'');
+  by('load-time').textContent=new Date().toLocaleString('es-AR');
+ }catch(e){
+  status.textContent='No se pudo verificar el estado automático';
+  by('detail').textContent='No significa que una noticia haya desaparecido. Consultá las ejecuciones públicas enlazadas abajo.';
+ }
+})();
+</script></body></html>
