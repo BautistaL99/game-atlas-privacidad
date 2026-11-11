@@ -1,0 +1,43 @@
+name: V210 verificar publicacion WEB intacta y panel de estado
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/v210-live-site-smoke.yml']
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Comprobar origen de firma y feed publicos sin modificar datos
+        run: |
+          node --test automation/v210-publisher.test.mjs
+      - name: Confirmar que Pages muestra el estado y no sustituyó la web V208
+        run: |
+          set -euo pipefail
+          BASE=https://bautistal99.github.io/game-atlas-privacidad
+          for i in $(seq 1 12); do
+            if curl -fsSL --retry 1 --max-time 12 "$BASE/estado-actualizaciones.html" > /tmp/status.html \
+              && grep -q 'Actualizaciones automáticas' /tmp/status.html; then break; fi
+            sleep 5
+          done
+          grep -q 'Actualizaciones automáticas' /tmp/status.html
+          curl -fsSL --max-time 12 "$BASE/automation/v210-last-check.json" > /tmp/health.json
+          node -e 'const s=require("/tmp/health.json");if(s.publisher!=="SIGNER_SETUP_REQUIRED")throw Error("Unexpected source status "+s.publisher)'
+          curl -fsSL --max-time 12 "$BASE/app/index.html" > /tmp/live.html
+          grep -q 'community-v206.js?rev=20261111-v208-wiki-url-validation' /tmp/live.html
+          curl -fsSL --max-time 12 "$BASE/updates/catalog-envelope.json" > /tmp/official.json
+          curl -fsSL --max-time 12 "$BASE/updates/community-envelope-v205.json" > /tmp/community.json
+          node --input-type=module - <<'NODE'
+          import {readFileSync} from 'node:fs';
+          import {verifyFeed} from './automation/v210-publisher.mjs';
+          const a=verifyFeed(JSON.parse(readFileSync('/tmp/official.json','utf8')),1);
+          const b=verifyFeed(JSON.parse(readFileSync('/tmp/community.json','utf8')),205);
+          console.log('PASS LIVE V210',JSON.stringify({officialRevision:a.revision,independentNews:b.news.length,wikiFiches:b.fiches.length,
+           status:'signer setup required',liveWeb:'V208 unchanged'}));
+          NODE
