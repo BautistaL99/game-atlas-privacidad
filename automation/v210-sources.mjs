@@ -106,7 +106,7 @@ export function wikiFiche(title,category,revision,pageId=0){
  * never templates, images, scripts, citations, coordinates or page styling.
  * Unknown keys ARE allowed, so new attributes can grow new UI cells.
  */
-const BAD_SPEC_KEY=/^(?:name|title|header.*|image.*|caption.*|photo.*|file.*|logo.*|map.*|radar.*|icon.*|style.*|class|css|script|theme|width|height|coordinates?|latitude|longitude|position|reference.*|ref\d*|template.*|game\d*|group\d+_(?:data|header)\d*|data\d+|label\d+)$/i;
+const BAD_SPEC_KEY=/^(?:name|title|header.*|image.*|caption.*|photo.*|file.*|logo.*|map.*|radar.*|icon.*|style.*|class|css|script|theme|width|height|coordinates?|latitude|longitude|position|reference.*|ref\d*|template.*|infobox.*|game\d*|group\d+_(?:data|header)\d*|data\d+|label\d+)$/i;
 const BAD_SPEC_TOKEN=/(?:^|[ _-])(?:front|rear|top|side|internal|exterior|interior|dashboard)[ _-]?(?:image|photo|picture|view)/i;
 export function parseWikiInfobox(source=''){
  if(typeof source!=='string'||source.length>130000)return [];
