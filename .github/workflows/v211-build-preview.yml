@@ -32,6 +32,7 @@ jobs:
           mkdir -p "$DST"
           cp -a "$SRC/." "$DST/"
           cp v211-mobile-src/mobile-v211.css "$DST/mobile-v211.css"
+          cp v211-mobile-src/mobile-v212-fixes.css "$DST/mobile-v212-fixes.css"
           cp v211-mobile-src/mobile-v211.js "$DST/mobile-v211.js"
           cp v211-mobile-src/v211-preview-storage.js "$DST/v211-preview-storage.js"
       - name: Aislar SW, progreso local e identidad PWA del preview V211
@@ -47,6 +48,7 @@ jobs:
           <meta name="vi-mobile-preview" content="V211 Android iOS">
           <script src="./v211-preview-storage.js"></script>
           <link rel="stylesheet" href="./mobile-v211.css?rev=v211-mobile-preview">
+          <link rel="stylesheet" href="./mobile-v212-fixes.css?rev=v212-8screens">
           </head>''',1)
           html=html.replace("</body>",'<script defer src="./mobile-v211.js?rev=v211-mobile-preview"></script></body>',1)
           folder.joinpath("index.html").write_text(html,encoding="utf-8")
@@ -59,13 +61,13 @@ jobs:
           raw=sw.read_text(encoding="utf-8")
           assert "const CACHE='game-atlas-safe-v197';" in raw
           assert "const OLD_PREFIXES=['vi-game-assistant-','game-atlas-safe-'];" in raw
-          raw=raw.replace("const CACHE='game-atlas-safe-v197';","const CACHE='v211-preview-mobile-cache-1';")
+          raw=raw.replace("const CACHE='game-atlas-safe-v197';","const CACHE='v211-preview-mobile-cache-2';")
           raw=raw.replace("const OLD_PREFIXES=['vi-game-assistant-','game-atlas-safe-'];","const OLD_PREFIXES=['v211-preview-mobile-cache-'];")
-          raw=raw.replace("'./mobile-v144.css',","'./mobile-v144.css','./mobile-v211.css','./mobile-v211.js','./v211-preview-storage.js',")
+          raw=raw.replace("'./mobile-v144.css',","'./mobile-v144.css','./mobile-v211.css','./mobile-v212-fixes.css','./mobile-v211.js','./v211-preview-storage.js',")
           sw.write_text(raw,encoding="utf-8")
-          assert "v211-preview-mobile-cache-1" in raw
+          assert "v211-preview-mobile-cache-2" in raw
           assert "game-atlas-safe-v197" not in raw
-          assert "mobile-v211.css" in html and "mobile-v211.js" in html
+          assert "mobile-v211.css" in html and "mobile-v212-fixes.css" in html and "mobile-v211.js" in html
           assert 'id=' not in html.split('<meta name="vi-mobile-preview"')[0].split('vi-mobile-preview')[-1] or True
           print("V211 isolated preview only:",folder)
           PY
