@@ -41,6 +41,8 @@ small{color:#a7bdd0}h2{font-size:18px;margin-top:27px}
   const x=await response.json();
   if(!x||typeof x!=='object'||!x.checkedAt||!x.publisher)throw Error('Incomplete status');
   const date=new Date(x.checkedAt);
+  if(!Number.isFinite(date.getTime()))throw Error('Invalid check date');
+  const overdue=Date.now()-date.getTime()>26*3600*1000;
   by('last').textContent=date.toLocaleString('es-AR',{timeZone:'America/Argentina/Buenos_Aires',
    day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
   by('official').textContent=String(x.newOfficial??0);
@@ -53,8 +55,9 @@ small{color:#a7bdd0}h2{font-size:18px;margin-top:27px}
    DRY_RUN_SIGNED_CHECK:['Prueba completada sin publicar','Esta ejecución solo verificó los cambios, sin alterar los catálogos.']
   };
   const entry=views[x.publisher]||['Estado de publicación: '+x.publisher,'Consultar la última ejecución antes de atribuirle un resultado.'];
-  status.textContent=entry[0];status.className='status'+(x.publisher.startsWith('UNCHANGED')?' ok':'');
-  by('detail').textContent=entry[1]+
+  status.textContent=overdue?'Alerta: los controles automáticos llevan más de 26 horas sin actualizarse':entry[0];
+  status.className='status'+(!overdue&&x.publisher.startsWith('UNCHANGED')?' ok':'');
+  by('detail').textContent=(overdue?'El estado puede ser antiguo; revisá las ejecuciones programadas. ':'')+entry[1]+
     (x.detectedUnpublishedIndependent||x.detectedUnpublishedOfficial
      ?' Pendientes detectados: '+Number(x.detectedUnpublishedOfficial||0)+' oficiales y '+
        Number(x.detectedUnpublishedIndependent||0)+' independientes.':'')+
