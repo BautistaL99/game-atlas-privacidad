@@ -1,0 +1,23 @@
+name: V210 prueba unica de guardado gratis sin tocar noticias
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/v210-permissions-probe.yml']
+permissions:
+  contents: write
+jobs:
+  safe-write:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: true}
+      - name: Guardar control de escritura solo en automation
+        run: |
+          set -euo pipefail
+          date -u +'%Y-%m-%dT%H:%M:%SZ' > automation/v210-permissions-ok.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add automation/v210-permissions-ok.txt
+          git commit -m 'V210 public free runner verified data-write permission'
+          git push
