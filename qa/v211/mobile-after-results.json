@@ -1,0 +1,2978 @@
+{
+  "reports": [
+    {
+      "device": "android-small",
+      "route": "#/",
+      "ww": 320,
+      "vw": 320,
+      "heading": "Un mundo por descubrir",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 624,
+        "w": 320,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 52,
+          "w": 52,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": {
+        "x": 26,
+        "y": 1591,
+        "w": 268,
+        "h": 106
+      },
+      "homeProgressGrid": {
+        "x": 26,
+        "y": 1591,
+        "w": 268,
+        "h": 306
+      },
+      "homeProgressActions": {
+        "x": 26,
+        "y": 1909,
+        "w": 268,
+        "h": 97
+      },
+      "homeCategories": {
+        "x": 12,
+        "y": 2046,
+        "w": 296,
+        "h": 819
+      },
+      "discoveryLink": {
+        "x": 23,
+        "y": 2992,
+        "w": 90,
+        "h": 38
+      },
+      "discoveryNav": {
+        "x": 35,
+        "y": 3040,
+        "w": 250,
+        "h": 52
+      },
+      "discoveryCards": {
+        "x": 23,
+        "y": 3104,
+        "w": 274,
+        "h": 209
+      },
+      "discoveryBadge": {
+        "x": 138,
+        "y": 3215,
+        "w": 77,
+        "h": 21
+      },
+      "discoveryText": {
+        "x": 138,
+        "y": 3115,
+        "w": 148,
+        "h": 94
+      },
+      "discoveryAction": {
+        "x": 34,
+        "y": 3249,
+        "w": 252,
+        "h": 53
+      },
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "android-small",
+      "route": "#/explorar/vehiculos",
+      "ww": 320,
+      "vw": 320,
+      "heading": "Vehículos",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 624,
+        "w": 320,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 52,
+          "w": 52,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "android-small",
+      "route": "#/noticias",
+      "ww": 320,
+      "vw": 320,
+      "heading": "Noticias de GTA VI",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 624,
+        "w": 320,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 52,
+          "w": 52,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [
+        {
+          "x": 12,
+          "y": 292,
+          "h": 48,
+          "w": 144,
+          "whiteSpace": "normal"
+        },
+        {
+          "x": 164,
+          "y": 292,
+          "h": 48,
+          "w": 144,
+          "whiteSpace": "normal"
+        },
+        {
+          "x": 12,
+          "y": 348,
+          "h": 48,
+          "w": 144,
+          "whiteSpace": "normal"
+        },
+        {
+          "x": 164,
+          "y": 348,
+          "h": 48,
+          "w": 144,
+          "whiteSpace": "normal"
+        }
+      ],
+      "newsScroll": 296,
+      "newsClient": 296,
+      "newsLayout": "grid",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "android-small",
+      "route": "#/mapa",
+      "ww": 320,
+      "vw": 320,
+      "heading": "Explorá el mapa",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 76
+      },
+      "nav": {
+        "x": 0,
+        "y": 624,
+        "w": 320,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 52,
+          "w": 52,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [
+        {
+          "name": "◈ Regiones",
+          "x": 23,
+          "y": 317,
+          "w": 71,
+          "h": 35,
+          "pressed": "false"
+        },
+        {
+          "name": "▰ Vehículos",
+          "x": 97,
+          "y": 317,
+          "w": 71,
+          "h": 35,
+          "pressed": "false"
+        },
+        {
+          "name": "◆ Misiones",
+          "x": 172,
+          "y": 317,
+          "w": 71,
+          "h": 35,
+          "pressed": "false"
+        },
+        {
+          "name": "● Lugares y servicios",
+          "x": 23,
+          "y": 355,
+          "w": 71,
+          "h": 35,
+          "pressed": "false"
+        },
+        {
+          "name": "★ Mis marcadores",
+          "x": 97,
+          "y": 355,
+          "w": 71,
+          "h": 35,
+          "pressed": "false"
+        }
+      ],
+      "fullScreen": {
+        "x": 254,
+        "y": 314,
+        "w": 44,
+        "h": 44
+      },
+      "progressStats": [],
+      "map": {
+        "x": 12,
+        "y": 304,
+        "w": 296,
+        "h": 340
+      },
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "android-small",
+      "route": "#/partida",
+      "ww": 320,
+      "vw": 320,
+      "heading": "Tu partida, en un solo lugar",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 624,
+        "w": 320,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 52,
+          "w": 52,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [
+        {
+          "h": 73,
+          "w": 134,
+          "label": "✓\n0\nCompletados",
+          "valueWidth": 10,
+          "valueScroll": 10
+        },
+        {
+          "h": 73,
+          "w": 134,
+          "label": "◉\n28\nPendientes",
+          "valueWidth": 20,
+          "valueScroll": 20
+        },
+        {
+          "h": 73,
+          "w": 134,
+          "label": "★\n0\nFavoritos",
+          "valueWidth": 10,
+          "valueScroll": 10
+        },
+        {
+          "h": 73,
+          "w": 134,
+          "label": "0 / 4\nCategorías completas",
+          "valueWidth": 35,
+          "valueScroll": 35
+        }
+      ],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "android-small",
+      "route": "#/ajustes",
+      "ww": 320,
+      "vw": 320,
+      "heading": "Ajustes",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 624,
+        "w": 320,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 52,
+          "w": 52,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": {
+        "x": 12,
+        "y": 209,
+        "w": 296,
+        "h": 339
+      },
+      "settingsPrivacy": {
+        "x": 12,
+        "y": 565,
+        "w": 296,
+        "h": 191
+      },
+      "settingsReport": {
+        "x": 12,
+        "y": 775,
+        "w": 296,
+        "h": 213
+      },
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "android-small",
+      "route": "#/buscar",
+      "ww": 320,
+      "vw": 320,
+      "heading": "Buscar",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 624,
+        "w": 320,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 52,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 52,
+          "w": 52,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "android",
+      "route": "#/",
+      "ww": 360,
+      "vw": 360,
+      "heading": "Un mundo por descubrir",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 360,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 724,
+        "w": 360,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 57,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": {
+        "x": 26,
+        "y": 1549,
+        "w": 308,
+        "h": 106
+      },
+      "homeProgressGrid": {
+        "x": 26,
+        "y": 1549,
+        "w": 308,
+        "h": 306
+      },
+      "homeProgressActions": {
+        "x": 26,
+        "y": 1867,
+        "w": 308,
+        "h": 97
+      },
+      "homeCategories": {
+        "x": 12,
+        "y": 2004,
+        "w": 336,
+        "h": 777
+      },
+      "discoveryLink": {
+        "x": 23,
+        "y": 2908,
+        "w": 90,
+        "h": 38
+      },
+      "discoveryNav": {
+        "x": 55,
+        "y": 2956,
+        "w": 250,
+        "h": 52
+      },
+      "discoveryCards": {
+        "x": 23,
+        "y": 3020,
+        "w": 314,
+        "h": 247
+      },
+      "discoveryBadge": {
+        "x": 138,
+        "y": 3169,
+        "w": 77,
+        "h": 21
+      },
+      "discoveryText": {
+        "x": 138,
+        "y": 3031,
+        "w": 188,
+        "h": 131
+      },
+      "discoveryAction": {
+        "x": 34,
+        "y": 3203,
+        "w": 292,
+        "h": 53
+      },
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "android",
+      "route": "#/explorar/vehiculos",
+      "ww": 360,
+      "vw": 360,
+      "heading": "Vehículos",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 360,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 724,
+        "w": 360,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 57,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "android",
+      "route": "#/noticias",
+      "ww": 360,
+      "vw": 360,
+      "heading": "Noticias de GTA VI",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 360,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 724,
+        "w": 360,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 57,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [
+        {
+          "x": 12,
+          "y": 293,
+          "h": 48,
+          "w": 164,
+          "whiteSpace": "normal"
+        },
+        {
+          "x": 184,
+          "y": 293,
+          "h": 48,
+          "w": 164,
+          "whiteSpace": "normal"
+        },
+        {
+          "x": 12,
+          "y": 349,
+          "h": 48,
+          "w": 164,
+          "whiteSpace": "normal"
+        },
+        {
+          "x": 184,
+          "y": 349,
+          "h": 48,
+          "w": 164,
+          "whiteSpace": "normal"
+        }
+      ],
+      "newsScroll": 336,
+      "newsClient": 336,
+      "newsLayout": "grid",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "android",
+      "route": "#/mapa",
+      "ww": 360,
+      "vw": 360,
+      "heading": "Explorá el mapa",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 360,
+        "h": 76
+      },
+      "nav": {
+        "x": 0,
+        "y": 724,
+        "w": 360,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 57,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [
+        {
+          "name": "◈ Regiones",
+          "x": 23,
+          "y": 317,
+          "w": 85,
+          "h": 35,
+          "pressed": "false"
+        },
+        {
+          "name": "▰ Vehículos",
+          "x": 111,
+          "y": 317,
+          "w": 85,
+          "h": 35,
+          "pressed": "false"
+        },
+        {
+          "name": "◆ Misiones",
+          "x": 198,
+          "y": 317,
+          "w": 85,
+          "h": 35,
+          "pressed": "false"
+        },
+        {
+          "name": "● Lugares y servicios",
+          "x": 23,
+          "y": 355,
+          "w": 85,
+          "h": 35,
+          "pressed": "false"
+        },
+        {
+          "name": "★ Mis marcadores",
+          "x": 111,
+          "y": 355,
+          "w": 85,
+          "h": 35,
+          "pressed": "false"
+        }
+      ],
+      "fullScreen": {
+        "x": 294,
+        "y": 314,
+        "w": 44,
+        "h": 44
+      },
+      "progressStats": [],
+      "map": {
+        "x": 12,
+        "y": 304,
+        "w": 336,
+        "h": 384
+      },
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "android",
+      "route": "#/partida",
+      "ww": 360,
+      "vw": 360,
+      "heading": "Tu partida, en un solo lugar",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 360,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 724,
+        "w": 360,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 57,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [
+        {
+          "h": 73,
+          "w": 154,
+          "label": "✓\n0\nCompletados",
+          "valueWidth": 10,
+          "valueScroll": 10
+        },
+        {
+          "h": 73,
+          "w": 154,
+          "label": "◉\n28\nPendientes",
+          "valueWidth": 20,
+          "valueScroll": 20
+        },
+        {
+          "h": 73,
+          "w": 154,
+          "label": "★\n0\nFavoritos",
+          "valueWidth": 10,
+          "valueScroll": 10
+        },
+        {
+          "h": 73,
+          "w": 154,
+          "label": "0 / 4\nCategorías completas",
+          "valueWidth": 35,
+          "valueScroll": 35
+        }
+      ],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "android",
+      "route": "#/ajustes",
+      "ww": 360,
+      "vw": 360,
+      "heading": "Ajustes",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 360,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 724,
+        "w": 360,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 57,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": {
+        "x": 12,
+        "y": 209,
+        "w": 336,
+        "h": 339
+      },
+      "settingsPrivacy": {
+        "x": 12,
+        "y": 565,
+        "w": 336,
+        "h": 191
+      },
+      "settingsReport": {
+        "x": 12,
+        "y": 775,
+        "w": 336,
+        "h": 213
+      },
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "android",
+      "route": "#/buscar",
+      "ww": 360,
+      "vw": 360,
+      "heading": "Buscar",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 360,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 724,
+        "w": 360,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 57,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 57,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone",
+      "route": "#/",
+      "ww": 393,
+      "vw": 393,
+      "heading": "Un mundo por descubrir",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 776,
+        "w": 393,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 62,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": {
+        "x": 26,
+        "y": 1515,
+        "w": 341,
+        "h": 106
+      },
+      "homeProgressGrid": {
+        "x": 26,
+        "y": 1515,
+        "w": 341,
+        "h": 306
+      },
+      "homeProgressActions": {
+        "x": 26,
+        "y": 1833,
+        "w": 341,
+        "h": 97
+      },
+      "homeCategories": {
+        "x": 12,
+        "y": 1970,
+        "w": 369,
+        "h": 777
+      },
+      "discoveryLink": {
+        "x": 23,
+        "y": 2875,
+        "w": 90,
+        "h": 38
+      },
+      "discoveryNav": {
+        "x": 72,
+        "y": 2923,
+        "w": 250,
+        "h": 52
+      },
+      "discoveryCards": {
+        "x": 23,
+        "y": 2987,
+        "w": 347,
+        "h": 247
+      },
+      "discoveryBadge": {
+        "x": 138,
+        "y": 3136,
+        "w": 101,
+        "h": 21
+      },
+      "discoveryText": {
+        "x": 138,
+        "y": 2998,
+        "w": 221,
+        "h": 131
+      },
+      "discoveryAction": {
+        "x": 34,
+        "y": 3169,
+        "w": 325,
+        "h": 53
+      },
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone",
+      "route": "#/explorar/vehiculos",
+      "ww": 393,
+      "vw": 393,
+      "heading": "Vehículos",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 776,
+        "w": 393,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 62,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone",
+      "route": "#/noticias",
+      "ww": 393,
+      "vw": 393,
+      "heading": "Noticias de GTA VI",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 776,
+        "w": 393,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 62,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [
+        {
+          "x": 12,
+          "y": 295,
+          "h": 48,
+          "w": 181,
+          "whiteSpace": "normal"
+        },
+        {
+          "x": 201,
+          "y": 295,
+          "h": 48,
+          "w": 181,
+          "whiteSpace": "normal"
+        },
+        {
+          "x": 12,
+          "y": 351,
+          "h": 48,
+          "w": 181,
+          "whiteSpace": "normal"
+        },
+        {
+          "x": 201,
+          "y": 351,
+          "h": 48,
+          "w": 181,
+          "whiteSpace": "normal"
+        }
+      ],
+      "newsScroll": 369,
+      "newsClient": 369,
+      "newsLayout": "grid",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone",
+      "route": "#/mapa",
+      "ww": 393,
+      "vw": 393,
+      "heading": "Explorá el mapa",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 76
+      },
+      "nav": {
+        "x": 0,
+        "y": 776,
+        "w": 393,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 62,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [
+        {
+          "name": "◈ Regiones",
+          "x": 26,
+          "y": 318,
+          "w": 92,
+          "h": 37,
+          "pressed": "false"
+        },
+        {
+          "name": "▰ Vehículos",
+          "x": 122,
+          "y": 318,
+          "w": 92,
+          "h": 37,
+          "pressed": "false"
+        },
+        {
+          "name": "◆ Misiones",
+          "x": 219,
+          "y": 318,
+          "w": 92,
+          "h": 37,
+          "pressed": "false"
+        },
+        {
+          "name": "● Lugares y servicios",
+          "x": 26,
+          "y": 359,
+          "w": 92,
+          "h": 37,
+          "pressed": "false"
+        },
+        {
+          "name": "★ Mis marcadores",
+          "x": 122,
+          "y": 359,
+          "w": 92,
+          "h": 37,
+          "pressed": "false"
+        }
+      ],
+      "fullScreen": {
+        "x": 327,
+        "y": 314,
+        "w": 44,
+        "h": 44
+      },
+      "progressStats": [],
+      "map": {
+        "x": 12,
+        "y": 304,
+        "w": 369,
+        "h": 409
+      },
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone",
+      "route": "#/partida",
+      "ww": 393,
+      "vw": 393,
+      "heading": "Tu partida, en un solo lugar",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 776,
+        "w": 393,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 62,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [
+        {
+          "h": 73,
+          "w": 171,
+          "label": "✓\n0\nCompletados",
+          "valueWidth": 11,
+          "valueScroll": 11
+        },
+        {
+          "h": 73,
+          "w": 171,
+          "label": "◉\n28\nPendientes",
+          "valueWidth": 22,
+          "valueScroll": 22
+        },
+        {
+          "h": 73,
+          "w": 171,
+          "label": "★\n0\nFavoritos",
+          "valueWidth": 11,
+          "valueScroll": 11
+        },
+        {
+          "h": 73,
+          "w": 171,
+          "label": "0 / 4\nCategorías completas",
+          "valueWidth": 37,
+          "valueScroll": 37
+        }
+      ],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone",
+      "route": "#/ajustes",
+      "ww": 393,
+      "vw": 393,
+      "heading": "Ajustes",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 776,
+        "w": 393,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 62,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": {
+        "x": 12,
+        "y": 209,
+        "w": 369,
+        "h": 318
+      },
+      "settingsPrivacy": {
+        "x": 12,
+        "y": 545,
+        "w": 369,
+        "h": 191
+      },
+      "settingsReport": {
+        "x": 12,
+        "y": 755,
+        "w": 369,
+        "h": 193
+      },
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone",
+      "route": "#/buscar",
+      "ww": 393,
+      "vw": 393,
+      "heading": "Buscar",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 776,
+        "w": 393,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 62,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 62,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone-large",
+      "route": "#/",
+      "ww": 430,
+      "vw": 430,
+      "heading": "Un mundo por descubrir",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 430,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 856,
+        "w": 430,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 68,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": {
+        "x": 26,
+        "y": 1515,
+        "w": 378,
+        "h": 106
+      },
+      "homeProgressGrid": {
+        "x": 26,
+        "y": 1515,
+        "w": 378,
+        "h": 306
+      },
+      "homeProgressActions": {
+        "x": 26,
+        "y": 1833,
+        "w": 378,
+        "h": 97
+      },
+      "homeCategories": {
+        "x": 12,
+        "y": 1970,
+        "w": 406,
+        "h": 761
+      },
+      "discoveryLink": {
+        "x": 23,
+        "y": 2858,
+        "w": 90,
+        "h": 38
+      },
+      "discoveryNav": {
+        "x": 90,
+        "y": 2906,
+        "w": 250,
+        "h": 52
+      },
+      "discoveryCards": {
+        "x": 23,
+        "y": 2970,
+        "w": 384,
+        "h": 209
+      },
+      "discoveryBadge": {
+        "x": 138,
+        "y": 3082,
+        "w": 77,
+        "h": 21
+      },
+      "discoveryText": {
+        "x": 138,
+        "y": 2981,
+        "w": 258,
+        "h": 94
+      },
+      "discoveryAction": {
+        "x": 34,
+        "y": 3116,
+        "w": 362,
+        "h": 53
+      },
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone-large",
+      "route": "#/explorar/vehiculos",
+      "ww": 430,
+      "vw": 430,
+      "heading": "Vehículos",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 430,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 856,
+        "w": 430,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 68,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone-large",
+      "route": "#/noticias",
+      "ww": 430,
+      "vw": 430,
+      "heading": "Noticias de GTA VI",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 430,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 856,
+        "w": 430,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 68,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [
+        {
+          "x": 12,
+          "y": 276,
+          "h": 48,
+          "w": 199,
+          "whiteSpace": "normal"
+        },
+        {
+          "x": 219,
+          "y": 276,
+          "h": 48,
+          "w": 199,
+          "whiteSpace": "normal"
+        },
+        {
+          "x": 12,
+          "y": 332,
+          "h": 48,
+          "w": 199,
+          "whiteSpace": "normal"
+        },
+        {
+          "x": 219,
+          "y": 332,
+          "h": 48,
+          "w": 199,
+          "whiteSpace": "normal"
+        }
+      ],
+      "newsScroll": 406,
+      "newsClient": 406,
+      "newsLayout": "grid",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone-large",
+      "route": "#/mapa",
+      "ww": 430,
+      "vw": 430,
+      "heading": "Explorá el mapa",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 430,
+        "h": 76
+      },
+      "nav": {
+        "x": 0,
+        "y": 856,
+        "w": 430,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 68,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [
+        {
+          "name": "◈ Regiones",
+          "x": 26,
+          "y": 318,
+          "w": 105,
+          "h": 37,
+          "pressed": "false"
+        },
+        {
+          "name": "▰ Vehículos",
+          "x": 135,
+          "y": 318,
+          "w": 105,
+          "h": 37,
+          "pressed": "false"
+        },
+        {
+          "name": "◆ Misiones",
+          "x": 243,
+          "y": 318,
+          "w": 105,
+          "h": 37,
+          "pressed": "false"
+        },
+        {
+          "name": "● Lugares y servicios",
+          "x": 26,
+          "y": 359,
+          "w": 105,
+          "h": 39,
+          "pressed": "false"
+        },
+        {
+          "name": "★ Mis marcadores",
+          "x": 135,
+          "y": 359,
+          "w": 105,
+          "h": 39,
+          "pressed": "false"
+        }
+      ],
+      "fullScreen": {
+        "x": 364,
+        "y": 314,
+        "w": 44,
+        "h": 44
+      },
+      "progressStats": [],
+      "map": {
+        "x": 12,
+        "y": 304,
+        "w": 406,
+        "h": 410
+      },
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone-large",
+      "route": "#/partida",
+      "ww": 430,
+      "vw": 430,
+      "heading": "Tu partida, en un solo lugar",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 430,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 856,
+        "w": 430,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 68,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [
+        {
+          "h": 73,
+          "w": 189,
+          "label": "✓\n0\nCompletados",
+          "valueWidth": 12,
+          "valueScroll": 12
+        },
+        {
+          "h": 73,
+          "w": 189,
+          "label": "◉\n28\nPendientes",
+          "valueWidth": 24,
+          "valueScroll": 24
+        },
+        {
+          "h": 73,
+          "w": 189,
+          "label": "★\n0\nFavoritos",
+          "valueWidth": 12,
+          "valueScroll": 12
+        },
+        {
+          "h": 73,
+          "w": 189,
+          "label": "0 / 4\nCategorías completas",
+          "valueWidth": 41,
+          "valueScroll": 41
+        }
+      ],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone-large",
+      "route": "#/ajustes",
+      "ww": 430,
+      "vw": 430,
+      "heading": "Ajustes",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 430,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 856,
+        "w": 430,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 68,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": {
+        "x": 12,
+        "y": 209,
+        "w": 406,
+        "h": 318
+      },
+      "settingsPrivacy": {
+        "x": 12,
+        "y": 545,
+        "w": 406,
+        "h": 191
+      },
+      "settingsReport": {
+        "x": 12,
+        "y": 755,
+        "w": 406,
+        "h": 193
+      },
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "iphone-large",
+      "route": "#/buscar",
+      "ww": 430,
+      "vw": 430,
+      "heading": "Buscar",
+      "topbar": {
+        "x": 0,
+        "y": 0,
+        "w": 430,
+        "h": 106
+      },
+      "nav": {
+        "x": 0,
+        "y": 856,
+        "w": 430,
+        "h": 76
+      },
+      "links": [
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Inicio"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Explorar"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mapa"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Noticias"
+        },
+        {
+          "h": 62,
+          "w": 68,
+          "svg": true,
+          "label": "Mi partida"
+        },
+        {
+          "h": 53,
+          "w": 68,
+          "svg": true,
+          "label": "Más"
+        }
+      ],
+      "newsFilters": [],
+      "newsScroll": 0,
+      "newsClient": 0,
+      "newsLayout": "none",
+      "homeProgressPulse": null,
+      "homeProgressGrid": null,
+      "homeProgressActions": null,
+      "homeCategories": null,
+      "discoveryLink": null,
+      "discoveryNav": null,
+      "discoveryCards": null,
+      "discoveryBadge": null,
+      "discoveryText": null,
+      "discoveryAction": null,
+      "settingsLanguage": null,
+      "settingsPrivacy": null,
+      "settingsReport": null,
+      "quickFilters": [],
+      "fullScreen": null,
+      "progressStats": [],
+      "map": null,
+      "searchFont": "16px",
+      "previewIsolated": true,
+      "desktopVisible": false
+    },
+    {
+      "device": "desktop-preserved",
+      "sidebar": "grid",
+      "bottom": "none",
+      "width": 1365,
+      "viewport": 1365,
+      "css": true,
+      "cssFixes": true
+    }
+  ],
+  "failures": []
+}
