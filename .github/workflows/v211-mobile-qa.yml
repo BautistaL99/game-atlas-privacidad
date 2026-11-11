@@ -1,0 +1,47 @@
+name: V211 comprobar web movil Android e iOS sin tocar produccion
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/v211-mobile-qa.yml'
+      - 'v211-mobile-src/test-mobile-v211.mjs'
+permissions:
+  contents: write
+concurrency:
+  group: game-atlas-v211-mobile-qa
+  cancel-in-progress: true
+jobs:
+  check-mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Preparar navegador Chrome real en Ubuntu
+        run: |
+          npm install --no-save --ignore-scripts playwright-core@1.56.1
+          test -x /usr/bin/google-chrome
+      - name: Esperar a que GitHub Pages muestre el preview independiente
+        run: |
+          BASE='https://bautistal99.github.io/game-atlas-privacidad/revision-v211-web-movil-android-ios-20261111'
+          for i in $(seq 1 24); do
+            if curl -fsSL --max-time 15 "$BASE/index.html" | grep -q 'mobile-v211.css'; then
+              echo 'Preview V211 ready'; exit 0
+            fi
+            sleep 5
+          done
+          echo 'Preview not yet deployed';exit 1
+      - name: Probar 4 tamaños móviles, navegación, noticias, mapa, datos y PC
+        run: node v211-mobile-src/test-mobile-v211.mjs
+      - name: Guardar capturas para comparar sin alterar la web
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add qa/v211/*-after.png qa/v211/mobile-after-results.json || true
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'V211 QA: mobile Android iOS screenshots and measured touch regressions'
+          git fetch origin main --quiet
+          git rebase origin/main
+          git push origin HEAD:main
