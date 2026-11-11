@@ -1,0 +1,43 @@
+name: V210 validar firma original (SIN PUBLICAR)
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/v210-signature-acceptance.yml']
+permissions:
+  contents: read
+jobs:
+  validate-key:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Comprobar compatibilidad de la firma sin mostrar la clave
+        env:
+          CATALOG_SIGNING_KEY_PEM_BASE64: ${{ secrets.CATALOG_SIGNING_KEY_PEM_BASE64 }}
+        run: |
+          node --input-type=module - <<'NODE'
+          import {readFileSync} from 'node:fs';
+          import {signFeed,verifyFeed,validatePublication} from './automation/v210-publisher.mjs';
+          const secret=process.env.CATALOG_SIGNING_KEY_PEM_BASE64;
+          if(!secret)throw Error('FALTA FIRMA: el secreto no esta configurado');
+          const files=[
+            ['updates/catalog-envelope.json',1],
+            ['updates/community-envelope-v205.json',205]
+          ];
+          for(const [path,schema] of files){
+            const prior=JSON.parse(readFileSync(path,'utf8'));
+            const original=verifyFeed(prior,schema);
+            validatePublication(original);
+            const signed=signFeed(original,secret);
+            const verified=verifyFeed(signed,schema);
+            validatePublication(verified);
+            if(JSON.stringify(verified)!==JSON.stringify(original))throw Error('No coincide el contenido tras firmar');
+            console.log('Firma original compatible, esquema',schema,'revision',verified.revision,'elementos protegidos: OK');
+          }
+          console.log('PASS: firma Ed25519 compatible con web y Android. Prueba SIN PUBLICAR datos.');
+          NODE
