@@ -1,0 +1,1 @@
+First signed live news feed release, after GitHub Actions original-key and news/wiki dry-run tests passed. 2026-11-11.
