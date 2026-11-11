@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {publicationDate,extractRockstarGraph,extractRockstarIntelRSS,wikiFiche,sha,parseWikiInfobox} from './v210-sources.mjs';
+import {publicationDate,extractRockstarGraph,extractRockstarIntelRSS,wikiFiche,sha,parseWikiInfobox,getOfficial,officialLinksFromHtml} from './v210-sources.mjs';
 import {verifyFeed,validatePublication,appendNews,mergeWiki} from './v210-publisher.mjs';
 test('V210 verify old Ed25519 feeds with the existing client public key',async()=>{
  const a=JSON.parse(await readFile('updates/catalog-envelope.json','utf8'));
@@ -108,4 +108,23 @@ test('V210 Wiki updates preserve attributes at the same revision but purge stale
  const newer=mergeWiki(withSpec.next,[{...old,wikiPageId:10,wikiRevision:old.wikiRevision+1}]);
  assert.equal(newer.changed,1);
  assert.equal(newer.next.fiches.find(x=>x.id===old.id).specs,undefined);
+});
+
+test('V210 detects a fresh Rockstar source even when GraphQL temporarily fails, without trusting fake hosts',async()=>{
+ const page='<a href="/newswire/article/abc123/gta-6-launch-new-details">News</a>'+
+  '<a href="https://evil.example/newswire/article/abc123/fake">Fake</a>';
+ const links=officialLinksFromHtml(page);
+ assert.deepEqual(links,['https://www.rockstargames.com/newswire/article/abc123/gta-6-launch-new-details']);
+ const fetchFn=async raw=>{
+  const url=String(raw);
+  if(url.includes('graph.rockstargames.com'))throw Error('503');
+  if(url.includes('/newswire/article/'))
+   return new Response('<meta property="og:title" content="GTA 6 Launch Details">'+
+     '<meta property="article:published_time" content="2026-11-10T13:30:00Z">',{status:200});
+  if(url.includes('/newswire?'))return new Response(page,{status:200});
+  return new Response('<html>no links</html>',{status:200});
+ };
+ const rows=await getOfficial(fetchFn);
+ assert.equal(rows.length,1);
+ assert.equal(rows[0].publishedAt,'2026-11-10');
 });
