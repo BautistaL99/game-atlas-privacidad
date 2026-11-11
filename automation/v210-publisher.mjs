@@ -49,6 +49,14 @@ export function validatePublication(data){
    if(!row.id.startsWith('community-report-')||row.sourceName!=='RockstarINTEL'||row.claimStatus!=='reported_not_confirmed_by_rockstar'||!/^https:\/\/(?:www\.)?rockstarintel\.com\//.test(row.sourceUrl)||!DATE.test(row.publishedAt))throw Error('Bad independent source');
   }else if(row.sourceTier==='community_indexed_not_rockstar_confirmed'){
    if(!row.id.startsWith('wiki-community-')||row.sourceName!=='GTA Wiki'||!/^https:\/\/gta\.wiki\/w\//.test(row.sourceUrl)||!Number.isInteger(row.wikiRevision))throw Error('Bad community source');
+   if(row.specs!==undefined){
+    if(!Array.isArray(row.specs)||row.specs.length>18)throw Error('Too many Wiki facts');
+    const keys=new Set();
+    for(const spec of row.specs){
+     if(!spec||!text(spec.key,70)||!text(spec.label,70)||!text(spec.value,170)||keys.has(spec.key))throw Error('Bad Wiki field');
+     keys.add(spec.key);
+    }
+   }
   }else throw Error('Unsupported sidecar source tier');
   if(row.publishedAt!==undefined&&!DATE.test(row.publishedAt))throw Error('Bad publication date');
  }
@@ -143,10 +151,13 @@ export function mergeWiki(previous,staged){
  const byId=new Map(previous.fiches.map(row=>[row.id,row]));let changed=0;
  for(const row of staged){
   const old=byId.get(row.id);
+  const {wikiPageId,...safeRow}=row;
   if(!old||row.wikiRevision>old.wikiRevision){
-   // Old infobox values may no longer describe the new Wiki revision: drop
-   // them until the new revision is parsed and signed, never show stale specs.
-   byId.set(row.id,row);changed++
+   // Only keep infobox data bound to the exact current source revision.
+   byId.set(row.id,safeRow);changed++;
+  }else if(row.wikiRevision===old.wikiRevision&&safeRow.specs?.length &&
+    JSON.stringify(safeRow.specs)!==JSON.stringify(old.specs||[])){
+   byId.set(row.id,{...old,specs:safeRow.specs});changed++;
   }
  }
  if(!changed)return {next:previous,changed:0};
@@ -204,10 +215,11 @@ async function run(){
   if(sources.every(x=>x.status==='rejected'))throw Error('All news providers down; signed archives unchanged');
  }else if(mode==='wiki'){
   try{wikiState=JSON.parse(await readFile('automation/v210-wiki-state.json','utf8'))}catch(e){if(e.code!=='ENOENT')throw e}
-  const scanned=await getWikiBatch(wikiState);
+  const scanned=await getWikiBatch(wikiState,fetch,{withSpecifications:true});
   const joined=mergeWiki(community,scanned.items);
   nextCommunity=joined.next;report.newWiki=joined.changed;report.warnings.push(...scanned.errors);
-  wikiState={cursor:scanned.cursor,checkedAt:stamp};
+  wikiState={cursor:scanned.cursor,specCursor:scanned.specCursor,checkedAt:stamp};
+  report.specsInspected=scanned.specsInspected;report.withWikiSpecifications=scanned.withSpecs;
  }else throw Error('Unknown scheduled mode');
  const changed=nextOfficial!==official||nextCommunity!==community;
  report.changesSigned=changed;
