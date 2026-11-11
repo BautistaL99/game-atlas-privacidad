@@ -160,6 +160,26 @@ async function run(){
  const report={checkedAt:stamp,mode,runner:'public-free',publisher:'not-activated',officialRevision:official.revision,communityRevision:community.revision,
   previousOfficialCount:official.items.length,previousIndependentCount:community.news.length,previousWikiCount:community.fiches.length,
   newOfficial:0,newIndependent:0,newWiki:0,quarantined:[],warnings:[]};
+ if(!secret){
+  // Do not burn the anonymous translation quota or claim a successful
+  // publication before the owner configures the existing signing key.
+  if(mode==='news'){
+   const sourceChecks=await Promise.allSettled([getOfficial(),getIndependent()]);
+   const oldOfficial=new Set(official.items.flatMap(x=>(x.sources||[]).map(s=>s.url)));
+   const oldCommunity=new Set(community.news.map(x=>x.sourceUrl));
+   report.detectedUnpublishedOfficial=sourceChecks[0].status==='fulfilled'
+    ?sourceChecks[0].value.filter(x=>!oldOfficial.has(x.url)).length:0;
+   report.detectedUnpublishedIndependent=sourceChecks[1].status==='fulfilled'
+    ?sourceChecks[1].value.filter(x=>!oldCommunity.has(x.url)).length:0;
+   for(const [i,source] of sourceChecks.entries())
+    if(source.status==='rejected')report.warnings.push((i?'RockstarINTEL':'Rockstar')+': '+String(source.reason?.message||'unavailable').slice(0,160));
+  }
+  report.publisher='SIGNER_SETUP_REQUIRED';
+  report.changesSigned=false;
+  await writeFile('automation/v210-last-check.json',JSON.stringify(report,null,2)+'\\n');
+  console.log('V210 REPORT',JSON.stringify(report));
+  return;
+ }
  let nextOfficial=official,nextCommunity=community,wikiState={};
  if(mode==='news'){
   const sources=await Promise.allSettled([getOfficial(),getIndependent()]);
