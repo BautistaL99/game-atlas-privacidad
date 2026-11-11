@@ -4,7 +4,10 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/v211-build-preview.yml'
-      - 'v211-mobile-src/**'
+      - 'v211-mobile-src/mobile-v211.css'
+      - 'v211-mobile-src/mobile-v211.js'
+      - 'v211-mobile-src/mobile-v212-fixes.css'
+      - 'v211-mobile-src/v211-preview-storage.js'
 permissions:
   contents: write
 concurrency:
