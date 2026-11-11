@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {publicationDate,extractRockstarGraph,extractRockstarIntelRSS,wikiFiche,sha} from './v210-sources.mjs';
+import {publicationDate,extractRockstarGraph,extractRockstarIntelRSS,wikiFiche,sha,parseWikiInfobox} from './v210-sources.mjs';
 import {verifyFeed,validatePublication,appendNews,mergeWiki} from './v210-publisher.mjs';
 test('V210 verify old Ed25519 feeds with the existing client public key',async()=>{
  const a=JSON.parse(await readFile('updates/catalog-envelope.json','utf8'));
@@ -73,4 +73,39 @@ test('V210 invalid new entries cannot poison the previously signed feed',async()
  sourceUrl:'https://evil.example/post',sourceName:'RockstarINTEL',sourceTier:'independent_reporting_not_official',claimStatus:'reported_not_confirmed_by_rockstar'};
  assert.throws(()=>appendNews(current,[malicious],'community'));
  assert.equal(current.news.length,8);
+});
+
+test('V210 safely adds unforeseen Wiki infobox cells but excludes nested templates and images',()=>{
+ const wiki=['{{Infobox vehicle',
+ '| image = Example.png',
+ '| front_image2 = picture.jpg',
+ '| top_speed = 230 km/h',
+ '| available_colors = Black, Red, White',
+ '| engine = V8',
+ '| infobox_style = fancy',
+ '| danger = {{malicious template|text}}',
+ '| label1 = Rear window material',
+ '| data1 = Reinforced glass',
+ '}}'].join('\n');
+ const fields=parseWikiInfobox(wiki);
+ assert(fields.some(x=>x.key==='available colors'&&x.value==='Black, Red, White'));
+ assert(fields.some(x=>x.key==='top speed'&&x.value==='230 km/h'));
+ assert(fields.some(x=>x.key==='rear window material'&&x.value==='Reinforced glass'));
+ assert(fields.every(x=>!/image|style|danger/.test(x.key)));
+ assert(fields.length<=18);
+});
+test('V210 Wiki updates preserve attributes at the same revision but purge stale specs after revision change',async()=>{
+ const current=verifyFeed(JSON.parse(await readFile('updates/community-envelope-v205.json','utf8')),205);
+ const old=current.fiches[0],sp=[{key:'available colors',label:'available colors',value:'Red'}];
+ const withSpec=mergeWiki(current,[{...old,wikiPageId:10,specs:sp}]);
+ assert.equal(withSpec.changed,1);
+ assert.equal(withSpec.next.fiches.length,current.fiches.length);
+ assert.equal(withSpec.next.fiches.find(x=>x.id===old.id)?.specs?.[0]?.value,'Red');
+ assert(!('wikiPageId' in withSpec.next.fiches.find(x=>x.id===old.id)));
+ const unchanged=mergeWiki(withSpec.next,[{...old,wikiPageId:10}]);
+ assert.equal(unchanged.changed,0);
+ assert.equal(unchanged.next.fiches.find(x=>x.id===old.id).specs[0].value,'Red');
+ const newer=mergeWiki(withSpec.next,[{...old,wikiPageId:10,wikiRevision:old.wikiRevision+1}]);
+ assert.equal(newer.changed,1);
+ assert.equal(newer.next.fiches.find(x=>x.id===old.id).specs,undefined);
 });
