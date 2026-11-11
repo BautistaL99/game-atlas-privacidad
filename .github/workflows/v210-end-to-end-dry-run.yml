@@ -1,4 +1,5 @@
 name: "V210 ensayo final firmado: noticias y Wiki SIN PUBLICAR"
+# Confirmar regresion del formato de URL relativo de Rockstar (sin publicación)
 on:
   push:
     branches: [main]
