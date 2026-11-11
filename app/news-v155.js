@@ -85,7 +85,8 @@ window.viNewsPage=function(route){
  '<a href="#/noticias/no-oficiales" class="'+(!official&&!all&&!archive?'is-active':'')+'" '+(!official&&!all&&!archive?'aria-current="page"':'')+'>◇ '+t.other+'</a>'+
  '<a href="#/noticias/archivo" class="'+(archive?'is-active':'')+'" '+(archive?'aria-current="page"':'')+'>▣ '+t.archive+' <span class="vi-news-archive-counter">'+older.length+'</span></a></nav>'+
  (archive?'<div class="vi-news-archive-note">'+t.archiveNote+'</div>':'')+
- '<div class="vi-news-list">'+(rows||'<div class="vi-news-empty"><h2>'+(archive?t.archiveEmpty:t.empty)+'</h2><p>'+(archive?t.archiveNote:t.note)+'</p></div>')+'</div></section>';
+ '<div class="vi-news-list">'+(rows||'<div class="vi-news-empty"><h2>'+(archive?t.archiveEmpty:t.empty)+'</h2><p>'+(archive?t.archiveNote:t.note)+'</p></div>')+
+ '<div data-vi-community-news="'+esc(route)+'">'+(window.viCommunityNewsCards?.(route,locale)||'')+'</div></div></section>';
 };
 })();
 
