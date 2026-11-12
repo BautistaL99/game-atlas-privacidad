@@ -1,0 +1,88 @@
+/* V217 V216-preview: draggable PAGE scrollbar on the outer right edge.
+ * Not a button inside the map; does not intercept map or pinch gestures. */
+(()=>{'use strict';
+ const mobile=()=>window.matchMedia('(max-width:700px)').matches;
+ const mapPage=()=>/^#\/mapa(?:[/?]|$)/.test(location.hash||'');
+ const enabled=()=>mobile()&&mapPage()&&!document.body.classList.contains('vi-map-modal-active');
+ const words={
+  es:'Agarrá esta barra para subir o bajar la página',
+  en:'Drag this bar to scroll the page up or down',
+  pt:'Arraste esta barra para subir ou descer a página'
+ };
+ let rail=null,thumb=null,dragId=null,queued=false;
+ const scrollNode=()=>document.scrollingElement||document.documentElement;
+ const scrollMax=()=>Math.max(0,scrollNode().scrollHeight-window.innerHeight);
+ function seek(clientY){
+  if(!rail||!thumb||rail.hidden)return;
+  const rect=rail.getBoundingClientRect();
+  const th=thumb.offsetHeight||50;
+  const fraction=Math.max(0,Math.min(1,(clientY-rect.top-th/2)/Math.max(1,rect.height-th)));
+  scrollNode().scrollTop=fraction*scrollMax();
+  drawThumb();
+ }
+ function attach(){
+  if(rail)return;
+  rail=document.createElement('div');
+  rail.className='v217-page-scroll-rail';
+  rail.setAttribute('role','scrollbar');
+  rail.setAttribute('aria-orientation','vertical');
+  rail.setAttribute('aria-valuemin','0');
+  rail.setAttribute('aria-valuemax','100');
+  rail.setAttribute('tabindex','0');
+  rail.setAttribute('aria-label',words[(document.documentElement.lang||'es').slice(0,2)]||words.es);
+  thumb=document.createElement('span');
+  thumb.className='v217-page-scroll-thumb';
+  rail.append(thumb);
+  rail.addEventListener('pointerdown',e=>{
+   if(e.button!==0)return;
+   e.preventDefault();e.stopPropagation();
+   dragId=e.pointerId;
+   try{rail.setPointerCapture(e.pointerId)}catch(_){}
+   seek(e.clientY);
+  });
+  rail.addEventListener('pointermove',e=>{
+   if(dragId!==e.pointerId)return;
+   e.preventDefault();seek(e.clientY);
+  });
+  for(const ev of ['pointerup','pointercancel','lostpointercapture'])
+    rail.addEventListener(ev,e=>{if(dragId===e.pointerId)dragId=null});
+  rail.addEventListener('keydown',e=>{
+   const commands={ArrowDown:80,ArrowUp:-80,PageDown:innerHeight*.8,PageUp:-innerHeight*.8};
+   if(Object.prototype.hasOwnProperty.call(commands,e.key)){
+    e.preventDefault();scrollNode().scrollTop+=commands[e.key];
+    drawThumb();
+   } else if(e.key==='Home'||e.key==='End'){
+    e.preventDefault();scrollNode().scrollTop=e.key==='Home'?0:scrollMax();
+    drawThumb();
+   }
+  });
+  document.body.append(rail);
+ }
+ function drawThumb(){
+  if(!rail||!thumb)return;
+  if(!enabled()){rail.hidden=true;return}
+  const max=scrollMax(),height=rail.getBoundingClientRect().height;
+  rail.hidden=max<35||height<70;
+  if(rail.hidden)return;
+  const th=Math.max(48,Math.min(height*.85,height*innerHeight/(max+innerHeight)));
+  thumb.style.height=th+'px';
+  const value=Math.min(1,Math.max(0,scrollNode().scrollTop/max));
+  thumb.style.transform='translateY('+((height-th)*value)+'px)';
+  rail.setAttribute('aria-valuenow',String(Math.round(value*100)));
+ }
+ function update(){
+  queued=false;
+  if(!enabled()){if(rail)rail.hidden=true;return}
+  attach();drawThumb();
+ }
+ function schedule(){if(queued)return;queued=true;requestAnimationFrame(update)}
+ addEventListener('scroll',schedule,{passive:true});
+ addEventListener('resize',schedule,{passive:true});
+ addEventListener('hashchange',schedule);
+ addEventListener('popstate',schedule);
+ window.visualViewport?.addEventListener('resize',schedule,{passive:true});
+ const root=document.getElementById('root');
+ if(root)new MutationObserver(schedule).observe(root,{childList:true,subtree:true});
+ document.addEventListener('DOMContentLoaded',schedule,{once:true});
+ schedule();
+})();
