@@ -1,0 +1,152 @@
+name: V216 paquete preliminar WEB Android iOS sin publicar
+on:
+  push:
+    branches: [feature/v216-leonida-map-seo]
+    paths: ['.github/workflows/v216-preview-web-android-ios.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Descargar version V216 desde rama aislada
+        uses: actions/checkout@v4
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Instalar SDK Android 36
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK_MANAGER=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -print -quit)
+          test -n "$SDK_MANAGER"
+          "$SDK_MANAGER" --install "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+      - name: Construir fuente común V216 para ambas apps y preservar package de Play
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp -a android-v215 android-v216
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          const pj='android-v216/package.json';
+          const p=JSON.parse(fs.readFileSync(pj,'utf8'));
+          p.name='game-atlas-guia-gta6-v216';
+          p.version='1.49.0';
+          p.dependencies['@capacitor/ios']='8.0.0';
+          fs.writeFileSync(pj,JSON.stringify(p,null,2)+'\n');
+          const cj='android-v216/capacitor.config.json';
+          const cfg=JSON.parse(fs.readFileSync(cj,'utf8'));
+          if(cfg.appId!=='com.indie.viassistant')throw Error('Play ID mismatch');
+          cfg.appName='Game Atlas: Guía de GTA 6';
+          fs.writeFileSync(cj,JSON.stringify(cfg,null,2)+'\n');
+          const prep='android-v216/prepare-android.mjs';
+          let c=fs.readFileSync(prep,'utf8');
+          if(!c.includes('android-v215')||!c.includes('versionCode 215'))throw Error('Original Android stage unexpected');
+          c=c.replaceAll('android-v215','android-v216')
+            .replaceAll('versionCode 215','versionCode 216')
+            .replaceAll('versionName "1.48.0"','versionName "1.49.0"')
+            .replaceAll('Game Atlas Companion','Game Atlas: Guía de GTA 6');
+          fs.writeFileSync(prep,c);
+          const m=JSON.parse(fs.readFileSync('app/assets/leonida-landmarks-v216.json','utf8'));
+          if(m.items.length<900)throw Error('Map markers incomplete');
+          if(!fs.readFileSync('app/index.html','utf8').includes('map-v216.css'))throw Error('V216 map missing');
+          JS
+          node android-v216/prepare-android.mjs stage
+          cmp app/index.html android-v216/www/index.html
+          cmp app/assets/leonida-landmarks-v216.json android-v216/www/assets/leonida-landmarks-v216.json
+          test -s android-v216/www/assets/leonida-yanis-v17.webp
+          node --check android-v216/www/app-v137.js
+      - name: Capacitor Android 8.0 y proyecto iOS Xcode
+        working-directory: android-v216
+        run: |
+          npm install --no-fund --no-audit
+          npx cap add android
+          npx cap sync android
+          npx cap add ios
+          npx cap sync ios
+          test -s ios/App/App/Info.plist
+          test -s ios/App/App/public/map-v216.css
+          test -s ios/App/App/public/assets/leonida-landmarks-v216.json
+      - name: VersionCode 216, logo y controles nativos Android
+        run: |
+          node android-v216/prepare-android.mjs native
+          grep -q 'versionCode 216' android-v216/android/app/build.gradle
+          grep -q 'versionName "1.49.0"' android-v216/android/app/build.gradle
+          grep -q 'targetSdkVersion = 36' android-v216/android/variables.gradle
+          grep -q 'Game Atlas: Guía de GTA 6' android-v216/android/app/src/main/res/values/strings.xml
+      - name: Generar APK de prueba y AAB candidato SIN firmar
+        working-directory: android-v216/android
+        env:
+          GRADLE_OPTS: '-Dorg.gradle.jvmargs=-Xmx3g -Dorg.gradle.parallel=false'
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug bundleRelease --no-daemon --stacktrace
+      - name: Empaquetar WEB + Android + iOS V216 y comprobar integridad
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p export-v216/{WEB,ANDROID,IOS,AUTOMATIZACION}
+          cp -a app guia-gta-6 updates index.html sitemap.xml robots.txt export-v216/WEB/
+          cp -a automation export-v216/AUTOMATIZACION/
+          cp .github/workflows/v210-free-scheduled-catalog.yml export-v216/AUTOMATIZACION/
+          cp .github/workflows/v216-map-seo-qa.yml export-v216/AUTOMATIZACION/
+          mkdir -p export-v216/ANDROID/fuentes export-v216/ANDROID/compilados export-v216/IOS/fuentes
+          tar -C android-v216 --exclude='./node_modules' --exclude='./ios' --exclude='./.gradle' --exclude='*/build' -cf - . |
+            tar -C export-v216/ANDROID/fuentes -xf -
+          tar -C android-v216 --exclude='./node_modules' --exclude='./android' -cf - . |
+            tar -C export-v216/IOS/fuentes -xf -
+          cp android-v216/android/app/build/outputs/apk/debug/app-debug.apk export-v216/ANDROID/compilados/Game-Atlas-V216-PRUEBA.apk
+          cp android-v216/android/app/build/outputs/bundle/release/app-release.aab export-v216/ANDROID/compilados/Game-Atlas-V216-SIN-FIRMAR.aab
+          test -s export-v216/IOS/fuentes/ios/App/App/public/assets/leonida-yanis-v17.webp
+          test -s export-v216/ANDROID/fuentes/www/map-v216.css
+          test -s export-v216/WEB/guia-gta-6/wiki/index.html
+          unzip -l export-v216/ANDROID/compilados/Game-Atlas-V216-PRUEBA.apk | grep -q 'assets/public/map-v216.css'
+          unzip -l export-v216/ANDROID/compilados/Game-Atlas-V216-PRUEBA.apk | grep -q 'assets/public/assets/leonida-yanis-v17.webp'
+          unzip -l export-v216/ANDROID/compilados/Game-Atlas-V216-SIN-FIRMAR.aab | grep -q 'base/assets/public/community-v206.js'
+          cat > export-v216/LEER-PRIMERO-V216.txt <<'TXT'
+          GAME ATLAS: GUÍA DE GTA 6 - V216 PRELIMINAR
+          Versión V216 preparada sobre rama feature/v216-leonida-map-seo.
+          NO se modificó la web pública ni se desplegó en Firebase.
+          WEB/: sitio estático V216, SEO, wiki, mapa, feeds.
+          ANDROID/: APK instalable de PRUEBA y AAB SIN FIRMAR.
+          Android package ID: com.indie.viassistant. versionCode 216, versionName 1.49.0.
+          Una APK de prueba NO debe reemplazar la instalación de Google Play
+          sin exportar previamente Mi partida; distinta firma.
+          Un AAB sin firmar NO se puede publicar directamente en Google Play.
+          IOS/: proyecto Capacitor iOS para Xcode; se necesita Mac y firma Apple.
+          El mapa GTADB Yanis v17 es una reconstrucción NO OFICIAL bajo CC BY 4.0.
+          Marcadores GTADB son aproximaciones no confirmadas por Rockstar.
+          Fuente/licencia/transformaciones: WEB/app/assets/LEONIDA-MAP-LICENSE.txt.
+          Los marcadores anteriores del usuario se preservan con aviso de recalibración.
+          Noticias, fichas y catálogos: clientes verifican firmas Ed25519 en las
+          URL públicas de GitHub Pages, normalmente cada 30 min mientras están abiertos.
+          El recopilador sigue corriendo en el repositorio público; no es push instantáneo.
+          Este archivo NO contiene claves privadas ni configuración de cuentas.
+          Web oficial esperada: https://gta6mapa.web.app/app/
+          La publicación Firebase sigue pendiente de credenciales correctas.
+          TXT
+          (cd export-v216 && zip -q -r ../Game-Atlas-V216-WEB-ANDROID-IOS-PREVIA.zip .)
+          unzip -tqq Game-Atlas-V216-WEB-ANDROID-IOS-PREVIA.zip
+          sha256sum Game-Atlas-V216-WEB-ANDROID-IOS-PREVIA.zip > Game-Atlas-V216-WEB-ANDROID-IOS-PREVIA.zip.sha256
+          sha256sum export-v216/ANDROID/compilados/* > SHA256-ANDROID-V216.txt
+          ls -lh Game-Atlas-V216-WEB-ANDROID-IOS-PREVIA.zip
+      - name: Entregar archivos de V216 para revisión
+        uses: actions/upload-artifact@v4
+        with:
+          name: GAME-ATLAS-V216-PREVIA-COMPLETA
+          path: |
+            Game-Atlas-V216-WEB-ANDROID-IOS-PREVIA.zip
+            Game-Atlas-V216-WEB-ANDROID-IOS-PREVIA.zip.sha256
+            SHA256-ANDROID-V216.txt
+            export-v216/ANDROID/compilados/Game-Atlas-V216-PRUEBA.apk
+            export-v216/ANDROID/compilados/Game-Atlas-V216-SIN-FIRMAR.aab
+          retention-days: 30
+          if-no-files-found: error
