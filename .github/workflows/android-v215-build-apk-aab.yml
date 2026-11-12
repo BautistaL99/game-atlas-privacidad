@@ -1,0 +1,120 @@
+name: Game Atlas Companion V215 - compilar Android APK y AAB
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/android-v215-build-apk-aab.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: game-atlas-v215-android-build
+  cancel-in-progress: false
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Descargar exactamente el contenido web aprobado
+        uses: actions/checkout@v4
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Android SDK 36
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK_MANAGER=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -print -quit)
+          test -n "$SDK_MANAGER"
+          "$SDK_MANAGER" --install "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+      - name: Comprobar app V215 y copiarla completa a Capacitor
+        run: |
+          node android-v215/prepare-android.mjs stage
+          node --check android-v215/www/mobile-v215.js
+          node --check android-v215/www/community-v206.js
+          node --check android-v215/www/online-updates.js
+          node --check android-v215/www/news-v155.js
+      - name: Instalar Capacitor 8 sin servicios de pago
+        working-directory: android-v215
+        run: |
+          npm install --no-fund --no-audit
+          npx cap add android
+          npx cap sync android
+      - name: Mantener identidad de Play, apariencia y API 36
+        run: |
+          node android-v215/prepare-android.mjs native
+          grep -q 'versionCode 215' android-v215/android/app/build.gradle
+          grep -q 'targetSdkVersion = 36' android-v215/android/variables.gradle
+          grep -q 'community-v206.js' android-v215/www/index.html
+          grep -q 'mobile-v215.css' android-v215/www/index.html
+      - name: Compilar APK para pruebas y AAB de release sin firmar
+        working-directory: android-v215/android
+        env:
+          GRADLE_OPTS: '-Dorg.gradle.jvmargs=-Xmx3g -Dorg.gradle.parallel=false'
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug bundleRelease --no-daemon --stacktrace
+      - name: Verificar archivos Android, paquete, assets y hash
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist/android-v215
+          APK="android-v215/android/app/build/outputs/apk/debug/app-debug.apk"
+          AAB="android-v215/android/app/build/outputs/bundle/release/app-release.aab"
+          test -s "$APK"
+          test -s "$AAB"
+          unzip -l "$APK" | grep -q 'assets/public/index.html'
+          unzip -l "$APK" | grep -q 'assets/public/community-v206.js'
+          unzip -l "$APK" | grep -q 'assets/public/mobile-v215.css'
+          unzip -l "$APK" | grep -q 'assets/public/online-updates.js'
+          unzip -l "$AAB" | grep -q 'base/assets/public/community-v206.js'
+          AAPT="$ANDROID_HOME/build-tools/36.0.0/aapt"
+          "$AAPT" dump badging "$APK" | grep 'package: name=.com.indie.viassistant.'
+          "$AAPT" dump badging "$APK" | grep "versionCode='215'"
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify "$APK"
+          cp "$APK" dist/android-v215/Game-Atlas-Companion-V215-PRUEBA.apk
+          cp "$AAB" dist/android-v215/Game-Atlas-Companion-V215-SIN-FIRMAR.aab
+          (cd dist/android-v215 && sha256sum Game-Atlas-Companion-V215-PRUEBA.apk Game-Atlas-Companion-V215-SIN-FIRMAR.aab > SHA256SUMS.txt)
+          cat > dist/android-v215/LEEME-ANDROID-V215.txt <<'TXT'
+          Game Atlas Companion - Android V215 (versionName 1.48.0; versionCode 215)
+          Package ID: com.indie.viassistant (mismo ID del proyecto de Play)
+          APK: archivo instalable de PRUEBA, firmado con clave de desarrollo
+          AAB: paquete de lanzamiento SIN FIRMAR. NO puede enviarse directamente a Play Console.
+          La AAB definitiva requiere firmarla con la clave de SUBIDA de Google Play ya autorizada.
+          Si tenes una version de Play instalada, NO la reemplaces con la APK de depuracion:
+          puede tener una firma distinta. Exporta antes los datos de Mi partida.
+          Novedades: misma V215 web/movil; noticias oficiales y medios independientes;
+          fichas comunitarias separadas; catalogos remotos firmados Ed25519;
+          idiomas ES/EN/PT; mapa, marcadores, favoritos y progreso local.
+          Se consultan al abrir/reanudar y aproximadamente cada 30 min si esta abierta.
+          La publicacion de nuevas noticias depende del horario del recopilador.
+          No existe sincronizacion en la nube de favoritos/progreso.
+          TXT
+          ls -lh dist/android-v215
+      - name: Entregar APK y AAB descargables desde Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: GAME-ATLAS-ANDROID-V215-APK-Y-AAB
+          path: dist/android-v215/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Publicar APK de prueba como descarga directa
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="android-v215-prueba"
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --target "$GITHUB_SHA" --title "Game Atlas Companion Android V215 - APK de prueba" --prerelease \
+              --notes "Version movil aprobada V215. APK de prueba, NO reemplazar la app de Play sin respaldo de Mi partida. AAB sin firmar incluido solo como candidato; requiere firma de subida para Play."
+          fi
+          gh release upload "$TAG" dist/android-v215/* --clobber
+          echo "APK de prueba: https://github.com/BautistaL99/game-atlas-privacidad/releases/download/$TAG/Game-Atlas-Companion-V215-PRUEBA.apk" >> "$GITHUB_STEP_SUMMARY"
+          echo "AAB candidato SIN FIRMAR (no subir a Play): https://github.com/BautistaL99/game-atlas-privacidad/releases/download/$TAG/Game-Atlas-Companion-V215-SIN-FIRMAR.aab" >> "$GITHUB_STEP_SUMMARY"
