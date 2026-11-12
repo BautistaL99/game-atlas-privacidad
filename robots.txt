@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gta6mapa.web.app/sitemap.xml

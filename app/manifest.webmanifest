@@ -1,7 +1,7 @@
 {
-  "name": "Game Atlas Companion",
-  "short_name": "Game Atlas Companion",
-  "description": "Asistente independiente de GTA VI con mapas y fichas verificadas",
+  "name": "Game Atlas: Guía de GTA 6",
+  "short_name": "Game Atlas GTA 6",
+  "description": "Wiki y guía independiente de GTA 6: mapa de Leonida, rutas, noticias y fichas.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
