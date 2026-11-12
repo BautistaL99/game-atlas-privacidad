@@ -1,0 +1,57 @@
+name: V216 generar vista previa mapa licenciado Leonida
+on:
+  push:
+    branches: [feature/v216-leonida-map-seo]
+    paths: ['.github/workflows/v216-map-asset-preview.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Obtener datos GTADB CC BY 4.0 directamente de origen
+        uses: actions/checkout@v4
+        with:
+          repository: rolux/gtadb.org
+          ref: 6acc1b555ed68255078b850f5d4a984610fa1910
+          sparse-checkout: maps/tiles/6/yanis,17/2
+          filter: blob:none
+          path: upstream
+          persist-credentials: false
+      - name: Crear imagen panorámica para estudio de recorte
+        run: |
+          python -m pip install -q Pillow
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          import re,json
+          folder=Path('upstream/maps/tiles/6/yanis,17/2')
+          records=[]
+          for f in folder.glob('*.jpg'):
+            match=re.fullmatch(r'2,(\d+),(\d+)\.jpg', f.name)
+            if match:
+              records.append((int(match.group(1)),int(match.group(2)),f))
+          assert len(records)>=100, 'Faltan tiles de la licencia'
+          xs=[x for x,y,_ in records];ys=[y for x,y,_ in records]
+          w,h=Image.open(records[0][2]).size
+          minx,maxx=min(xs),max(xs);miny,maxy=min(ys),max(ys)
+          mosaic=Image.new('RGB',((maxx-minx+1)*w,(maxy-miny+1)*h),(44,104,166))
+          for x,y,f in records:
+            with Image.open(f) as im:
+              mosaic.paste(im,((x-minx)*w,(y-miny)*h))
+          out=Path('v216-map-preview');out.mkdir(exist_ok=True)
+          mosaic.save(out/'yanis-v17-overview.jpg',quality=89,optimize=True)
+          (out/'provenance.json').write_text(json.dumps({'source':'https://github.com/rolux/gtadb.org',
+            'ref':'6acc1b555ed68255078b850f5d4a984610fa1910',
+            'license':'CC BY 4.0','credits':'GTADB.ORG and contributors','x':[minx,maxx],'y':[miny,maxy],'tile':[w,h],
+            'image':list(mosaic.size)},indent=2))
+          print('Overview',mosaic.size,'tiles',len(records))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: V216-YANIS-V17-LICENCED-OVERVIEW
+          path: v216-map-preview/
+          retention-days: 7
