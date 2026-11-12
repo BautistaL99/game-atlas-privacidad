@@ -474,12 +474,14 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-map]');if(
   mapTransform();return;
  }
  if(a==='routes'){
+  const wasOverlay=viMapFullscreen||mobileMapFiltersOpen;
   if(viMapFullscreen){
     viMapFullscreen=false;
     document.body.classList.remove('vi-map-modal-active');
     if(history.state?.viMapFullscreen)history.replaceState({...history.state,viMapFullscreen:false},'',location.href);
   }
-  if(mobileMapFiltersOpen){mobileMapFiltersOpen=false;mapUpdate();}
+  mobileMapFiltersOpen=false;
+  if(wasOverlay)mapUpdate();
   window.viRenderRoutes?.();
   requestAnimationFrame(()=>{
     const area=document.getElementById('vi-route-manager');
