@@ -181,6 +181,20 @@ jobs:
                     'Existing points not restored when cancelling marker mode '+lang);
                   check(await page.locator('.atlas-cluster').count()>0,
                     'Clusters not restored on cancelling marker mode '+lang);
+                  // Saving a new personal pin must still work and retain existing data.
+                  await page.locator('.atlas-create-pin-btn').click();
+                  const mapBox=await page.locator('#mapCanvas').boundingBox();
+                  await page.locator('#mapCanvas').click({position:{x:Math.round(mapBox.width*0.48),y:Math.round(mapBox.height*0.42)}});
+                  await page.locator('#mapPinName').waitFor({timeout:6000});
+                  await page.locator('#mapPinName').fill('QA - My saved place');
+                  await page.locator('[data-map="save"]').click();
+                  check(await page.locator('#mapCanvas').evaluate(e=>!e.classList.contains('vi-map-placing')),
+                    'Save did not leave marker mode '+lang);
+                  check(await page.locator('#mapStage .atlas-pin.personal').count()>0,
+                    'Saved personal marker is not present '+lang);
+                  const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('gta6-assistant:v1:map-pins')||'[]'));
+                  check(saved.some(p=>p.title==='QA - My saved place'),
+                    'New marker not persisted in browser '+lang);
                 }
                 if(width===390){
                   const chips=page.locator('.vi-map-filter-chips button[data-value]');
@@ -212,3 +226,5 @@ jobs:
 # QA rerun after V216.1 dark visual overhaul and desktop screenshot at 1856
 
 # V216.2 UX tests: collapsed groups, scrollable status, visible cluster legend and marker editor isolation
+
+# QA after shifting legend below mobile map and checking full personal-marker save flow
