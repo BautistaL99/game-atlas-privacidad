@@ -78,7 +78,7 @@ jobs:
                     railBg:getComputedStyle(document.querySelector('.atlas-filters')).backgroundImage,
                     groupBg:getComputedStyle(document.querySelector('.atlas-filter-group')).backgroundColor,
                     chipsDisplay:getComputedStyle(document.querySelector('.vi-map-filter-chips')).display,
-                    clusterMax:[...document.querySelectorAll('.atlas-cluster')].reduce((n,x)=>Math.max(n,Number(x.textContent)||0),0)};
+                    clusterMax:[...document.querySelectorAll('.atlas-cluster')].reduce((n,x)=>Math.max(n,Number(x.querySelector('.v216-cluster-value')?.textContent)||0),0)};
                 });
                 check(state.imageLoaded,'Basemap failed to load '+lang+' '+width);
                 check(state.pins>200,'Missing community pins '+lang+' '+width);
@@ -92,6 +92,28 @@ jobs:
                   check(state.clusters<=32,'Overcrowded clusters at default zoom '+lang+' '+width+' '+state.clusters);
                   check(state.mapWidth>=width*.53,'Map too narrow '+lang+' '+width+' '+JSON.stringify(state));
                 }
+                // UX acceptance: categories and status start collapsed and status
+                // belongs INSIDE the same scroll area as category filters.
+                const groupState=await page.evaluate(()=>{
+                  const root=document.querySelector('#atlas-map-filter-panel');
+                  const scroll=root?.querySelector('.atlas-filter-scroll');
+                  const status=root?.querySelector('.atlas-status-group');
+                  const legend=document.querySelector('.v216-map-legend');
+                  return {
+                    groups:[...root.querySelectorAll('details[data-map-group]')].map(d=>({id:d.dataset.mapGroup,open:d.open})),
+                    statusOpen:status?.open,
+                    statusInScroll:!!scroll?.contains(status),
+                    legend:!!legend,
+                    clusterZoomIcon:!!document.querySelector('.atlas-cluster .v216-cluster-zoom')
+                  };
+                });
+                check(groupState.groups.length===3&&groupState.groups.every(g=>!g.open),
+                  'Map category filter group should start collapsed '+lang+' '+width+' '+JSON.stringify(groupState));
+                check(!groupState.statusOpen&&groupState.statusInScroll,
+                  'Status filters should start collapsed and scroll with categories '+lang+' '+width);
+                check(groupState.legend&&groupState.clusterZoomIcon,
+                  'Cluster legend and zoom affordance missing '+lang+' '+width);
+                if(lang==='es')await page.screenshot({path:'v216-qa-screenshots/map-'+width+'.png',fullPage:false});
                 const placeholder={es:'Buscar',en:'Search',pt:'Buscar'}[lang];
                 check(state.placeholder.includes(placeholder),'Wrong search language '+lang);
                 const panelTitle=(await page.locator('.atlas-v117-sidebar-head strong').textContent()).trim();
@@ -120,6 +142,7 @@ jobs:
                   check(before!==after,'Clicking cluster should zoom '+lang);
                 }
                 if(width===1440){
+                  await page.locator('details[data-map-group="discoveries"] summary').click();
                   const controls=page.locator('input[data-map-cat="lugares"]');
                   check(await controls.count()===1,'Places filter absent '+lang);
                   const countBefore=await page.locator('.atlas-pin').count();
@@ -130,11 +153,39 @@ jobs:
                   check(await page.locator('.atlas-pin').count()===countBefore,
                     'Restoring places filter did not recover pins '+lang);
                 }
+                if(width===1440){
+                  // Verify status group is scrollable rather than a fixed overlay.
+                  const status=page.locator('details.atlas-status-group');
+                  await status.locator('summary').scrollIntoViewIfNeeded();
+                  await status.locator('summary').click();
+                  check(await status.evaluate(d=>d.open),'Status group did not expand '+lang);
+                  await page.locator('input[data-map-missing]').check();
+                  check(await page.locator('details.atlas-status-group').evaluate(d=>d.open),
+                    'Status group collapsed unexpectedly on map refresh '+lang);
+                  await page.locator('input[data-map-missing]').uncheck();
+                  await status.locator('summary').click();
+                  check(!(await status.evaluate(d=>d.open)),'Status group failed to collapse '+lang);
+
+                  // "Create marker" must not reveal 900+ unclustered points.
+                  await page.locator('.atlas-create-pin-btn').click();
+                  check(await page.locator('#mapCanvas').evaluate(e=>e.classList.contains('vi-map-placing')),
+                    'Not in place-marker mode '+lang);
+                  check(await page.locator('.atlas-pin').count()===0,
+                    'All map points appeared while creating marker '+lang);
+                  check(await page.locator('.atlas-cluster').count()===0,
+                    'Cluster markers appeared while creating marker '+lang);
+                  check(await page.locator('.v216-map-mode-hint').count()===1,
+                    'Marker placement guidance missing '+lang);
+                  await page.locator('.atlas-create-pin-btn').click();
+                  check(await page.locator('.atlas-pin').count()>200,
+                    'Existing points not restored when cancelling marker mode '+lang);
+                  check(await page.locator('.atlas-cluster').count()>0,
+                    'Clusters not restored on cancelling marker mode '+lang);
+                }
                 if(width===390){
                   const chips=page.locator('.vi-map-filter-chips button[data-value]');
                   check(await chips.count()===5,'V215 mobile quick filters changed '+lang);
                 }
-                if(lang==='es')await page.screenshot({path:'v216-qa-screenshots/map-'+width+'.png',fullPage:false});
                 results.push({lang,width,...state,matches});
                 await page.close();
               }
@@ -159,3 +210,5 @@ jobs:
 # Extra ES EN PT category, filter and UI coverage
 
 # QA rerun after V216.1 dark visual overhaul and desktop screenshot at 1856
+
+# V216.2 UX tests: collapsed groups, scrollable status, visible cluster legend and marker editor isolation
