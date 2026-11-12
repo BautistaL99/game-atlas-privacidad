@@ -79,3 +79,17 @@
  .atlas-v119 .atlas-search-results{max-height:178px}
  .atlas-v119 .atlas-search-label{width:100%;min-width:0}
 }
+
+/* On 1024px laptops the app's existing side navigation also uses horizontal
+   space. Keep a compact 210px map filter rail to prioritize the map. */
+@media(min-width:980px) and (max-width:1150px){
+ .atlas-v119 .atlas-layout{
+   grid-template-columns:minmax(190px,210px) minmax(0,1fr)!important;
+   gap:8px!important
+ }
+ body:has(.atlas-v119) .container{
+   width:100%!important;max-width:none!important;
+   margin:0!important;padding-left:8px!important;padding-right:8px!important
+ }
+ .atlas-v119 .atlas-filters{padding:8px!important}
+}
