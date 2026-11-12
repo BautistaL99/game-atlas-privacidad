@@ -387,8 +387,8 @@ function mapRouteMarkup(){
  if(!points)return '';
  const coords=points.map(p=>[(p.x/100*MAP_WIDTH).toFixed(1),(p.y/100*MAP_HEIGHT).toFixed(1)]);
  const shape=coords.map(p=>p.join(',')).join(' ');
- const dots=coords.map(([x,y],i)=>'<circle cx="'+x+'" cy="'+y+'" r="14" fill="#123744" stroke="#f1fff9" stroke-width="3"/><text x="'+x+'" y="'+(Number(y)+5)+'" fill="#fff" text-anchor="middle" font-weight="900" font-size="15">'+(i+1)+'</text>').join('');
- return '<svg class="v217-route-overlay" viewBox="0 0 '+MAP_WIDTH+' '+MAP_HEIGHT+'" aria-hidden="true" focusable="false"><polyline points="'+shape+'" fill="none" stroke="#062d40" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/><polyline points="'+shape+'" fill="none" stroke="#66ffe3" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="16 9"/>'+dots+'</svg>';
+ const dots=points.map((p,i)=>'<span class="v217-route-stop" style="left:'+p.x+'%;top:'+p.y+'%" aria-hidden="true">'+(i+1)+'</span>').join('');
+ return '<svg class="v217-route-overlay" viewBox="0 0 '+MAP_WIDTH+' '+MAP_HEIGHT+'" aria-hidden="true" focusable="false"><polyline points="'+shape+'" fill="none" stroke="#062d40" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/><polyline points="'+shape+'" fill="none" stroke="#66ffe3" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="33 17"/></svg>'+dots;
 }
 
 function renderMap(){const pins=mapAdd?[]:mapShown(),all=allMapPins(),icons=Object.fromEntries(mapFilterCategories.map(c=>[c.id,c.icon]));const mapStyles=Object.fromEntries(mapFilterCategories.map(c=>[c.id,c]));const p=all.find(x=>x.id===mapActive),linked=p&&mapItem(p);const personalPins=mapCustom();const summary=linked?tr(linked.summary||linked.desc):(p?.note||tr({es:'Ubicación provisional',en:'Provisional location',pt:'Localização provisória'}));
