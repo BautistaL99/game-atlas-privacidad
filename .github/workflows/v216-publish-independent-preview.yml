@@ -110,3 +110,5 @@ jobs:
           echo 'La web publica /app y Firebase NO se modifican.' >> "$GITHUB_STEP_SUMMARY"
 
 # V216.1 dark-map layout preview refresh after browser QA pass (desktop + mobile)
+
+# Refresh preview assets with cache busting for V216.1 dark design
