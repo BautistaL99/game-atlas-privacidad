@@ -1,0 +1,110 @@
+name: V215 publicar Firebase gratis usando GitHub publico
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/v215-firebase-public-free-deploy.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: game-atlas-firebase-v215-public
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Comprobar V215 aprobada y feeds publicos
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'JS'
+          import {existsSync,readFileSync} from 'node:fs';
+          const required=[
+            'app/index.html','app/sw.js','app/mobile-v215.css','app/mobile-v215.js',
+            'app/mobile-v212.css','app/mobile-v212.js','app/mobile-v212-fixes.css',
+            'app/mobile-v211.css','app/mobile-v211.js',
+            'updates/catalog-envelope.json','updates/community-envelope-v205.json',
+            'sitemap.xml','guia-gta-6/index.html'
+          ];
+          for(const p of required)if(!existsSync(p)||!readFileSync(p).length)throw Error('Falta '+p);
+          const html=readFileSync('app/index.html','utf8'),sw=readFileSync('app/sw.js','utf8');
+          for(const name of ['mobile-v211.css','mobile-v211.js','mobile-v212-fixes.css','mobile-v212.css','mobile-v212.js','mobile-v215.css','mobile-v215.js']){
+            if(!html.includes('./'+name+'?rev=visible-mobile-v215-20261112'))throw Error('La web no es V215: '+name);
+          }
+          if(!sw.includes("const CACHE='game-atlas-safe-v215-mobile'"))throw Error('Cache SW no corresponde a V215');
+          for(const p of ['updates/catalog-envelope.json','updates/community-envelope-v205.json'])JSON.parse(readFileSync(p,'utf8'));
+          console.log('V215 correcta, feeds preservados y archivos completos');
+          JS
+      - name: Comprobar autorizacion Firebase sin exponer credenciales
+        env:
+          FIREBASE_SERVICE_ACCOUNT_GTA6MAPA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_GTA6MAPA }}
+        shell: bash
+        run: |
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT_GTA6MAPA" ]; then
+            echo '::error title=Falta Firebase en GitHub PUBLICO::No existe el secreto FIREBASE_SERVICE_ACCOUNT_GTA6MAPA en este repositorio. No se publico nada.'
+            exit 1
+          fi
+          node --input-type=module <<'JS'
+          let key;
+          try {key=JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_GTA6MAPA)}catch{throw Error('Cuenta Firebase no es JSON')}
+          if(key.type!=='service_account'||key.project_id!=='gta6mapa'||!key.private_key)throw Error('Cuenta Firebase incorrecta; se cancela');
+          console.log('Cuenta de servicio gta6mapa presente (sin mostrar secretos)');
+          JS
+      - name: Armar espejo Firebase con version V215 ya publicada en Pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p firebase-hosting/site
+          cp -a app updates guia-gta-6 firebase-hosting/site/
+          cp index.html sitemap.xml firebase-hosting/site/
+          find . -maxdepth 1 -type f -name 'google*.html' -exec cp '{}' firebase-hosting/site/ ';'
+          cat > firebase.json <<'JSON'
+          {
+            "hosting": {
+              "site": "gta6mapa",
+              "public": "firebase-hosting/site",
+              "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+              "redirects": [{"source": "/", "destination": "/app/", "type": 302}],
+              "headers": [
+                {"source": "**/*.html", "headers": [{"key": "Cache-Control", "value": "no-cache, no-store, must-revalidate"}]},
+                {"source": "**/*.json", "headers": [{"key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate"}]},
+                {"source": "**/sw.js", "headers": [{"key": "Cache-Control", "value": "no-cache, no-store, must-revalidate"}]}
+              ]
+            }
+          }
+          JSON
+          echo '{"projects":{"default":"gta6mapa"}}' > .firebaserc
+          cmp app/index.html firebase-hosting/site/app/index.html
+          cmp updates/catalog-envelope.json firebase-hosting/site/updates/catalog-envelope.json
+          cmp updates/community-envelope-v205.json firebase-hosting/site/updates/community-envelope-v205.json
+      - name: Desplegar V215 en gta6mapa.web.app
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_GTA6MAPA }}
+          projectId: gta6mapa
+          channelId: live
+          entryPoint: .
+          firebaseToolsVersion: '15.34.1'
+      - name: Confirmar que Firebase sirve el HTML CSS y feeds exactos
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 15); do
+            if curl -fsSL --max-time 18 "https://gta6mapa.web.app/app/index.html?release=${GITHUB_SHA}" -o /tmp/index-v215.html &&
+               cmp -s app/index.html /tmp/index-v215.html &&
+               curl -fsSL --max-time 18 "https://gta6mapa.web.app/app/mobile-v215.css?release=${GITHUB_SHA}" -o /tmp/style-v215.css &&
+               cmp -s app/mobile-v215.css /tmp/style-v215.css &&
+               curl -fsSL --max-time 18 "https://gta6mapa.web.app/updates/catalog-envelope.json?release=${GITHUB_SHA}" -o /tmp/feed-v215.json &&
+               cmp -s updates/catalog-envelope.json /tmp/feed-v215.json &&
+               curl -fsSL --max-time 18 "https://gta6mapa.web.app/updates/community-envelope-v205.json?release=${GITHUB_SHA}" -o /tmp/community-v215.json &&
+               cmp -s updates/community-envelope-v205.json /tmp/community-v215.json; then
+              echo 'V215 PUBLICADA Y VERIFICADA EN FIREBASE'
+              echo 'Sitio oficial: https://gta6mapa.web.app/app/' >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            sleep 6
+          done
+          echo '::error::Firebase no devuelve aun la version V215 identica a la aprobada'
+          exit 1
