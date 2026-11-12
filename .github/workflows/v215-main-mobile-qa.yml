@@ -1,0 +1,101 @@
+name: V215 QA de /app movil publicado sin cambios PC
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/v215-main-mobile-qa.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Install browser
+        run: npm install --no-save --ignore-scripts playwright-core@1.56.1
+      - name: Wait for the published /app to contain V215 CSS
+        run: |
+          url='https://bautistal99.github.io/game-atlas-privacidad/app/index.html?qa=v215-live'
+          for i in $(seq 1 35); do
+            if curl --fail --silent --show-error --max-time 15 "$url" | grep -q 'mobile-v215.css'; then
+              echo "V215 HTML deployed"; exit 0
+            fi
+            sleep 5
+          done
+          echo 'Production page did not deploy V215';exit 1
+      - name: Test live browser on 320, 390, 490, 1024 wide screens
+        run: |
+          node --input-type=module <<'JS'
+          import {chromium} from 'playwright-core';
+          const url='https://bautistal99.github.io/game-atlas-privacidad/app/index.html?test=v215-published';
+          const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
+          const check=(yes,msg)=>{if(!yes)throw Error(msg)};
+          try {
+            for(const width of [320,390,490,1024]){
+              const page=await browser.newPage({viewport:{width,height:800},isMobile:width<701,hasTouch:width<701,deviceScaleFactor:1});
+              const errs=[];page.on('pageerror',e=>errs.push(e.message));
+              await page.goto(url+'#/mapa',{waitUntil:'domcontentloaded',timeout:45000});
+              await page.locator('.atlas-map .vi-map-filter-chips button').first().waitFor({timeout:25000});
+              await page.waitForTimeout(250);
+              const stats=await page.evaluate(()=>{
+                const r=e=>{if(!e)return null;const x=e.getBoundingClientRect();return {x:x.x,y:x.y,w:x.width,h:x.height}};
+                const chip=document.querySelector('.atlas-map .vi-map-filter-chips'),els=[...chip.querySelectorAll('button')];
+                return {docW:document.documentElement.scrollWidth,chip:r(chip),
+                  buttons:els.map(e=>({label:e.textContent.trim(),id:e.dataset.value,...r(e)})),
+                  hasV215:[...document.styleSheets].some(s=>s.href?.includes('mobile-v215.css'))};
+              });
+              check(stats.hasV215,'V215 style not loaded '+width);
+              check(stats.docW<=width+2,'horizontal overflow '+width);
+              if(width<701){
+                check(stats.buttons.length===5,'five filters missing');
+                check(stats.chip.h<=40&&new Set(stats.buttons.map(b=>Math.round(b.y))).size===1,
+                  'map filter strip not a single row '+width+' '+JSON.stringify(stats));
+                check(stats.buttons.map(b=>b.label).join('|')==='Regiones|Autos|Misiones|Lugares|Míos',
+                  'mobile labels not compact: '+JSON.stringify(stats.buttons));
+                await page.locator('.vi-map-filter-chips button[data-value="vehiculos"]').click();
+                await page.waitForTimeout(150);
+                check(await page.locator('.vi-map-filter-chips button[data-value="vehiculos"]').getAttribute('aria-pressed')==='true','map filter tap not working '+width);
+                await page.locator('.atlas-map [data-map="fullscreen"]').click();
+                const full=await page.evaluate(()=>{
+                  const map=document.querySelector('.atlas-v119');
+                  const btn=document.querySelector('.atlas-v119 .atlas-map .atlas-mobile-filter-toggle');
+                  const st=getComputedStyle(btn);
+                  return {on:map.classList.contains('vi-fullscreen-map'),w:btn.getBoundingClientRect().width,bg:st.backgroundColor};
+                });
+                check(full.on&&full.bg==='rgb(89, 243, 220)'&&full.w>=120,'fullscreen filters not highlighted '+width+' '+JSON.stringify(full));
+                await page.goto(url+'#/',{waitUntil:'domcontentloaded'});
+                await page.locator('#vi-discovery-cards').waitFor({timeout:25000});
+                const arrows=await page.evaluate(()=>{
+                  const nav=document.querySelector('.vi-discovery-nav');const rect=nav.getBoundingClientRect();
+                  const card=document.querySelector('#vi-discovery-cards').getBoundingClientRect();
+                  return {w:rect.width,h:rect.height,y:rect.y,cardBottom:card.bottom,btn:[...nav.querySelectorAll('button')].map(x=>x.getBoundingClientRect().width)};
+                });
+                check(arrows.w<=125&&arrows.h<=36&&arrows.y>=arrows.cardBottom-1,'discover arrows not compact '+width+' '+JSON.stringify(arrows));
+                await page.goto(url+'#/noticias',{waitUntil:'domcontentloaded'});
+                await page.locator('.vi-news-tabs a').first().waitFor({timeout:25000});
+                const hero=await page.locator('.vi-news-hero').boundingBox();
+                const tabs=await page.locator('.vi-news-tabs').boundingBox();
+                check(hero.height<150&&tabs.height<=105,'news still too tall '+width+' '+JSON.stringify({hero,tabs}));
+                await page.evaluate(()=>scrollTo(0,100));
+                const before=await page.evaluate(()=>scrollY);
+                await page.locator('.vi-news-tabs a[href="#/noticias/oficiales"]').click();
+                await page.waitForTimeout(100);
+                const after=await page.evaluate(()=>({route:location.hash,scrollY}));
+                check(after.route==='#/noticias/oficiales'&&Math.abs(after.scrollY-before)<8,
+                  'news tab causes jump '+width+' '+JSON.stringify({before,after}));
+                console.log('MOBILE /app OK '+width+' '+JSON.stringify({chip:stats.chip,labels:stats.buttons.map(x=>x.label),full,arrows,newsHeroHeight:hero.height}));
+              } else {
+                check(stats.buttons[1]?.label.includes('Vehículos'),'Desktop categories changed');
+                await page.goto(url+'#/noticias',{waitUntil:'domcontentloaded'});
+                await page.locator('.vi-news-tabs a').first().waitFor();
+                check(await page.locator('.vi-news-tabs').evaluate(e=>getComputedStyle(e).display)==='flex','Desktop news tabs changed');
+                console.log('DESKTOP /app OK '+width+' '+JSON.stringify(stats.buttons.map(x=>x.label)));
+              }
+              check(errs.length===0,'browser JS errors '+width+': '+errs.join('; '));
+              await page.close();
+            }
+          }finally {await browser.close()}
+          JS
