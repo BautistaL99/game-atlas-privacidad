@@ -370,7 +370,44 @@ function renderMap(){const pins=mapShown(),all=allMapPins(),icons=Object.fromEnt
 }
 function mapPopupPosition(){const el=document.getElementById('mapCanvas'),p=document.getElementById('mapPopup');if(!el||!p)return;const fit=viMapFit(el),scale=fit*mapZoom,cx=(el.clientWidth-MAP_WIDTH*fit)/2,cy=(el.clientHeight-MAP_HEIGHT*fit)/2,x=mapDX+cx+Number(p.dataset.x)*(MAP_WIDTH/100)*scale+12,y=mapDY+cy+Number(p.dataset.y)*(MAP_HEIGHT/100)*scale-12;p.style.left=Math.max(10,Math.min(el.clientWidth-355,x))+'px';p.style.top=Math.max(10,Math.min(el.clientHeight-295,y))+'px';}
 function viMapFit(el){const full=!!el.closest('.vi-fullscreen-map');return (full?Math.max:Math.min)(el.clientWidth/MAP_WIDTH,el.clientHeight/MAP_HEIGHT)}
-function mapTransform(){const el=document.getElementById('mapCanvas'),stage=document.getElementById('mapStage');if(!el||!stage)return;const fit=viMapFit(el);stage.style.transform=`translate(${mapDX+(el.clientWidth-MAP_WIDTH*fit)/2}px,${mapDY+(el.clientHeight-MAP_HEIGHT*fit)/2}px) scale(${fit*mapZoom})`;mapPopupPosition();}
+
+/* V216: progressive marker clusters. A cluster represents an exact count of
+   currently-filtered locations; clicking it centers/zooms without changing filters.
+   All text labels, search selection and persistent progress remain unchanged. */
+function mapRefreshClusters(){
+ const stage=document.getElementById('mapStage');if(!stage)return;
+ const tier=mapQuery.trim()||mapAdd?'none':mapZoom<1.5?'wide':mapZoom<2.5?'district':mapZoom<3.8?'street':mapZoom<5?'fine':'none';
+ if(stage.dataset.v216ClusterTier===tier)return;
+ stage.dataset.v216ClusterTier=tier;
+ stage.querySelectorAll('button.atlas-cluster').forEach(el=>el.remove());
+ const original=[...stage.querySelectorAll('button.atlas-pin:not(.atlas-cluster)')];
+ for(const el of original){el.style.visibility='';el.style.pointerEvents='';}
+ if(tier==='none')return;
+ const grid={wide:14,district:9,street:5.3,fine:2.9}[tier];
+ const groups=new Map();
+ for(const el of original){
+  const x=parseFloat(el.style.left),y=parseFloat(el.style.top);
+  if(!Number.isFinite(x)||!Number.isFinite(y))continue;
+  const key=Math.floor(x/grid)+','+Math.floor(y/grid);
+  if(!groups.has(key))groups.set(key,[]);
+  groups.get(key).push({el,x,y});
+ }
+ for(const group of groups.values()){
+  if(group.length<2)continue;
+  for(const p of group){p.el.style.visibility='hidden';p.el.style.pointerEvents='none';}
+  const x=group.reduce((a,p)=>a+p.x,0)/group.length;
+  const y=group.reduce((a,p)=>a+p.y,0)/group.length;
+  const btn=document.createElement('button');btn.type='button';btn.className='atlas-cluster';
+  btn.dataset.map='cluster';btn.dataset.x=String(x);btn.dataset.y=String(y);
+  btn.style.left=x+'%';btn.style.top=y+'%';
+  const number=group.length;btn.textContent=number>999?'999+':String(number);
+  const label=tr({es:number+' ubicaciones; acercar para separarlas',en:number+' locations; zoom in to split',pt:number+' locais; amplie para separar'});
+  btn.title=label;btn.setAttribute('aria-label',label);
+  stage.appendChild(btn);
+ }
+}
+
+function mapTransform(){const el=document.getElementById('mapCanvas'),stage=document.getElementById('mapStage');if(!el||!stage)return;const fit=viMapFit(el);stage.style.transform=`translate(${mapDX+(el.clientWidth-MAP_WIDTH*fit)/2}px,${mapDY+(el.clientHeight-MAP_HEIGHT*fit)/2}px) scale(${fit*mapZoom})`;mapPopupPosition();mapRefreshClusters();}
 function mapUpdate(){const root=document.getElementById('mapApp');if(root){const panel=document.getElementById('atlas-map-filter-panel');const previousY=panel?.scrollTop||0;const scroll=panel?.querySelector('.atlas-filter-scroll')?.scrollTop||0;root.innerHTML=renderMap();mapBind();queueMicrotask(()=>window.viApplyI18n?.());const next=document.getElementById('atlas-map-filter-panel');if(next){next.scrollTop=previousY;const content=next.querySelector('.atlas-filter-scroll');if(content)content.scrollTop=scroll;}}} // Crucial: reconnect dragging after every re-render.
 function mapChangeZoom(mult,x,y){const el=document.getElementById('mapCanvas');if(!el)return;const fit=viMapFit(el),centerX=(el.clientWidth-MAP_WIDTH*fit)/2,centerY=(el.clientHeight-MAP_HEIGHT*fit)/2,next=Math.min(6,Math.max(.85,mapZoom*mult)),ratio=next/mapZoom;mapDX=x-(x-mapDX-centerX)*ratio-centerX;mapDY=y-(y-mapDY-centerY)*ratio-centerY;mapZoom=next;mapTransform();}
 let mapDrag=null; const mapPointers=new Map(); let mapPinch=null;let mapPanEnabled=true;
@@ -396,8 +433,19 @@ function mapBind(){const el=document.getElementById('mapCanvas');if(!el)return;m
  el.addEventListener('pointerup',e=>{if(e.pointerType==='touch'||!mouseDrag)return;const d=mouseDrag;mouseDrag=null;if(d.moved)return;if(!mapAdd){if(mapActive){mapActive=null;mapUpdate()}return}const r=el.getBoundingClientRect(),fit=viMapFit(el),scale=fit*mapZoom,cx=(el.clientWidth-MAP_WIDTH*fit)/2,cy=(el.clientHeight-MAP_HEIGHT*fit)/2;mapDraft={x:Math.max(0,Math.min(100,(e.clientX-r.left-mapDX-cx)/scale/(MAP_WIDTH/100))),y:Math.max(0,Math.min(100,(e.clientY-r.top-mapDY-cy)/scale/(MAP_HEIGHT/100)))};mapActive=null;mapUpdate()});
  el.addEventListener('pointercancel',()=>{mouseDrag=null});
 }
-function mapFocusPin(id){const p=allMapPins().find(x=>x.id===id),el=document.getElementById('mapCanvas');if(!p||!el)return;const fit=viMapFit(el),scale=fit*mapZoom,cx=(el.clientWidth-MAP_WIDTH*fit)/2,cy=(el.clientHeight-MAP_HEIGHT*fit)/2;mapDX=el.clientWidth/2-cx-p.x*(MAP_WIDTH/100)*scale;mapDY=el.clientHeight/2-cy-p.y*(MAP_HEIGHT/100)*scale;mapActive=p.id;mapMissing=false;mapCompleted=false;mapFavOnly=false;mapQuery='';mapCategories=[...new Set([...mapCategories,p.category])];mapUpdate()}
+function mapFocusPin(id){const p=allMapPins().find(x=>x.id===id),el=document.getElementById('mapCanvas');if(!p||!el)return;if(mapZoom<4.95)mapZoom=4.95;const fit=viMapFit(el),scale=fit*mapZoom,cx=(el.clientWidth-MAP_WIDTH*fit)/2,cy=(el.clientHeight-MAP_HEIGHT*fit)/2;mapDX=el.clientWidth/2-cx-p.x*(MAP_WIDTH/100)*scale;mapDY=el.clientHeight/2-cy-p.y*(MAP_HEIGHT/100)*scale;mapActive=p.id;mapMissing=false;mapCompleted=false;mapFavOnly=false;mapQuery='';mapCategories=[...new Set([...mapCategories,p.category])];mapUpdate()}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-map]');if(!b)return;e.preventDefault();const a=b.dataset.map,v=b.dataset.value;
+ if(a==='cluster'){
+  const el=document.getElementById('mapCanvas');if(!el)return;
+  const x=Number(b.dataset.x),y=Number(b.dataset.y);
+  if(!Number.isFinite(x)||!Number.isFinite(y))return;
+  const fit=viMapFit(el);
+  mapZoom=Math.min(6,Math.max(1.8,mapZoom*1.9));
+  const cx=(el.clientWidth-MAP_WIDTH*fit)/2,cy=(el.clientHeight-MAP_HEIGHT*fit)/2;
+  mapDX=el.clientWidth/2-cx-(x/100)*MAP_WIDTH*fit*mapZoom;
+  mapDY=el.clientHeight/2-cy-(y/100)*MAP_HEIGHT*fit*mapZoom;
+  mapTransform();return;
+ }
  if(a==='fullscreen'){if(!viMapFullscreen){viMapFullscreen=true;history.pushState({...history.state,viMapFullscreen:true},'',location.href)}else{viMapFullscreen=false;if(history.state?.viMapFullscreen)history.back()}mobileMapFiltersOpen=false;document.body.classList.toggle('vi-map-modal-active',viMapFullscreen);mapUpdate();return;}if(a==='mobile-filters'){if(mapAdd)return;mobileMapFiltersOpen=!mobileMapFiltersOpen;mapUpdate();return;}
  if(a==='gesture-mode'){mapPanEnabled=!mapPanEnabled;mapUpdate();return;}
  if(a==='quick-category'){mapCategories=mapCategories.includes(v)?mapCategories.filter(x=>x!==v):[...mapCategories,v];mapUpdate();return;}
