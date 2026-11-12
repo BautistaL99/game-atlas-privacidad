@@ -121,3 +121,5 @@ jobs:
           path: v216-qa-screenshots/
           retention-days: 7
           if-no-files-found: ignore
+
+# V216 browser QA rerun after syntax correction
