@@ -375,10 +375,10 @@ function mapSavedRouteCount(){try{const routes=JSON.parse(localStorage.getItem('
    transform the line and numbered stops together with the map. */
 let mapRouteDisplay=null;
 function mapRoutePoints(route){
- if(!route||route.mapVersion!==MAP_VERSION||!Array.isArray(route.stops)||route.stops.length<2||route.stops.length>20)return null;
+ if(!route||!Array.isArray(route.stops)||route.stops.length<2||route.stops.length>20)return null;
  const byId=new Map(allMapPins().map(p=>[p.id,p]));
  const points=route.stops.map(id=>byId.get(id));
- if(points.some(p=>!p||!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.x>100||p.y<0||p.y>100))return null;
+ if(points.some(p=>!p||p.legacy||!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.x>100||p.y<0||p.y>100))return null;
  return points;
 }
 function mapRouteMarkup(){
@@ -928,6 +928,7 @@ window.viMapRouteShow=(route,options={})=>{
  if(options.focus!==false)requestAnimationFrame(()=>document.getElementById('mapCanvas')?.scrollIntoView({behavior:'smooth',block:'center'}));
  return true;
 };
+window.viMapRouteCanDraw=(route)=>!!mapRoutePoints(route);
 window.viMapRouteHide=()=>{mapRouteDisplay=null;mapUpdate();};
 window.viMapRouteState=()=>mapRouteDisplay?.id||null;
 
