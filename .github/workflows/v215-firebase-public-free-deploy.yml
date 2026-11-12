@@ -112,7 +112,10 @@ jobs:
           import {readFileSync} from 'node:fs';
           import {createPrivateKey,createSign} from 'node:crypto';
           const cfg=JSON.parse(readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS,'utf8'));
-          try{createPrivateKey(cfg.private_key)}catch{throw Error('La clave privada no contiene una clave criptografica utilizable')}
+          let parsedKey;
+          try{parsedKey=createPrivateKey(cfg.private_key)}catch{throw Error('La clave privada no contiene una clave criptografica utilizable')}
+          console.log('Tipo criptografico de la clave recibida: '+parsedKey.asymmetricKeyType);
+          if(parsedKey.asymmetricKeyType!=='rsa')throw Error('La clave guardada no es RSA de Firebase, es una clave de otra funcion. No se puede publicar con esta clave.')
           const now=Math.floor(Date.now()/1000);
           const head=Buffer.from(JSON.stringify({alg:'RS256',typ:'JWT',kid:cfg.private_key_id})).toString('base64url');
           const payload=Buffer.from(JSON.stringify({
