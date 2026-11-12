@@ -37,20 +37,35 @@ jobs:
           for(const p of ['updates/catalog-envelope.json','updates/community-envelope-v205.json'])JSON.parse(readFileSync(p,'utf8'));
           console.log('V215 correcta, feeds preservados y archivos completos');
           JS
-      - name: Comprobar autorizacion Firebase sin exponer credenciales
+      - name: Preparar clave Firebase de forma segura (JSON o base64)
         env:
           FIREBASE_SERVICE_ACCOUNT_GTA6MAPA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_GTA6MAPA }}
         shell: bash
         run: |
-          if [ -z "$FIREBASE_SERVICE_ACCOUNT_GTA6MAPA" ]; then
-            echo '::error title=Falta Firebase en GitHub PUBLICO::No existe el secreto FIREBASE_SERVICE_ACCOUNT_GTA6MAPA en este repositorio. No se publico nada.'
-            exit 1
-          fi
+          set -euo pipefail
           node --input-type=module <<'JS'
+          import {writeFileSync} from 'node:fs';
+          const original=(process.env.FIREBASE_SERVICE_ACCOUNT_GTA6MAPA||'').trim();
+          if(!original)throw Error('No existe secreto Firebase en este repositorio; no se publico nada');
+          const candidates=[original.replace(/^\uFEFF/,'')];
+          const tick=String.fromCharCode(96);
+          if(original.startsWith(tick.repeat(3)))candidates.push(original.replace(new RegExp('^'+tick+'{3}(?:json)?\\s*','i'),'').replace(new RegExp('\\s*'+tick+'{3}$'),''));
+          const compact=original.replace(/\s+/g,'');
+          if(compact.length>100&&/^[A-Za-z0-9+/_=-]+$/.test(compact)){
+            try{candidates.push(Buffer.from(compact.replace(/-/g,'+').replace(/_/g,'/'),'base64').toString('utf8').replace(/^\uFEFF/,''))}catch{}
+          }
           let key;
-          try {key=JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_GTA6MAPA)}catch{throw Error('Cuenta Firebase no es JSON')}
-          if(key.type!=='service_account'||key.project_id!=='gta6mapa'||!key.private_key)throw Error('Cuenta Firebase incorrecta; se cancela');
-          console.log('Cuenta de servicio gta6mapa presente (sin mostrar secretos)');
+          for(const option of candidates){
+            try{
+              let obj=JSON.parse(option);
+              if(typeof obj==='string')obj=JSON.parse(obj);
+              if(obj&&typeof obj==='object'&&obj.type==='service_account'&&obj.project_id==='gta6mapa'&&obj.private_key&&obj.client_email){key=obj;break;}
+            }catch{}
+          }
+          if(!key)throw Error('El secreto esta guardado, pero no contiene un JSON valido de cuenta de servicio gta6mapa ni su version base64. NO se publico nada');
+          const dest=process.env.RUNNER_TEMP+'/firebase-gta6mapa-v215-service-account.json';
+          writeFileSync(dest,JSON.stringify(key),{mode:0o600});
+          console.log('Credencial valida de gta6mapa preparada exclusivamente en runner (sin mostrarla)');
           JS
       - name: Armar espejo Firebase con version V215 ya publicada en Pages
         shell: bash
@@ -79,14 +94,13 @@ jobs:
           cmp app/index.html firebase-hosting/site/app/index.html
           cmp updates/catalog-envelope.json firebase-hosting/site/updates/catalog-envelope.json
           cmp updates/community-envelope-v205.json firebase-hosting/site/updates/community-envelope-v205.json
-      - name: Desplegar V215 en gta6mapa.web.app
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_GTA6MAPA }}
-          projectId: gta6mapa
-          channelId: live
-          entryPoint: .
-          firebaseToolsVersion: '15.34.1'
+      - name: Desplegar Firebase LIVE con credencial temporal en runner
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-gta6mapa-v215-service-account.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx --yes firebase-tools@15.34.1 deploy --only hosting --project gta6mapa --non-interactive
       - name: Confirmar que Firebase sirve el HTML CSS y feeds exactos
         shell: bash
         run: |
