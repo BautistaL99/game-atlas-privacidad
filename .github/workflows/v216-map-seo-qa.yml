@@ -74,7 +74,7 @@ jobs:
                     imageLoaded:bg?.complete&&bg.naturalWidth>0,
                     bodyWidth:document.documentElement.scrollWidth,
                     placeholder:document.querySelector('#mapSearchText')?.placeholder,
-                    searchInRail:!!f?.contains(document.querySelector('#mapSearchText')),
+                    searchInRail:!!document.querySelector('.atlas-filters')?.contains(document.querySelector('#mapSearchText')),
                     railBg:getComputedStyle(document.querySelector('.atlas-filters')).backgroundImage,
                     groupBg:getComputedStyle(document.querySelector('.atlas-filter-group')).backgroundColor,
                     chipsDisplay:getComputedStyle(document.querySelector('.vi-map-filter-chips')).display,
