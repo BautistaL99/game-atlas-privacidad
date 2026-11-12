@@ -1,9 +1,10 @@
 /* V217 V216-preview: draggable PAGE scrollbar on the outer right edge.
  * Not a button inside the map; does not intercept map or pinch gestures. */
 (()=>{'use strict';
- const mobile=()=>window.matchMedia('(max-width:700px)').matches;
+ // Portrait AND landscape phones: landscape viewport can exceed 700 CSS px.
+ const mobile=()=>window.matchMedia('(max-width:700px), (pointer:coarse) and (max-width:1150px)').matches;
  const mapPage=()=>/^#\/mapa(?:[/?]|$)/.test(location.hash||'');
- const enabled=()=>mobile()&&mapPage()&&!document.body.classList.contains('vi-map-modal-active');
+ const enabled=()=>mobile()&&mapPage();
  const words={
   es:'Agarrá esta barra para subir o bajar la página',
   en:'Drag this bar to scroll the page up or down',
@@ -38,7 +39,10 @@
    e.preventDefault();e.stopPropagation();
    dragId=e.pointerId;
    try{rail.setPointerCapture(e.pointerId)}catch(_){}
-   seek(e.clientY);
+   if(document.body.classList.contains('vi-map-modal-active')){
+     document.querySelector('#mapCanvas [data-map="fullscreen"]')?.click();
+     requestAnimationFrame(()=>{seek(e.clientY);schedule()});
+   }else seek(e.clientY);
   });
   rail.addEventListener('pointermove',e=>{
    if(dragId!==e.pointerId)return;
@@ -62,18 +66,29 @@
   if(!rail||!thumb)return;
   if(!enabled()){rail.hidden=true;return}
   const max=scrollMax(),height=rail.getBoundingClientRect().height;
-  rail.hidden=max<35||height<70;
+  rail.hidden=height<70;
   if(rail.hidden)return;
   const th=Math.max(48,Math.min(height*.85,height*innerHeight/(max+innerHeight)));
   thumb.style.height=th+'px';
-  const value=Math.min(1,Math.max(0,scrollNode().scrollTop/max));
+  const value=max?Math.min(1,Math.max(0,scrollNode().scrollTop/max)):0;
   thumb.style.transform='translateY('+((height-th)*value)+'px)';
   rail.setAttribute('aria-valuenow',String(Math.round(value*100)));
+ }
+ function ensureRoutesAccess(){
+  if(!enabled())return;
+  const toolbar=document.querySelector('#mapApp .atlas-v119 .atlas-toolbar');
+  if(!toolbar||toolbar.querySelector('.v218-route-access'))return;
+  const button=document.createElement('button');
+  button.type='button';button.dataset.map='routes';button.className='v218-route-access';
+  const lang=(document.documentElement.lang||'es').slice(0,2);
+  button.textContent=({es:'🧭 Rutas',en:'🧭 Routes',pt:'🧭 Rotas'})[lang]||'🧭 Rutas';
+  button.title=({es:'Ver y crear recorridos',en:'View and create routes',pt:'Ver e criar rotas'})[lang]||'Ver y crear recorridos';
+  toolbar.append(button);
  }
  function update(){
   queued=false;
   if(!enabled()){if(rail)rail.hidden=true;return}
-  attach();drawThumb();
+  attach();drawThumb();ensureRoutesAccess();
  }
  function schedule(){if(queued)return;queued=true;requestAnimationFrame(update)}
  addEventListener('scroll',schedule,{passive:true});
