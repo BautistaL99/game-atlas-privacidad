@@ -68,7 +68,7 @@
   const max=scrollMax(),height=rail.getBoundingClientRect().height;
   rail.hidden=height<70;
   if(rail.hidden)return;
-  const th=Math.max(48,Math.min(height*.85,height*innerHeight/(max+innerHeight)));
+  const th=Math.min(56,Math.max(38,height-4)); // small draggable handle; never an oversized scrollbar
   thumb.style.height=th+'px';
   const value=max?Math.min(1,Math.max(0,scrollNode().scrollTop/max)):0;
   thumb.style.transform='translateY('+((height-th)*value)+'px)';
