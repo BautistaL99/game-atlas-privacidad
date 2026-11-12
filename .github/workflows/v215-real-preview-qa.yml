@@ -1,0 +1,84 @@
+name: V215 verificar layout visual realmente publicado
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/v215-real-preview-qa.yml'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install --no-save --ignore-scripts playwright-core@1.56.1
+      - name: Compare mobile and desktop computed sizes in published Pages
+        run: |
+          node --input-type=module <<'JS'
+          import {chromium} from 'playwright-core';
+          const url='https://bautistal99.github.io/game-atlas-privacidad/revision-v215-compacta-nueva-20261111/index.html';
+          const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
+          const check=(yes,m)=>{if(!yes)throw Error(m)};
+          try {
+            for(const width of [320,390,490,1024]){
+              const page=await browser.newPage({viewport:{width,height:800},isMobile:width<=700,hasTouch:width<=700,deviceScaleFactor:1});
+              const errs=[];page.on('pageerror',e=>errs.push(e.message));
+              await page.goto(url+'?test=v215#/mapa',{waitUntil:'domcontentloaded',timeout:45000});
+              await page.locator('.atlas-map .vi-map-filter-chips button').first().waitFor({timeout:25000});
+              await page.waitForTimeout(250);
+              const map=await page.evaluate(()=>{
+                const box=e=>{const r=e?.getBoundingClientRect();return r?{x:r.x,y:r.y,w:r.width,h:r.height}:null};
+                const chips=document.querySelector('.atlas-map .vi-map-filter-chips');
+                const buttons=[...(chips?.querySelectorAll('button')||[])];
+                return {vw:innerWidth,docW:document.documentElement.scrollWidth,strip:box(chips),
+                  buttons:buttons.map(e=>({label:e.textContent.trim(),id:e.dataset.value,...box(e)})),
+                  hasV215:[...document.styleSheets].some(s=>s.href?.includes('mobile-v215.css')),
+                  fullscreenBefore:document.querySelector('.atlas-v119')?.classList.contains('vi-fullscreen-map')};
+              });
+              check(map.hasV215,'missing actual V215 CSS: '+width);
+              check(map.docW<=width+2,'horizontal overflow '+width+': '+map.docW);
+              if(width<=700){
+                check(map.buttons.length===5,'missing filters '+width);
+                check(new Set(map.buttons.map(b=>Math.round(b.y))).size===1,
+                  'filters still occupy multiple rows '+width+' '+JSON.stringify(map));
+                check(map.strip.h<=40,'map top strip not compact '+width+' '+map.strip.h);
+                check(map.buttons.map(b=>b.label).join('/')==='Regiones/Autos/Misiones/Lugares/Míos',
+                  'filters not shortened '+width+': '+map.buttons.map(b=>b.label));
+                await page.locator('.atlas-map [data-map="fullscreen"]').click();
+                const full=await page.evaluate(()=>{
+                  const el=document.querySelector('.atlas-v119'),btn=document.querySelector('.atlas-v119 .atlas-map .atlas-mobile-filter-toggle');
+                  const style=btn?getComputedStyle(btn):null;
+                  return {on:el?.classList.contains('vi-fullscreen-map'),width:btn?.getBoundingClientRect().width,
+                    bg:style?.backgroundColor,color:style?.color};
+                });
+                check(full.on,'fullscreen not enabled '+width);
+                check(full.width>=120&&full.bg==='rgb(89, 243, 220)',
+                  'fullscreen filter button not bright '+width+': '+JSON.stringify(full));
+                await page.goto(url+'?test=v215#/',{waitUntil:'domcontentloaded'});
+                await page.locator('.vi-discovery-nav button').first().waitFor({timeout:20000});
+                const controls=await page.evaluate(()=>{
+                  const nav=document.querySelector('.vi-discovery-nav');
+                  const rect=nav.getBoundingClientRect(),arrows=[...nav.querySelectorAll('button')];
+                  const card=document.querySelector('#vi-discovery-cards').getBoundingClientRect();
+                  return {w:rect.width,h:rect.height,y:rect.y,cardBottom:card.bottom,
+                    buttons:arrows.map(b=>({w:b.getBoundingClientRect().width,h:b.getBoundingClientRect().height}))};
+                });
+                check(controls.w<=125&&controls.h<=36,
+                  'carousel controls still big '+width+': '+JSON.stringify(controls));
+                check(controls.buttons.length===2&&controls.buttons.every(b=>b.w<=35),
+                  'carousel arrows still big '+width+': '+JSON.stringify(controls));
+                check(controls.y>=controls.cardBottom-1,
+                  'carousel arrows not below card '+width);
+                console.log('MOBILE '+width+' OK '+JSON.stringify({strip:map.strip,labels:map.buttons.map(b=>b.label),fullscreen:full,arrows:controls}));
+              }else{
+                check(map.buttons[1]?.label!=='Autos','PC map labels were changed');
+                console.log('DESKTOP '+width+' OK '+JSON.stringify(map.buttons.map(b=>b.label)));
+              }
+              check(errs.length===0,'browser exceptions '+width+': '+errs.join(' | '));
+              await page.close();
+            }
+          }finally{await browser.close()}
+          JS
