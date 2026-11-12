@@ -123,3 +123,5 @@ jobs:
           if-no-files-found: ignore
 
 # V216 browser QA rerun after syntax correction
+
+# QA after 1024px left rail refinement
