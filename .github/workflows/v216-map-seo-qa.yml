@@ -197,6 +197,52 @@ jobs:
                     'New marker not persisted in browser '+lang);
                 }
                 if(width===390){
+                  check(await page.locator('.v216-mobile-route-rail .v216-rail-routes').isVisible(),
+                    'Right-side mobile route rail missing '+lang);
+                  check(await page.locator('#mapCanvas').evaluate(x=>x.classList.contains('vi-map-scroll-enabled')
+                    && getComputedStyle(x).touchAction.includes('pan-y')),
+                    'Mobile map prevents page scroll by default '+lang);
+                  check(await page.locator('#vi-route-manager .vi-routes-header h2').count()===1,
+                    'Existing route manager is absent below map '+lang);
+                  const mode=page.locator('.v216-mobile-route-rail .v216-rail-scroll');
+                  await mode.click();
+                  check(await page.locator('#mapCanvas').evaluate(x=>x.classList.contains('vi-map-pan-enabled')
+                    && getComputedStyle(x).touchAction==='none'),
+                    'Map move toggle failed '+lang);
+                  await page.locator('.v216-mobile-route-rail .v216-rail-scroll').click();
+                  check(await page.locator('#mapCanvas').evaluate(x=>x.classList.contains('vi-map-scroll-enabled')),
+                    'Page-scroll toggle did not restore state '+lang);
+                  // The route control must actually navigate to an existing rendered section.
+                  await page.locator('.v216-mobile-route-rail .v216-rail-routes').click();
+                  await page.waitForFunction(()=>{
+                    const p=document.getElementById('vi-route-manager');
+                    if(!p)return false;
+                    const rect=p.getBoundingClientRect();
+                    return rect.top>=-20&&rect.top<window.innerHeight*0.75;
+                  },{timeout:7000});
+                  check(await page.evaluate(()=>window.scrollY)>120,
+                    'Routes button failed to scroll down below the map '+lang);
+                  await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+                  const routeFilter=page.locator('.v216-filter-routes');
+                  if(!(await routeFilter.isVisible())){
+                    await page.locator('[data-map="mobile-filters"]').first().click();
+                  }
+                  await routeFilter.click();
+                  await page.waitForFunction(()=>{
+                    const e=document.getElementById('vi-route-manager');
+                    return !!e&&e.getBoundingClientRect().top<window.innerHeight*.75;
+                  },{timeout:7000});
+                }
+                if(width===1440){
+                  const b=page.locator('.v216-filter-routes');
+                  check(await b.isVisible(),'Route filter entry not visible on desktop '+lang);
+                  await b.click();
+                  await page.waitForFunction(()=>{
+                    const el=document.getElementById('vi-route-manager');
+                    return !!el&&el.getBoundingClientRect().top<window.innerHeight*.75;
+                  },{timeout:7000});
+                }
+                if(width===390){
                   const chips=page.locator('.vi-map-filter-chips button[data-value]');
                   check(await chips.count()===5,'V215 mobile quick filters changed '+lang);
                 }
@@ -228,3 +274,5 @@ jobs:
 # V216.2 UX tests: collapsed groups, scrollable status, visible cluster legend and marker editor isolation
 
 # QA after shifting legend below mobile map and checking full personal-marker save flow
+
+# V216.3 mobile right routes rail, filter routes navigation and explicit page-scroll vs map-pan tests
