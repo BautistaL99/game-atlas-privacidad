@@ -315,7 +315,7 @@ else void loadCommunityMapPins();
 const mapItem=(p)=>p?.itemId?records.find(i=>i.id===p.itemId):null;
 const mapSearchAliases={
  regiones:'region regions regiões zona zonas area areas',
- lugares:'lugar lugares location locations place places sitio sitios serviços services poi hotel restaurant restaurante hospital police policia aeroporto airport aeropuerto beach praia playa metro train tren',
+ lugares:'lugar lugares locais local localização localizacao location locations place places sitio sitios serviço serviços services poi hotel restaurant restaurante hospital police policia aeroporto airport aeropuerto beach praia playa metro train tren',
  misiones:'mision misión mission missions missão missões missao missoes objetivos quests',
  vehiculos:'vehiculo vehículo vehiculos vehículos vehicle vehicles carro carros cars coches auto autos',
  armas:'arma armas weapon weapons armas gun',
@@ -326,7 +326,7 @@ const mapSearchAliases={
  personajes:'personaje personajes character characters personagem personagens',
  personal:'personal my mine meus meus marcadores markers',
  'tiendas-armas':'gun shop armeria armería armory loja de armas tienda de armas',
- garajes:'garage garages garaje garajes oficina taller workshop oficina mecânica'
+ garajes:'garage garages garagem garagens garaje garajes oficina oficinas taller workshop oficina mecânica mecánica'
 };
 function mapMatches(p,q,linkedIds){
  const item=mapItem(p);
