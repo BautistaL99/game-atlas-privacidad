@@ -1,0 +1,9 @@
+GTA VI Map Tiles (CC BY 4.0) — https://map.gtadb.org
+© 2025–2026 GTADB.ORG and contributors. Yanis V17 community reconstruction.
+Original repository: https://github.com/rolux/gtadb.org
+Pinned revision: 6acc1b555ed68255078b850f5d4a984610fa1910
+License: https://creativecommons.org/licenses/by/4.0/
+Changes: selected source zoom level 3, mosaicked 420 tiles, cropped out peripheral
+legend/reference panel, resized to 2400x1800, re-encoded as WEBP.
+This is an unofficial approximate community reconstruction, not Rockstar cartography.
+Original work not endorsed or sponsored by GTADB, Rockstar or Take-Two.
