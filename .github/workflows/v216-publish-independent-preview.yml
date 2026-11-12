@@ -68,7 +68,7 @@ jobs:
           txt=sw.read_text()
           assert "const CACHE='game-atlas-safe-v215-mobile';" in txt
           assert "const OLD_PREFIXES=['vi-game-assistant-','game-atlas-safe-'];" in txt
-          txt=txt.replace("const CACHE='game-atlas-safe-v215-mobile';","const CACHE='v216-leonida-standalone-preview-20261112';")
+          txt=txt.replace("const CACHE='game-atlas-safe-v215-mobile';","const CACHE='v216-leonida-standalone-preview-20261112-ux3';")
           txt=txt.replace("const OLD_PREFIXES=['vi-game-assistant-','game-atlas-safe-'];","const OLD_PREFIXES=['v216-leonida-standalone-preview-'];")
           # Ensure offline re-use never reaches the primary app.
           txt=txt.replace("'./mobile-v215.js','./routes-v145.css'","'./mobile-v215.js','./map-v216.css','./preview-storage-v216.js','./routes-v145.css'")
@@ -112,3 +112,5 @@ jobs:
 # V216.1 dark-map layout preview refresh after browser QA pass (desktop + mobile)
 
 # Refresh preview assets with cache busting for V216.1 dark design
+
+# UX3 publish: marker placement isolation, compact filters, user-visible cluster explanation, safe cache refresh
