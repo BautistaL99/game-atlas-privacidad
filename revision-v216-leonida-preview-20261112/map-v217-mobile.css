@@ -1,0 +1,55 @@
+/* V217: mobile-only UX for V216 preview. Neither /app nor desktop are affected. */
+.atlas-v119 #mapStage > .v217-route-overlay{
+  position:absolute;inset:0;width:100%;height:100%;
+  z-index:4;pointer-events:none;overflow:hidden;
+}
+.atlas-v119 #mapStage > .atlas-pin{z-index:6}
+.atlas-v119 #mapStage > .atlas-cluster{z-index:8}
+.vi-route-manager .v217-route-actions{
+  display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 12px;
+}
+.vi-route-manager .v217-route-actions button{
+  flex:1 1 180px;min-height:44px;font-weight:800;
+}
+.vi-route-manager .v217-route-actions .v217-route-draw{
+  color:#073637;background:#66eada;border:1px solid #c8fff8;
+}
+.vi-route-manager .v217-route-actions .v217-route-draw:hover{
+  color:#042b2e;background:#96fff1;
+}
+.vi-route-manager .v217-route-actions button[hidden]{display:none!important}
+@media(max-width:700px){
+  /* No extra buttons on top of map zoom/reset controls. */
+  .atlas-v119 .v216-mobile-route-rail,
+  .atlas-v119 .v216-rail-scroll,
+  .atlas-v119 .v216-rail-routes{display:none!important}
+  body .v217-page-scroll-rail{
+    box-sizing:border-box;position:fixed;
+    top:calc(84px + env(safe-area-inset-top,0px));
+    bottom:calc(94px + env(safe-area-inset-bottom,0px));
+    right:2px;width:27px;z-index:950;
+    border:0;background:transparent;cursor:grab;
+    touch-action:none;user-select:none;-webkit-user-select:none;
+    overscroll-behavior:contain;
+  }
+  body .v217-page-scroll-rail[hidden],
+  body.vi-map-modal-active .v217-page-scroll-rail{display:none!important}
+  body .v217-page-scroll-rail::before{
+    content:"";position:absolute;
+    top:0;bottom:0;right:5px;width:11px;
+    background:rgba(13,45,57,.68);
+    border:1px solid rgba(116,198,209,.55);
+    border-radius:15px;pointer-events:none;
+  }
+  body .v217-page-scroll-thumb{
+    position:absolute;top:0;right:5px;width:13px;
+    box-sizing:border-box;background:#6bf3dc;
+    border:1px solid #e8fffc;border-radius:15px;
+    box-shadow:0 1px 8px #0026349c;
+    pointer-events:none;will-change:transform;
+  }
+  body .v217-page-scroll-rail:active{cursor:grabbing}
+  body .v217-page-scroll-rail:focus-visible{
+    outline:2px solid #91fff0;outline-offset:1px;border-radius:12px;
+  }
+}
