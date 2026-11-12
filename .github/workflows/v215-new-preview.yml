@@ -1,0 +1,71 @@
+name: V215 publicar preview visual compacto independiente
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/v215-new-preview.yml'
+      - 'v215-mobile-src/mobile-v215.css'
+      - 'v215-mobile-src/mobile-v215.js'
+permissions:
+  contents: write
+concurrency:
+  group: game-atlas-v215-independent-mobile-preview
+  cancel-in-progress: true
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make totally new preview URL (never overwrite main /app)
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil,json
+          src=Path('revision-v211-web-movil-android-ios-20261111')
+          dst=Path('revision-v215-compacta-nueva-20261111')
+          assert src.is_dir() and not dst.exists()
+          shutil.copytree(src,dst)
+          shutil.copyfile('v215-mobile-src/mobile-v215.css',dst/'mobile-v215.css')
+          shutil.copyfile('v215-mobile-src/mobile-v215.js',dst/'mobile-v215.js')
+          html=(dst/'index.html').read_text(encoding='utf-8')
+          assert html.count('</head>')==1 and html.count('</body>')==1
+          html=html.replace('</head>','<link rel="stylesheet" href="./mobile-v215.css?rev=real-compact-one-row-v215"></head>')
+          html=html.replace('</body>','<script src="./mobile-v215.js?rev=real-compact-one-row-v215"></script></body>')
+          html=html.replace('content="V212 Android iOS"','content="V215 Android iOS"')
+          (dst/'index.html').write_text(html,encoding='utf-8')
+          js=(dst/'v211-preview-storage.js').read_text(encoding='utf-8')
+          js=js.replace('__game_atlas_v211_mobile_preview__:','__game_atlas_v215_mobile_preview__:')
+          (dst/'v211-preview-storage.js').write_text(js,encoding='utf-8')
+          manifest=json.loads((dst/'manifest.webmanifest').read_text(encoding='utf-8'))
+          manifest['id']='/game-atlas-privacidad/revision-v215-compacta-nueva-20261111/'
+          manifest['name']='Game Atlas Companion · V215 prueba móvil'
+          manifest['short_name']='Game Atlas V215'
+          (dst/'manifest.webmanifest').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          sw=(dst/'sw.js').read_text(encoding='utf-8')
+          assert "const OFFLINE=[" in sw
+          a=sw.index("const CACHE='")
+          b=sw.index("';",a)+2
+          sw=sw[:a]+"const CACHE='v215-independent-mobile-cache-1';"+sw[b:]
+          a=sw.index("const OLD_PREFIXES=")
+          b=sw.index(';',a)+1
+          sw=sw[:a]+"const OLD_PREFIXES=['v215-independent-mobile-cache-'];"+sw[b:]
+          sw=sw.replace("'./mobile-v212.js',","'./mobile-v212.js','./mobile-v215.css','./mobile-v215.js',")
+          assert "'./mobile-v215.js'" in sw
+          (dst/'sw.js').write_text(sw,encoding='utf-8')
+          print('V215 standalone preview created with new folder and cache scope')
+          PY
+          node --check revision-v215-compacta-nueva-20261111/mobile-v215.js
+          node --check revision-v215-compacta-nueva-20261111/sw.js
+      - name: Commit only separate preview folder
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add revision-v215-compacta-nueva-20261111/
+          git diff --cached --quiet && exit 0
+          git commit -m "V215 publish independent compact mobile preview; no production app changes"
+          git fetch origin main --quiet
+          git rebase origin/main
+          git push origin HEAD:main
+          echo 'Preview: https://bautistal99.github.io/game-atlas-privacidad/revision-v215-compacta-nueva-20261111/' >> "$GITHUB_STEP_SUMMARY"
