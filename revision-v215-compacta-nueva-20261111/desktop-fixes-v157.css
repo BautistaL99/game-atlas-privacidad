@@ -1,0 +1,11 @@
+/* V157 — Soft artwork blend: retain V156 bottom docking and separate legal notice.
+   Desktop web only; no effect on Android, sidebar sizing or user data. */
+@media (min-width:701px) {
+  html.vi-real-gallery .shell > .sidebar > .sidebar-photo {
+    filter:brightness(.86) saturate(.90)!important;
+    opacity:.95!important;
+    -webkit-mask-image:radial-gradient(ellipse 88% 82% at 50% 51%,#000 27%,rgba(0,0,0,.90) 50%,rgba(0,0,0,.45) 75%,transparent 100%)!important;
+    mask-image:radial-gradient(ellipse 88% 82% at 50% 51%,#000 27%,rgba(0,0,0,.90) 50%,rgba(0,0,0,.45) 75%,transparent 100%)!important;
+    background-image:linear-gradient(to bottom,#11132173 0%,transparent 34%,#11132129 75%,#11132199 100%),var(--vi-sidebar-photo,url('./assets/original/scene.svg'))!important;
+  }
+}

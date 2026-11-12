@@ -1,0 +1,252 @@
+/* V212 — Compact mobile-only refinements. PC styles and source data stay untouched. */
+@media (max-width:700px) {
+  /* News: expose the first story sooner without sacrificing the four filters. */
+  #root .vi-news-page .vi-news-hero {
+    padding:14px 16px!important;
+    margin:3px 0 11px!important;
+    border-radius:16px!important;
+  }
+  #root .vi-news-page .vi-news-hero .eyebrow {font-size:10px!important;letter-spacing:.12em!important}
+  #root .vi-news-page .vi-news-hero h1 {font-size:25px!important;line-height:1.12!important;margin:6px 0 5px!important}
+  #root .vi-news-page .vi-news-hero p {font-size:12px!important;line-height:1.35!important;margin:0!important}
+  #root .vi-news-page .vi-news-tabs {
+    display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;margin:0 0 12px!important;
+  }
+  #root .vi-news-page .vi-news-tabs a {
+    box-sizing:border-box!important;min-width:0!important;min-height:40px!important;
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    gap:3px!important;padding:6px 5px!important;line-height:1.2!important;
+    border-radius:10px!important;font-size:11px!important;white-space:normal!important;
+    text-align:center!important;
+  }
+  #root .vi-news-page .vi-news-archive-counter {flex:none!important;margin-left:2px!important}
+  #root .vi-news-page .vi-news-list {gap:12px!important}
+  #root .vi-news-page .vi-news-archive-note {padding:10px 12px!important;margin-bottom:12px!important;font-size:12px!important}
+
+  /* Discover: catalog link, then card, then familiar navigation below it. */
+  #root .home-v18 .v177-discovery-section {
+    display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+    gap:9px!important;padding:15px 12px 17px!important;
+  }
+  #root .home-v18 .v177-discovery-section .v18-block-header,
+  #root .home-v18 .v177-discovery-section .vi-discovery-head-actions {display:contents!important}
+  #root .home-v18 .v177-discovery-section .vi-discovery-heading {grid-row:1!important;min-width:0!important}
+  #root .home-v18 .v177-discovery-section .vi-discovery-heading h2 {font-size:clamp(23px,6vw,29px)!important}
+  #root .home-v18 .v177-discovery-section .vi-discovery-heading p {font-size:11px!important;line-height:1.35!important}
+  #root .home-v18 .v177-discovery-section .vi-discovery-catalog {
+    grid-row:2!important;justify-self:start!important;min-height:28px!important;
+    padding:2px 0!important;margin:0!important;
+  }
+  #root .home-v18 .v177-discovery-section #vi-discovery-cards {
+    grid-row:3!important;min-width:0!important;margin:0!important;gap:0!important;
+  }
+  #root .home-v18 .v177-discovery-section #vi-discovery-cards .content-card {
+    box-sizing:border-box!important;min-width:0!important;
+    padding:10px!important;gap:0!important;
+  }
+  #root .home-v18 .v177-discovery-section #vi-discovery-cards .content-card-link {
+    padding:0!important;min-height:0!important;margin:0!important;
+    grid-template-columns:94px minmax(0,1fr)!important;gap:10px!important;
+  }
+  #root .home-v18 .v177-discovery-section #vi-discovery-cards .card-inline-actions {
+    position:static!important;inset:auto!important;transform:none!important;
+    box-sizing:border-box!important;width:100%!important;height:auto!important;
+    min-height:41px!important;display:flex!important;flex-flow:row nowrap!important;
+    justify-content:center!important;align-items:center!important;gap:6px!important;
+    margin:7px 0 0!important;padding:7px 0 0!important;
+  }
+  #root .home-v18 .v177-discovery-section #vi-discovery-cards .quick-complete {
+    box-sizing:border-box!important;flex:0 1 auto!important;min-width:0!important;max-width:none!important;
+    height:34px!important;min-height:34px!important;max-height:34px!important;
+    padding:4px 8px!important;border-radius:9px!important;font-size:11px!important;
+    line-height:1.1!important;white-space:nowrap!important;
+  }
+  #root .home-v18 .v177-discovery-section #vi-discovery-cards .quick-fav {
+    box-sizing:border-box!important;position:static!important;flex:0 0 36px!important;
+    width:36px!important;min-width:36px!important;max-width:36px!important;
+    height:34px!important;min-height:34px!important;max-height:34px!important;
+    margin:0!important;padding:0!important;border-radius:9px!important;
+  }
+  #root .home-v18 .v177-discovery-section #vi-discovery-cards .vi-compare-pick {
+    box-sizing:border-box!important;flex:0 1 auto!important;min-width:0!important;
+    min-height:34px!important;height:34px!important;max-height:34px!important;
+    padding:4px 8px!important;border-radius:9px!important;font-size:11px!important;
+    line-height:1.1!important;white-space:nowrap!important;
+  }
+  #root .home-v18 .v177-discovery-section .vi-discovery-nav {
+    grid-row:4!important;display:grid!important;
+    grid-template-columns:38px minmax(0,1fr) 38px!important;
+    align-items:center!important;justify-self:center!important;
+    width:min(100%,228px)!important;box-sizing:border-box!important;
+    gap:10px!important;padding:0!important;margin:2px auto 0!important;
+    border:0!important;border-radius:0!important;background:transparent!important;
+    box-shadow:none!important;
+  }
+  #root .home-v18 .v177-discovery-section .vi-discovery-nav button {
+    box-sizing:border-box!important;width:38px!important;min-width:38px!important;
+    max-width:38px!important;height:38px!important;min-height:38px!important;
+    max-height:38px!important;padding:0!important;display:grid!important;place-items:center!important;
+    border:1px solid #7095a6!important;border-radius:10px!important;
+    background:#183342!important;color:#93f8ec!important;font-size:25px!important;
+    line-height:1!important;box-shadow:none!important;
+  }
+  #root .home-v18 .v177-discovery-section .vi-discovery-nav [data-vi-discover-count] {
+    display:block!important;min-width:0!important;text-align:center!important;
+    font-size:12px!important;font-weight:800!important;
+  }
+
+  /* Map: one slim swipeable row instead of a chunky two-row overlay. */
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips {
+    box-sizing:border-box!important;display:flex!important;flex-flow:row nowrap!important;
+    align-items:center!important;justify-content:flex-start!important;
+    left:8px!important;right:64px!important;top:8px!important;bottom:auto!important;
+    width:auto!important;max-width:calc(100% - 73px)!important;
+    min-height:39px!important;max-height:44px!important;
+    gap:4px!important;padding:3px!important;border-radius:11px!important;
+    overflow-x:auto!important;overflow-y:hidden!important;
+    scroll-snap-type:x proximity!important;scrollbar-width:none!important;
+    -webkit-overflow-scrolling:touch!important;touch-action:pan-x!important;
+  }
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips button {
+    box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;
+    justify-content:center!important;flex:0 0 auto!important;scroll-snap-align:start!important;
+    width:max-content!important;max-width:none!important;min-width:0!important;
+    min-height:32px!important;height:32px!important;padding:5px 9px!important;
+    font-size:10px!important;line-height:1.15!important;white-space:nowrap!important;
+    border-radius:8px!important;
+  }
+  #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle {
+    box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;
+    justify-content:center!important;gap:6px!important;
+    width:auto!important;min-width:88px!important;max-width:112px!important;
+    min-height:39px!important;height:39px!important;
+    padding:0 9px!important;font-size:0!important;line-height:1!important;
+    border-radius:10px!important;white-space:nowrap!important;
+  }
+  #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle::before {content:'☷';font-size:15px;line-height:1}
+  #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle::after {content:'Filtros';font-size:11px;line-height:1;font-weight:800}
+  #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle[aria-expanded='true']::after {content:'Cerrar'}
+}
+@media (max-width:355px) {
+  #root .home-v18 .v177-discovery-section #vi-discovery-cards .card-inline-actions {gap:4px!important}
+  #root .home-v18 .v177-discovery-section #vi-discovery-cards .quick-complete,
+  #root .home-v18 .v177-discovery-section #vi-discovery-cards .vi-compare-pick {padding-inline:5px!important;font-size:10px!important}
+  #root .home-v18 .v177-discovery-section #vi-discovery-cards .quick-fav {flex-basis:34px!important;width:34px!important;min-width:34px!important;max-width:34px!important}
+}
+
+/* V213 verification: five map categories remain visible without a wide ribbon. */
+@media(max-width:700px) {
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips {
+    display:grid!important;
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    grid-auto-flow:row!important;
+    align-items:stretch!important;
+    justify-items:stretch!important;
+    box-sizing:border-box!important;
+    position:absolute!important;
+    top:7px!important;bottom:auto!important;
+    left:7px!important;right:auto!important;
+    width:min(82%,288px)!important;
+    max-width:calc(100% - 66px)!important;
+    min-height:0!important;height:auto!important;max-height:none!important;
+    padding:4px!important;gap:3px!important;
+    overflow:visible!important;white-space:normal!important;
+    border-radius:11px!important;
+    scroll-snap-type:none!important;
+    touch-action:manipulation!important;
+  }
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips button {
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    box-sizing:border-box!important;
+    grid-column:span 2!important;
+    width:100%!important;min-width:0!important;max-width:none!important;
+    min-height:32px!important;height:32px!important;max-height:32px!important;
+    flex:none!important;
+    padding:4px 3px!important;border-radius:7px!important;
+    font-size:10px!important;font-weight:750!important;
+    line-height:1.1!important;text-align:center!important;
+    white-space:normal!important;overflow-wrap:normal!important;
+    scroll-snap-align:none!important;
+  }
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips button:nth-child(n+4) {
+    grid-column:span 3!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-map .vi-map-filter-chips {
+    max-width:calc(100% - 66px)!important;right:auto!important;
+  }
+}
+@media(max-width:360px) {
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips {
+    left:5px!important;gap:3px!important;padding:3px!important;
+  }
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips button {
+    font-size:9.5px!important;padding-inline:2px!important;
+  }
+}
+
+/* V214: extra compact quick filters on the embedded map, emphasis on fullscreen filter access. */
+@media (max-width:700px) {
+  /* Smaller embedded map: preserve all 5 readable, directly tappable categories. */
+  #root .atlas-v119:not(.vi-fullscreen-map) .atlas-map .vi-map-filter-chips {
+    width:min(66%,245px)!important;
+    max-width:calc(100% - 66px)!important;
+    min-height:0!important;
+    gap:2px!important;padding:3px!important;
+    border-radius:9px!important;
+    background:#071a25cf!important;
+    box-shadow:0 2px 7px #0005!important;
+  }
+  #root .atlas-v119:not(.vi-fullscreen-map) .atlas-map .vi-map-filter-chips button {
+    height:29px!important;min-height:29px!important;max-height:29px!important;
+    padding:2px 2px!important;
+    border-radius:7px!important;
+    font-size:9px!important;
+    line-height:1.08!important;
+    letter-spacing:-.01em!important;
+  }
+  /* Full screen: the bottom-left filter control must look actionable. */
+  #root .atlas-v119.vi-fullscreen-map .atlas-map .atlas-mobile-filter-toggle {
+    min-width:114px!important;max-width:134px!important;width:auto!important;
+    min-height:42px!important;height:42px!important;
+    background:linear-gradient(125deg,#14786f,#14615e)!important;
+    border:1.5px solid #a2ffef!important;
+    border-radius:11px!important;
+    color:#fff!important;
+    box-shadow:0 0 0 2px #70fff038,0 5px 17px #0009!important;
+    font-weight:900!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-map .atlas-mobile-filter-toggle::before {
+    color:#fff!important;font-size:17px!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-map .atlas-mobile-filter-toggle::after {
+    color:#fff!important;font-size:12px!important;font-weight:900!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-map .atlas-mobile-filter-toggle[aria-expanded='true'] {
+    background:linear-gradient(125deg,#24586b,#20455f)!important;
+    border-color:#b8fff3!important;
+  }
+  /* Discovery arrows: slim navigation row below the card. */
+  #root .home-v18 .v177-discovery-section .vi-discovery-nav {
+    grid-template-columns:36px minmax(0,1fr) 36px!important;
+    width:min(100%,168px)!important;
+    min-height:36px!important;height:36px!important;
+    gap:7px!important;margin:1px auto 0!important;
+  }
+  #root .home-v18 .v177-discovery-section .vi-discovery-nav button {
+    width:36px!important;min-width:36px!important;max-width:36px!important;
+    height:36px!important;min-height:36px!important;max-height:36px!important;
+    font-size:22px!important;border-radius:9px!important;
+  }
+  #root .home-v18 .v177-discovery-section .vi-discovery-nav [data-vi-discover-count] {
+    min-width:0!important;font-size:11px!important;
+  }
+}
+@media (max-width:355px) {
+  #root .atlas-v119:not(.vi-fullscreen-map) .atlas-map .vi-map-filter-chips {
+    width:min(73%,229px)!important;
+  }
+  #root .atlas-v119:not(.vi-fullscreen-map) .atlas-map .vi-map-filter-chips button {
+    font-size:8.5px!important;
+  }
+}
