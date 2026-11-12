@@ -63,8 +63,8 @@
   let html=`<section class="vi-routes" aria-label="${esc(l.title)}"><div class="vi-routes-header"><div><h2>🧭 ${esc(l.title)}</h2><p>${esc(l.hint)}</p></div><button class="vi-route-primary" data-vi-route="toggle-create">${esc(creating?l.cancel:l.create)}</button></div>`;
   if(pending){html+=`<div class="vi-route-import"><h3>${esc(l.importTitle)}</h3><p>${esc(l.importIntro)}</p><strong>${esc(pending.title)}</strong><p>${pending.stops.length} ${esc(l.step.toLowerCase())} · ${esc(l.warning)}</p><button data-vi-route="import">${esc(l.accept)}</button><button data-vi-route="reject-import">${esc(l.reject)}</button></div>`}
   if(creating){const w=searchWords(),list=createChoices(pins);html+=`<form id="vi-route-create"><label>${esc(l.routeName)} <input name="routeTitle" type="text" required maxlength="90" autocomplete="off"></label><p>${esc(l.createLabel)}</p><label class="v218-search-label" for="vi-route-pin-search">🔎 ${esc(w.search)}<input id="vi-route-pin-search" type="search" maxlength="120" autocomplete="off" placeholder="${esc(w.placeholder)}" value="${esc(routePinQuery)}"></label><p id="vi-route-search-status" class="v218-route-status" role="status">${esc(list.status)}</p><div class="vi-route-choices" id="vi-route-choices">${list.html}</div><button class="vi-route-primary" type="submit">${esc(l.save)}</button></form>`}
-  html+=`<div class="vi-route-list"><h3>${esc(l.mine)} / ${esc(l.curated)}</h3>${routes.length?routes.map(r=>{const completed=new Set(safeList(progress[r.id]));return `<button class="vi-route-choice ${selected===r.id?'is-active':''}" data-vi-route="open" data-id="${esc(r.id)}"><strong>${esc(localeText(r.title))}</strong><small>${esc(r.personal?l.local:l.signed)} · ${r.stops.filter(x=>completed.has(x)).length}/${r.stops.length}</small></button>`}).join(''):`<p>${esc(l.none)}</p>`}</div>`;
-  if(active){const d=new Set(safeList(progress[active.id]));const canDraw=window.viMapRouteCanDraw?.(active)===true;html+=`<div class="vi-route-detail"><h3>${esc(localeText(active.title))}</h3><p>${esc(localeText(active.summary)||l.warning)}</p><small>${esc(l.progress)}: ${active.stops.filter(x=>d.has(x)).length}/${active.stops.length}</small>${canDraw&&active.mapVersion!==ctx.mapVersion?'<p class="vi-route-alert">Ruta de un mapa anterior: puntos compatibles recalculados en el mapa actual. Trazado ilustrativo.</p>':''}<div class="v217-route-actions"><button class="v217-route-draw" type="button" data-vi-route="draw" data-id="${esc(active.id)}" ${!canDraw?'disabled':''}>🧭 ${esc(l.draw)}</button><button type="button" data-vi-route="hide" data-id="${esc(active.id)}" ${window.viMapRouteState?.()===active.id?'':'hidden'}>${esc(l.hide)} ✕</button></div><ol>${active.stops.map((id,i)=>stopCard(active,id,i)).join('')}</ol>${!canDraw?`<p class="vi-route-alert">${esc(l.obsolete)}</p>`:''}${active.personal?`<div class="vi-route-controls"><label class="v218-search-label">🔎 ${esc(searchWords().addSearch)} <input id="vi-route-add-search" type="search" maxlength="120" autocomplete="off" placeholder="${esc(searchWords().placeholder)}" value="${esc(routeAddQuery)}"></label><label>${esc(l.choose)} <select id="vi-route-new-stop">${addOptions(pins,active)}</select></label><button data-vi-route="add" data-id="${esc(active.id)}" ${active.stops.length>=STOPS_MAX||!addOptions(pins,active)?'disabled':''}>${esc(l.add)}</button><button data-vi-route="share" data-id="${esc(active.id)}">${esc(l.share)}</button><button data-vi-route="delete" data-id="${esc(active.id)}">🗑 ${esc(l.delete)}</button></div><small>${esc(l.shareHelp)}</small>`:''}</div>`}
+  html+=`<div class="vi-route-list"><h3>${esc(l.mine)} / ${esc(l.curated)}</h3>${routes.length?routes.map(r=>{const completed=new Set(safeList(progress[r.id]));return `<button class="vi-route-choice ${selected===r.id?'is-active':''}" data-vi-route="open" data-id="${esc(r.id)}" data-personal="${r.personal?'true':'false'}" title="${esc(localeText(r.title))}${r.personal?' · '+({es:'Mantené presionado para eliminar',en:'Press and hold to delete',pt:'Mantenha pressionado para excluir'})[ctx.locale]||'':''}"><strong>${esc(localeText(r.title))}</strong><small>${esc(r.personal?l.local:l.signed)} · ${r.stops.filter(x=>completed.has(x)).length}/${r.stops.length}</small></button>`}).join(''):`<p>${esc(l.none)}</p>`}</div>`;
+  if(active){const d=new Set(safeList(progress[active.id]));const canDraw=window.viMapRouteCanDraw?.(active)===true;html+=`<div class="vi-route-detail"><h3>${esc(localeText(active.title))}</h3><p>${esc(localeText(active.summary)||l.warning)}</p><small>${esc(l.progress)}: ${active.stops.filter(x=>d.has(x)).length}/${active.stops.length}</small>${canDraw&&active.mapVersion!==ctx.mapVersion?'<p class="vi-route-alert">Ruta de un mapa anterior: puntos compatibles recalculados en el mapa actual. Trazado ilustrativo.</p>':''}<div class="v217-route-actions"><button class="v217-route-draw" type="button" data-vi-route="draw" data-id="${esc(active.id)}" ${!canDraw?'disabled':''}>🧭 ${esc(l.draw)}</button><button type="button" data-vi-route="hide" data-id="${esc(active.id)}" ${window.viMapRouteState?.()===active.id?'':'hidden'}>${esc(l.hide)} ✕</button>${active.personal?`<button type="button" class="v219-route-delete" data-vi-route="delete" data-id="${esc(active.id)}">🗑 ${esc(l.delete)}</button>`:''}</div><ol>${active.stops.map((id,i)=>stopCard(active,id,i)).join('')}</ol>${!canDraw?`<p class="vi-route-alert">${esc(l.obsolete)}</p>`:''}${active.personal?`<div class="vi-route-controls"><label class="v218-search-label">🔎 ${esc(searchWords().addSearch)} <input id="vi-route-add-search" type="search" maxlength="120" autocomplete="off" placeholder="${esc(searchWords().placeholder)}" value="${esc(routeAddQuery)}"></label><label>${esc(l.choose)} <select id="vi-route-new-stop">${addOptions(pins,active)}</select></label><button data-vi-route="add" data-id="${esc(active.id)}" ${active.stops.length>=STOPS_MAX||!addOptions(pins,active)?'disabled':''}>${esc(l.add)}</button><button data-vi-route="share" data-id="${esc(active.id)}">${esc(l.share)}</button><!-- V219: delete button lives below Hide route, not duplicated here --></div><small>${esc(l.shareHelp)}</small>`:''}</div>`}
   if(message)html+=`<p class="vi-route-message" role="status">${esc(message)}</p>`;
   root.innerHTML=html+`<p class="vi-route-warning">${esc(l.warning)}</p></section>`;
  }
@@ -74,6 +74,57 @@
  }
  function maybeImport(){const match=(location.hash||'').match(/[?&]share=([A-Za-z0-9_-]+)/);if(!match||pending)return;try{pending=decodeShare(match[1]);selected=null;creating=false}catch(e){message=labels().invalid}finally{history.replaceState(history.state,'',location.pathname+location.search+'#/mapa')}}
  function toast(v){message=v;render()}
+
+ function deletePersonalRoute(id){
+  const candidate=all().find(r=>r.id===id&&r.personal);
+  if(!candidate)return false; // reviewed routes cannot be deleted
+  const l=labels();
+  if(!window.confirm('«'+localeText(candidate.title)+'»\n'+l.confirm))return false;
+  try{
+   persist(all().filter(r=>r.id!==id));
+   const progress=doneAll();delete progress[id];
+   localStorage.setItem(DONE,JSON.stringify(progress));
+  }catch(error){toast(clean(String(error?.message||l.invalid)));return false}
+  if(window.viMapRouteState?.()===id)window.viMapRouteHide?.();
+  if(selected===id)selected=null;
+  message=l.updated;
+  render();
+  return true;
+ }
+ // Press and hold a PERSONAL route tile to request deletion. Moving a finger to
+ // scroll the route list cancels the gesture; deletion always needs confirmation.
+ let routePress=null,suppressChoiceId='',suppressChoiceUntil=0;
+ function cancelRoutePress(){
+  if(routePress){clearTimeout(routePress.timer);routePress=null}
+ }
+ function longPressDelete(id){
+  suppressChoiceId=id;suppressChoiceUntil=Date.now()+1250;
+  cancelRoutePress();
+  deletePersonalRoute(id);
+ }
+ document.addEventListener('pointerdown',e=>{
+  const tile=e.target.closest?.('.vi-route-choice[data-personal="true"]');
+  cancelRoutePress();
+  if(!tile||(!['touch','pen'].includes(e.pointerType))||e.button!==0)return;
+  const id=tile.dataset.id;
+  routePress={id,pointerId:e.pointerId,x:e.clientX,y:e.clientY,timer:setTimeout(()=>{
+   if(routePress?.id===id)longPressDelete(id);
+  },650)};
+ },{passive:true});
+ document.addEventListener('pointermove',e=>{
+  if(!routePress||e.pointerId!==routePress.pointerId)return;
+  if(Math.abs(e.clientX-routePress.x)>12||Math.abs(e.clientY-routePress.y)>12)cancelRoutePress();
+ },{passive:true});
+ document.addEventListener('pointerup',cancelRoutePress,{passive:true});
+ document.addEventListener('pointercancel',cancelRoutePress,{passive:true});
+ document.addEventListener('scroll',cancelRoutePress,{passive:true,capture:true});
+ document.addEventListener('contextmenu',e=>{
+  const tile=e.target.closest?.('.vi-route-choice[data-personal="true"]');
+  if(!tile||!window.matchMedia?.('(pointer:coarse)').matches)return;
+  e.preventDefault();
+  if(suppressChoiceId===tile.dataset.id&&Date.now()<suppressChoiceUntil)return;
+  longPressDelete(tile.dataset.id);
+ });
  document.addEventListener('submit',e=>{if(e.target.id!=='vi-route-create')return;e.preventDefault();const l=labels(),data=new FormData(e.target),title=clean(data.get('routeTitle'),90),picks=[...draftSelected].filter(id=>pinMap().has(id)).slice(0,STOPS_MAX);if(!title||picks.length<2){toast(l.needsPoints);return}const a=all(),id='route-'+(crypto.randomUUID?.()||Date.now().toString(36)+'-'+Math.random().toString(36).slice(2));const next={id,title,personal:true,mapVersion:context().mapVersion,stops:picks,createdAt:new Date().toISOString()};try{persist([...a,next]);selected=id;creating=false;routePinQuery='';draftSelected.clear();window.viMapRouteShow?.(next,{focus:true});toast(l.updated)}catch(e){toast(String(e.message))}});
  document.addEventListener('change',e=>{if(e.target.name==='stop'){e.target.checked?draftSelected.add(e.target.value):draftSelected.delete(e.target.value);const status=document.getElementById('vi-route-search-status');if(status)status.textContent=createChoices(context().pins).status}});
  document.addEventListener('input',e=>{
@@ -82,7 +133,7 @@
  });
  document.addEventListener('click',async e=>{const b=e.target.closest('[data-vi-route]');if(!b)return;const a=b.dataset.viRoute,id=b.dataset.id,stop=b.dataset.pin,l=labels(),routes=all(),r=routes.find(x=>x.id===id);
   if(a==='toggle-create'){creating=!creating;routePinQuery='';draftSelected.clear();render();return}
-  if(a==='open'){selected=id;routeAddQuery='';creating=false;const chosen=routeById(id);message=window.viMapRouteShow?.(chosen,{focus:false})?'':l.obsolete;render();return}
+  if(a==='open'){if(id===suppressChoiceId&&Date.now()<suppressChoiceUntil){e.preventDefault();return}selected=id;routeAddQuery='';creating=false;const chosen=routeById(id);message=window.viMapRouteShow?.(chosen,{focus:false})?'':l.obsolete;render();return}
   if(a==='draw'){const chosen=routeById(id);if(!window.viMapRouteShow?.(chosen,{focus:true})){toast(l.obsolete)}else{message='';render()}return}
   if(a==='hide'){window.viMapRouteHide?.();render();return}
   if(a==='focus'){if(pinMap().has(stop))window.viRouteFocusPin?.(stop);return}
@@ -93,7 +144,7 @@
   if(a==='move'){const i=Number(b.dataset.index),to=i+Number(b.dataset.move);if(!Number.isInteger(i)||to<0||to>=r.stops.length)return;[r.stops[i],r.stops[to]]=[r.stops[to],r.stops[i]];persist(routes);if(window.viMapRouteState?.()===r.id)window.viMapRouteShow?.(r,{focus:false});toast(l.updated);return}
   if(a==='remove'){const i=Number(b.dataset.index);if(i<0||i>=r.stops.length||r.stops.length<=2){toast(l.needsPoints);return}r.stops.splice(i,1);persist(routes);if(window.viMapRouteState?.()===r.id)window.viMapRouteShow?.(r,{focus:false});toast(l.updated);return}
   if(a==='add'){const pin=document.getElementById('vi-route-new-stop')?.value;if(!pinMap().has(pin)||r.stops.includes(pin)||r.stops.length>=STOPS_MAX)return;r.stops.push(pin);routeAddQuery='';persist(routes);if(window.viMapRouteState?.()===r.id)window.viMapRouteShow?.(r,{focus:false});toast(l.updated);return}
-  if(a==='delete'){if(!window.confirm(l.confirm))return;persist(routes.filter(x=>x.id!==r.id));const d=doneAll();delete d[r.id];localStorage.setItem(DONE,JSON.stringify(d));if(window.viMapRouteState?.()===r.id)window.viMapRouteHide?.();selected=null;toast(l.updated);return}
+  if(a==='delete'){deletePersonalRoute(id);return}
   if(a==='share'){const url=new URL(location.href);if(url.protocol!=='https:'||/^(?:localhost|127\.0\.0\.1)$/.test(url.hostname)){toast(l.unavailable);return}const map=pinMap();const stops=r.stops.map(id=>map.get(id)).filter(Boolean).map(p=>({title:p.title.slice(0,100),note:(p.note||'').slice(0,220),x:p.x,y:p.y}));if(stops.length<2){toast(l.invalid);return}const pack={v:1,mapVersion:context().mapVersion,title:r.title,stops};const bytes=new TextEncoder().encode(JSON.stringify(pack));const b64=btoa(Array.from(bytes,c=>String.fromCharCode(c)).join('')).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');url.hash='/mapa?share='+b64;if(url.href.length>MAX_URL){toast(l.invalid);return}try{if(navigator.share)await navigator.share({title:r.title,url:url.href});else {await navigator.clipboard.writeText(url.href);toast(l.copy)}}catch(err){if(err.name!=='AbortError')toast(l.invalid)}return}
  });
  window.viApplySignedRoutes=(items)=>{const valid=Array.isArray(items)?items.filter(r=>r&&typeof r.id==='string'&&r.id.startsWith('official-')&&r.stops?.length>=2&&r.stops?.length<=STOPS_MAX):[];signedRoutes=valid.map(r=>({...r,personal:false}));render()};
