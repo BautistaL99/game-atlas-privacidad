@@ -134,3 +134,53 @@
   #root .home-v18 .v177-discovery-section #vi-discovery-cards .vi-compare-pick {padding-inline:5px!important;font-size:10px!important}
   #root .home-v18 .v177-discovery-section #vi-discovery-cards .quick-fav {flex-basis:34px!important;width:34px!important;min-width:34px!important;max-width:34px!important}
 }
+
+/* V213 verification: five map categories remain visible without a wide ribbon. */
+@media(max-width:700px) {
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips {
+    display:grid!important;
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    grid-auto-flow:row!important;
+    align-items:stretch!important;
+    justify-items:stretch!important;
+    box-sizing:border-box!important;
+    position:absolute!important;
+    top:7px!important;bottom:auto!important;
+    left:7px!important;right:auto!important;
+    width:min(82%,288px)!important;
+    max-width:calc(100% - 66px)!important;
+    min-height:0!important;height:auto!important;max-height:none!important;
+    padding:4px!important;gap:3px!important;
+    overflow:visible!important;white-space:normal!important;
+    border-radius:11px!important;
+    scroll-snap-type:none!important;
+    touch-action:manipulation!important;
+  }
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips button {
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    box-sizing:border-box!important;
+    grid-column:span 2!important;
+    width:100%!important;min-width:0!important;max-width:none!important;
+    min-height:32px!important;height:32px!important;max-height:32px!important;
+    flex:none!important;
+    padding:4px 3px!important;border-radius:7px!important;
+    font-size:10px!important;font-weight:750!important;
+    line-height:1.1!important;text-align:center!important;
+    white-space:normal!important;overflow-wrap:normal!important;
+    scroll-snap-align:none!important;
+  }
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips button:nth-child(n+4) {
+    grid-column:span 3!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-map .vi-map-filter-chips {
+    max-width:calc(100% - 66px)!important;right:auto!important;
+  }
+}
+@media(max-width:360px) {
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips {
+    left:5px!important;gap:3px!important;padding:3px!important;
+  }
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips button {
+    font-size:9.5px!important;padding-inline:2px!important;
+  }
+}
