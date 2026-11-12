@@ -3,6 +3,16 @@
   position:absolute;inset:0;width:100%;height:100%;
   z-index:4;pointer-events:none;overflow:hidden;
 }
+.atlas-v119 #mapStage > .v217-route-stop{
+  position:absolute;z-index:10;pointer-events:none;
+  display:grid;place-items:center;
+  box-sizing:border-box;width:38px;height:38px;
+  transform:translate(-50%,-50%) scale(var(--v216-pin-inverse,1));
+  border:3px solid #eefffb;border-radius:50%;
+  background:#064551;color:#fff;
+  font-size:18px;font-weight:900;line-height:1;
+  box-shadow:0 0 0 3px #052738b8,0 1px 8px #000a;
+}
 .atlas-v119 #mapStage > .atlas-pin{z-index:6}
 .atlas-v119 #mapStage > .atlas-cluster{z-index:8}
 .vi-route-manager .v217-route-actions{
