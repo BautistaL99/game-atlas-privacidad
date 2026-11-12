@@ -28,7 +28,7 @@
   color:#042b2e;background:#96fff1;
 }
 .vi-route-manager .v217-route-actions button[hidden]{display:none!important}
-@media(max-width:700px){
+@media (max-width:700px), (pointer:coarse) and (max-width:1150px){
   /* No extra buttons on top of map zoom/reset controls. */
   .atlas-v119 .v216-mobile-route-rail,
   .atlas-v119 .v216-rail-scroll,
@@ -37,29 +37,78 @@
     box-sizing:border-box;position:fixed;
     top:calc(84px + env(safe-area-inset-top,0px));
     bottom:calc(94px + env(safe-area-inset-bottom,0px));
-    right:2px;width:27px;z-index:950;
+    right:1px;width:33px;z-index:2147482000;
     border:0;background:transparent;cursor:grab;
     touch-action:none;user-select:none;-webkit-user-select:none;
     overscroll-behavior:contain;
   }
-  body .v217-page-scroll-rail[hidden],
-  body.vi-map-modal-active .v217-page-scroll-rail{display:none!important}
+  body .v217-page-scroll-rail[hidden]{display:none!important}
   body .v217-page-scroll-rail::before{
     content:"";position:absolute;
-    top:0;bottom:0;right:5px;width:11px;
-    background:rgba(13,45,57,.68);
-    border:1px solid rgba(116,198,209,.55);
+    top:0;bottom:0;right:6px;width:17px;
+    background:rgba(5,35,49,.92);
+    border:2px solid rgba(156,253,243,.8);
     border-radius:15px;pointer-events:none;
   }
   body .v217-page-scroll-thumb{
-    position:absolute;top:0;right:5px;width:13px;
-    box-sizing:border-box;background:#6bf3dc;
-    border:1px solid #e8fffc;border-radius:15px;
-    box-shadow:0 1px 8px #0026349c;
+    position:absolute;top:0;right:5px;width:19px;
+    box-sizing:border-box;background:linear-gradient(90deg,#47d6d7,#8dffee);
+    border:2px solid #e8fffc;border-radius:15px;
+    box-shadow:0 0 0 2px #002d35b8,0 1px 11px #002634;
     pointer-events:none;will-change:transform;
   }
   body .v217-page-scroll-rail:active{cursor:grabbing}
   body .v217-page-scroll-rail:focus-visible{
     outline:2px solid #91fff0;outline-offset:1px;border-radius:12px;
   }
+  /* A visible grip belongs to the draggable scrollbar, NOT to the map. */
+  body .v217-page-scroll-thumb::after{
+    content:"≡";display:grid;place-items:center;
+    position:absolute;top:50%;left:50%;
+    width:18px;height:21px;transform:translate(-50%,-50%);
+    color:#07454e;font-weight:900;font-size:23px;line-height:1;
+  }
+  /* Restore easy route access in the search toolbar, outside the map. */
+  #root .atlas-v119 .atlas-toolbar .v218-route-access{
+    display:inline-flex;justify-content:center;align-items:center;
+    min-height:43px;padding:8px 13px;
+    border:1px solid #8bfff0;border-radius:10px;
+    background:#125c61;color:#effffb;font-size:13px;font-weight:850;
+    flex:0 0 auto;touch-action:manipulation;
+  }
+  #root .atlas-v119 .atlas-toolbar .atlas-search-label{
+    flex:1 1 210px;width:auto!important;min-width:0!important;
+  }
+  #root .vi-route-manager .v218-search-label,
+  #root .vi-route-manager #vi-route-create .v218-search-label{
+    display:grid;gap:7px;width:100%;min-width:0;flex:1 1 100%;
+    font-size:13px;font-weight:800;color:#d0f9f2;
+  }
+  #root .vi-route-manager .v218-search-label input[type=search]{
+    width:100%;min-width:0;max-width:100%;box-sizing:border-box;
+    min-height:45px;padding:10px 12px;
+    color:#f4ffff;background:#092537;
+    border:1px solid #71c5c6;border-radius:10px;
+    font-size:16px;outline-offset:2px;
+  }
+  #root .vi-route-manager .v218-route-status{
+    margin:8px 0 4px;font-size:12px;color:#b2f1e9;
+  }
+  #root .vi-route-manager .vi-route-choices{
+    max-height:230px;overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid #315e6d;border-radius:10px;padding:5px;
+  }
+  #root .vi-route-manager .vi-route-choices label{
+    min-height:43px;display:flex;align-items:center;
+  }
+  #root .vi-route-manager .vi-route-choices input[type=checkbox]{
+    width:18px;height:18px;flex:none;
+  }
+  #root .vi-route-manager .vi-route-controls label{
+    min-width:0;flex:1 1 100%;
+  }
+  #root .vi-route-manager .vi-route-controls select{
+    width:100%;min-height:44px;max-width:100%;
+  }
+
 }
