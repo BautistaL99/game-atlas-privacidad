@@ -108,3 +108,5 @@ jobs:
           echo '### Vista previa V216' >> "$GITHUB_STEP_SUMMARY"
           echo 'https://bautistal99.github.io/game-atlas-privacidad/revision-v216-leonida-preview-20261112/' >> "$GITHUB_STEP_SUMMARY"
           echo 'La web publica /app y Firebase NO se modifican.' >> "$GITHUB_STEP_SUMMARY"
+
+# V216.1 dark-map layout preview refresh after browser QA pass (desktop + mobile)
