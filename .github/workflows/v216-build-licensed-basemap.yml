@@ -1,0 +1,73 @@
+name: V216 construir basemap CC BY 4.0 para Leonida
+on:
+  push:
+    branches: [feature/v216-leonida-map-seo]
+    paths: ['.github/workflows/v216-build-licensed-basemap.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  licensed-basemap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Descargar tiles originales GTADB por sparse checkout (NO hotlink)
+        uses: actions/checkout@v4
+        with:
+          repository: rolux/gtadb.org
+          ref: 6acc1b555ed68255078b850f5d4a984610fa1910
+          sparse-checkout: maps/tiles/6/yanis,17/3
+          filter: blob:none
+          path: upstream
+          persist-credentials: false
+      - name: Reconstruir base navegable y escribir atribucion de licencia
+        run: |
+          python -m pip install -q Pillow
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          import re
+          src=Path('upstream/maps/tiles/6/yanis,17/3')
+          records=[]
+          for f in src.glob('*.jpg'):
+            m=re.fullmatch(r'3,(\d+),(\d+)\.jpg',f.name)
+            if m: records.append((int(m[1]),int(m[2]),f))
+          assert len(records)>=400,'Tiles Yanis v17 insuficientes'
+          minx,maxx=5,24;miny,maxy=5,25
+          w,h=256,256
+          canvas=Image.new('RGB',((maxx-minx+1)*w,(maxy-miny+1)*h),(44,104,166))
+          for x,y,f in records:
+            if not(minx<=x<=maxx and miny<=y<=maxy):continue
+            with Image.open(f) as tile:
+              canvas.paste(tile,((x-minx)*w,(y-miny)*h))
+          # Same world-space crop as level-2 preview, at 2x source resolution.
+          # Level 2 mosaic starts at tile 2,2; level 3 begins at 5,5.
+          crop=(192,184,4832,3664)
+          img=canvas.crop(crop).resize((2400,1800),Image.Resampling.LANCZOS)
+          out=Path('app/assets');out.mkdir(exist_ok=True)
+          img.save(out/'leonida-yanis-v17.webp','WEBP',quality=82,method=5)
+          assert (out/'leonida-yanis-v17.webp').stat().st_size<6_000_000
+          (out/'LEONIDA-MAP-LICENSE.txt').write_text(
+            'GTA VI Map Tiles (CC BY 4.0) — https://map.gtadb.org\n'
+            '© 2025–2026 GTADB.ORG and contributors. Yanis V17 community reconstruction.\n'
+            'Original repository: https://github.com/rolux/gtadb.org\n'
+            'Pinned revision: 6acc1b555ed68255078b850f5d4a984610fa1910\n'
+            'License: https://creativecommons.org/licenses/by/4.0/\n'
+            'Changes: selected source zoom level 3, mosaicked 420 tiles, cropped out peripheral\n'
+            'legend/reference panel, resized to 2400x1800, re-encoded as WEBP.\n'
+            'This is an unofficial approximate community reconstruction, not Rockstar cartography.\n'
+            'Original work not endorsed or sponsored by GTADB, Rockstar or Take-Two.\n'
+          )
+          print('Basemap:',(out/'leonida-yanis-v17.webp').stat().st_size,'bytes')
+          PY
+      - name: Guardar basemap licenciado solamente en la rama V216
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/assets/leonida-yanis-v17.webp app/assets/LEONIDA-MAP-LICENSE.txt
+          if git diff --cached --quiet; then echo 'No source changes';exit 0;fi
+          git commit -m "V216: licensed Yanis V17 Leonida community map with provenance and CC BY credits"
+          git pull --rebase origin feature/v216-leonida-map-seo
+          git push origin HEAD:feature/v216-leonida-map-seo
