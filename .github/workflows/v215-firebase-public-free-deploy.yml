@@ -62,7 +62,21 @@ jobs:
               if(obj&&typeof obj==='object'&&obj.type==='service_account'&&obj.project_id==='gta6mapa'&&obj.private_key&&obj.client_email){key=obj;break;}
             }catch{}
           }
-          if(!key)throw Error('El secreto esta guardado, pero no contiene un JSON valido de cuenta de servicio gta6mapa ni su version base64. NO se publico nada');
+          if(!key){
+            const trimmed=original.trim();
+            const kind=trimmed.startsWith('{')?'empieza como JSON':
+              trimmed.startsWith('[')?'empieza como lista':
+              trimmed.startsWith('"')?'empieza entre comillas':
+              trimmed.startsWith('-----BEGIN')?'parece una clave PEM suelta':
+              trimmed.startsWith('data:')?'parece un enlace de datos':
+              /^[A-Za-z0-9+/_=-]+$/.test(trimmed)&&trimmed.length>80?'parece texto codificado':
+              /\.(json|txt)$/i.test(trimmed)?'parece un nombre de archivo':
+              'otro tipo de texto';
+            const complete=trimmed.includes('"private_key"')&&trimmed.includes('"project_id"')&&trimmed.includes('"client_email"');
+            const hasJsonMarkers=trimmed.includes('"private_key"')||trimmed.includes('"project_id"');
+            console.log('Diagnostico privado de formato (sin datos): '+kind+'; campos de JSON '+(complete?'presentes':hasJsonMarkers?'parciales':'ausentes'));
+            throw Error('El secreto no se puede interpretar como JSON de Firebase. No se publico nada');
+          }
           const dest=process.env.RUNNER_TEMP+'/firebase-gta6mapa-v215-service-account.json';
           writeFileSync(dest,JSON.stringify(key),{mode:0o600});
           console.log('Credencial valida de gta6mapa preparada exclusivamente en runner (sin mostrarla)');
