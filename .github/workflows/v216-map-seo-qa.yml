@@ -1,0 +1,123 @@
+name: V216 QA mapa y SEO (sin publicar)
+on:
+  push:
+    branches: [feature/v216-leonida-map-seo]
+    paths: ['.github/workflows/v216-map-seo-qa.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  map-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Sintaxis y datos licenciados
+        run: |
+          set -euo pipefail
+          node --check app/app-v137.js
+          node --check app/online-updates.js
+          node --check app/routes-v145.js
+          node - <<'JS'
+          const fs=require('fs');
+          const p=JSON.parse(fs.readFileSync('app/assets/leonida-landmarks-v216.json','utf8'));
+          if(p.schema!==216||p.items.length<200||p.items.some(x=>x.x<0||x.y<0||x.x>100||x.y>100))throw Error('Bad community dataset');
+          const app=fs.readFileSync('app/index.html','utf8');
+          const guide=fs.readFileSync('guia-gta-6/index.html','utf8');
+          const wiki=fs.readFileSync('guia-gta-6/wiki/index.html','utf8');
+          const sitemap=fs.readFileSync('sitemap.xml','utf8');
+          if(!app.includes('map-v216.css')||!app.includes('Game Atlas: Guía de GTA 6'))throw Error('Missing app brand/CSS');
+          if(/noindex/i.test(guide)||!wiki.includes('Wiki de GTA 6'))throw Error('Guide blocked or wiki missing');
+          if(!sitemap.includes('https://gta6mapa.web.app/guia-gta-6/wiki/'))throw Error('Wiki sitemap missing');
+          if(!fs.existsSync('robots.txt'))throw Error('Robots missing');
+          if(!fs.existsSync('app/assets/LEONIDA-MAP-LICENSE.txt'))throw Error('Map attribution missing');
+          console.log('Static checks OK, landmark count',p.items.length);
+          JS
+      - name: Preparar navegador automatizado y servidor local
+        run: |
+          npm install --no-save --ignore-scripts playwright-core@1.56.1
+          python3 -m http.server 8765 --directory . >/tmp/v216-http-server.log 2>&1 &
+          echo $! > /tmp/v216-server.pid
+          for i in $(seq 1 20);do if curl -fsS http://127.0.0.1:8765/app/ >/dev/null;then exit 0;fi;sleep 1;done
+          cat /tmp/v216-http-server.log
+          exit 1
+      - name: Pruebas reales de mapa, zoom, filtros, idiomas y responsive
+        env:
+          QA_BASE: http://127.0.0.1:8765/app/
+        run: |
+          mkdir -p v216-qa-screenshots
+          node --input-type=module <<'JS'
+          import {chromium} from 'playwright-core';
+          import fs from 'node:fs';
+          const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+          const check=(v,msg)=>{if(!v)throw Error(msg)};
+          const results=[];
+          try{
+            for(const lang of ['es','en','pt']){
+              for(const width of [320,390,1024,1440]){
+                const page=await browser.newPage({viewport:{width,height:900},deviceScaleFactor:1,isMobile:width<701,hasTouch:width<701});
+                page.on('pageerror',e=>{throw Error('Uncaught browser error '+lang+' '+width+': '+e.message)});
+                await page.addInitScript(l=>localStorage.setItem('vi_demo_locale',l),lang);
+                await page.goto(process.env.QA_BASE+'#/mapa',{waitUntil:'domcontentloaded',timeout:45000});
+                await page.locator('#mapCanvas').waitFor({timeout:20000});
+                await page.waitForFunction(()=>document.querySelectorAll('.atlas-pin').length>200,{timeout:20000});
+                const state=await page.evaluate(()=>{
+                  const m=document.querySelector('.atlas-map')?.getBoundingClientRect();
+                  const f=document.querySelector('.atlas-filters')?.getBoundingClientRect();
+                  const bg=document.querySelector('.atlas-background');
+                  return {mapWidth:m?.width,filterX:f?.x,mapX:m?.x,filterRight:f?.right,
+                    pins:document.querySelectorAll('.atlas-pin').length,
+                    clusters:document.querySelectorAll('.atlas-cluster').length,
+                    imageLoaded:bg?.complete&&bg.naturalWidth>0,
+                    bodyWidth:document.documentElement.scrollWidth,
+                    placeholder:document.querySelector('#mapSearchText')?.placeholder};
+                });
+                check(state.imageLoaded,'Basemap failed to load '+lang+' '+width);
+                check(state.pins>200,'Missing community pins '+lang+' '+width);
+                check(state.clusters>0,'No zoom-based clusters '+lang+' '+width);
+                check(state.bodyWidth<=width+3,'Horizontal overflow '+lang+' '+width+' '+JSON.stringify(state));
+                if(width>=1024){
+                  check(state.filterRight<=state.mapX,'Filter rail is not left of map '+lang+' '+width+' '+JSON.stringify(state));
+                  check(state.mapWidth>=width*.53,'Map too narrow '+lang+' '+width+' '+JSON.stringify(state));
+                }
+                const placeholder={es:'Buscar',en:'Search',pt:'Buscar'}[lang];
+                check(state.placeholder.includes(placeholder),'Wrong search language '+lang);
+                const input=page.locator('#mapSearchText');
+                await input.fill('Vice City');
+                await page.locator('.atlas-search-results button').first().waitFor({timeout:8000});
+                const matches=await page.locator('.atlas-search-results button').count();
+                check(matches>0,'No map search results '+lang+' '+width);
+                check(await page.locator('.atlas-cluster').count()===0,'Search should expand clusters');
+                await input.fill('');
+                await page.waitForTimeout(150);
+                if(width===1440){
+                  const b=page.locator('.atlas-cluster').first();
+                  const before=await page.locator('#mapStage').getAttribute('style');
+                  await b.click();
+                  const after=await page.locator('#mapStage').getAttribute('style');
+                  check(before!==after,'Clicking cluster should zoom '+lang);
+                }
+                if(width===390){
+                  const chips=page.locator('.vi-map-filter-chips button[data-value]');
+                  check(await chips.count()===5,'V215 mobile quick filters changed '+lang);
+                }
+                if(lang==='es')await page.screenshot({path:'v216-qa-screenshots/map-'+width+'.png',fullPage:false});
+                results.push({lang,width,...state,matches});
+                await page.close();
+              }
+            }
+          }finally{await browser.close();}
+          fs.writeFileSync('v216-qa-screenshots/results.json',JSON.stringify(results,null,2));
+          console.log('PASS V216',results.length,'browser configurations');
+          JS
+      - name: Capturas y resultados de QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: V216-MAP-SEO-QA-CAPTURAS
+          path: v216-qa-screenshots/
+          retention-days: 7
+          if-no-files-found: ignore
