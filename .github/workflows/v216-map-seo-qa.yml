@@ -85,12 +85,22 @@ jobs:
                 }
                 const placeholder={es:'Buscar',en:'Search',pt:'Buscar'}[lang];
                 check(state.placeholder.includes(placeholder),'Wrong search language '+lang);
+                const panelTitle=(await page.locator('.atlas-v117-sidebar-head strong').textContent()).trim();
+                check(panelTitle===({es:'Filtros del mapa',en:'Map filters',pt:'Filtros do mapa'}[lang]),
+                  'Filter sidebar not localized '+lang+' '+width+' '+panelTitle);
+                const createLabel=(await page.locator('.atlas-create-pin-btn').textContent()).trim();
+                check(createLabel.includes(({es:'Crear marcador',en:'Create marker',pt:'Criar marcador'}[lang])),
+                  'Create marker label not localized '+lang+' '+width);
                 const input=page.locator('#mapSearchText');
                 await input.fill('Vice City');
                 await page.locator('.atlas-search-results button').first().waitFor({timeout:8000});
                 const matches=await page.locator('.atlas-search-results button').count();
                 check(matches>0,'No map search results '+lang+' '+width);
                 check(await page.locator('.atlas-cluster').count()===0,'Search should expand clusters');
+                await input.fill(({es:'restaurante',en:'restaurant',pt:'restaurante'}[lang]));
+                await page.locator('.atlas-search-results button').first().waitFor({timeout:8000});
+                check(await page.locator('.atlas-search-results button').count()>0,
+                   'Localized category/landmark search failed '+lang+' '+width);
                 await input.fill('');
                 await page.waitForTimeout(150);
                 if(width===1440){
@@ -99,6 +109,17 @@ jobs:
                   await b.click();
                   const after=await page.locator('#mapStage').getAttribute('style');
                   check(before!==after,'Clicking cluster should zoom '+lang);
+                }
+                if(width===1440){
+                  const controls=page.locator('input[data-map-cat="lugares"]');
+                  check(await controls.count()===1,'Places filter absent '+lang);
+                  const countBefore=await page.locator('.atlas-pin').count();
+                  await controls.uncheck();
+                  const countAfter=await page.locator('.atlas-pin').count();
+                  check(countAfter<countBefore,'Places filter did not change visible markers '+lang);
+                  await page.locator('input[data-map-cat="lugares"]').check();
+                  check(await page.locator('.atlas-pin').count()===countBefore,
+                    'Restoring places filter did not recover pins '+lang);
                 }
                 if(width===390){
                   const chips=page.locator('.vi-map-filter-chips button[data-value]');
@@ -125,3 +146,5 @@ jobs:
 # V216 browser QA rerun after syntax correction
 
 # QA after 1024px left rail refinement
+
+# Extra ES EN PT category, filter and UI coverage
