@@ -124,6 +124,14 @@ jobs:
                   'Create marker label not localized '+lang+' '+width);
                 const input=page.locator('#mapSearchText');
                 await input.fill('Vice City');
+                const searchState=await page.evaluate(()=>({
+                  query:document.querySelector('#mapSearchText')?.value,
+                  markup:document.querySelector('.atlas-search-results')?.textContent?.slice(0,110),
+                  pinCount:document.querySelectorAll('#mapStage .atlas-pin').length,
+                  searchResults:document.querySelectorAll('.atlas-search-results button').length,
+                  locale:document.documentElement.lang
+                }));
+                console.log('MAP SEARCH',lang,width,JSON.stringify(searchState));
                 await page.locator('.atlas-search-results button').first().waitFor({timeout:8000});
                 const matches=await page.locator('.atlas-search-results button').count();
                 check(matches>0,'No map search results '+lang+' '+width);
@@ -276,3 +284,5 @@ jobs:
 # QA after shifting legend below mobile map and checking full personal-marker save flow
 
 # V216.3 mobile right routes rail, filter routes navigation and explicit page-scroll vs map-pan tests
+
+# QA rerun with non-sensitive search diagnostics and fullscreen route exit repair
