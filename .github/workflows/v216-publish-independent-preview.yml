@@ -1,0 +1,110 @@
+name: V216 publicar vista previa independiente - nunca cambiar produccion
+on:
+  push:
+    branches: [feature/v216-leonida-map-seo]
+    paths: ['.github/workflows/v216-publish-independent-preview.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: v216-preview-only-not-app
+  cancel-in-progress: false
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout V216 aprobada en rama separada
+        uses: actions/checkout@v4
+        with:
+          ref: feature/v216-leonida-map-seo
+          path: v216-source
+      - name: Checkout sitio publico main sin modificar /app
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: public-main
+          persist-credentials: true
+      - name: Preparar preview completa y aislar el progreso
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,shutil
+          source=Path('v216-source/app')
+          main=Path('public-main')
+          dest=main/'revision-v216-leonida-preview-20261112'
+          assert (source/'index.html').exists()
+          assert (source/'map-v216.css').exists()
+          assert (source/'assets/leonida-yanis-v17.webp').exists()
+          assert (source/'assets/leonida-landmarks-v216.json').exists()
+          assert (main/'app/index.html').exists()
+          original_root=(main/'app/index.html').read_bytes()
+          if dest.exists():shutil.rmtree(dest)
+          shutil.copytree(source,dest)
+          # Preview data isolation: same GitHub Pages domain, separate localStorage namespace.
+          storage=(main/'revision-v215-compacta-nueva-20261111'/'v211-preview-storage.js').read_text()
+          assert '__game_atlas_v215_mobile_preview__:' in storage
+          storage=storage.replace('__game_atlas_v215_mobile_preview__:','__game_atlas_v216_leonida_preview__:')
+          (dest/'preview-storage-v216.js').write_text(storage)
+          html=(dest/'index.html').read_text()
+          assert html.count('</head>')==1
+          assert '<meta name="robots" content="index,follow,max-image-preview:large">' in html
+          html=html.replace('<meta name="robots" content="index,follow,max-image-preview:large">','<meta name="robots" content="noindex,nofollow">')
+          # Insert isolation before all code, preserve map assets and translations exactly.
+          assert html.count('<head>')==1
+          html=html.replace('<head>','<head><script src="./preview-storage-v216.js"></script><meta name="vi-preview" content="V216 independiente, NO publicada en Firebase">',1)
+          (dest/'index.html').write_text(html)
+          manifest=dest/'manifest.webmanifest'
+          p=json.loads(manifest.read_text())
+          p['id']='/game-atlas-privacidad/revision-v216-leonida-preview-20261112/'
+          p['start_url']='./'
+          p['scope']='./'
+          p['name']='Game Atlas: Guía de GTA 6 — V216 vista previa'
+          p['short_name']='Game Atlas V216'
+          manifest.write_text(json.dumps(p,ensure_ascii=False,indent=2)+'\n')
+          sw=dest/'sw.js'
+          txt=sw.read_text()
+          assert "const CACHE='game-atlas-safe-v215-mobile';" in txt
+          assert "const OLD_PREFIXES=['vi-game-assistant-','game-atlas-safe-'];" in txt
+          txt=txt.replace("const CACHE='game-atlas-safe-v215-mobile';","const CACHE='v216-leonida-standalone-preview-20261112';")
+          txt=txt.replace("const OLD_PREFIXES=['vi-game-assistant-','game-atlas-safe-'];","const OLD_PREFIXES=['v216-leonida-standalone-preview-'];")
+          # Ensure offline re-use never reaches the primary app.
+          txt=txt.replace("'./mobile-v215.js','./routes-v145.css'","'./mobile-v215.js','./map-v216.css','./preview-storage-v216.js','./routes-v145.css'")
+          sw.write_text(txt)
+          (dest/'LEER-V216-PREVIEW.txt').write_text(
+            'V216 solo vista previa — noindex — no publicada en Firebase.\n'
+            'URL: https://bautistal99.github.io/game-atlas-privacidad/revision-v216-leonida-preview-20261112/\n'
+            'Datos de pruebas aislados con localStorage independiente. Service worker exclusivo.\n'
+            'Fuente: rama feature/v216-leonida-map-seo. V215 y app publica no se modifican.\n'
+            'Mapa Yanis V17 de GTADB CC BY 4.0, posiciones aproximadas no oficiales.\n'
+          )
+          assert original_root==(main/'app/index.html').read_bytes()
+          assert 'noindex,nofollow' in (dest/'index.html').read_text()
+          assert 'preview-storage-v216.js' in (dest/'index.html').read_text()
+          print('PREVIEW ONLY ready; main /app unchanged')
+          PY
+          node --check public-main/revision-v216-leonida-preview-20261112/app-v137.js
+          node --check public-main/revision-v216-leonida-preview-20261112/preview-storage-v216.js
+          node --check public-main/revision-v216-leonida-preview-20261112/sw.js
+      - name: Guardar SOLO ruta de preview en main - conservando produccion
+        working-directory: public-main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add revision-v216-leonida-preview-20261112/
+          test "$(git diff --cached --name-only | grep -vc '^revision-v216-leonida-preview-20261112/' || true)" = 0
+          if git diff --cached --quiet; then
+            echo 'Preview unchanged'
+          else
+            git commit -m 'V216: vista previa independiente del mapa de Leonida sin cambiar /app'
+            git fetch origin main --quiet
+            git rebase origin/main
+            git push origin HEAD:main
+          fi
+          echo '### Vista previa V216' >> "$GITHUB_STEP_SUMMARY"
+          echo 'https://bautistal99.github.io/game-atlas-privacidad/revision-v216-leonida-preview-20261112/' >> "$GITHUB_STEP_SUMMARY"
+          echo 'La web publica /app y Firebase NO se modifican.' >> "$GITHUB_STEP_SUMMARY"
