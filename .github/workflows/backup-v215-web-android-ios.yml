@@ -1,0 +1,143 @@
+name: Respaldo V215 WEB Android iOS - sin publicar Firebase
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/backup-v215-web-android-ios.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Recuperar version V215 aprobada y sus actualizaciones
+        uses: actions/checkout@v4
+      - name: Preparar Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificar version aprobada y generar cliente Android
+        shell: bash
+        run: |
+          set -euo pipefail
+          node android-v215/prepare-android.mjs stage
+          grep -q 'mobile-v215.css' app/index.html
+          grep -q 'mobile-v215.js' app/index.html
+          grep -q 'community-v206.js' app/index.html
+          grep -q 'online-updates.js' app/index.html
+          test -s updates/catalog-envelope.json
+          test -s updates/community-envelope-v205.json
+          cd android-v215
+          npm install --no-fund --no-audit
+          npx cap add android
+          npx cap sync android
+          cd ..
+          node android-v215/prepare-android.mjs native
+      - name: Descargar APK y AAB V215 y verificar hashes originales
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p .v215-output/ANDROID/compilados
+          cd .v215-output/ANDROID/compilados
+          gh release download android-v215-prueba --repo BautistaL99/game-atlas-privacidad --pattern 'Game-Atlas-Companion-V215-PRUEBA.apk' --pattern 'Game-Atlas-Companion-V215-SIN-FIRMAR.aab' --pattern 'SHA256SUMS.txt' --pattern 'LEEME-ANDROID-V215.txt'
+          sha256sum --check SHA256SUMS.txt
+          unzip -l Game-Atlas-Companion-V215-PRUEBA.apk | grep -q 'assets/public/mobile-v215.css'
+          unzip -l Game-Atlas-Companion-V215-PRUEBA.apk | grep -q 'assets/public/community-v206.js'
+          echo 'APK V215 y AAB V215 verificadas'
+      - name: Generar proyecto iOS Xcode con la misma web V215
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .v215-output/IOS/proyecto-capacitor
+          tar -C android-v215 --exclude='./node_modules' --exclude='./android' -cf - . |
+            tar -C .v215-output/IOS/proyecto-capacitor -xf -
+          cd .v215-output/IOS/proyecto-capacitor
+          node -e "const fs=require('fs'),p=require('./package.json');p.dependencies['@capacitor/ios']='8.0.0';fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n')"
+          npm install --no-fund --no-audit
+          npx cap add ios
+          test -d ios/App
+          test -s ios/App/App/Info.plist
+          test -s ios/App/App/public/index.html
+          grep -q 'mobile-v215.css' ios/App/App/public/index.html
+          grep -q 'community-v206.js' ios/App/App/public/index.html
+          echo 'Proyecto iOS Xcode V215 creado con contenido aprobado'
+      - name: Reunir web, fuente Android y automatizacion V215
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .v215-output/WEB/sitio .v215-output/ANDROID/proyecto-capacitor .v215-output/AUTOMATIZACION
+          cp -a app updates guia-gta-6 .v215-output/WEB/sitio/
+          cp index.html sitemap.xml .v215-output/WEB/sitio/
+          for f in google*.html; do if test -f "$f"; then cp "$f" .v215-output/WEB/sitio/; fi; done
+          tar -C android-v215 --exclude='./node_modules' --exclude='./.gradle' --exclude='*/build' -cf - . |
+            tar -C .v215-output/ANDROID/proyecto-capacitor -xf -
+          cp -a automation .v215-output/AUTOMATIZACION/
+          mkdir -p .v215-output/AUTOMATIZACION/workflows
+          cp .github/workflows/v210-free-scheduled-catalog.yml .v215-output/AUTOMATIZACION/workflows/
+          cp .github/workflows/android-v215-build-apk-aab.yml .v215-output/AUTOMATIZACION/workflows/
+          cp .github/workflows/v215-firebase-public-free-deploy.yml .v215-output/AUTOMATIZACION/workflows/
+          cat > .v215-output/LEER-PRIMERO.txt <<'TXT'
+          GAME ATLAS COMPANION - RESPALDO V215 - 12 NOVIEMBRE 2026
+
+          WEB/
+            sitio/ -> web V215 completa, incluyendo HTML, CSS, JavaScript,
+            ilustraciones, traducciones, novedades y fichas firmadas.
+            NO se publica automaticamente al abrir este ZIP.
+            WEB OFICIAL: https://gta6mapa.web.app/app/
+            OJO: al armar este respaldo, V215 NO estaba publicada en Firebase.
+            URL alternativa de version V215 en GitHub Pages:
+            https://bautistal99.github.io/game-atlas-privacidad/app/
+
+          ANDROID/
+            compilados/Game-Atlas-Companion-V215-PRUEBA.apk -> APK instalable
+            de PRUEBA (versionCode 215). No reemplazar app Play existente sin
+            respaldar Mi partida; distinta firma de depuracion.
+            compilados/Game-Atlas-Companion-V215-SIN-FIRMAR.aab -> AAB candidato,
+            NO subir sin firmar con la clave de subida de Google Play.
+            proyecto-capacitor/ -> codigo Capacitor Android generado con
+            identificador original com.indie.viassistant, versionCode 215.
+            Compilacion en Android: Node, Android SDK 36 y Java 21.
+
+          IOS/
+            proyecto-capacitor/ -> codigo y proyecto Xcode Capacitor 8 con
+            la MISMA web V215 y modulos de noticias y fichas automáticas.
+            Se necesita Mac + Xcode + cuenta Apple Developer para compilar,
+            firmar y distribuir. NO hay .ipa firmado en el ZIP.
+
+          AUTOMATIZACION/
+            automation/ -> codigo y pruebas del recopilador de novedades
+            oficiales, noticias independientes y fichas.
+            workflows/ -> tareas de programacion, Android y Firebase.
+            No incluye secretos ni claves privadas.
+            El recopilador V210 funciona en el repositorio publico de GitHub.
+            Las apps consultan feeds publicos firmados por Ed25519.
+            Comprueban novedades al abrir/reanudar o aprox. cada 30 minutos
+            mientras estan abiertas. NO son alertas instantaneas.
+
+          IMPORTANTE:
+            El respaldo NO equivale a publicar en Firebase, Google Play o App Store.
+            La web de escritorio no se modifica por generar este respaldo.
+            Favoritos y progreso son locales: no se sincronizan entre dispositivos.
+          TXT
+          test -s .v215-output/WEB/sitio/app/index.html
+          test -s .v215-output/WEB/sitio/app/mobile-v215.css
+          test -s .v215-output/WEB/sitio/updates/catalog-envelope.json
+          test -s .v215-output/ANDROID/proyecto-capacitor/android/app/build.gradle
+          test -s .v215-output/IOS/proyecto-capacitor/ios/App/App/Info.plist
+          (cd .v215-output && zip -q -r ../Game-Atlas-Companion-V215-WEB-ANDROID-IOS.zip .)
+          test -s Game-Atlas-Companion-V215-WEB-ANDROID-IOS.zip
+          sha256sum Game-Atlas-Companion-V215-WEB-ANDROID-IOS.zip > Game-Atlas-Companion-V215-WEB-ANDROID-IOS.zip.sha256
+          unzip -tqq Game-Atlas-Companion-V215-WEB-ANDROID-IOS.zip
+          ls -lh Game-Atlas-Companion-V215-WEB-ANDROID-IOS.zip
+      - name: Entregar ZIP completo
+        uses: actions/upload-artifact@v4
+        with:
+          name: GAME-ATLAS-V215-WEB-ANDROID-IOS-RESPALDO
+          path: |
+            Game-Atlas-Companion-V215-WEB-ANDROID-IOS.zip
+            Game-Atlas-Companion-V215-WEB-ANDROID-IOS.zip.sha256
+          retention-days: 30
+          if-no-files-found: error
