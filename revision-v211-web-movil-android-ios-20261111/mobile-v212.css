@@ -184,3 +184,69 @@
     font-size:9.5px!important;padding-inline:2px!important;
   }
 }
+
+/* V214: extra compact quick filters on the embedded map, emphasis on fullscreen filter access. */
+@media (max-width:700px) {
+  /* Smaller embedded map: preserve all 5 readable, directly tappable categories. */
+  #root .atlas-v119:not(.vi-fullscreen-map) .atlas-map .vi-map-filter-chips {
+    width:min(66%,245px)!important;
+    max-width:calc(100% - 66px)!important;
+    min-height:0!important;
+    gap:2px!important;padding:3px!important;
+    border-radius:9px!important;
+    background:#071a25cf!important;
+    box-shadow:0 2px 7px #0005!important;
+  }
+  #root .atlas-v119:not(.vi-fullscreen-map) .atlas-map .vi-map-filter-chips button {
+    height:29px!important;min-height:29px!important;max-height:29px!important;
+    padding:2px 2px!important;
+    border-radius:7px!important;
+    font-size:9px!important;
+    line-height:1.08!important;
+    letter-spacing:-.01em!important;
+  }
+  /* Full screen: the bottom-left filter control must look actionable. */
+  #root .atlas-v119.vi-fullscreen-map .atlas-map .atlas-mobile-filter-toggle {
+    min-width:114px!important;max-width:134px!important;width:auto!important;
+    min-height:42px!important;height:42px!important;
+    background:linear-gradient(125deg,#14786f,#14615e)!important;
+    border:1.5px solid #a2ffef!important;
+    border-radius:11px!important;
+    color:#fff!important;
+    box-shadow:0 0 0 2px #70fff038,0 5px 17px #0009!important;
+    font-weight:900!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-map .atlas-mobile-filter-toggle::before {
+    color:#fff!important;font-size:17px!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-map .atlas-mobile-filter-toggle::after {
+    color:#fff!important;font-size:12px!important;font-weight:900!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-map .atlas-mobile-filter-toggle[aria-expanded='true'] {
+    background:linear-gradient(125deg,#24586b,#20455f)!important;
+    border-color:#b8fff3!important;
+  }
+  /* Discovery arrows: slim navigation row below the card. */
+  #root .home-v18 .v177-discovery-section .vi-discovery-nav {
+    grid-template-columns:36px minmax(0,1fr) 36px!important;
+    width:min(100%,168px)!important;
+    min-height:36px!important;height:36px!important;
+    gap:7px!important;margin:1px auto 0!important;
+  }
+  #root .home-v18 .v177-discovery-section .vi-discovery-nav button {
+    width:36px!important;min-width:36px!important;max-width:36px!important;
+    height:36px!important;min-height:36px!important;max-height:36px!important;
+    font-size:22px!important;border-radius:9px!important;
+  }
+  #root .home-v18 .v177-discovery-section .vi-discovery-nav [data-vi-discover-count] {
+    min-width:0!important;font-size:11px!important;
+  }
+}
+@media (max-width:355px) {
+  #root .atlas-v119:not(.vi-fullscreen-map) .atlas-map .vi-map-filter-chips {
+    width:min(73%,229px)!important;
+  }
+  #root .atlas-v119:not(.vi-fullscreen-map) .atlas-map .vi-map-filter-chips button {
+    font-size:8.5px!important;
+  }
+}
