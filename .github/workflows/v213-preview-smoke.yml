@@ -1,0 +1,82 @@
+name: V213 comprobar vista previa movil (Noticias, Descubrir, Mapa)
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/v213-preview-smoke.yml'
+permissions:
+  contents: read
+jobs:
+  check-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright Chromium driver
+        run: npm install --no-save --ignore-scripts playwright-core@1.56.1
+      - name: Verify mobile UI in hosted preview and desktop isolation
+        run: |
+          node --input-type=module <<'JS'
+          import {chromium} from 'playwright-core';
+          const base='https://bautistal99.github.io/game-atlas-privacidad/revision-v211-web-movil-android-ios-20261111/index.html?qa=v213';
+          const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
+          const assert=(ok,msg)=>{if(!ok)throw Error(msg)};
+          try {
+            for(const w of [320,390,700,1024]){
+              const page=await browser.newPage({viewport:{width:w,height:800},isMobile:w<=700,hasTouch:w<=700,deviceScaleFactor:1});
+              const errors=[];page.on('pageerror',e=>errors.push(e.message));
+              await page.goto(base+'#/noticias',{waitUntil:'domcontentloaded',timeout:45000});
+              await page.locator('.vi-news-tabs a').first().waitFor({timeout:20000});
+              const n=await page.evaluate(()=>{
+                const r=selector=>{const el=document.querySelector(selector);return el?{w:el.getBoundingClientRect().width,h:el.getBoundingClientRect().height,top:el.getBoundingClientRect().top,display:getComputedStyle(el).display}:null};
+                return {w:innerWidth,htmlWidth:document.documentElement.scrollWidth,hero:r('.vi-news-hero'),tabs:r('.vi-news-tabs'),buttons:[...document.querySelectorAll('.vi-news-tabs>a')].map(e=>({y:e.getBoundingClientRect().top,h:e.getBoundingClientRect().height})),v212Loaded:[...document.styleSheets].some(e=>e.href?.includes('mobile-v212.css'))};
+              });
+              assert(n.v212Loaded,'missing V212 CSS');
+              assert(n.buttons.length===4,'missing news filters');
+              assert(n.htmlWidth<=w+2,'horizontal scroll news '+w);
+              if(w<=700){
+                assert(n.hero.h<150,'news hero too tall '+w+': '+n.hero.h);
+                assert(n.tabs.h<105,'news tabs too tall '+w+': '+n.tabs.h);
+                assert(n.tabs.display==='grid','news tabs not compact grid '+w);
+                await page.evaluate(()=>scrollTo(0,100));
+                const before=await page.evaluate(()=>scrollY);
+                for(const label of ['/noticias/oficiales','/noticias/no-oficiales','/noticias/archivo','/noticias']){
+                  await page.locator('.vi-news-tabs a[href="#'+label+'"]').click();
+                  await page.waitForTimeout(90);
+                  const state=await page.evaluate(()=>({hash:location.hash,y:scrollY}));
+                  assert(state.hash==='#'+label,'news tab route '+label);
+                  assert(Math.abs(state.y-before)<8,'news jumped '+w+' '+label+': '+before+'->'+state.y);
+                }
+                await page.goto(base+'#/',{waitUntil:'domcontentloaded'});
+                await page.locator('#vi-discovery-cards').waitFor();
+                const h=await page.evaluate(()=>{
+                  const y=s=>{const x=document.querySelector(s)?.getBoundingClientRect();return x?{top:x.top+scrollY,bottom:x.bottom+scrollY,h:x.height,w:x.width}:null};
+                  return {link:y('.vi-discovery-catalog'),card:y('#vi-discovery-cards'),nav:y('.vi-discovery-nav'),buttons:[...document.querySelectorAll('#vi-discovery-cards .card-inline-actions button')].map(x=>({w:x.getBoundingClientRect().width,h:x.getBoundingClientRect().height}))};
+                });
+                assert(h.link&&h.card&&h.nav,'discovery elements missing');
+                assert(h.link.bottom<=h.card.top+4,'discovery card not immediately below catalog');
+                assert(h.card.bottom<=h.nav.top+4,'discovery arrows not below card');
+                assert(h.buttons.length>=2,'discovery action buttons missing');
+                assert(h.buttons.every(x=>x.h<=38),'discovery actions too tall');
+                await page.goto(base+'#/mapa',{waitUntil:'domcontentloaded'});
+                await page.locator('.vi-map-filter-chips button').first().waitFor();
+                const m=await page.evaluate(()=>{
+                  const el=document.querySelector('.vi-map-filter-chips');
+                  return {filterH:el.getBoundingClientRect().height,
+                    filters:[...el.querySelectorAll('button')].map(x=>({y:Math.round(x.getBoundingClientRect().y),w:x.getBoundingClientRect().width,h:x.getBoundingClientRect().height}))};
+                });
+                assert(m.filters.length===5,'missing five map filters');
+                assert(new Set(m.filters.map(x=>x.y)).size===2,'not two map rows '+JSON.stringify(m));
+                assert(m.filterH<85,'map overlay still too tall '+m.filterH);
+              } else {
+                assert(n.tabs.display==='flex','desktop news layout changed');
+              }
+              assert(!errors.length,'browser JS errors '+w+': '+errors.join('; '));
+              console.log('V213 PASS '+w,JSON.stringify(n));
+              await page.close();
+            }
+          }finally {await browser.close()}
+          JS
