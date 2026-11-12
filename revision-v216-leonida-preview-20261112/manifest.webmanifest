@@ -1,0 +1,33 @@
+{
+  "name": "Game Atlas: Guía de GTA 6 — V216 vista previa",
+  "short_name": "Game Atlas V216",
+  "description": "Wiki y guía independiente de GTA 6: mapa de Leonida, rutas, noticias y fichas.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0c0e18",
+  "theme_color": "#101321",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "id": "/game-atlas-privacidad/revision-v216-leonida-preview-20261112/"
+}
