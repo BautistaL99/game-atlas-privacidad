@@ -62,6 +62,27 @@ jobs:
               if(obj&&typeof obj==='object'&&obj.type==='service_account'&&obj.project_id==='gta6mapa'&&obj.private_key&&obj.client_email){key=obj;break;}
             }catch{}
           }
+          // The user may have saved only the original active service-account PEM.
+          // Reconstruct the standard credential in runner memory from public account metadata.
+          // Never write credentials to repository, summary, workflow outputs or logs.
+          if(!key&&original.startsWith('-----BEGIN PRIVATE KEY-----')){
+            const pem=original.replace(/\\n/g,'\n').replace(/\r/g,'').trim()+'\n';
+            if(!pem.includes('-----END PRIVATE KEY-----'))throw Error('Clave PEM incompleta. No se publico nada');
+            key={
+              type:'service_account',
+              project_id:'gta6mapa',
+              private_key_id:'ef791aeb03ac62a7e130c54d0fc15527057062ef',
+              private_key:pem,
+              client_email:'github-action-1445078769@gta6mapa.iam.gserviceaccount.com',
+              client_id:'117668602201494757061',
+              auth_uri:'https://accounts.google.com/o/oauth2/auth',
+              token_uri:'https://oauth2.googleapis.com/token',
+              auth_provider_x509_cert_url:'https://www.googleapis.com/oauth2/v1/certs',
+              client_x509_cert_url:'https://www.googleapis.com/robot/v1/metadata/x509/github-action-1445078769%40gta6mapa.iam.gserviceaccount.com',
+              universe_domain:'googleapis.com'
+            };
+            console.log('Clave PEM existente preparada como credencial Firebase sin revelar material secreto');
+          }
           if(!key){
             const trimmed=original.trim();
             const kind=trimmed.startsWith('{')?'empieza como JSON':
