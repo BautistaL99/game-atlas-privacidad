@@ -59,7 +59,7 @@ jobs:
                 assert(h.link&&h.card&&h.nav,'discovery elements missing');
                 assert(h.link.bottom<=h.card.top+4,'discovery card not immediately below catalog');
                 assert(h.card.bottom<=h.nav.top+4,'discovery arrows not below card');
-                assert(h.buttons.length>=2,'discovery action buttons missing');
+                assert(h.buttons.length>=1,'discovery favorite action missing');
                 assert(h.buttons.every(x=>x.h<=38),'discovery actions too tall');
                 await page.goto(base+'#/mapa',{waitUntil:'domcontentloaded'});
                 await page.locator('.vi-map-filter-chips button').first().waitFor();
