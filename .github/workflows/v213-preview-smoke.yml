@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/v213-preview-smoke.yml'
+      - 'revision-v211-web-movil-android-ios-20261111/mobile-v212.css'
 permissions:
   contents: read
 jobs:
@@ -59,18 +60,29 @@ jobs:
                 assert(h.link&&h.card&&h.nav,'discovery elements missing');
                 assert(h.link.bottom<=h.card.top+4,'discovery card not immediately below catalog');
                 assert(h.card.bottom<=h.nav.top+4,'discovery arrows not below card');
+                assert(h.nav.w<=175&&h.nav.h<=39,'discovery arrows still oversized '+JSON.stringify(h.nav));
                 assert(h.buttons.length>=1,'discovery favorite action missing');
                 assert(h.buttons.every(x=>x.h<=38),'discovery actions too tall');
                 await page.goto(base+'#/mapa',{waitUntil:'domcontentloaded'});
                 await page.locator('.vi-map-filter-chips button').first().waitFor();
                 const m=await page.evaluate(()=>{
                   const el=document.querySelector('.vi-map-filter-chips');
-                  return {filterH:el.getBoundingClientRect().height,
+                  return {filterH:el.getBoundingClientRect().height,filterW:el.getBoundingClientRect().width,
                     filters:[...el.querySelectorAll('button')].map(x=>({y:Math.round(x.getBoundingClientRect().y),w:x.getBoundingClientRect().width,h:x.getBoundingClientRect().height}))};
                 });
                 assert(m.filters.length===5,'missing five map filters');
                 assert(new Set(m.filters.map(x=>x.y)).size===2,'not two map rows '+JSON.stringify(m));
-                assert(m.filterH<85,'map overlay still too tall '+m.filterH);
+                assert(m.filterH<70,'map overlay still too tall '+m.filterH);
+                assert(m.filterW<=247,'map overlay still too wide '+m.filterW);
+                await page.locator('.atlas-map [data-map="fullscreen"]').click();
+                const fullscreen=await page.evaluate(()=>{
+                  const el=document.querySelector('.atlas-v119');
+                  const btn=el?.querySelector('.atlas-mobile-filter-toggle');
+                  const css=btn?getComputedStyle(btn):null;
+                  return {active:el?.classList.contains('vi-fullscreen-map'),w:btn?.getBoundingClientRect().width,bg:css?.backgroundImage,border:css?.borderColor};
+                });
+                assert(fullscreen.active,'map fullscreen did not open');
+                assert(fullscreen.w>=110&&fullscreen.bg?.includes('gradient'),'fullscreen filters not highlighted '+JSON.stringify(fullscreen));
               } else {
                 assert(n.tabs.display==='flex','desktop news layout changed');
               }
