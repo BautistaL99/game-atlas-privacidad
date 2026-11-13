@@ -62,10 +62,14 @@ export function knownLabel(label){
  const key=sourceKey(label),v=KEY_LABELS[key];
  return v?{es:v[0],en:v[1],pt:v[2]}:null;
 }
-export function knownValue(value){
+export function knownValue(value,fieldKey=''){
  const v=Object.entries(VALUES).find(([name])=>sourceKey(name)===sourceKey(value))?.[1];
  if(v)return {es:v[0],en:v[1],pt:v[2]};
- if(proper(value))return {es:value,en:value,pt:value};
+ const key=sourceKey(fieldKey);
+ const isNumeric=/^\d+(?:[.,]\d+)?(?:\s*(?:\$|%|km\/h|mph))?$/.test(value);
+ const clearName=/^[A-Z][\p{L}'’-]+(?:\s+[A-Z][\p{L}'’-]+){1,5}$/u.test(value);
+ const branded=['manufacturer','related','voice','vehicles','aka','affiliations','home','nationality','lineup'].includes(key);
+ if(isNumeric||clearName||(branded&&proper(value)))return {es:value,en:value,pt:value};
  return null;
 }
 async function requestTranslation(input,lang,fetchFn=fetch){
@@ -108,7 +112,7 @@ export async function localizeCommunity(community,{
    }
    try{
     const labels=knownLabel(s.label)||{en:s.label,es:await lookup(s.label,'es'),pt:await lookup(s.label,'pt')};
-    const values=knownValue(s.value)||{en:s.value,es:await lookup(s.value,'es'),pt:await lookup(s.value,'pt')};
+    const values=knownValue(s.value,s.key)||{en:s.value,es:await lookup(s.value,'es'),pt:await lookup(s.value,'pt')};
     localized.push({key:s.key,sourceValue:s.value,label:labels,value:values});
     results.added++;
    }catch(err){
