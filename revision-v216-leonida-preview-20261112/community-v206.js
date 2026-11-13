@@ -38,6 +38,16 @@
      !translations(item.title,160)||!translations(item.summary,450)||
      !Number.isSafeInteger(item.wikiRevision)||item.wikiRevision<0||
      item.image!==undefined||item.facts!==undefined||item.mapPoint!==undefined||item.gallery!==undefined)throw Error('Untrusted community profile');
+   if(item.specs!==undefined){
+    if(!Array.isArray(item.specs)||item.specs.length>18||
+       item.specs.some(v=>!clean(v?.key,70)||!clean(v?.label,70)||!clean(v?.value,170)))throw Error('Invalid Wiki technical fields');
+   }
+   if(item.specsI18n!==undefined){
+    const source=new Map((item.specs||[]).map(v=>[v.key,v.value]));
+    if(!Array.isArray(item.specsI18n)||item.specsI18n.length>18||
+       item.specsI18n.some(v=>!clean(v?.key,70)||source.get(v.key)!==v.sourceValue||
+          !translations(v.label,170)||!translations(v.value,170)))throw Error('Unverified Wiki technical translations');
+   }
    seen.add(item.id);
   }
   return data;
@@ -63,6 +73,7 @@
  };
  const date=s=>/^\d{4}-\d{2}-\d{2}$/.test(s||'')?s:'';
  function newsHtml(route,lang){
+  if(window.viCommunityFeedsIntegrated===true)return '';
   if(!issue||route==='/noticias/oficiales'||/[?&]estado=favoritos/.test(location.hash))return '';
   const isArchive=route==='/noticias/archivo',cut=new Date(Date.now()-90*86400000).toISOString().slice(0,10);
   const rows=issue.news.filter(n=>isArchive?n.publishedAt<cut:n.publishedAt>=cut).sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt));
@@ -78,6 +89,7 @@
   return '<section class="vi-v206-independent-news" aria-label="'+t.title+'">'+page+'</section>';
  }
  function wikiHtml(category,lang){
+  if(window.viCommunityFeedsIntegrated===true)return '';
   if(!issue||!allowedCategories.has(category))return '';
   const rows=issue.fiches.filter(r=>r.category===category).sort((a,b)=>String(a.title.en).localeCompare(String(b.title.en)));
   if(!rows.length)return '';
@@ -111,6 +123,7 @@
  window.viCommunityNewsCards=(route,lang)=>newsHtml(route,lang);
  window.viCommunityWikiSection=(category,lang)=>'<div data-vi-community-wiki="'+esc(category)+'">'+wikiHtml(category,lang)+'</div>';
  function refreshVisible(){
+  if(issue&&typeof window.viApplyCommunityFeeds==='function')window.viApplyCommunityFeeds(issue);
   const language=typeof locale==='string'?locale:(document.documentElement.lang||'es');
   for(const element of document.querySelectorAll('[data-vi-community-news]'))
    element.innerHTML=newsHtml(element.getAttribute('data-vi-community-news'),language);
