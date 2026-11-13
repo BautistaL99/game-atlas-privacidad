@@ -93,6 +93,9 @@ Object.assign(VI_UI_DICTIONARY,{
 /* V220: audit of visible ES/EN/PT labels, including More-menu and map shortcuts. */
 Object.assign(VI_UI_DICTIONARY,{
  'Comparar':{en:'Compare',pt:'Comparar'},
+ 'Apoyar proyecto':{en:'Support project',pt:'Apoiar projeto'},
+ 'Top speedruns':{en:'Top speedruns',pt:'Melhores speedruns'},
+ 'Guía e información GTA 6':{en:'GTA VI guide',pt:'Guia GTA VI'},
  'Rutas y recorridos':{en:'Routes and trails',pt:'Rotas e percursos'},
  'Rutas':{en:'Routes',pt:'Rotas'},
  'Recorridos':{en:'Trails',pt:'Percursos'},
