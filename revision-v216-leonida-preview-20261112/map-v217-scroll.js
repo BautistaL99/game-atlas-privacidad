@@ -11,8 +11,11 @@
   pt:'Arraste esta barra para subir ou descer a página'
  };
  let rail=null,thumb=null,dragId=null,queued=false;
- const scrollNode=()=>document.scrollingElement||document.documentElement;
- const scrollMax=()=>Math.max(0,scrollNode().scrollHeight-window.innerHeight);
+ // On the mobile map route the app itself scrolls, not the browser viewport.
+ // This eliminates Chrome Android's unstyleable blue viewport scroll indicator.
+ const scrollNode=()=>enabled()?(document.getElementById('root')||document.scrollingElement||document.documentElement):(document.scrollingElement||document.documentElement);
+ const scrollMax=()=>{const node=scrollNode();return Math.max(0,node.scrollHeight-node.clientHeight)};
+ let wasEnabled=false;
  function seek(clientY){
   if(!rail||!thumb||rail.hidden)return;
   const rect=rail.getBoundingClientRect();
@@ -88,7 +91,14 @@
  function update(){
   queued=false;
   const active=enabled();
-  // Reinforce the route class before styling the browser's real scroll node.
+  // A non-viewport scroll container prevents Android's blue overlay rail
+  // when users swipe above/beside the map. The green rail controls this node.
+  if(active!==wasEnabled){
+    const root=document.getElementById('root');
+    if(root)root.scrollTop=0;
+    (document.scrollingElement||document.documentElement).scrollTop=0;
+    wasEnabled=active;
+  }
   document.documentElement.classList.toggle('vi-route-map',active);
   if(!active){if(rail)rail.hidden=true;return}
   attach();drawThumb();ensureRoutesAccess();
@@ -100,7 +110,10 @@
  addEventListener('popstate',schedule);
  window.visualViewport?.addEventListener('resize',schedule,{passive:true});
  const root=document.getElementById('root');
- if(root)new MutationObserver(schedule).observe(root,{childList:true,subtree:true});
+ if(root){
+   root.addEventListener('scroll',schedule,{passive:true});
+   new MutationObserver(schedule).observe(root,{childList:true,subtree:true});
+ }
  document.addEventListener('DOMContentLoaded',schedule,{once:true});
  schedule();
 })();
