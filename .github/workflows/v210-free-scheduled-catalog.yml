@@ -50,7 +50,8 @@ jobs:
       - name: Comprobar modelo de firmas, fuentes y fecha original
         if: steps.cadence.outputs.should_run == 'true'
         run: |
-          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs
+          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v220-wiki-spec-translations.test.mjs automation/v220-client-integration.test.mjs
+          node --check automation/v220-wiki-spec-translations.mjs
           node --check automation/v210-sources.mjs
           node --check automation/v210-publisher.mjs
       - name: Recuperar novedades de origen original y conservar archivo previo
