@@ -57,7 +57,7 @@ export function validatePublication(data){
     const keys=new Set();
     for(const spec of row.specs){
      if(!spec||!text(spec.key,70)||!text(spec.label,70)||!text(spec.value,170)||keys.has(spec.key))throw Error('Bad Wiki field');
-     for(const field of ['labelI18n','valueI18n'])if(spec[field]!==undefined&&!tr(spec[field],190))throw Error('Untrusted Wiki translation');
+     for(const field of ['labelI18n','valueI18n'])if(spec[field]!==undefined&&!tr(spec[field],field==='labelI18n'?80:190))throw Error('Untrusted Wiki translation');
      keys.add(spec.key);
     }
    }
