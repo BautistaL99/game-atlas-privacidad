@@ -1,0 +1,107 @@
+name: Game Atlas Companion V220 - compilar Android APK y AAB
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/index.html'
+      - '.github/workflows/android-v220-build-apk-aab.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: game-atlas-v220-android-build
+  cancel-in-progress: false
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Descargar exactamente el contenido web aprobado
+        uses: actions/checkout@v4
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Android SDK 36
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK_MANAGER=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -print -quit)
+          test -n "$SDK_MANAGER"
+          "$SDK_MANAGER" --install "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+      - name: Comprobar el unico paquete V220 aprobado y copiarlo a Capacitor
+        run: |
+          node android-v220/prepare-android.mjs stage
+          node --check android-v220/www/mobile-v220.js
+          node --check android-v220/www/community-v206.js
+          node --check android-v220/www/online-updates.js
+          node --check android-v220/www/news-v155.js
+      - name: Instalar Capacitor 8 sin servicios de pago
+        working-directory: android-v220
+        run: |
+          npm install --no-fund --no-audit
+          npx cap add android
+          npx cap sync android
+      - name: Mantener identidad de Play, apariencia y API 36
+        run: |
+          node android-v220/prepare-android.mjs native
+          grep -q 'versionCode 220' android-v220/android/app/build.gradle
+          grep -q 'targetSdkVersion = 36' android-v220/android/variables.gradle
+          grep -q 'community-v206.js' android-v220/www/index.html
+          grep -q 'mobile-v220.css' android-v220/www/index.html
+      - name: Compilar APK de QA y AAB candidato sin firmar (NO PUBLICAR EN PLAY)
+        working-directory: android-v220/android
+        env:
+          GRADLE_OPTS: '-Dorg.gradle.jvmargs=-Xmx3g -Dorg.gradle.parallel=false'
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug bundleRelease --no-daemon --stacktrace
+      - name: Verificar archivos Android, paquete, assets y hash
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist/android-v220
+          APK="android-v220/android/app/build/outputs/apk/debug/app-debug.apk"
+          AAB="android-v220/android/app/build/outputs/bundle/release/app-release.aab"
+          test -s "$APK"
+          test -s "$AAB"
+          unzip -l "$APK" | grep -q 'assets/public/index.html'
+          unzip -l "$APK" | grep -q 'assets/public/community-v206.js'
+          unzip -l "$APK" | grep -q 'assets/public/mobile-v220.css'
+          unzip -l "$APK" | grep -q 'assets/public/online-updates.js'
+          unzip -l "$AAB" | grep -q 'base/assets/public/community-v206.js'
+          AAPT="$ANDROID_HOME/build-tools/36.0.0/aapt"
+          "$AAPT" dump badging "$APK" | grep 'package: name=.com.indie.viassistant.'
+          "$AAPT" dump badging "$APK" | grep "versionCode='220'"
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify "$APK"
+          cp "$APK" dist/android-v220/Game-Atlas-Companion-V220-PRUEBA.apk
+          cp "$AAB" dist/android-v220/Game-Atlas-Companion-V220-SIN-FIRMAR.aab
+          (cd dist/android-v220 && sha256sum Game-Atlas-Companion-V220-PRUEBA.apk Game-Atlas-Companion-V220-SIN-FIRMAR.aab > SHA256SUMS.txt)
+          cat > dist/android-v220/LEEME-ANDROID-V220.txt <<'TXT'
+          Game Atlas Companion - Android V220 (versionName 1.50.0; versionCode 220)
+          Package ID: com.indie.viassistant (mismo ID del proyecto de Play)
+          APK: archivo instalable de PRUEBA, firmado con clave de desarrollo
+          AAB: paquete de lanzamiento SIN FIRMAR. NO puede enviarse directamente a Play Console.
+          La AAB definitiva requiere firmarla con la clave de SUBIDA de Google Play ya autorizada.
+          Si tenes una version de Play instalada, NO la reemplaces con la APK de depuracion:
+          puede tener una firma distinta. Exporta antes los datos de Mi partida.
+          Novedades: misma V220 web/movil; noticias oficiales y medios independientes;
+          fichas comunitarias separadas; catalogos remotos firmados Ed25519;
+          idiomas ES/EN/PT; mapa, marcadores, favoritos y progreso local.
+          Se consultan al abrir/reanudar y aproximadamente cada 30 min si esta abierta.
+          La publicacion de nuevas noticias depende del horario del recopilador.
+          No existe sincronizacion en la nube de favoritos/progreso.
+          TXT
+          ls -lh dist/android-v220
+      - name: Guardar artefactos QA en GitHub Actions (NO DISTRIBUCION)
+        uses: actions/upload-artifact@v4
+        with:
+          name: GAME-ATLAS-ANDROID-V220-APK-Y-AAB
+          path: dist/android-v220/
+          retention-days: 30
+          if-no-files-found: error
