@@ -79,9 +79,11 @@ async function translateRemote(en,lang,fetchFn){
  const raw=await response.text();
  if(raw.length>50000)throw Error('Translation reply too large');
  const answer=JSON.parse(raw),value=answer?.responseData?.translatedText?.trim();
- if(answer.responseStatus!==200||!SAFE(value)||/translation quota|invalid request|warning|rate limit/i.test(value))
+ if(Number(answer.responseStatus)!==200||!SAFE(value)||/translation quota|invalid request|warning|rate limit/i.test(value))
   throw Error('Untrusted translation response');
  if((en.match(/\d+/g)||[]).some(n=>!value.includes(n)))throw Error('Translation lost numerical fact');
+ if(value.toLocaleLowerCase()===en.toLocaleLowerCase()&&en.trim().split(/\s+/).length>1)
+  throw Error('Description not translated; retry later instead of mislabeling language');
  return value;
 }
 export async function translateFacts(data,{fetchFn=fetch,maxRequests=24,maxSpecs=14}={}){
