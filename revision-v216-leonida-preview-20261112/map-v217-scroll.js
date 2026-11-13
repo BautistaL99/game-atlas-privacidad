@@ -68,7 +68,7 @@
   const max=scrollMax(),height=rail.getBoundingClientRect().height;
   rail.hidden=height<70;
   if(rail.hidden)return;
-  const th=Math.min(56,Math.max(38,height-4)); // small draggable handle; never an oversized scrollbar
+  const th=Math.min(62,Math.max(44,height-4)); // small draggable handle; never an oversized scrollbar
   thumb.style.height=th+'px';
   const value=max?Math.min(1,Math.max(0,scrollNode().scrollTop/max)):0;
   thumb.style.transform='translateY('+((height-th)*value)+'px)';
@@ -87,7 +87,10 @@
  }
  function update(){
   queued=false;
-  if(!enabled()){if(rail)rail.hidden=true;return}
+  const active=enabled();
+  // Reinforce the route class before styling the browser's real scroll node.
+  document.documentElement.classList.toggle('vi-route-map',active);
+  if(!active){if(rail)rail.hidden=true;return}
   attach();drawThumb();ensureRoutesAccess();
  }
  function schedule(){if(queued)return;queued=true;requestAnimationFrame(update)}

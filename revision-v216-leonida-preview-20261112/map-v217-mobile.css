@@ -240,3 +240,54 @@
     background-position:center,84% 55%!important;background-size:cover,cover!important;opacity:.96!important;
   }
 }
+
+/* V220.1: mobile map keeps only our green PAGE thumb.
+   The actual scroll container varies across Chrome Android/Safari/WebView.
+   Hide native blue overlay rails without disabling scroll or changing PC. */
+@media (max-width:700px), (pointer:coarse) and (max-width:1150px) {
+ html.vi-route-map,
+ html.vi-route-map body,
+ html.vi-route-map body *:not(.v217-page-scroll-thumb) {
+   scrollbar-width:none!important;
+   -ms-overflow-style:none!important;
+ }
+ html.vi-route-map::-webkit-scrollbar,
+ html.vi-route-map body::-webkit-scrollbar,
+ html.vi-route-map body *::-webkit-scrollbar {
+   display:none!important;width:0!important;height:0!important;background:transparent!important;
+ }
+ html.vi-route-map body .v217-page-scroll-rail,
+ html.vi-route-map body .v217-page-scroll-rail:focus-visible {
+   right:0!important;width:34px!important;background:transparent!important;
+   outline:none!important;border:0!important;box-shadow:none!important;
+ }
+ html.vi-route-map body .v217-page-scroll-thumb {
+   right:7px!important;width:18px!important;min-height:42px!important;
+   background:#16bca2!important;border:1px solid #91ffee!important;
+   box-shadow:0 1px 5px #00272e!important;
+ }
+ /* CSS pseudo-label used to be literally 'Filtros'/'Cerrar' in all languages. */
+ #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle::after,
+ #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle[aria-expanded='true']::after {
+   content:attr(data-map-label)!important;
+ }
+ /* All three actions use the same 44px-high touch target.
+    Clear needs extra horizontal room for the translated word. */
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions {
+   display:flex!important;align-items:center!important;gap:6px!important;flex-wrap:nowrap!important;
+ }
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions > button {
+   box-sizing:border-box!important;height:44px!important;min-height:44px!important;
+   border-radius:10px!important;flex:0 0 auto!important;
+   padding:0 10px!important;font-weight:800!important;line-height:1!important;
+ }
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions .atlas-search-jump,
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions .v220-route-search {
+   width:44px!important;min-width:44px!important;max-width:44px!important;
+   font-size:24px!important;padding:0!important;display:grid!important;place-items:center!important;
+ }
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions .v220-map-clear {
+   width:auto!important;min-width:68px!important;max-width:none!important;
+   font-size:13px!important;padding:0 10px!important;
+ }
+}
