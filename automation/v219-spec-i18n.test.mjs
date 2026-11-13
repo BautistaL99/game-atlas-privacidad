@@ -9,6 +9,8 @@ test('common wiki technical keys and values are localized in three languages',()
  assert.equal(knownValue('M').pt,'Masculino');
  assert.equal(knownValue('4-door SUV').es,'SUV de 4 puertas');
  assert.equal(knownValue('Vice City').pt,'Vice City');
+ assert.equal(knownValue('Bravado','manufacturer').pt,'Bravado');
+ assert.equal(knownValue('Mechanic','occupation'),null);
 });
 test('retains unchanged source and caches translations with original key provenance',async()=>{
  const data={schema:205,revision:7,fiches:[{id:'wiki-community-abc',wikiRevision:12,
@@ -22,7 +24,7 @@ test('retains unchanged source and caches translations with original key provena
  assert.equal(data.revision,7);
  const b=await localizeCommunity(a.next,{translate,cache:a.report.cache});
  assert.equal(b.changed,false);
- assert.equal(calls,4);
+ assert.equal(calls,6);
 });
 test('refuses untranslated or altered facts, never displays an unlocalized value',async()=>{
  const data={revision:9,fiches:[{id:'f',specs:[
