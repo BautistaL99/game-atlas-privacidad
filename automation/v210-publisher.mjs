@@ -6,6 +6,7 @@
 import {createPrivateKey,createPublicKey,sign,verify} from 'node:crypto';
 import {readFile,writeFile} from 'node:fs/promises';
 import {getOfficial,getIndependent,getWikiBatch,sha,clean,boundedText} from './v210-sources.mjs';
+import {translateFacts} from './v220-wiki-spec-translations.mjs';
 const PUB='qxnlUBqCBknS8KL/Bymrx4COzWN9TpPJAfdHohv/ugI=';
 const MODES={official:1,community:205};
 const VI=/\b(?:grand theft auto\s*(?:vi|6)|gta\s*(?:vi|6))\b/i;
@@ -56,6 +57,7 @@ export function validatePublication(data){
     const keys=new Set();
     for(const spec of row.specs){
      if(!spec||!text(spec.key,70)||!text(spec.label,70)||!text(spec.value,170)||keys.has(spec.key))throw Error('Bad Wiki field');
+     for(const field of ['labelI18n','valueI18n'])if(spec[field]!==undefined&&!tr(spec[field],190))throw Error('Untrusted Wiki translation');
      keys.add(spec.key);
     }
    }
@@ -223,6 +225,15 @@ async function run(){
   nextCommunity=joined.next;report.newWiki=joined.changed;report.warnings.push(...scanned.errors);
   wikiState={cursor:scanned.cursor,specCursor:scanned.specCursor,checkedAt:stamp};
   report.specsInspected=scanned.specsInspected;report.withWikiSpecifications=scanned.withSpecs;
+  // Source revisions are validated above. Translate a bounded number of
+  // technical properties each scan, retry failures without publishing English
+  // as if it were a completed ES/PT translation.
+  const i18n=await translateFacts(nextCommunity,{maxRequests:24,maxSpecs:14});
+  nextCommunity=i18n.next;
+  report.specsTranslated=i18n.translated;
+  report.specsPending=i18n.pending;
+  report.translationRequests=i18n.requests;
+  report.quarantined.push(...i18n.errors.slice(0,10).map(x=>({source:'GTA Wiki',url:'',reason:x.id+' '+x.key+' '+x.lang+': '+x.reason})));
  }else throw Error('Unknown scheduled mode');
  const changed=nextOfficial!==official||nextCommunity!==community;
  report.changesSigned=changed;
