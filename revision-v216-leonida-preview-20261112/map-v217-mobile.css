@@ -205,3 +205,38 @@
 }
 
 /* V219 rights fix: original locally authored art replaces both mobile Rockstar hotlinks. Desktop and other media untouched. */
+
+/* V220 FINAL MOBILE QA — ONLY touch-sized screens, desktop remains unchanged. */
+@media (max-width:700px), (pointer:coarse) and (max-width:1150px) {
+  /* Suppress browser's blue native thumb/outline; show only our green handle. */
+  html.vi-route-map,html.vi-route-map body { scrollbar-width:none!important; }
+  html.vi-route-map::-webkit-scrollbar,html.vi-route-map body::-webkit-scrollbar { width:0!important;height:0!important;display:none!important; }
+  body .v217-page-scroll-rail,body .v217-page-scroll-rail:focus,body .v217-page-scroll-rail:focus-visible {
+    right:0!important;width:18px!important;border:0!important;outline:0!important;
+    box-shadow:none!important;background:transparent!important;
+  }
+  body .v217-page-scroll-rail::before { display:none!important; }
+  body .v217-page-scroll-thumb {right:3px!important;width:12px!important;border:1px solid #6dffe4!important;background:#16bca2!important;box-shadow:0 1px 4px #001c27!important;}
+  #root .atlas-v119 .atlas-map>.vi-map-fullscreen-btn {right:12px!important;}
+  #root .atlas-v119 .atlas-controls .vi-map-gesture-toggle {display:grid!important;place-items:center!important;min-width:42px!important;min-height:42px!important;}
+  /* Fullscreen: routes live beside Clear, with a compact magnifier. */
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .v216-filter-routes {display:none!important;}
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .v220-route-search {
+    display:grid!important;place-items:center!important;min-width:40px!important;width:40px!important;height:38px!important;
+    border:1px solid #69dcc7!important;border-radius:10px!important;background:#083d43!important;
+    color:#eafffa!important;font-size:24px!important;font-weight:800!important;line-height:1!important;padding:0!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions {display:flex!important;align-items:center!important;gap:7px!important;}
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions button {flex:0 0 auto!important;}
+  /* Keep only the photograph, not a big 'generic illustration' sticker. */
+  #root .vi-community-art-caption {display:none!important;}
+  /* Reuse reviewed original coastal artwork instead of polygonal placeholders. */
+  #root .my-game-hero .my-game-hero-art {
+    background-image:url('./assets/original/community-coast-v193.webp')!important;
+    background-position:64% 47%!important;background-size:cover!important;opacity:1!important;
+  }
+  #root .v120-playthrough .v120-overview::before {
+    background-image:linear-gradient(105deg,rgba(5,15,31,.88),rgba(6,21,38,.50)),url('./assets/original/community-coast-v193.webp')!important;
+    background-position:center,84% 55%!important;background-size:cover,cover!important;opacity:.96!important;
+  }
+}

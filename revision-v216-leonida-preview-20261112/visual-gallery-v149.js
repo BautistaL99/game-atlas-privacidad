@@ -202,7 +202,7 @@
    span.setAttribute('role','img');
    span.setAttribute('aria-label',label+' — '+note);
    const symbol=document.createElement('span');symbol.className='vi-community-art-icon';symbol.setAttribute('aria-hidden','true');symbol.textContent=icon;
-   const caption=document.createElement('span');caption.className='vi-community-art-caption';
+   const caption=document.createElement('span');caption.className='vi-community-art-caption';caption.setAttribute('aria-hidden','true');
    const strong=document.createElement('strong');strong.textContent=label;
    const small=document.createElement('small');small.textContent=note;
    caption.append(strong,small);span.append(symbol,caption);
