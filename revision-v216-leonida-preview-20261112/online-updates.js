@@ -4,6 +4,8 @@
  */
 (()=>{'use strict';
  const LANG=['es','en','pt'];
+ // V219: source-approved map points/routes must match the actual Yanis V17 basemap.
+ const CURRENT_MAP_VERSION='map-v216-yanis17';
  const CATEGORIES=new Set(['personajes','vehiculos','armas','misiones','economia','mapa-lugares','coleccionables','secretos','actividades','mundo','actualizaciones','herramientas']);
  const MAPPABLE=new Set(['personajes','vehiculos','armas','misiones','economia','mapa-lugares','coleccionables','secretos','actividades','mundo']);
  const ID=/^[a-z0-9][a-z0-9_-]{0,119}$/;
@@ -63,7 +65,7 @@
    const tags=Array.isArray(r.tags)?r.tags:[];
    if(tags.length>20||tags.some(t=>!string(t,55)))throw Error('Tags');
    let mapPoint;
-   if(r.mapPoint!==undefined){const m=r.mapPoint;if(!MAPPABLE.has(r.category)||!m||m.mapVersion!=='map-v14-provisional'||!Number.isFinite(m.x)||!Number.isFinite(m.y)||m.x<0||m.x>100||m.y<0||m.y>100)throw Error('Map calibration');mapPoint={mapVersion:m.mapVersion,x:m.x,y:m.y}}
+   if(r.mapPoint!==undefined){const m=r.mapPoint;if(!MAPPABLE.has(r.category)||!m||m.mapVersion!==CURRENT_MAP_VERSION||!Number.isFinite(m.x)||!Number.isFinite(m.y)||m.x<0||m.x>100||m.y<0||m.y>100)throw Error('Map calibration');mapPoint={mapVersion:m.mapVersion,x:m.x,y:m.y}}
    const publishedAt=r.publishedAt===undefined?undefined:r.publishedAt;
    if(publishedAt!==undefined&&!/^\d{4}-\d{2}-\d{2}$/.test(publishedAt))throw Error('Bad publication date');
    let gallery;
@@ -99,7 +101,7 @@
   const routes=o.routes===undefined?[]:o.routes;
   if(!Array.isArray(routes)||routes.length>80)throw Error('Routes');
   const seenRoute=new Set();
-  for(const r of routes){if(!r||!/^official-[a-z0-9_-]{1,90}$/.test(r.id)||seenRoute.has(r.id)||!translated(r.title,180)||!translated(r.summary,1300)||r.mapVersion!=='map-v14-provisional'||!Array.isArray(r.stops)||r.stops.length<2||r.stops.length>20||r.stops.some(x=>typeof x!=='string'||!/^(?:catalog-)?[a-z0-9_-]{1,120}$/.test(x))||new Set(r.stops).size!==r.stops.length)throw Error('Bad route');seenRoute.add(r.id)}
+  for(const r of routes){if(!r||!/^official-[a-z0-9_-]{1,90}$/.test(r.id)||seenRoute.has(r.id)||!translated(r.title,180)||!translated(r.summary,1300)||r.mapVersion!==CURRENT_MAP_VERSION||!Array.isArray(r.stops)||r.stops.length<2||r.stops.length>20||r.stops.some(x=>typeof x!=='string'||!/^(?:catalog-)?[a-z0-9_-]{1,120}$/.test(x))||new Set(r.stops).size!==r.stops.length)throw Error('Bad route');seenRoute.add(r.id)}
   const rankings=o.rankings===undefined?{donations:[],speedruns:[]}:o.rankings;
   if(!rankings||!Array.isArray(rankings.donations)||!Array.isArray(rankings.speedruns)||rankings.donations.length>100||rankings.speedruns.length>100)throw Error('Rankings');
   const seenRank=new Set(),currencies=new Set();
