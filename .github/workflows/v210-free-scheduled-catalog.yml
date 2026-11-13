@@ -50,9 +50,10 @@ jobs:
       - name: Comprobar modelo de firmas, fuentes y fecha original
         if: steps.cadence.outputs.should_run == 'true'
         run: |
-          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs
+          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v219-spec-i18n.test.mjs
           node --check automation/v210-sources.mjs
           node --check automation/v210-publisher.mjs
+          node --check automation/v219-spec-i18n.mjs
       - name: Recuperar novedades de origen original y conservar archivo previo
         if: steps.cadence.outputs.should_run == 'true'
         env:
@@ -87,7 +88,7 @@ jobs:
             echo 'Repository changed during collection; postpone until next scheduled pass'
             exit 1
           fi
-          git add automation/v210-last-check.json
+          git add automation/v210-last-check.json automation/v219-translation-cache.json
           git add updates/catalog-envelope.json updates/community-envelope-v205.json
           if [ -f automation/v210-wiki-state.json ]; then git add automation/v210-wiki-state.json; fi
           if git diff --cached --quiet; then
