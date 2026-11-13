@@ -63,7 +63,7 @@ export function knownLabel(label){
  return v?{es:v[0],en:v[1],pt:v[2]}:null;
 }
 export function knownValue(value){
- const v=VALUES[sourceKey(value)];
+ const v=Object.entries(VALUES).find(([name])=>sourceKey(name)===sourceKey(value))?.[1];
  if(v)return {es:v[0],en:v[1],pt:v[2]};
  if(proper(value))return {es:value,en:value,pt:value};
  return null;
