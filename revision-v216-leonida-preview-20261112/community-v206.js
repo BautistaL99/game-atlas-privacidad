@@ -38,6 +38,16 @@
      !translations(item.title,160)||!translations(item.summary,450)||
      !Number.isSafeInteger(item.wikiRevision)||item.wikiRevision<0||
      item.image!==undefined||item.facts!==undefined||item.mapPoint!==undefined||item.gallery!==undefined)throw Error('Untrusted community profile');
+   if(item.specs!==undefined){
+    if(!Array.isArray(item.specs)||item.specs.length>18)throw Error('Untrusted Wiki specification count');
+    const keys=new Set();
+    for(const f of item.specs){
+     if(!f||!clean(f.key,70)||!clean(f.label,70)||!clean(f.value,170)||keys.has(f.key))throw Error('Untrusted Wiki specification');
+     keys.add(f.key);
+     if(f.labelI18n!==undefined&&!translations(f.labelI18n,80))throw Error('Invalid multilingual Wiki label');
+     if(f.valueI18n!==undefined&&!translations(f.valueI18n,190))throw Error('Invalid multilingual Wiki value');
+    }
+   }
    seen.add(item.id);
   }
   return data;
@@ -63,7 +73,7 @@
  };
  const date=s=>/^\d{4}-\d{2}-\d{2}$/.test(s||'')?s:'';
  function newsHtml(route,lang){
-  if(!issue||route==='/noticias/oficiales'||/[?&]estado=favoritos/.test(location.hash))return '';
+  if(!issue||window.viWikiCatalogIndexed===true||route==='/noticias/oficiales'||/[?&]estado=favoritos/.test(location.hash))return '';
   const isArchive=route==='/noticias/archivo',cut=new Date(Date.now()-90*86400000).toISOString().slice(0,10);
   const rows=issue.news.filter(n=>isArchive?n.publishedAt<cut:n.publishedAt>=cut).sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt));
   if(!rows.length)return '';
@@ -78,7 +88,7 @@
   return '<section class="vi-v206-independent-news" aria-label="'+t.title+'">'+page+'</section>';
  }
  function wikiHtml(category,lang){
-  if(!issue||!allowedCategories.has(category))return '';
+  if(!issue||!allowedCategories.has(category)||window.viWikiCatalogIndexed===true)return '';
   const rows=issue.fiches.filter(r=>r.category===category).sort((a,b)=>String(a.title.en).localeCompare(String(b.title.en)));
   if(!rows.length)return '';
   const t=words[localeOf(lang)];
@@ -129,6 +139,7 @@
    if(next.revision===lastRevision)return;
    issue=next;lastRevision=next.revision;
    try{localStorage.setItem(KEY,JSON.stringify(env))}catch{}
+   window.viApplyCommunityFeed?.(next);
    refreshVisible();
    dispatchEvent(new CustomEvent('vi:community-content-updated',{detail:{revision:lastRevision,news:next.news.length,fiches:next.fiches.length}}));
   }catch(err){console.warn('Community feed rejected; official news remains available:',err.message)}
@@ -148,7 +159,7 @@
     interval:Math.max(10,Math.min(1440,Number(conf.minCheckMinutes)||30))*60000};
    try{
     const cached=localStorage.getItem(KEY);
-    if(cached){const data=await checkSigned(JSON.parse(cached),cfg.key);issue=data;lastRevision=data.revision;refreshVisible()}
+    if(cached){const data=await checkSigned(JSON.parse(cached),cfg.key);issue=data;lastRevision=data.revision;window.viApplyCommunityFeed?.(data);refreshVisible()}
    }catch(e){try{localStorage.removeItem(KEY)}catch{}}
    void refresh(true);
    if(!timer)timer=setInterval(()=>{if(!document.hidden)void refresh()},cfg.interval);
