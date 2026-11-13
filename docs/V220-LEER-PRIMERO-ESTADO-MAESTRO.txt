@@ -1,0 +1,107 @@
+GAME ATLAS COMPANION — ESTADO MAESTRO V219 / CANDIDATO TECNICO V220
+Fecha: 13/11/2026. Este TXT reemplaza las descripciones de estado de V140-V218.
+NO significa que se hayan publicado la nueva web, la app Android ni la app iOS.
+
+1. IDENTIDAD Y VERSIONES
+Sitio oficial previsto: https://gta6mapa.web.app/app/
+Espejo GitHub Pages: https://bautistal99.github.io/game-atlas-privacidad/app/
+Vista previa preservada: /revision-v216-leonida-preview-20261112/
+V219 = última versión móvil aprobada visualmente por el propietario.
+V220 = candidata V219 + integración automática, traducciones, pruebas, arte
+original y documentación. Todas las modificaciones nuevas se preparan por rama;
+un PR abierto no es una publicación ni aprobación para las tiendas.
+NO cambiar la experiencia de PC sin revisión. NO usar datos ficticios para
+completar GTA VI. No importar recursos externos sin permiso/licencia adecuada.
+
+2. FUNCIONES EXISTENTES DE LA PAGINA (EVOLUCION ACUMULATIVA)
+V1xx:
+- Catálogo central de artículos/fichas con IDs estables, títulos y resúmenes.
+- Navegación Inicio, Explorar, Mapa, Noticias, Mi partida, Más.
+- ES/EN/PT y selector de idioma; búsquedas textuales, categorías y sinónimos.
+- Fichas individuales, estados de usuario, favoritos, vistos y recientes.
+- Comparaciones, filtros dinámicos, analítica descriptiva de progreso.
+- Noticias oficiales, archivo de noticias, presentación editorial y fuentes.
+- Galerías curadas y controles contra imágenes sin derechos.
+- Importación/exportación local de progreso y protección de privacidad.
+V142-V174:
+- Datos firmados, feeds remotos, imágenes verificadas y validación de fuentes.
+- Tablas/comparadores y estructura técnica para parámetros futuros vacíos.
+- Rutas locales y recorridos, con puntos y estados independientes.
+- Fuentes/rankings, top, donaciones como propuesta con controles de seguridad.
+- SEO y páginas estáticas; pruebas de fuentes, traducciones, navegación.
+V19x-V20x:
+- Correcciones de maquetación web, búsquedas y traducciones.
+- Automatización de Newswire y fuentes comunitarias, separadas por origen.
+- Wiki incrementales, firma Ed25519, deduplicación y modo conservador.
+- Medios independientes certificados por fuente, no comunicados Rockstar.
+V211-V219:
+- Mejoras de móvil y Android sin romper PC.
+- Mapa Leonida con atribución GTADB/Yanis V17, filtros, zoom/paneo.
+- Rutas ilustrativas dibujadas, rutas personalizadas, buscador de paradas,
+  orden, mostrar/ocultar camino, eliminación y confirmación por pulsación larga.
+- Barra lateral arrastrable de página en lugar de botones sobre el zoom.
+- Dos fondos artísticos en Mi partida y progreso.
+V220 CANDIDATO:
+- Las Wiki verificadas por firma alimentan el catálogo central /buscar,
+  /explorar/categoria, /ficha/id, favoritos, comparaciones y campos técnicos.
+- Las noticias independientes ingresan al catálogo principal conservando tier.
+- Los datos técnicos se internacionalizan incrementalmente y solo se muestran
+  con ES/EN/PT completo; hay cuarentena automática de traducciones fallidas.
+- Corrección validador de puntos/rutas firmados al mapa map-v216-yanis17.
+- Arte móvil original sin hotlinks a fotografías de Rockstar.
+- Wiki cada hora durante primera semana del lanzamiento y luego ciclo diario.
+- Source summaries Rockstar cuando metadatos permiten extracción y traducción.
+  Fallback neutro sin inventar si no se pueden verificar.
+
+3. MODULOS DEL CLIENTE MAS IMPORTANTES
+app-v137.js: catálogo records[], render, fichas, búsqueda, progreso, mapa.
+online-updates.js: schema 1 + verificación Ed25519, anti-rollback, caché.
+community-v206.js: schema 205 + verificación, noticia independiente y Wiki.
+routes-v145.js: rutas locales y firma de rutas aprobadas cuando disponibles.
+news-v155.js: páginas de noticias y presentación.
+vi-i18n.js: UI multilingüe y diccionario.
+detail-enhancements-v160.js: galería y comparación.
+map-v216.css + map-v217-mobile.css + map-v217-scroll.js: mapa móvil y barra.
+visual-gallery-v149.js: capa visual web; no exportarla a WebView sin revisión.
+sw.js: caché de recursos propios, actualización de JS/CSS network-first.
+online-config.json: endpoint de feeds públicos y CLAVE PUBLICA (no secreto).
+manifest.webmanifest: identidad PWA.
+privacy.html: política de datos y contacto publicados.
+assets/LEONIDA-MAP-LICENSE.txt: licencias del mapa.
+assets/original/ART-ORIGIN-V219.txt: procedencia de nuevos fondos.
+
+4. CONTRATOS Y LIMITES
+Los datos del usuario viven en localStorage en ese dispositivo.
+No hay cuenta ni backup remoto obligatorio. No cambiar este diseño.
+Los feeds remotos son JSON firmados con revisiones crecientes.
+El publicador nunca lee favoritos, Mi partida, rutas personales ni passwords.
+Rockstar = noticia oficial; Wiki = dato técnico verificado por fuente aprobada;
+independiente = reporte de medio, no confirmación Rockstar.
+Cada registro mantiene fuente original, fecha de origen e ID sin duplicados.
+Campos futuros vacíos no se eliminan.
+Especificaciones en inglés no se muestran como español/portugués hasta
+traducción completa. El contenido se incorpora cuando exista evidencia.
+Rutas actuales ilustran conexión entre paradas; no se garantiza red vial.
+No se garantizan nuevas noticias en cada corrida ni actualización inmediata.
+Donaciones y rankings no deben aceptar cobros inexistentes.
+Los secretos de publicación nunca aparecen en repositorios, backups ni chats.
+
+5. DIFERENCIA ENTRE APROBACION Y AUTOMATIZACION
+Las revisiones periódicas de noticias/Wiki son AUTOMATICAS sin escribir códigos
+de aprobación ni ejecutar un workflow de despliegue web.
+El despliegue oficial de /app y Firebase pasa por una autorización humana
+única con la frase DERECHOS_REVISADOS, más todas las pruebas y secretos
+administrados por GitHub. No requiere escribir «PUBLICAR_WEB» si se aplica
+el flujo V220 de un solo control. NO se ejecuta hasta autorización expresa.
+Android: preparar APK/AAB, probar y firmar con claves de propietario.
+iOS: requerirá un Mac, Xcode, firma Apple y revisión de App Store.
+No afirmar que cualquier app está publicada porque exista un proyecto.
+
+6. RECUPERACION
+Seguir docs/V220-FLUJO-AUTOMATICO-COMUNICACIONES.txt y el manual privado
+V220-PUBLICACION-RECONSTRUCCION.txt. Restaurar primero desde SHA/tag
+inalterable; verificar archivos y las firmas Ed25519, no copiar un ZIP
+antiguo sobre main. Reactivar jobs uno por uno; nunca forzar push ni
+ejecutar el deploy privado por cada noticia.
+Si falla el chat, los repositorios y el historial de commits son la fuente
+de verdad; NO es necesario tener este chat para reconstruir la web.
