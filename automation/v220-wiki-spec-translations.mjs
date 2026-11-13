@@ -120,7 +120,7 @@ export async function translateFacts(data,{fetchFn=fetch,maxRequests=24,maxSpecs
     dataByKind[kind]={es:value.es,en,pt:value.pt};
    }
    if(failed){pending++;continue}
-   if(!LANGS.every(lang=>SAFE(dataByKind.label?.[lang])&&SAFE(dataByKind.value?.[lang]))){pending++;continue}
+   if(!LANGS.every(lang=>SAFE(dataByKind.label?.[lang])&&dataByKind.label[lang].length<=80&&SAFE(dataByKind.value?.[lang]))){pending++;continue}
    next[j]={...spec,labelI18n:dataByKind.label,valueI18n:dataByKind.value};
    rowChanged=true;translated++;completed++;
   }
