@@ -291,3 +291,43 @@
    font-size:13px!important;padding:0 10px!important;
  }
 }
+
+/* V220.2 — Mobile map is the sole scroll container. Chrome Android may draw a
+   blue viewport scrollbar even when html::-webkit-scrollbar is hidden.
+   Prevent viewport scrolling ONLY on the map route; put all page motion on
+   #root so the existing green custom rail is the only scroll indicator. */
+@media (max-width:700px), (pointer:coarse) and (max-width:1150px) {
+ html.vi-route-map,html.vi-route-map body {
+   box-sizing:border-box!important;height:100%!important;
+   height:100dvh!important;max-height:100dvh!important;
+   overflow:hidden!important;overscroll-behavior:none!important;
+ }
+ html.vi-route-map #root {
+   box-sizing:border-box!important;display:block!important;
+   height:100vh!important;height:100dvh!important;max-height:100dvh!important;
+   overflow-x:hidden!important;overflow-y:auto!important;
+   scrollbar-width:none!important;-ms-overflow-style:none!important;
+   -webkit-overflow-scrolling:touch!important;overscroll-behavior-y:contain!important;
+   touch-action:pan-y!important;
+ }
+ html.vi-route-map #root::-webkit-scrollbar,
+ html.vi-route-map #root::-webkit-scrollbar-track,
+ html.vi-route-map #root::-webkit-scrollbar-thumb {
+   display:none!important;width:0!important;height:0!important;
+   background:transparent!important;border:0!important;
+ }
+ /* Fullscreen map filters: put Search, Clear and Compass on one centered row. */
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-head {
+   display:flex!important;flex-direction:column!important;
+   align-items:stretch!important;justify-content:center!important;gap:8px!important;
+   width:100%!important;box-sizing:border-box!important;
+ }
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-head > b {
+   align-self:flex-start!important;text-align:left!important;
+ }
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions {
+   width:100%!important;box-sizing:border-box!important;display:flex!important;
+   justify-content:center!important;align-items:center!important;
+   flex-wrap:nowrap!important;gap:8px!important;margin:0 auto!important;
+ }
+}
