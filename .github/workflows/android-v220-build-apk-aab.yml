@@ -4,7 +4,6 @@ on:
     branches: [main]
     paths:
       - 'app/index.html'
-      - '.github/workflows/android-v220-build-apk-aab.yml'
   workflow_dispatch:
 permissions:
   contents: read
