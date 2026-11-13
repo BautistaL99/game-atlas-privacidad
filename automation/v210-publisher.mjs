@@ -101,6 +101,19 @@ async function officialTitle(url,original,lang,fetchFn=fetch){
  if(title&&VI.test(title)&&title.toLowerCase()!==original.toLowerCase())return enToTranslated(original,title);
  return myMemory(original,lang,fetchFn);
 }
+/* Prefer a genuine Rockstar metadata description, translated into all
+ * three locales. If unavailable, the existing safe summary template remains.
+ * Never automatically hotlink unreviewed promotional photographs. */
+async function officialExcerpt(url,fetchFn=fetch){
+ try{
+  const html=await boundedText(url,fetchFn,{max:1200000,headers:{Accept:'text/html'}});
+  const en=clean(meta(html,'og:description')||meta(html,'description'),170);
+  if(!en||en.length<34||/cookies?|privacy|javascript required|accept all/i.test(en))return null;
+  const es=await myMemory(en,'es',fetchFn),pt=await myMemory(en,'pt',fetchFn);
+  return tr({es,en,pt},190)?{es,en,pt}:null;
+ }catch{return null}
+}
+
 export async function officialEntry(source,fetchFn=fetch){
  if(!urlValid(source.url)||!/^https:\/\/www\.rockstargames\.com\/newswire\/article\//.test(source.url)||!DATE.test(source.publishedAt))
   throw Error('Bad Rockstar source');
@@ -108,9 +121,10 @@ export async function officialEntry(source,fetchFn=fetch){
  if(!VI.test(en))throw Error('Rockstar item not explicitly GTA VI');
  const es=await officialTitle(source.url,en,'es',fetchFn);
  const pt=await officialTitle(source.url,en,'pt',fetchFn);
+ const excerpt=await officialExcerpt(source.url,fetchFn);
  return {id:'rockstar-'+sha(source.url).slice(0,24),category:'actualizaciones',status:'verified',
   title:{es,en,pt},
-  summary:{
+  summary:excerpt||{
    es:'Rockstar Games publicó una noticia oficial sobre Grand Theft Auto VI: '+es+'. Consultá el anuncio original para conocer los detalles.',
    en:'Rockstar Games published an official Grand Theft Auto VI announcement: '+en+'. Read the original Rockstar publication for details.',
    pt:'A Rockstar Games publicou uma notícia oficial sobre Grand Theft Auto VI: '+pt+'. Leia o comunicado original para conhecer os detalhes.'
