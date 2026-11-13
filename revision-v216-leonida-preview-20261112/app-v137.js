@@ -894,8 +894,8 @@ document.addEventListener('submit',e=>{if(e.target.id==='homeSearchForm'){e.prev
 const viWikiGoodLang=(x,max=190)=>x&&typeof x==='object'&&['es','en','pt'].every(l=>typeof x[l]==='string'&&x[l].trim()&&x[l].length<=max&&!/[<>\x00-\x1f]/.test(x[l]));
 function viWikiApplyLocale(item,lang){
  const specs=(item.wikiSpecs||[]).filter(x=>viWikiGoodLang(x.labelI18n,80)&&viWikiGoodLang(x.valueI18n,190));
- item.facts=specs.slice(0,18).map(x=>({key:x.labelI18n[lang]||x.labelI18n.es,value:x.valueI18n[lang]||x.valueI18n.es,verified:true,source:'wiki'}));
- item.attributes=Object.fromEntries(specs.map(x=>[x.key,(x.valueI18n[lang]||x.valueI18n.es)]));
+ item.facts=[...(item.facts||[]).filter(x=>x.source!=='wiki'),...specs.slice(0,18).map(x=>({key:x.labelI18n[lang]||x.labelI18n.es,value:x.valueI18n[lang]||x.valueI18n.es,verified:true,source:'wiki'}))];
+ item.attributes={...(item.attributes||{}),...Object.fromEntries(specs.map(x=>[x.key,(x.valueI18n[lang]||x.valueI18n.es)]))};
  return item;
 }
 window.viWikiCatalogIndexed=false;
@@ -965,7 +965,9 @@ window.viApplySignedCatalog=function(items){
   const old=existing.get(it.id);
   if(old){
    // Preserve curated facts, local media and game-specific metadata unless update explicitly carries verified fields.
-   existing.set(it.id,{...old,...it,image:(it.image?.data||it.image?.remote)?it.image:old.image||{},facets:{...(old.facets||{}),...(it.facets||{})},tags:it.tags?.length?it.tags:(old.tags||[]),trackable:it.trackable===undefined?old.trackable:it.trackable,mapPoint:it.mapPoint||old.mapPoint,publishedAt:it.publishedAt||old.publishedAt,facts:it.facts?.length?it.facts:(old.facts||[]),gallery:Array.isArray(it.gallery)?it.gallery:old.gallery}); changed++;
+   existing.set(it.id,{...old,...it,
+    sources:old.wikiSource?[...(it.sources||old.sources||[]).filter(src=>src.url!==old.wikiSource),{url:old.wikiSource,label:'GTA Wiki · fuente verificada',checkedAt:''}]:it.sources||old.sources||[],
+    image:(it.image?.data||it.image?.remote)?it.image:old.image||{},facets:{...(old.facets||{}),...(it.facets||{})},tags:it.tags?.length?it.tags:(old.tags||[]),trackable:it.trackable===undefined?old.trackable:it.trackable,mapPoint:it.mapPoint||old.mapPoint,publishedAt:it.publishedAt||old.publishedAt,facts:it.facts?.length?it.facts:(old.facts||[]),gallery:Array.isArray(it.gallery)?it.gallery:old.gallery}); changed++;
   }else{existing.set(it.id,{...it,image:(it.image?.data||it.image?.remote)?it.image:undefined});added++}
  }
  records.splice(0,records.length,...existing.values());
