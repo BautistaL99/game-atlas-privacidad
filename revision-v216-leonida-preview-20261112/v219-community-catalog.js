@@ -71,8 +71,8 @@
   try{
    const records=prepareRows(feed);
    if(!records.length)return false;
-   window.viApplySignedCatalog(records);
    window.viCommunityFeedsIntegrated=true;
+   window.viApplySignedCatalog(records);
    window.viV219CommunityStats={revision:feed.revision,fiches:feed.fiches.length,news:feed.news.length,integrated:records.length,
      translatedFields:records.reduce((sum,r)=>sum+(r.wikiSourceInfo?.localizedFields||0),0)};
    // This event is informational only: favorites/progress remain untouched.
