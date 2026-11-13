@@ -6,6 +6,7 @@
 import {createPrivateKey,createPublicKey,sign,verify} from 'node:crypto';
 import {readFile,writeFile} from 'node:fs/promises';
 import {getOfficial,getIndependent,getWikiBatch,sha,clean,boundedText} from './v210-sources.mjs';
+import {localizeCommunity} from './v219-spec-i18n.mjs';
 const PUB='qxnlUBqCBknS8KL/Bymrx4COzWN9TpPJAfdHohv/ugI=';
 const MODES={official:1,community:205};
 const VI=/\b(?:grand theft auto\s*(?:vi|6)|gta\s*(?:vi|6))\b/i;
@@ -57,6 +58,14 @@ export function validatePublication(data){
     for(const spec of row.specs){
      if(!spec||!text(spec.key,70)||!text(spec.label,70)||!text(spec.value,170)||keys.has(spec.key))throw Error('Bad Wiki field');
      keys.add(spec.key);
+    }
+   }
+   if(row.specsI18n!==undefined){
+    if(!Array.isArray(row.specsI18n)||row.specsI18n.length>18)throw Error('Unbounded localized Wiki fields');
+    const original=new Map((row.specs||[]).map(s=>[s.key,s.value]));
+    for(const item of row.specsI18n){
+     if(!item||!text(item.key,70)||original.get(item.key)!==item.sourceValue||
+      !tr(item.label,170)||!tr(item.value,170))throw Error('Wiki translation lacks source provenance');
     }
    }
   }else throw Error('Unsupported sidecar source tier');
@@ -198,7 +207,7 @@ async function run(){
   console.log('V210 REPORT',JSON.stringify(report));
   return;
  }
- let nextOfficial=official,nextCommunity=community,wikiState={};
+ let nextOfficial=official,nextCommunity=community,wikiState={},specCache={};
  if(mode==='news'){
   const sources=await Promise.allSettled([getOfficial(),getIndependent()]);
   if(sources[0].status==='fulfilled'){
@@ -218,9 +227,15 @@ async function run(){
   if(sources.every(x=>x.status==='rejected'))throw Error('All news providers down; signed archives unchanged');
  }else if(mode==='wiki'){
   try{wikiState=JSON.parse(await readFile('automation/v210-wiki-state.json','utf8'))}catch(e){if(e.code!=='ENOENT')throw e}
+  try{specCache=JSON.parse(await readFile('automation/v219-translation-cache.json','utf8'))}catch(e){if(e.code!=='ENOENT')throw e}
   const scanned=await getWikiBatch(wikiState,fetch,{withSpecifications:true});
   const joined=mergeWiki(community,scanned.items);
-  nextCommunity=joined.next;report.newWiki=joined.changed;report.warnings.push(...scanned.errors);
+  const localized=await localizeCommunity(joined.next,{cache:specCache,limit:36});
+  nextCommunity=localized.next;report.newWiki=joined.changed;report.warnings.push(...scanned.errors);
+  report.localizedFieldsAdded=localized.report.added;
+  report.localizedFieldsPending=localized.report.pending;
+  report.specTranslationQuarantine=localized.report.rejected;
+  specCache=localized.report.cache;
   wikiState={cursor:scanned.cursor,specCursor:scanned.specCursor,checkedAt:stamp};
   report.specsInspected=scanned.specsInspected;report.withWikiSpecifications=scanned.withSpecs;
  }else throw Error('Unknown scheduled mode');
@@ -243,7 +258,10 @@ async function run(){
   if(newCommunity)verifyFeed(newCommunity,205);
   if(newOfficial)await writeFile(oldOfficialPath,JSON.stringify(newOfficial)+'\n');
   if(newCommunity)await writeFile(oldCommunityPath,JSON.stringify(newCommunity)+'\n');
-  if(mode==='wiki')await writeFile('automation/v210-wiki-state.json',JSON.stringify(wikiState,null,2)+'\n');
+  if(mode==='wiki'){
+   await writeFile('automation/v210-wiki-state.json',JSON.stringify(wikiState,null,2)+'\n');
+   await writeFile('automation/v219-translation-cache.json',JSON.stringify(specCache,null,2)+'\n');
+  }
   report.publisher=changed?'SIGNED_READY_TO_COMMIT':'UNCHANGED_SIGNED_ARCHIVES_PRESERVED';
  }
  await writeFile('automation/v210-last-check.json',JSON.stringify(report,null,2)+'\n');
