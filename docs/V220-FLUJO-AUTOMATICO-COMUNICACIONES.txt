@@ -1,0 +1,149 @@
+GAME ATLAS COMPANION — CONTRATO TECNICO DE AUTOMATIZACION V220
+ESTADO: CANDIDATO; NO ES CONFIRMACION DE PUBLICACION
+Fecha de preparación: 13/11/2026 (Argentina)
+Base visual y funcional validada por el propietario: V219.
+Cambios V220: integración de contenido firmado, traducción progresiva y pruebas.
+Este documento es OPERATIVO; las guías V140-V218 son HISTORICAS.
+
+1. ARQUITECTURA DE DOMINIOS Y RESPONSABILIDADES
+A) Repositorio PUBLICO: BautistaL99/game-atlas-privacidad
+  - /.github/workflows/v210-free-scheduled-catalog.yml: tareas automatizadas.
+  - /automation/v210-sources.mjs: origen y scraping/APIs permitidas.
+  - /automation/v210-publisher.mjs: validación, deduplicación, firma y persistencia.
+  - /automation/v220-wiki-spec-translations.mjs: traducción incremental técnica.
+  - /automation/v219-launch-window.mjs: control temporal del cron Wiki.
+  - /updates/catalog-envelope.json: sobre Ed25519 schema=1 (Rockstar y registros ya curados).
+  - /updates/community-envelope-v205.json: sobre Ed25519 schema=205 (medio independiente y Wiki).
+  - /automation/v210-wiki-state.json: cursores por categoría y cursor de extracción técnica.
+  - /automation/v210-last-check.json: diagnóstico, fecha, cuarentenas y recuentos.
+  - /revision-v216-leonida-preview-20261112/: CANDIDATA VISUAL V219 con mejoras V220.
+  - /app/: SOLO versión oficial después de aprobación; JAMAS sincronizar aquí desde el recolector.
+B) Repositorio de DESARROLLO: BautistaL99/-gta-vi-game-assistant
+  - /shared/site/: fuente canónica para construir web, Android y clientes.
+  - /scripts/sync-clients.mjs: copia shared/site a /web y /android/mobile/www.
+  - /.github/workflows/publish-reviewed.yml: publicación WEB por aprobación explícita.
+  - Android e iOS requieren compilación nativa y firma aparte. No se generan desde Wiki.
+C) Alojamiento:
+  - GitHub Pages (feeds públicos firmados): https://bautistal99.github.io/game-atlas-privacidad/updates/
+  - Web final Firebase Hosting: https://gta6mapa.web.app/app/
+  - /app/ público y Firebase solo después de revisión del propietario.
+  - Clientes consultan URL HTTPS aprobada, sin scripts remotos ni solicitudes de datos privados.
+
+2. HORARIOS AUTOMATICOS EN UTC (ARGENTINA UTC-3)
+Noticias: 29 17,23 * * * = 14:29 y 20:29 ART (dos veces al día).
+Wiki normal: 43 8 * * * = 05:43 ART (una vez al día).
+Wiki primeros 7 días del lanzamiento de GTA VI anunciado para 19/11/2026:
+  11 * * * * = minuto 11 de cada hora; solo de 2026-11-19T03:00:00Z
+  (19 nov 00:00 ART) a 2026-11-26T03:00:00Z (26 nov 00:00 ART), fin excluido.
+  Durante esos 7 días el cron diario se desactiva mediante compuerta para no duplicar.
+  El 26 nov vuelve el diario 05:43 ART. Ajustar GAME_ATLAS_LAUNCH_AT si
+  cambia la fecha oficial: no asumir otra fecha sin confirmación.
+GitHub Actions puede retrasar jobs programados. No hay SLA ni actualizaciones instantáneas.
+Para NO consumir créditos privados, el recolector corre exclusivamente en repo público;
+no iniciar un despliegue integral por cada escaneo.
+
+3. FUENTES Y CLASIFICACION
+Rockstar Games:
+  graph.rockstargames.com (GraphQL Newswire), rockstargames.com/newswire, rockstargames.com/VI.
+  Fuente OFICIAL de noticias. Fecha original y URL original son obligatorias.
+RockstarINTEL: RSS https://rockstarintel.com/feed/, medio INDEPENDIENTE
+  aprobado como fuente revisada; una nota no implica confirmación Rockstar.
+GTA Wiki: https://gta.wiki/api.php y https://gta.wiki/w/Titulo
+  Wiki confiable verificada por Game Atlas para datos técnicos cuando corresponde.
+  No llamar a la Wiki «comunicado oficial Rockstar». Guardar sourceName/sourceUrl,
+  sourceTier, wikiRevision y la referencia técnica específica.
+  Categorías del escáner vigente: vehículos, personajes, armas, lugares.
+  No afirmar cobertura automática de toda la Internet o de todas las Wikis.
+Nuevas fuentes: deben agregarse explícitamente a allowlist, testearse y revisarse.
+No escribir datos falsos o especulativos como coordenadas del mapa.
+
+4. PUBLICACION Y VALIDACION — SIN INTERVENCION HUMANA EN CADA ACTUALIZACION
+(1) Acciones programadas hacen checkout de repo público main.
+(2) Verifican ambos feeds antiguos con clave pública Ed25519 y su schema.
+(3) Revisan fuentes allowlist, HTTP/TLS, tamaño, fecha original y relevancia GTA VI.
+(4) Por URL/ID/revisión de Wiki evitan duplicados; nunca cambian la fecha del original.
+(5) Traducen título/resumen ES, EN y PT; no aceptan servicio en error o salida inválida.
+(6) Para Wiki analizan infobox plano seguro, excluyen plantillas, HTML, imágenes y scripts.
+    Máximo 18 especificaciones/entrada; máximo 60 páginas técnicas por pase.
+    Rotan cursores para revisar progresivamente todos los elementos disponibles.
+(7) V220 intenta traducir campos label/value de especificaciones hasta 14 campos y
+    24 solicitudes remotas/pase, aprovechando diccionario y nombres propios sin cuota.
+    Se guarda labelI18n y valueI18n={es,en,pt}; NO se presenta el campo en
+    español/portugués hasta disponer de ambas traducciones validadas.
+    Error/cuota -> pendiente y reintento posterior; no sobrescribe el dato inglés fuente.
+(8) Validan el JSON final, incrementan revision si hubo cambios, firman con clave
+    PRIVADA guardada como secreto CATALOG_SIGNING_KEY_PEM_BASE64.
+    Jamás poner clave privada en TXT, respuesta, build o repo.
+(9) Verifican la nueva firma antes de escribir y hacen commit SOLO de
+    /updates/catalog-envelope.json, /updates/community-envelope-v205.json,
+    /automation/v210-last-check.json, /automation/v210-wiki-state.json.
+    Commit con push normal y comprobación de concurrencia; nunca force-push.
+(10) No publicar app, HTML, imágenes o datos personales en estos jobs.
+(11) Si falla origen o firma, mantener archivos firmados anteriores. Registrar cuarentena.
+(12) Tests de publicación: v210-publisher.test.mjs, v219-launch-window.test.mjs,
+     v220-wiki-spec-translations.test.mjs, v220-client-integration.test.mjs.
+
+5. CARGA Y COMUNICACIONES EN LA WEB/APP
+- /online-config.json indica enabled, manifestUrl, clave publica Ed25519 schema=1
+  y minCheckMinutes=30 (chequeo del navegador, NO cron del publicador).
+- /online-updates.js: descarga /updates/catalog-envelope.json HTTPS, valida firma y
+  schema, revisiones anti-rollback, cache local del SOBRE firmado; llama
+  window.viApplySignedCatalog(items) del núcleo app-v137.js.
+- /community-v206.js: deriva URL hermana /updates/community-envelope-v205.json,
+  valida firma, origen, tamaños, ID y ES/EN/PT; cache del sobre firmado; V220
+  invoca window.viApplyCommunityFeed({news,fiches}).
+- /app-v137.js: records[] es el catálogo compartido en memoria: sirve categorías,
+  /ficha/:id, /buscar, comparador, favoritos y progreso.
+  V220 indexa Wiki y noticias independientes firmadas en records[]; deduplica
+  por URL fuente; conserva título/fotos/datos curados si el mismo objeto ya existía.
+  Nunca inventa mapPoint. Los campos wiki solo se incorporan con traducción completa.
+- Los títulos/valores técnicos tienen atributos i18n; en cambio de idioma la ficha
+  usa los valores ES/EN/PT correspondientes. Campos aún pendientes NO se inventan.
+- /routes-v145.js lee catálogo y puntos; permite rutas personales y línea ilustrativa.
+- /news-v155.js mantiene archivos y presentación de noticias.
+- Novedades son datos, NO JS ejecutable del sitio. JSON remoto no ejecuta HTML.
+- Al abrir pantalla, al recuperar conexión, al volver desde segundo plano y cada
+  minCheckMinutes mientras visible, el cliente busca mayor revision firmada.
+- Datos de usuario («Mi partida», marcados, favoritos, rutas personales, preferencias)
+  siguen en localStorage del propio dispositivo; jamás en el editor de contenidos.
+- No eliminar esos datos al actualizar el catálogo. No prometer sincronización cloud.
+
+6. CLASIFICACION DE CONFIANZA Y DETALLES
+- «Oficial Rockstar»: declaración con URL Rockstar.
+- «Wiki verificada por Game Atlas»: fuente Wiki aprobada, con URL y revision exacta.
+- «Medio independiente verificado»: origen revisado; no equivale a confirmado Rockstar.
+- Campo futuro sin datos: válido y esperado; NO completar por imaginación.
+- Imágenes: no reutilizar carátulas externas sin derechos. Los dos fondos móviles
+  originales V219 tienen procedencia en assets/original/ART-ORIGIN-V219.txt.
+- El mapa es comunitario CC BY 4.0 con atribuciones en LEONIDA-MAP-LICENSE.txt;
+  rutas en línea recta ilustrativas, no navegación por calles confirmadas.
+
+7. FALLOS Y RECUPERACION
+Si una noticia no aparece:
+  a) mirar Actions v210 en repo público y automation/v210-last-check.json;
+  b) comparar URL original y fecha con feed firmado, y «quarantined»;
+  c) si no hay traducción segura, no forzar publicación manual sin revisión;
+  d) validar Ed25519, revision y URL configurada; comprobar consola del cliente.
+Si llega Wiki nueva sin especificaciones:
+  a) es normal que la infobox todavía no tenga campos o que su turno de cursor no haya llegado;
+  b) revisar specCursor, specsInspected, specsPending y translationRequests;
+  c) no introducir atributos en inglés en ES/PT ni texto inventado.
+Si navegador conserva datos viejos:
+  a) verificar URL GitHub Pages actual, firma, revision incremental y 30 minutos;
+  b) activar visibilidad o invocar viRefreshSignedContent/viRefreshCommunityContent;
+  c) revisar caché SW; no limpiar localStorage de Mi partida como «solución».
+Si GitHub Actions falla:
+  a) conservar feed anterior, no modificar main con force;
+  b) comprobar límites/cuota, fuentes y secretos configurados SIN visualizarlos.
+Si se pierde este chat:
+  a) leer este contrato y el manual maestro V220;
+  b) revisar SHA de la rama candidata y workflows protegidos;
+  c) nunca divulgar claves ni asumir que una rama candidata ya está publicada.
+
+8. LIMITACIONES ANTES DE DECLARAR VERSION COMERCIAL
+- Comprobar despliegue exacto GitHub Pages/Firebase y compatibilidad real Android/iOS.
+- Las traducciones técnicas se completan progresivamente; su velocidad depende de
+  API externa y cuotas. No prometer disponibilidad inmediata de los 542 campos.
+- Hay que revisar todos los resultados del contenido extraído y las nuevas fichas.
+- Las noticias sin metadatos descriptivos utilizan el resumen neutro de seguridad.
+- No publicar automáticamente la web o tiendas solo porque un feed se actualizó.

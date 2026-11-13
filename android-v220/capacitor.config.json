@@ -1,0 +1,19 @@
+{
+  "appId": "com.indie.viassistant",
+  "appName": "Game Atlas Companion",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": false
+  },
+  "server": {
+    "androidScheme": "https",
+    "iosScheme": "capacitor"
+  },
+  "plugins": {
+    "StatusBar": {
+      "backgroundColor": "#101827",
+      "style": "LIGHT"
+    }
+  }
+}

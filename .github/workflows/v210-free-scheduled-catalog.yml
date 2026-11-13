@@ -5,6 +5,8 @@ on:
     - cron: '29 17,23 * * *'
     # Wiki once daily (05:43 Argentina), bounded to 50 titles/category.
     - cron: '43 8 * * *'
+    # First 7 days after GTA VI launch: once per hour, only while the launch gate is open.
+    - cron: '11 * * * *'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -29,7 +31,6 @@ jobs:
     env:
       CATALOG_SIGNING_KEY_PEM_BASE64: ${{ secrets.CATALOG_SIGNING_KEY_PEM_BASE64 }}
       GAME_ATLAS_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
-      GAME_ATLAS_MODE: ${{ ((github.event_name == 'schedule' && github.event.schedule == '43 8 * * *') || (github.event_name == 'workflow_dispatch' && inputs.wiki_scan)) && 'wiki' || 'news' }}
     steps:
       - name: Recuperar solo los archivos públicos sin tocar la aplicación
         uses: actions/checkout@v4
@@ -39,14 +40,27 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Elegir cronograma seguro para el lanzamiento V219
+        id: cadence
+        env:
+          GITHUB_EVENT_SCHEDULE: ${{ github.event.schedule }}
+          GAME_ATLAS_WIKI_SCAN: ${{ inputs.wiki_scan && 'true' || 'false' }}
+          GAME_ATLAS_LAUNCH_AT: '2026-11-19T03:00:00.000Z'
+        run: node automation/v219-launch-window.mjs >> "$GITHUB_OUTPUT"
       - name: Comprobar modelo de firmas, fuentes y fecha original
+        if: steps.cadence.outputs.should_run == 'true'
         run: |
-          node --test automation/v210-publisher.test.mjs
+          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v220-wiki-spec-translations.test.mjs automation/v220-client-integration.test.mjs
+          node --check automation/v220-wiki-spec-translations.mjs
           node --check automation/v210-sources.mjs
           node --check automation/v210-publisher.mjs
       - name: Recuperar novedades de origen original y conservar archivo previo
+        if: steps.cadence.outputs.should_run == 'true'
+        env:
+          GAME_ATLAS_MODE: ${{ steps.cadence.outputs.mode }}
         run: node automation/v210-publisher.mjs
       - name: Reportar los hallazgos sin secretos ni textos privados
+        if: steps.cadence.outputs.should_run == 'true'
         run: |
           node --input-type=module - <<'NODE'
           import {readFileSync,appendFileSync} from 'node:fs';
@@ -62,7 +76,7 @@ jobs:
           appendFileSync(process.env.GITHUB_STEP_SUMMARY,summary+'\n');
           NODE
       - name: Publicar SOLO los archivos de datos firmados o el diagnóstico público
-        if: ${{ github.event_name != 'workflow_dispatch' || !inputs.dry_run }}
+        if: ${{ steps.cadence.outputs.should_run == 'true' && (github.event_name != 'workflow_dispatch' || !inputs.dry_run) }}
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'

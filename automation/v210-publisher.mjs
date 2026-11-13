@@ -6,6 +6,7 @@
 import {createPrivateKey,createPublicKey,sign,verify} from 'node:crypto';
 import {readFile,writeFile} from 'node:fs/promises';
 import {getOfficial,getIndependent,getWikiBatch,sha,clean,boundedText} from './v210-sources.mjs';
+import {translateFacts} from './v220-wiki-spec-translations.mjs';
 const PUB='qxnlUBqCBknS8KL/Bymrx4COzWN9TpPJAfdHohv/ugI=';
 const MODES={official:1,community:205};
 const VI=/\b(?:grand theft auto\s*(?:vi|6)|gta\s*(?:vi|6))\b/i;
@@ -56,6 +57,7 @@ export function validatePublication(data){
     const keys=new Set();
     for(const spec of row.specs){
      if(!spec||!text(spec.key,70)||!text(spec.label,70)||!text(spec.value,170)||keys.has(spec.key))throw Error('Bad Wiki field');
+     for(const field of ['labelI18n','valueI18n'])if(spec[field]!==undefined&&!tr(spec[field],field==='labelI18n'?80:190))throw Error('Untrusted Wiki translation');
      keys.add(spec.key);
     }
    }
@@ -99,6 +101,19 @@ async function officialTitle(url,original,lang,fetchFn=fetch){
  if(title&&VI.test(title)&&title.toLowerCase()!==original.toLowerCase())return enToTranslated(original,title);
  return myMemory(original,lang,fetchFn);
 }
+/* Prefer a genuine Rockstar metadata description, translated into all
+ * three locales. If unavailable, the existing safe summary template remains.
+ * Never automatically hotlink unreviewed promotional photographs. */
+async function officialExcerpt(url,fetchFn=fetch){
+ try{
+  const html=await boundedText(url,fetchFn,{max:1200000,headers:{Accept:'text/html'}});
+  const en=clean(meta(html,'og:description')||meta(html,'description'),170);
+  if(!en||en.length<34||/cookies?|privacy|javascript required|accept all/i.test(en))return null;
+  const es=await myMemory(en,'es',fetchFn),pt=await myMemory(en,'pt',fetchFn);
+  return tr({es,en,pt},190)?{es,en,pt}:null;
+ }catch{return null}
+}
+
 export async function officialEntry(source,fetchFn=fetch){
  if(!urlValid(source.url)||!/^https:\/\/www\.rockstargames\.com\/newswire\/article\//.test(source.url)||!DATE.test(source.publishedAt))
   throw Error('Bad Rockstar source');
@@ -106,9 +121,10 @@ export async function officialEntry(source,fetchFn=fetch){
  if(!VI.test(en))throw Error('Rockstar item not explicitly GTA VI');
  const es=await officialTitle(source.url,en,'es',fetchFn);
  const pt=await officialTitle(source.url,en,'pt',fetchFn);
+ const excerpt=await officialExcerpt(source.url,fetchFn);
  return {id:'rockstar-'+sha(source.url).slice(0,24),category:'actualizaciones',status:'verified',
   title:{es,en,pt},
-  summary:{
+  summary:excerpt||{
    es:'Rockstar Games publicó una noticia oficial sobre Grand Theft Auto VI: '+es+'. Consultá el anuncio original para conocer los detalles.',
    en:'Rockstar Games published an official Grand Theft Auto VI announcement: '+en+'. Read the original Rockstar publication for details.',
    pt:'A Rockstar Games publicou uma notícia oficial sobre Grand Theft Auto VI: '+pt+'. Leia o comunicado original para conhecer os detalhes.'
@@ -223,6 +239,15 @@ async function run(){
   nextCommunity=joined.next;report.newWiki=joined.changed;report.warnings.push(...scanned.errors);
   wikiState={cursor:scanned.cursor,specCursor:scanned.specCursor,checkedAt:stamp};
   report.specsInspected=scanned.specsInspected;report.withWikiSpecifications=scanned.withSpecs;
+  // Source revisions are validated above. Translate a bounded number of
+  // technical properties each scan, retry failures without publishing English
+  // as if it were a completed ES/PT translation.
+  const i18n=await translateFacts(nextCommunity,{maxRequests:24,maxSpecs:14});
+  nextCommunity=i18n.next;
+  report.specsTranslated=i18n.translated;
+  report.specsPending=i18n.pending;
+  report.translationRequests=i18n.requests;
+  report.quarantined.push(...i18n.errors.slice(0,10).map(x=>({source:'GTA Wiki',url:'',reason:x.id+' '+x.key+' '+x.lang+': '+x.reason})));
  }else throw Error('Unknown scheduled mode');
  const changed=nextOfficial!==official||nextCommunity!==community;
  report.changesSigned=changed;
