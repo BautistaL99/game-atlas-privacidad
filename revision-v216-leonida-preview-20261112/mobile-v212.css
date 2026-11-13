@@ -125,8 +125,8 @@
     border-radius:10px!important;white-space:nowrap!important;
   }
   #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle::before {content:'☷';font-size:15px;line-height:1}
-  #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle::after {content:'Filtros';font-size:11px;line-height:1;font-weight:800}
-  #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle[aria-expanded='true']::after {content:'Cerrar'}
+  #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle::after {content:attr(data-map-label);font-size:11px;line-height:1;font-weight:800}
+  #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle[aria-expanded='true']::after {content:attr(data-map-label)}
 }
 @media (max-width:355px) {
   #root .home-v18 .v177-discovery-section #vi-discovery-cards .card-inline-actions {gap:4px!important}
