@@ -1,7 +1,7 @@
 {
-  "name": "Game Atlas: Guía de GTA 6 — V219 vista previa",
-  "short_name": "Game Atlas V219",
-  "description": "Wiki y guía independiente de GTA 6: mapa de Leonida, rutas, noticias y fichas.",
+  "name": "Game Atlas Companion · V220 (vista previa)",
+  "short_name": "Atlas V220 QA",
+  "description": "Vista previa no oficial para probar Game Atlas V220. Datos personales aislados de la versión publicada.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
