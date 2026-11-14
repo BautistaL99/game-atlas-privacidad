@@ -270,6 +270,14 @@
  observer.observe(document.body,{subtree:true,childList:true});
  addEventListener('hashchange',schedule);
  document.addEventListener('vi:catalog-refresh',schedule);
+ // The map popup must reuse the same reviewed image as the full entry.
+ // Do not treat an illustration or a contextual promotion as verified evidence
+ // of the precise location, and do not use the remote photo on native clients.
+ window.viReviewedPhotoForRecordV220=(id)=>{
+  if(typeof id!=='string'||!Object.prototype.hasOwnProperty.call(cards,id))return '';
+  const key=cards[id],url=photo(key);
+  return typeof url==='string'&&url.startsWith(base)?url:'';
+ };
  window.viGalleryPhotoMap=()=>({records:Object.keys(cards).length,categories:Object.keys(categories).length,officialImages:Object.keys(assets).length});
 })();
 
