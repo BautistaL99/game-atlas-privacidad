@@ -142,15 +142,22 @@ function atlasExternalActionV220(kind,activeLabel){
  return url?'<a class="atlas-store-action atlas-store-ready" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc(activeLabel)+' ↗</a>':'<span class="atlas-store-action atlas-store-pending" aria-disabled="true">'+tr({es:'Próximamente',en:'Coming soon',pt:'Em breve'})+'</span>';
 }
 function atlasStoreCardsV220(){
+ const googlePlayIcon='<svg viewBox="0 0 28 28" width="27" height="27" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 3.7c-.5.3-.8.9-.8 1.7v17.2c0 .8.3 1.4.8 1.7L16.6 14 6 3.7Z" fill="#64E4CD"/><path d="m16.6 14 3.4-3.3L9.2 4.5 16.6 14Z" fill="#B6F3E7"/><path d="m16.6 14 3.4 3.3L9.2 23.5 16.6 14Z" fill="#85C9DC"/><path d="m20 10.7 3.3 2c.9.6.9 2 0 2.6l-3.3 2-3.4-3.3 3.4-3.3Z" fill="#E9F9F5"/></svg>';
+ const iphoneIcon='<svg viewBox="0 0 28 28" width="27" height="27" fill="none" stroke="#A7E9E1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="7" y="2.8" width="14" height="22.4" rx="3.2"/><path d="M11.2 6h5.6"/><path d="M13 21.8h2"/></svg>';
  return '<div class="atlas-stores">'+
-  '<article class="atlas-store-card"><span class="atlas-store-icon" aria-hidden="true">▶</span><div><strong>Android</strong><small>Google Play</small></div>'+
+  '<article class="atlas-store-card"><div class="atlas-store-top"><span class="atlas-store-icon" aria-hidden="true">'+googlePlayIcon+'</span><div class="atlas-store-copy"><strong>Android</strong><small>Google Play</small></div></div>'+
   atlasExternalActionV220('androidPlay',tr({es:'Descargar para Android',en:'Get it on Android',pt:'Baixar para Android'}))+'</article>'+
-  '<article class="atlas-store-card"><span class="atlas-store-icon" aria-hidden="true">&#63743;</span><div><strong>iPhone / iPad</strong><small>App Store</small></div>'+
+  '<article class="atlas-store-card"><div class="atlas-store-top"><span class="atlas-store-icon" aria-hidden="true">'+iphoneIcon+'</span><div class="atlas-store-copy"><strong>iPhone / iPad</strong><small>App Store</small></div></div>'+
   atlasExternalActionV220('iosAppStore',tr({es:'Descargar para iOS',en:'Get it on iOS',pt:'Baixar para iOS'}))+'</article>'+
   '</div>';
 }
 function atlasDownloadBannerV220(){
- return '<section class="atlas-install-panel" aria-labelledby="atlas-install-title"><div class="atlas-install-intro"><span class="v18-section-kicker">GAME ATLAS / APPS</span><h2 id="atlas-install-title">'+tr({es:'Game Atlas en tu celular',en:'Game Atlas on your phone',pt:'Game Atlas no seu celular'})+'</h2><p>'+tr({es:'Las aplicaciones para Android y iOS están en preparación. Por ahora podés seguir usando la web.',en:'Android and iOS apps are in preparation. You can continue using the web meanwhile.',pt:'Os aplicativos para Android e iOS estão em preparação. Por enquanto, você pode continuar usando o site.'})+'</p></div>'+atlasStoreCardsV220()+'</section>';
+ return '<section class="atlas-install-panel" aria-labelledby="atlas-install-title">'+
+  '<div class="atlas-install-intro"><span class="atlas-install-kicker">'+tr({es:'GAME ATLAS / APLICACIONES',en:'GAME ATLAS / MOBILE APPS',pt:'GAME ATLAS / APLICATIVOS'})+'</span>'+
+  '<h2 id="atlas-install-title">'+tr({es:'Llevá Game Atlas a tu celular',en:'Take Game Atlas with you',pt:'Leve o Game Atlas com você'})+'</h2>'+
+  '<p>'+tr({es:'Muy pronto vas a poder disfrutar de la guía de GTA 6 también en Android y iPhone. Mientras tanto, seguí usando la versión web.',en:'Our GTA 6 guide is coming to Android and iPhone. In the meantime, keep enjoying the web version.',pt:'O guia de GTA 6 estará disponível em breve para Android e iPhone. Enquanto isso, continue usando a versão web.'})+'</p>'+
+  '<span class="atlas-install-note"><span class="atlas-install-dot" aria-hidden="true"></span>'+tr({es:'En preparación para Google Play y App Store',en:'In preparation for Google Play and the App Store',pt:'Em preparação para Google Play e App Store'})+'</span></div>'+
+  atlasStoreCardsV220()+'</section>';
 }
 function atlasDownloadsPageV220(){
  return '<div class="atlas-downloads-page">'+atlasDownloadBannerV220()+'<p class="atlas-downloads-notice">'+tr({es:'Los botones se activarán únicamente cuando las aplicaciones estén disponibles en las tiendas oficiales. No ofrecemos APK ni IPA de origen desconocido.',en:'Buttons will activate only when the apps are available in the official stores. We do not offer unverified APK or IPA files.',pt:'Os botões serão ativados somente quando os aplicativos estiverem disponíveis nas lojas oficiais. Não oferecemos APK ou IPA sem verificação.'})+'</p></div>';
