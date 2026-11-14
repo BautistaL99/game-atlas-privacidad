@@ -1,9 +1,5 @@
 name: Game Atlas Companion V215 - compilar Android APK y AAB
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/android-v215-build-apk-aab.yml'
   workflow_dispatch:
 permissions:
   contents: write

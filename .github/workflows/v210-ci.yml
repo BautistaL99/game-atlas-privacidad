@@ -1,10 +1,5 @@
 name: V210 verificar recuperacion segura GRATIS (sin publicar)
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'automation/v210-*.mjs'
-      - '.github/workflows/v210-ci.yml'
   workflow_dispatch:
 permissions:
   contents: read
