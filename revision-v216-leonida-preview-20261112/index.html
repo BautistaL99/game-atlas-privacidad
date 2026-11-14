@@ -752,6 +752,57 @@ body.vi-map-modal-active{overflow:hidden!important}
  .topbar .top-search-wrap{grid-area:search!important;grid-column:1!important;grid-row:3!important}
  html.vi-route-map .topbar{grid-template-areas:"brand" "settings"!important;grid-template-rows:auto auto!important}
 }
+
+/* atlas-mobile-action-chips-v220: both topbar actions match the language selector. */
+.topbar .mobile-actions>.mobile-donate,
+.topbar .mobile-actions>.mobile-download{
+ display:inline-flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ box-sizing:border-box!important;
+ gap:5px!important;
+ min-height:43px!important;
+ padding:10px 13px!important;
+ border:1px solid transparent!important;
+ border-radius:14px!important;
+ background:#1c1f31!important;
+ color:#e1e7f4!important;
+ font-size:13px!important;
+ font-weight:650!important;
+ line-height:1.2!important;
+ text-decoration:none!important;
+ white-space:nowrap!important;
+ box-shadow:none!important;
+ transition:background .18s ease,border-color .18s ease!important;
+}
+.topbar .mobile-actions>.mobile-donate:hover,
+.topbar .mobile-actions>.mobile-download:hover{
+ background:#272b40!important;
+ border-color:#474a63!important;
+ color:#fff!important;
+}
+.topbar .mobile-actions>.mobile-donate:focus-visible,
+.topbar .mobile-actions>.mobile-download:focus-visible{
+ outline:2px solid #a6ecdf!important;
+ outline-offset:2px!important;
+}
+@media(max-width:700px){
+ .topbar .mobile-actions>.mobile-donate,
+ .topbar .mobile-actions>.mobile-download{
+  min-height:38px!important;
+  padding:8px 10px!important;
+  font-size:11px!important;
+  border-radius:11px!important;
+ }
+}
+@media(max-width:370px){
+ .topbar .mobile-actions>.mobile-donate,
+ .topbar .mobile-actions>.mobile-download{
+  min-width:0!important;
+  padding:7px 6px!important;
+  font-size:10px!important;
+ }
+}
 </style>
 </head>
 <body><div id="root"></div><script src="./community-v206.js?rev=20261113-v220-preview-release"></script><script src="./news-v155.js?rev=20261110-v206-preview"></script><script src="./info-v158.js"></script><script src="./detail-enhancements-v160.js"></script><script src="./compare-metrics-v161.js"></script><script src="./guest-import-safe.js"></script><script src="./app-v137.js?rev=20261114-v220-store-premium-v2"></script><script src="./vi-i18n.js?rev=20261113-v220-final-mobile-b"></script><script src="./diagnostics-v143.js?rev=20261109-v197"></script><script src="./online-updates.js?rev=20261113-v220-preview-release"></script><script src="./routes-v145.js?rev=20261113-v220-preview-release"></script>
