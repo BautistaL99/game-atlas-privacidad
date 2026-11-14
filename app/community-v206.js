@@ -9,12 +9,12 @@
  const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const clean=(x,n)=>typeof x==='string'&&x.length>0&&x.length<=n&&!/[<>\x00-\x1f]/.test(x);
  const translations=(v,n)=>v&&typeof v==='object'&&LANGS.every(l=>clean(v[l],n));
- const hostname=(raw,allowed)=>{
+ const hostname=(raw,allowed,minPathLength=8)=>{
   if(typeof raw!=='string'||raw.length>600)return false;
   try{
    const url=new URL(raw);
    return url.protocol==='https:'&&!url.username&&!url.password&&!url.port&&!url.hash&&!url.search&&
-      allowed.includes(url.hostname)&&url.pathname.length>=8;
+      allowed.includes(url.hostname)&&url.pathname.length>=minPathLength;
   }catch{return false}
  };
  function validate(data){
@@ -33,7 +33,7 @@
   for(const item of data.fiches){
    if(!item||!/^wiki-community-[a-f0-9]{24}$/.test(item.id)||seen.has(item.id)||
      !allowedCategories.has(item.category)||item.sourceName!=='GTA Wiki'||
-     item.sourceTier!=='community_indexed_not_rockstar_confirmed'||!hostname(item.sourceUrl,['gta.wiki'])||
+     item.sourceTier!=='community_indexed_not_rockstar_confirmed'||!hostname(item.sourceUrl,['gta.wiki'],5)||
      !new URL(item.sourceUrl).pathname.startsWith('/w/')||
      !translations(item.title,160)||!translations(item.summary,450)||
      !Number.isSafeInteger(item.wikiRevision)||item.wikiRevision<0||
