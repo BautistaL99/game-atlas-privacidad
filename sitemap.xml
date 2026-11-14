@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url><loc>https://bautistal99.github.io/game-atlas-privacidad/app/</loc></url>
+  <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/</loc></url>
   <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/mapa/</loc></url>
   <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/personajes/</loc></url>
   <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/vehiculos/</loc></url>
@@ -23,4 +23,10 @@
   <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/</loc><xhtml:link rel="alternate" hreflang="es" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/"/><xhtml:link rel="alternate" hreflang="en" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/en/"/><xhtml:link rel="alternate" hreflang="pt" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/pt/"/></url>
   <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/en/</loc><xhtml:link rel="alternate" hreflang="es" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/"/><xhtml:link rel="alternate" hreflang="en" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/en/"/><xhtml:link rel="alternate" hreflang="pt" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/pt/"/></url>
   <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/pt/</loc><xhtml:link rel="alternate" hreflang="es" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/"/><xhtml:link rel="alternate" hreflang="en" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/en/"/><xhtml:link rel="alternate" hreflang="pt" href="https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/comparador/pt/"/></url>
+  <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/wiki/</loc></url>
+  <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/noticias/independientes/</loc></url>
+  <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/wiki/categorias/armas/</loc></url>
+  <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/wiki/categorias/mapa-lugares/</loc></url>
+  <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/wiki/categorias/personajes/</loc></url>
+  <url><loc>https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/wiki/categorias/vehiculos/</loc></url>
 </urlset>

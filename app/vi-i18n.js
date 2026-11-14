@@ -90,6 +90,43 @@ Object.assign(VI_UI_DICTIONARY,{
  'Ver fuente':{en:'View source',pt:'Ver fonte'},
  'Leer noticia original':{en:'Read original article',pt:'Ler notícia original'}
 });
+/* V220: audit of visible ES/EN/PT labels, including More-menu and map shortcuts. */
+Object.assign(VI_UI_DICTIONARY,{
+ 'Comparar':{en:'Compare',pt:'Comparar'},
+ 'Apoyar proyecto':{en:'Support project',pt:'Apoiar projeto'},
+ 'Top speedruns':{en:'Top speedruns',pt:'Melhores speedruns'},
+ 'Guía e información GTA 6':{en:'GTA VI guide',pt:'Guia GTA VI'},
+ 'Rutas y recorridos':{en:'Routes and trails',pt:'Rotas e percursos'},
+ 'Rutas':{en:'Routes',pt:'Rotas'},
+ 'Recorridos':{en:'Trails',pt:'Percursos'},
+ 'Ver, crear y seguir rutas':{en:'View, create and follow routes',pt:'Ver, criar e seguir rotas'},
+ 'Buscar y abrir rutas':{en:'Find and open routes',pt:'Buscar e abrir rotas'},
+ 'Pantalla completa':{en:'Fullscreen',pt:'Tela cheia'},
+ 'Cerrar pantalla completa':{en:'Exit fullscreen',pt:'Sair da tela cheia'},
+ 'Ver mapa en pantalla completa':{en:'Open fullscreen map',pt:'Abrir mapa em tela cheia'},
+ 'Cambiá a desplazar página':{en:'Switch to page scrolling',pt:'Alternar para rolar a página'},
+ 'Cambiar a desplazar página':{en:'Switch to page scrolling',pt:'Alternar para rolar a página'},
+ 'Cambiar a mover mapa':{en:'Switch to moving the map',pt:'Alternar para mover o mapa'},
+ 'Mostrar mapa completo':{en:'Show the full map',pt:'Mostrar mapa completo'},
+ 'Deslizá para bajar la página':{en:'Swipe to scroll down the page',pt:'Deslize para descer a página'},
+ 'Marcadores personales':{en:'Personal markers',pt:'Marcadores pessoais'},
+ 'Noticias no oficiales':{en:'Unofficial news',pt:'Notícias não oficiais'},
+ 'Fuentes verificadas':{en:'Verified sources',pt:'Fontes verificadas'},
+ 'Fuente comunitaria':{en:'Community source',pt:'Fonte comunitária'},
+ 'Ver ficha':{en:'View entry',pt:'Ver ficha'},
+ 'Ver catálogo':{en:'View catalog',pt:'Ver catálogo'},
+ 'Volver al mapa':{en:'Back to map',pt:'Voltar ao mapa'},
+ 'Búsqueda por categoría':{en:'Search by category',pt:'Busca por categoria'},
+ 'No confirmadas':{en:'Unconfirmed',pt:'Não confirmadas'},
+ 'Todo':{en:'All',pt:'Tudo'},
+ 'Ocultar':{en:'Hide',pt:'Ocultar'},
+ 'Cerrar':{en:'Close',pt:'Fechar'},
+ 'Filtros':{en:'Filters',pt:'Filtros'},
+ 'Lugares y servicios':{en:'Places and services',pt:'Lugares e serviços'},
+ 'Reanudar ruta':{en:'Resume route',pt:'Retomar rota'},
+ 'Guardar ruta':{en:'Save route',pt:'Salvar rota'},
+ 'Borrar ruta':{en:'Delete route',pt:'Excluir rota'}
+});
 (function(){
  // Keep the Spanish source of text/attributes so a language switch can be
  // repeated without leaving stale translations from the previous language.

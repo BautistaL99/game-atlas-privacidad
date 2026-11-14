@@ -1,0 +1,5 @@
+V216 solo vista previa — noindex — no publicada en Firebase.
+URL: https://bautistal99.github.io/game-atlas-privacidad/revision-v216-leonida-preview-20261112/
+Datos de pruebas aislados con localStorage independiente. Service worker exclusivo.
+Fuente: rama feature/v216-leonida-map-seo. V215 y app publica no se modifican.
+Mapa Yanis V17 de GTADB CC BY 4.0, posiciones aproximadas no oficiales.

@@ -1,0 +1,333 @@
+/* V217: mobile-only UX for V216 preview. Neither /app nor desktop are affected. */
+.atlas-v119 #mapStage > .v217-route-overlay{
+  position:absolute;inset:0;width:100%;height:100%;
+  z-index:4;pointer-events:none;overflow:hidden;
+}
+.atlas-v119 #mapStage > .v217-route-stop{
+  position:absolute;z-index:10;pointer-events:none;
+  display:grid;place-items:center;
+  box-sizing:border-box;width:38px;height:38px;
+  transform:translate(-50%,-50%) scale(var(--v216-pin-inverse,1));
+  border:3px solid #eefffb;border-radius:50%;
+  background:#064551;color:#fff;
+  font-size:18px;font-weight:900;line-height:1;
+  box-shadow:0 0 0 3px #052738b8,0 1px 8px #000a;
+}
+.atlas-v119 #mapStage > .atlas-pin{z-index:6}
+.atlas-v119 #mapStage > .atlas-cluster{z-index:8}
+.vi-route-manager .v217-route-actions{
+  display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 12px;
+}
+.vi-route-manager .v217-route-actions button{
+  flex:1 1 180px;min-height:44px;font-weight:800;
+}
+.vi-route-manager .v217-route-actions .v217-route-draw{
+  color:#073637;background:#66eada;border:1px solid #c8fff8;
+}
+.vi-route-manager .v217-route-actions .v217-route-draw:hover{
+  color:#042b2e;background:#96fff1;
+}
+.vi-route-manager .v217-route-actions button[hidden]{display:none!important}
+@media (max-width:700px), (pointer:coarse) and (max-width:1150px){
+  /* No extra buttons on top of map zoom/reset controls. */
+  .atlas-v119 .v216-mobile-route-rail,
+  .atlas-v119 .v216-rail-scroll,
+  .atlas-v119 .v216-rail-routes{display:none!important}
+  body .v217-page-scroll-rail{
+    box-sizing:border-box;position:fixed;
+    top:calc(84px + env(safe-area-inset-top,0px));
+    bottom:calc(94px + env(safe-area-inset-bottom,0px));
+    right:1px;width:33px;z-index:2147482000;
+    border:0;background:transparent;cursor:grab;
+    touch-action:none;user-select:none;-webkit-user-select:none;
+    overscroll-behavior:contain;
+  }
+  body .v217-page-scroll-rail[hidden]{display:none!important}
+  body .v217-page-scroll-rail::before{
+    content:"";position:absolute;
+    top:0;bottom:0;right:6px;width:17px;
+    background:rgba(5,35,49,.92);
+    border:2px solid rgba(156,253,243,.8);
+    border-radius:15px;pointer-events:none;
+  }
+  body .v217-page-scroll-thumb{
+    position:absolute;top:0;right:5px;width:19px;
+    box-sizing:border-box;background:linear-gradient(90deg,#47d6d7,#8dffee);
+    border:2px solid #e8fffc;border-radius:15px;
+    box-shadow:0 0 0 2px #002d35b8,0 1px 11px #002634;
+    pointer-events:none;will-change:transform;
+  }
+  body .v217-page-scroll-rail:active{cursor:grabbing}
+  body .v217-page-scroll-rail:focus-visible{
+    outline:2px solid #91fff0;outline-offset:1px;border-radius:12px;
+  }
+  /* A visible grip belongs to the draggable scrollbar, NOT to the map. */
+  body .v217-page-scroll-thumb::after{
+    content:"≡";display:grid;place-items:center;
+    position:absolute;top:50%;left:50%;
+    width:18px;height:21px;transform:translate(-50%,-50%);
+    color:#07454e;font-weight:900;font-size:23px;line-height:1;
+  }
+  /* Restore easy route access in the search toolbar, outside the map. */
+  #root .atlas-v119 .atlas-toolbar .v218-route-access{
+    display:inline-flex;justify-content:center;align-items:center;
+    min-height:43px;padding:8px 13px;
+    border:1px solid #8bfff0;border-radius:10px;
+    background:#125c61;color:#effffb;font-size:13px;font-weight:850;
+    flex:0 0 auto;touch-action:manipulation;
+  }
+  #root .atlas-v119 .atlas-toolbar .atlas-search-label{
+    flex:1 1 210px;width:auto!important;min-width:0!important;
+  }
+  #root .vi-route-manager .v218-search-label,
+  #root .vi-route-manager #vi-route-create .v218-search-label{
+    display:grid;gap:7px;width:100%;min-width:0;flex:1 1 100%;
+    font-size:13px;font-weight:800;color:#d0f9f2;
+  }
+  #root .vi-route-manager .v218-search-label input[type=search]{
+    width:100%;min-width:0;max-width:100%;box-sizing:border-box;
+    min-height:45px;padding:10px 12px;
+    color:#f4ffff;background:#092537;
+    border:1px solid #71c5c6;border-radius:10px;
+    font-size:16px;outline-offset:2px;
+  }
+  #root .vi-route-manager .v218-route-status{
+    margin:8px 0 4px;font-size:12px;color:#b2f1e9;
+  }
+  #root .vi-route-manager .vi-route-choices{
+    max-height:230px;overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid #315e6d;border-radius:10px;padding:5px;
+  }
+  #root .vi-route-manager .vi-route-choices label{
+    min-height:43px;display:flex;align-items:center;
+  }
+  #root .vi-route-manager .vi-route-choices input[type=checkbox]{
+    width:18px;height:18px;flex:none;
+  }
+  #root .vi-route-manager .vi-route-controls label{
+    min-width:0;flex:1 1 100%;
+  }
+  #root .vi-route-manager .vi-route-controls select{
+    width:100%;min-height:44px;max-width:100%;
+  }
+
+}
+
+/* V219 mobile refinement — a short GRABBABLE thumb, not a tall panel.
+ * The transparent 22px rail captures page scrolling only on its own edge. */
+@media (max-width:700px), (pointer:coarse) and (max-width:1150px) {
+  body .v217-page-scroll-rail{
+    right:0!important;width:23px!important;
+    top:calc(142px + env(safe-area-inset-top,0px))!important;
+    bottom:calc(99px + env(safe-area-inset-bottom,0px))!important;
+    background:transparent!important;border:0!important;
+    box-shadow:none!important;opacity:1!important;
+    z-index:1005!important;
+  }
+  body .v217-page-scroll-rail::before{display:none!important;content:none!important}
+  body .v217-page-scroll-thumb{
+    right:5px!important;width:11px!important;
+    border:1px solid #9bf9e9!important;border-radius:15px!important;
+    background:#34bfae!important;
+    box-shadow:0 1px 7px #041f2f9a!important;
+    min-height:38px!important;max-height:56px!important;
+  }
+  body .v217-page-scroll-thumb::after{
+    content:""!important;
+    position:absolute;display:block!important;
+    top:50%;left:50%;width:5px;height:13px;
+    transform:translate(-50%,-50%);
+    background:repeating-linear-gradient(to bottom,#093745 0 2px,transparent 2px 5px)!important;
+    opacity:.95;
+  }
+  /* Give page controls their own space; never mask a route button or map zoom. */
+  #root .atlas-v119 .atlas-toolbar{padding-right:24px!important;box-sizing:border-box!important}
+  #root .atlas-v119 .atlas-map>.atlas-controls{right:31px!important}
+  #root .atlas-v119 .atlas-map>.vi-map-fullscreen-btn{right:31px!important}
+  #root .vi-route-manager{box-sizing:border-box!important;padding-right:22px!important}
+  #root .vi-route-manager .v217-route-actions{
+    display:flex!important;flex-direction:column!important;align-items:stretch!important;
+    gap:8px!important;
+  }
+  #root .vi-route-manager .v217-route-actions button{
+    width:100%!important;min-height:43px!important;
+    flex:0 0 auto!important;box-sizing:border-box!important;
+  }
+  #root .vi-route-manager .v217-route-actions .v219-route-delete{
+    color:#ffd3d7!important;
+    background:#3d1b2b!important;
+    border:1px solid #a8576c!important;
+    font-weight:850!important;
+  }
+  #root .vi-route-manager .vi-route-choice[data-personal="true"]{
+    -webkit-touch-callout:none;
+    user-select:none;-webkit-user-select:none;
+  }
+}
+/* The desktop hero uses a Rockstar photograph via vi-real-gallery.
+ * Restore the SAME source in mobile; local vector stays underneath as a fallback.
+ * Avoid negative z-index layers, which were hidden by isolation on some mobiles. */
+@media (max-width:700px), (pointer:coarse) and (max-width:1150px) {
+  #root .my-game-hero{isolation:isolate!important}
+  #root .my-game-hero .my-game-hero-art{
+    display:block!important;position:absolute!important;inset:0!important;
+    z-index:0!important;opacity:1!important;
+    background-image:
+      url("./assets/original/atlas-neon-coast-v219.svg"),
+      url("./assets/original/donaciones.svg")!important;
+    background-position:70% 49%,center!important;
+    background-size:cover,cover!important;
+    background-repeat:no-repeat,no-repeat!important;
+  }
+  #root .my-game-hero::before{
+    z-index:1!important;
+    background:linear-gradient(90deg,rgba(8,17,32,.96) 0%,rgba(8,17,32,.86) 42%,rgba(8,17,32,.28) 100%)!important;
+  }
+  #root .my-game-hero .my-game-hero-copy,
+  #root .my-game-hero .my-game-hero-link{
+    z-index:2!important;position:relative!important;
+  }
+  /* Second background: actual progression overview, not just the hero. */
+  #root .v120-playthrough .v120-overview::before{
+    inset:0!important;opacity:.9!important;
+    background-image:
+      linear-gradient(100deg,rgba(4,20,35,.83),rgba(5,23,40,.68)),
+      url("./assets/original/atlas-marina-road-v219.svg"),
+      url("./assets/original/mapa-lugares.svg")!important;
+    background-position:center,65% center,center!important;
+    background-size:cover,cover,cover!important;
+    background-repeat:no-repeat,no-repeat,no-repeat!important;
+  }
+  #root .v120-playthrough .v120-overview-top,
+  #root .v120-playthrough .v120-overview-stats{
+    position:relative!important;z-index:1!important;
+  }
+}
+
+/* V219 rights fix: original locally authored art replaces both mobile Rockstar hotlinks. Desktop and other media untouched. */
+
+/* V220 FINAL MOBILE QA — ONLY touch-sized screens, desktop remains unchanged. */
+@media (max-width:700px), (pointer:coarse) and (max-width:1150px) {
+  /* Suppress browser's blue native thumb/outline; show only our green handle. */
+  html.vi-route-map,html.vi-route-map body { scrollbar-width:none!important; }
+  html.vi-route-map::-webkit-scrollbar,html.vi-route-map body::-webkit-scrollbar { width:0!important;height:0!important;display:none!important; }
+  body .v217-page-scroll-rail,body .v217-page-scroll-rail:focus,body .v217-page-scroll-rail:focus-visible {
+    right:0!important;width:18px!important;border:0!important;outline:0!important;
+    box-shadow:none!important;background:transparent!important;
+  }
+  body .v217-page-scroll-rail::before { display:none!important; }
+  body .v217-page-scroll-thumb {right:3px!important;width:12px!important;border:1px solid #6dffe4!important;background:#16bca2!important;box-shadow:0 1px 4px #001c27!important;}
+  #root .atlas-v119 .atlas-map>.vi-map-fullscreen-btn {right:12px!important;}
+  #root .atlas-v119 .atlas-controls .vi-map-gesture-toggle {display:grid!important;place-items:center!important;min-width:42px!important;min-height:42px!important;}
+  /* Fullscreen: routes live beside Clear, with a compact magnifier. */
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .v216-filter-routes {display:none!important;}
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .v220-route-search {
+    display:grid!important;place-items:center!important;min-width:40px!important;width:40px!important;height:38px!important;
+    border:1px solid #69dcc7!important;border-radius:10px!important;background:#083d43!important;
+    color:#eafffa!important;font-size:24px!important;font-weight:800!important;line-height:1!important;padding:0!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions {display:flex!important;align-items:center!important;gap:7px!important;}
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions button {flex:0 0 auto!important;}
+  /* Keep only the photograph, not a big 'generic illustration' sticker. */
+  #root .vi-community-art-caption {display:none!important;}
+  /* Reuse reviewed original coastal artwork instead of polygonal placeholders. */
+  #root .my-game-hero .my-game-hero-art {
+    background-image:url('./assets/original/community-coast-v193.webp')!important;
+    background-position:64% 47%!important;background-size:cover!important;opacity:1!important;
+  }
+  #root .v120-playthrough .v120-overview::before {
+    background-image:linear-gradient(105deg,rgba(5,15,31,.88),rgba(6,21,38,.50)),url('./assets/original/community-coast-v193.webp')!important;
+    background-position:center,84% 55%!important;background-size:cover,cover!important;opacity:.96!important;
+  }
+}
+
+/* V220.1: mobile map keeps only our green PAGE thumb.
+   The actual scroll container varies across Chrome Android/Safari/WebView.
+   Hide native blue overlay rails without disabling scroll or changing PC. */
+@media (max-width:700px), (pointer:coarse) and (max-width:1150px) {
+ html.vi-route-map,
+ html.vi-route-map body,
+ html.vi-route-map body *:not(.v217-page-scroll-thumb) {
+   scrollbar-width:none!important;
+   -ms-overflow-style:none!important;
+ }
+ html.vi-route-map::-webkit-scrollbar,
+ html.vi-route-map body::-webkit-scrollbar,
+ html.vi-route-map body *::-webkit-scrollbar {
+   display:none!important;width:0!important;height:0!important;background:transparent!important;
+ }
+ html.vi-route-map body .v217-page-scroll-rail,
+ html.vi-route-map body .v217-page-scroll-rail:focus-visible {
+   right:0!important;width:34px!important;background:transparent!important;
+   outline:none!important;border:0!important;box-shadow:none!important;
+ }
+ html.vi-route-map body .v217-page-scroll-thumb {
+   right:7px!important;width:18px!important;min-height:42px!important;
+   background:#16bca2!important;border:1px solid #91ffee!important;
+   box-shadow:0 1px 5px #00272e!important;
+ }
+ /* CSS pseudo-label used to be literally 'Filtros'/'Cerrar' in all languages. */
+ #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle::after,
+ #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle[aria-expanded='true']::after {
+   content:attr(data-map-label)!important;
+ }
+ /* All three actions use the same 44px-high touch target.
+    Clear needs extra horizontal room for the translated word. */
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions {
+   display:flex!important;align-items:center!important;gap:6px!important;flex-wrap:nowrap!important;
+ }
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions > button {
+   box-sizing:border-box!important;height:44px!important;min-height:44px!important;
+   border-radius:10px!important;flex:0 0 auto!important;
+   padding:0 10px!important;font-weight:800!important;line-height:1!important;
+ }
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions .atlas-search-jump,
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions .v220-route-search {
+   width:44px!important;min-width:44px!important;max-width:44px!important;
+   font-size:24px!important;padding:0!important;display:grid!important;place-items:center!important;
+ }
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions .v220-map-clear {
+   width:auto!important;min-width:68px!important;max-width:none!important;
+   font-size:13px!important;padding:0 10px!important;
+ }
+}
+
+/* V220.2 — Mobile map is the sole scroll container. Chrome Android may draw a
+   blue viewport scrollbar even when html::-webkit-scrollbar is hidden.
+   Prevent viewport scrolling ONLY on the map route; put all page motion on
+   #root so the existing green custom rail is the only scroll indicator. */
+@media (max-width:700px), (pointer:coarse) and (max-width:1150px) {
+ html.vi-route-map,html.vi-route-map body {
+   box-sizing:border-box!important;height:100%!important;
+   height:100dvh!important;max-height:100dvh!important;
+   overflow:hidden!important;overscroll-behavior:none!important;
+ }
+ html.vi-route-map #root {
+   box-sizing:border-box!important;display:block!important;
+   height:100vh!important;height:100dvh!important;max-height:100dvh!important;
+   overflow-x:hidden!important;overflow-y:auto!important;
+   scrollbar-width:none!important;-ms-overflow-style:none!important;
+   -webkit-overflow-scrolling:touch!important;overscroll-behavior-y:contain!important;
+   touch-action:pan-y!important;
+ }
+ html.vi-route-map #root::-webkit-scrollbar,
+ html.vi-route-map #root::-webkit-scrollbar-track,
+ html.vi-route-map #root::-webkit-scrollbar-thumb {
+   display:none!important;width:0!important;height:0!important;
+   background:transparent!important;border:0!important;
+ }
+ /* Fullscreen map filters: put Search, Clear and Compass on one centered row. */
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-head {
+   display:flex!important;flex-direction:column!important;
+   align-items:stretch!important;justify-content:center!important;gap:8px!important;
+   width:100%!important;box-sizing:border-box!important;
+ }
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-head > b {
+   align-self:flex-start!important;text-align:left!important;
+ }
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel .atlas-filter-heading-actions {
+   width:100%!important;box-sizing:border-box!important;display:flex!important;
+   justify-content:center!important;align-items:center!important;
+   flex-wrap:nowrap!important;gap:8px!important;margin:0 auto!important;
+ }
+}

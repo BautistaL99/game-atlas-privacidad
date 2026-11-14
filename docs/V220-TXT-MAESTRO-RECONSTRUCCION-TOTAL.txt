@@ -1,0 +1,652 @@
+GAME ATLAS COMPANION
+
+ACTUALIZACION 13/11/2026: fuente V220 fijada ahora en eeac34d28490a0dd6549ea7e0c4f9e4864c8a66c. Los cambios moviles incluyen pan inicial, barra verde, rutas fullscreen, foto local de Mi partida y ES/EN/PT. Snapshot 7f7e849... al final del documento corresponde a prueba HISTORICA del feed, no a codigo actual.
+MANUAL MAESTRO V220: PROYECTO, PRODUCTO, ARQUITECTURA, AUTOMATIZACION,
+SEO DINAMICO, PUBLICACION, RESPALDO Y RECUPERACION
+Corte de preparacion: 13 de noviembre de 2026 (Argentina)
+ESTADO: CANDIDATO DE LANZAMIENTO, NO EQUIVALE A VERSION PUBLICADA.
+Documento pensado para una persona que NUNCA haya visto el producto ni este chat.
+
+======================================================================
+00. LEER ESTO PRIMERO. IDENTIDAD, OBJETIVO Y VERDAD OPERATIVA
+======================================================================
+Game Atlas Companion es una guia independiente, no oficial, de GTA VI.
+No pertenece a Rockstar Games ni a Take-Two Interactive. Tiene una web
+usable desde PC y telefonos, y clientes nativos Android y futuro iOS.
+Su propuesta no es solo publicar noticias: combina enciclopedia de
+fichas (wiki), mapa, buscador, galeria, comparador y seguimiento de la
+partida de cada usuario.
+
+El objetivo de arquitectura es:
+A) un mismo producto multilingue ES/EN/PT;
+B) noticias oficiales y medios independientes CLARAMENTE diferenciados;
+C) fichas de fuentes comunitarias con atribucion y datos verificables;
+D) actualizaciones de contenidos firmadas y automaticas, SIN aprobaciones
+   humanas para cada noticia, articulo, ficha o especificacion;
+E) datos personales de juego guardados en el dispositivo, no en la nube;
+F) una sola puerta de autorizacion humana para publicar una NUEVA VERSION
+   de la web: introducir derechos_revisados (tambien acepta mayusculas)
+   en el workflow privado de publicacion, tras revisar derechos/privacidad;
+G) no malgastar minutos de Actions privados en compilaciones de prueba;
+H) preservar siempre la interfaz PC existente al ajustar diseño movil.
+
+Estado real al escribir:
+- La V219 es la referencia visual revisada del movil.
+- La V220 es una RAMA candidata con mejoras de automatizacion, SEO, mapa,
+  arte, reconstruccion y documentacion. NO afirmar que esta en Firebase,
+  Google Play o App Store hasta verificar cada despliegue real.
+- El anterior sitio de Firebase sigue visible: https://gta6mapa.web.app/app/
+- El PR publico de V220 y la rama privada son codigo en revision, NO deploy.
+- Los TXT anteriores V140-V218 son historia de versiones: NO instrucciones
+  operativas actuales si contradicen esta V220 y sus archivos de codigo.
+- Ningun archivo incluye contrasenas, keystores, tokens o claves privadas.
+- Una copia sin credenciales DEL PROPIETARIO no puede suplantar las firmas
+  criptograficas ni publicar en cuentas Firebase/Google/Apple existentes.
+
+======================================================================
+01. COMO SE VE Y COMO SE USA EL PRODUCTO: EXPLICACION NO TECNICA
+======================================================================
+INICIO:
+- Portada, contenidos destacados, atajos a secciones, recomendaciones
+  para descubrir y resumen de avance de la partida.
+- Tarjetas de noticias y entradas del catalogo; una recomendacion lleva
+  al elemento, no reescribe el estado local del jugador.
+
+EXPLORAR Y CATALOGO:
+- Categorias: personajes, vehiculos, armas, lugares, misiones, secretos,
+  coleccionables, actividades, mundo/fauna y otras segun el catalogo.
+- Filtros, busquedas en idioma seleccionado, sinonimos, y fichas completas
+  con texto, fuente, galerias e informacion tecnica cuando existe.
+- Favorito, completado/pendiente, vistos/recientes; comparacion de
+  elementos compatibles sin inventar cifras faltantes.
+- Datos confirmados y rumores/reportes se etiquetan de manera distinta.
+- Wiki comunitaria y noticias independientes entran al catalogo
+  central SOLO tras comprobar su fuente, esquema y firma.
+
+MAPA:
+- Mapa interactivo de Leonida/Vice City, puntos comunitarios, categorias,
+  grupos, filtros contraidos y detalle contextual al seleccionar un punto.
+- Marcadores locales y buscador de lugares. Acercar, alejar y desplazar.
+- Rutas personales: seleccionar paradas, buscar puntos, reordenar,
+  visualizar/ocultar el trazado y eliminar rutas guardadas.
+- En movil hay barra de desplazamiento de pagina y controles tactiles
+  especificos para no bloquear la navegacion.
+- LIMITACION REAL: las rutas V219/V220 son trazados ilustrativos entre
+  paradas; NO ofrecen calculo vial confirmado calle por calle.
+- El mapa tiene condiciones de licencia y atribucion propias, no es
+  un mapa oficial publicado por Rockstar.
+
+NOTICIAS:
+- Oficiales: proceden de Rockstar Newswire con fecha original y URL
+  original, foto solo si esta autorizada y vinculada correctamente.
+- Independientes: proceden de RockstarINTEL y se rotulan como cobertura
+  de un medio, NO como declaraciones o confirmaciones de Rockstar.
+- Fichas Wiki: proceden de GTA Wiki, fuente y revision documentadas,
+  NO equivalen a anuncio oficial aunque sean registros comprobados.
+- Archivo historico, separacion por procedencia, enlaces para comprobar
+  afirmaciones y buscador de contenidos.
+
+MI PARTIDA:
+- Favoritos, progreso, completados/pendientes, descubrimientos,
+  marcadores, rutas locales y estadisticas descriptivas.
+- Backup/exportacion e importacion cuando el modulo local lo ofrece.
+- ATENCION: no hay sincronizacion obligatoria entre dispositivos ni
+  cuenta Google activa. No borrar localStorage sin copia del usuario.
+- Favoritos y progreso de https://gta6mapa.web.app y del espejo GitHub
+  son almacenamientos DIFERENTES por el origen del navegador.
+  Evitar mandar al jugador a la copia de la app en GitHub Pages.
+
+COMPARADOR Y OTRAS HERRAMIENTAS:
+- Comparador de elementos de una misma categoria con datos disponibles.
+- Las celdas desconocidas quedan vacias o pendientes, nunca inventadas.
+- Secciones de rankings, opciones de apoyo/donaciones y rankings de
+  speedrun pueden estar en modo demostracion o sin datos: NO asegurar
+  pagos, Google Login o servicios operativos inexistentes.
+
+AJUSTES / IDIOMAS / PRIVACIDAD:
+- Interfaz multilingue español, ingles y portugues.
+- Idioma, preferencias, politica de privacidad y fuentes.
+- El cliente no transmite la partida personal al recolector de noticias.
+- Toda traduccion tecnica se muestra solo cuando esta completa y validada
+  para el idioma; campos no traducidos quedan pendientes.
+
+BUSCADORES:
+- Busqueda general y dentro de categorias, con terminos/sinonimos de
+  ES/EN/PT. Debe distinguir noticias, fichas, mapa y comparador.
+- Nunca mostrar un resultado en idioma equivocado ni atribuir una
+  noticia de terceros a Rockstar Games.
+
+======================================================================
+02. DONDE ESTA TODO Y CUAL ES LA FUENTE DE VERDAD
+======================================================================
+Repositorio de DESARROLLO PRIVADO:
+  https://github.com/BautistaL99/-gta-vi-game-assistant
+  Rama candidata: release/v220-market-candidate-20261113
+  main es la linea de base: una rama candidata NO la reemplaza.
+  shared/site/                 = fuente canonica del cliente web.
+  web/                         = salida generada del sitio web.
+  android/mobile/www/          = salida generada del cliente Android.
+  scripts/sync-clients.mjs     = copia canonicamente web y Android.
+  scripts/prepare-market-v220.mjs = importa visual V219/V220 congelado.
+  scripts/check-market-v220.mjs   = validaciones de la V220.
+  scripts/prepare-firebase-hosting.mjs = espejo Firebase aprobado.
+  scripts/prepublish-gate.mjs = barrera de derechos y privacidad.
+  scripts/generate-static-seo.mjs = landing y noticias oficiales SEO.
+  scripts/generate-community-seo-v220.mjs = wiki y medio independiente SEO.
+  scripts/v220-seo-refresh.mjs = actualizador SEO de feeds firmados.
+  scripts/generate-static-seo.test.mjs y
+  scripts/generate-community-seo-v220.test.mjs = pruebas SEO.
+  scripts/static-seo.css y scripts/static-compare/*.html = estilos y
+    comparadores estaticos de SEO.
+  .github/workflows/publish-reviewed.yml = unica publicacion web oficial.
+  scripts/public-release/v220-free-scheduled-catalog.yml = plantilla de
+    recolector PUBLICO con refresco de paginas SEO, instalada al publicar.
+  android/mobile/ y android-v220 = fuentes/preparacion de Android.
+  ios-v220/ = preparacion de iOS mediante Capacitor; requiere macOS.
+  docs/ = manuales, decisiones, controles y versiones historicas.
+
+Repositorio PUBLICO, paginas y feeds:
+  https://github.com/BautistaL99/game-atlas-privacidad
+  main /app/ = espejo publicado GitHub Pages de la aplicacion.
+  main /guia-gta-6/ = paginas HTML legibles por motores de busqueda.
+  main /updates/ = sobres JSON criptograficamente firmados.
+  main /automation/ = recolector automatico y revision de SEO.
+  review/v219-original-art-and-launch-wiki-hourly-20261112 =
+    propuesta revisada de V219/V220, NO equivale a main.
+  Snapshot PUBLICO congelado para el importador V220:
+    eeac34d28490a0dd6549ea7e0c4f9e4864c8a66c
+    No cambiar este SHA sin auditar y fijar nuevo SHA en importador,
+    workflow y manifiestos de reconstruccion.
+  revision-v216-leonida-preview-20261112/ = referencia visual,
+    NO es la aplicacion productiva.
+
+HOSTING:
+  Web PRINCIPAL: https://gta6mapa.web.app/app/
+  Espejo GitHub: https://bautistal99.github.io/game-atlas-privacidad/app/
+  Paginas SEO indexables:
+    https://bautistal99.github.io/game-atlas-privacidad/guia-gta-6/
+    /mapa/, /personajes/, /vehiculos/, /armas/, /noticias/,
+    /noticias/independientes/, /wiki/, /mi-partida/, /comparador/,
+    /comparador/en/ y /comparador/pt/.
+  Feed oficial:
+    https://bautistal99.github.io/game-atlas-privacidad/updates/catalog-envelope.json
+  Feed comunitario:
+    https://bautistal99.github.io/game-atlas-privacidad/updates/community-envelope-v205.json
+  Sitemaps que deben inspeccionarse tras lanzamiento:
+    https://gta6mapa.web.app/sitemap.xml
+    https://bautistal99.github.io/game-atlas-privacidad/sitemap.xml
+
+REGLA: los repositorios, su historial de commits, SHA, pruebas y lo que
+realmente responden las URL son la fuente de verdad. Un TXT por si solo
+no demuestra que algo este desplegado o funcionando.
+
+======================================================================
+03. FLUJOS DE INFORMACION E INTERCONEXIONES
+======================================================================
+FLUJO A: contenidos:
+  Rockstar Newswire / graph.rockstargames.com
+  RockstarINTEL RSS / rockstarintel.com/feed/
+  GTA Wiki API / gta.wiki/api.php
+          |
+          v
+  GitHub Actions PUBLICO, cron con compuerta de lanzamiento
+          |
+          v
+  automation/v210-sources.mjs [fuentes allowlist, fecha, relevancia]
+          |
+          v
+  automation/v210-publisher.mjs [deduplica, traduce, categoriza,
+  valida, preserva historico, firma Ed25519, revision ascendente]
+          |
+          +--> updates/catalog-envelope.json (schema 1, oficial)
+          |
+          +--> updates/community-envelope-v205.json (schema 205,
+               noticias independientes y fichas wiki no oficiales)
+          |
+          v
+  automation/v220-seo-refresh.mjs [valida AMBAS firmas, revisiones,
+  evita retrocesos, regenera HTML wiki/noticias y sitemap]
+          |
+          v
+  Git commit publico SIN force, solo feeds/SEO/diagnostico
+          |
+          +--> Pages: /guia-gta-6/ indexable por buscadores
+          |
+          +--> feeds firmados para las apps YA instaladas
+                     |
+                     v
+  Cliente: online-updates.js y community-v206.js
+    [HTTPS, firma Ed25519, schema, revision, cache local]
+                     |
+                     v
+  app-v137.js records[] y vista actual, busquedas, fichas, mapa,
+  noticias, favoritos y comparador. SOLO CAMBIA DATA, NO BUILD.
+  No hay dependencia de ChatGPT, IA o intervencion del propietario
+  para publicar una noticia elegible de estas fuentes aprobadas.
+
+FLUJO B: progreso privado:
+  Evento del usuario (favorito, completado, ruta, idioma)
+          v
+  modulos JS y localStorage del mismo dispositivo/origen
+          v
+  UI de Mi partida, mapa y fichas
+  SIN subirlo a GitHub, Firebase, OpenSEO ni a otras cuentas.
+  El recolector NUNCA necesita acceder a ese almacenamiento.
+
+FLUJO C: publicacion de una nueva interfaz:
+  Fuente revisada SHA exacto V219/V220 -> importador -> shared/site
+          v
+  sync-clients -> web/ y android/mobile/www/
+          v
+  pruebas, auditoria de imagenes y permisos, revision derechos
+          v
+  UNICO input manual derechos_revisados, workflow privado protegido
+          v
+  GitHub Pages /app/ y contenido SEO + automatizaciones publicas
+          v
+  espejo Firebase Hosting /app/; comparar HTML + ambos feeds
+          v
+  verificacion de navegacion PC/movil y de version exacta.
+  Android y iOS SON FLUJOS DE TIENDA INDEPENDIENTES: un despliegue web
+  nunca instala un AAB/IPA en los telefonos.
+
+======================================================================
+04. HORARIOS AUTOMATICOS, FIRMA Y TRADUCCIONES
+======================================================================
+Cron y conversión a Argentina (UTC-3):
+- NEWS: 29 17,23 * * * = 14:29 y 20:29 hora argentina.
+- WIKI normal: 43 8 * * * = 05:43 argentina cada dia.
+- WIKI intensivo: 11 * * * * = cada hora durante la ventana
+  19/11/2026 00:00 ART a 26/11/2026 00:00 ART (fin excluido).
+- La compuerta v219-launch-window.mjs impide duplicar wiki diaria
+  y horaria. Si cambia el lanzamiento oficial, actualizar ese contrato.
+- Cron no garantiza puntualidad exacta ni contenido nuevo en cada pase.
+
+CLASIFICACION:
+- schema 1: registro del catalogo oficial respaldado por fuente.
+- schema 205: fuente independiente o comunidad, con sourceTier,
+  sourceUrl, sourceName, claimStatus y wikiRevision cuando corresponde.
+- El contenido NO autorizado se rechaza o pone en cuarentena.
+- Fecha de noticia = publicacion original, NUNCA fecha de escaneo.
+- ID/URL evitados por duplicacion; revision solo crece cuando hay
+  cambios; si falla una API, NO borrar el feed validado anterior.
+
+FIRMAS:
+- Ed25519: sobre {schema,payload,signature}; payload base64 de JSON
+  validado, firma sobre ese payload. La clave PUBLICA va en
+  online-config.json y en verificador; NO es secreta.
+- El secreto para FIRMAR reside en GitHub Actions PUBLICO con el nombre
+  CATALOG_SIGNING_KEY_PEM_BASE64 (NO incluir su valor).
+- El cliente verifica firma y protege contra revision menor.
+- Si falta clave firmante, el recolector no publica nuevas fichas:
+  genera diagnostico SIGNER_SETUP_REQUIRED; NO simular actualizaciones.
+- Las dependencias remotas de traduccion estan sujetas a cuotas.
+  Campos tecnicos en ES/PT solo aparecen con labelI18n/valueI18n
+  completos, sin mezclar textos ingleses a escondidas.
+
+SEO DINAMICO (INTEGRACION NUEVA DE V220):
+- La automatizacion PUBLICA, no la privada, corre el refresco SEO
+  despues del recolector firmado y antes del commit del mismo pase.
+- Entrypoint: automation/v220-seo-refresh.mjs.
+- Compara revision y hash de ambos sobres firmados, bloquea rollback
+  y reescritura silenciosa de una revision ya procesada.
+- Guarda checkpoint automation/seo/last-indexed-v220.json.
+- Reutiliza generador oficial automation/seo/generate-static-seo.mjs:
+  paginas de categorias, noticias de Rockstar, comparador, sitemap.
+- A continuacion genera comunidad con
+  automation/seo/generate-community-seo-v220.mjs:
+  indice /guia-gta-6/wiki/ de fichas comunitarias con categorias,
+  lista de /guia-gta-6/noticias/independientes/ con fecha y origen,
+  paginas /guia-gta-6/wiki/categorias/<grupo>/ cuando la categoria
+  contiene tres o mas registros firmados (incluye mapa-lugares), y
+  paginas /guia-gta-6/wiki/fichas/<id>/ SOLO para fichas con dos o
+  mas datos sustantivos, ES traducidos y fuente. No crear cientos de
+  landing vacias; una ficha sin datos suficientes sigue disponible
+  en la app y en el indice, pero no recibe pagina individual SEO.
+- Los HTML generan title, description, H1, canonical, og: y
+  Schema.org; escapan datos para impedir HTML de fuentes externas.
+- El sitemap GitHub Pages contiene solo landings canonicas, no
+  la copia de /app/, ni previews, ni rutas con #, ni archivo noindex.
+- El sitemap Firebase contiene exclusivamente /app/ canonico.
+- Las paginas de noticias independientes NO se hacen pasar por oficiales.
+- Las paginas SEO estaticas se regeneran al cambiar el feed en el
+  cron. Los feeds siguen siendo utilizables aunque falle el SEO;
+  el workflow bloquea ese commit conjunto y conserva lo anterior
+  para no publicar HTML incoherente. Revisar Actions/diagnostico.
+- No hay una "keyword magica": el SEO puede crecer con contenidos
+  reales posteriores al lanzamiento, respetando su origen y utilidad.
+- ES/EN/PT en la APP; paginas SEO editoriales principalmente ES,
+  comparador con landings ES, EN y PT y hreflang. NO inventar URLs
+  independientes EN/PT que no existan.
+- Google Search Console / OpenSEO sirve para orientar demanda,
+  pero NO convierte volumen estimado en visitas ni garantiza posicion.
+
+======================================================================
+05. MAPA, RECURSOS Y DERECHOS
+======================================================================
+Archivos clave (web/ y shared/site/):
+  app-v137.js                 = nucleo, categorias, UI, catalogo.
+  vi-i18n.js                  = textos y terminos multilingues.
+  online-updates.js           = feed oficial y cache firmada.
+  community-v206.js           = feed wiki/independientes.
+  news-v155.js                = vistas de noticias.
+  routes-v145.js              = rutas y paradas del usuario.
+  map-v216.css                = mapa Leonida.
+  map-v217-mobile.css         = ajustes tactiles y filtros.
+  map-v217-scroll.js          = scroll movil de la pagina del mapa.
+  detail-enhancements-v160.js= fichas, imagenes y comparaciones.
+  sw.js                       = service worker, cache y actualizaciones.
+  manifest.webmanifest        = PWA / iconos.
+  online-config.json          = endpoint HTTPS y clave publica.
+  privacy.html                = privacidad ES/EN/PT.
+  assets/LEONIDA-MAP-LICENSE.txt = derechos/atribuciones del mapa.
+  assets/original/ART-ORIGIN-V219.txt = arte original y procedencia.
+
+No suprimir atribuciones del mapa comunitario CC BY 4.0.
+No copiar capturas o fotos de Rockstar por tener URL accesible;
+verificar permisos/licencias y politicas antes de distribuir.
+La capa historica visual-gallery-v149.js / visual-web-v148.css
+puede mantener referencias remotas de Rockstar que necesitan revision.
+Nunca presentar screenshots promocionales como arte propio.
+Los mapas y trazados no deben inventar caminos, precision vial o
+ubicaciones no confirmadas.
+
+======================================================================
+06. PASOS PARA RECONSTRUIR SIN TENER ESTE CHAT
+======================================================================
+PRERREQUISITOS:
+- Acceso autorizado a ambos repositorios y a sus historiales;
+  Node.js 22, Git, terminal; no usar --force sin procedimiento especial.
+- Cuenta propietaria Firebase, Github, Play/Apple si se pretende
+  publicar, con credenciales y secretos YA configurados por su titular.
+- En Android, entorno Java/SDK/Gradle indicado en android-v220/;
+  iOS requiere macOS, Xcode y equipo/certificado Apple.
+- Un equipo sin acceso a secretos puede REPRODUCIR y PROBAR fuentes,
+  pero no publicar en los servicios del propietario ni falsificar feeds.
+
+RECUPERACION DESDE V220:
+1) Leer este TXT, docs/V220-PUBLICACION-RECONSTRUCCION.txt y los TXT
+   publicos docs/V220-LEER-PRIMERO-ESTADO-MAESTRO.txt y
+   docs/V220-FLUJO-AUTOMATICO-COMUNICACIONES.txt.
+2) Clonar repo PRIVADO en rama release/v220-market-candidate-20261113;
+   conservar SHA actual de cada commit y respaldo de la version live.
+3) Clonar repo PUBLICO y checkout exacto del commit
+   eeac34d28490a0dd6549ea7e0c4f9e4864c8a66c7f7e849cddba1df3275f467dfa7b506e50dba90d
+   en subdirectorio release-source-v220 del repo privado.
+4) Definir GAME_ATLAS_V220_PUBLIC_SHA con ese mismo SHA, luego:
+     node scripts/prepare-market-v220.mjs release-source-v220
+     node scripts/sync-clients.mjs
+     node scripts/check-market-v220.mjs
+5) Correr tests de automatizacion, noticias, idiomas, busqueda,
+   rutas, PWA, web/Android, catalogo, privacidad, atribucion y SEO:
+     node --test scripts/generate-static-seo.test.mjs
+     node --test scripts/generate-community-seo-v220.test.mjs
+     node --test scripts/test-firebase-hosting.mjs
+   Y todos los tests extra enumerados en
+   .github/workflows/publish-reviewed.yml.
+   Primero tests locales; nunca gastar Actions privados por costumbre.
+6) Revisar offline, controles moviles, scroll, filtros, rutas,
+   i18n ES/EN/PT, favoritos y respaldo Mi partida en dispositivos.
+7) Revisar TODOS los medios y derechos con
+   scripts/audit-web-public-rights.mjs y los documentos de licencia.
+8) NO pulsar publicacion hasta autorizacion real del propietario
+   y revision tecnica/legal: entrada derechos_revisados.
+9) El workflow privado toma la web aprobada, clona sitio PUBLICO
+   actualizado, preserva feeds firmados, instala:
+     automation/v220-seo-refresh.mjs,
+     automation/seo/generate-static-seo.mjs y tests,
+     automation/seo/generate-community-seo-v220.mjs y tests,
+     automation/seo/static-seo.css y static-compare/,
+     .github/workflows/v210-free-scheduled-catalog.yml con SEO.
+   Verifica firmas, genera HTML y sitemap, guarda revision/huellas.
+10) Hace push NORMAL de web, SEO, instrucciones y automatizacion;
+    crea espejo Firebase desde la misma version aprobada.
+    Comparar HTML y ambos sobres firmados byte a byte.
+11) Revisar URLs, consola, indexacion, contenido y funciones web PC,
+    Safari iOS y Android reales; registrar pruebas y SHA publicados.
+12) Confirmar cron y secret de firma en PUBLICO sin mostrar valores.
+    Verificar que se regenere /guia-gta-6/ con un cambio real de
+    revision validada. Nunca publicar un JSON de prueba firmado como
+    si fuera una novedad real de GTA VI.
+13) Google Play y Apple: llevar a tiendas solo tras build, QA,
+    firma, disclosures y revision de cada plataforma.
+
+COMO GENERAR / PROBAR SEO SIN PUBLICAR:
+- La fuente esta en scripts/generate-static-seo.mjs y
+  scripts/generate-community-seo-v220.mjs.
+- El refresco portable para cron usa SOLO ambos feeds ya firmados y
+  validados por el publicador publico, nunca feeds de prueba.
+- En un directorio de pruebas aislado, ejecutar tests Node antes de
+  hacer commits. No ejecutar generador sobre un repositorio publicador
+  ajeno o un path sin control.
+- Si solo se modifican paginas SEO, no hace falta recompilar Android.
+- Si la mejora es del cliente web, usar fuente unica y sync-clients.
+- Documentar alteraciones a la politica de datos, derechos e idiomas.
+
+ANDROID:
+- packageId com.indie.viassistant; versionName V220 1.50.0,
+  versionCode 220. No cambiar el packageId sin analizar Play.
+- android-v220 prepara cliente Capacitor; APK debug SOLO QA,
+  AAB release sin firmar NO es app final.
+- Para Play: keystore de subida del titular, firma, versiones,
+  Data Safety, politicas de Google y pruebas de tienda.
+- Guardar progreso Mi partida antes de cambiar entre APK debug y Play,
+  ya que diferente firma puede impedir una actualizacion directa.
+
+IOS:
+- ios-v220/prepare-ios.mjs, Capacitor, macOS con Xcode, equipo
+  Apple developer y certificados de firma.
+- Seleccionar bundle ID autorizado, build 220, probar iPhone/iPad,
+  archive/validate/upload en App Store Connect y esperar revision.
+- Desde Linux/este chat NO existe un IPA firmado listo para tienda.
+
+======================================================================
+07. PRUEBAS DE ACEPTACION QUE DEMUESTRAN QUE FUNCIONA
+======================================================================
+WEB PC:
+- Inicio y todas las pestañas; buscar en 3 idiomas y cada categoria.
+- Fichas con datos, foto correcta y fuente correcta; favoritos,
+  comparador, archivos, enlaces y seguimiento sin regresiones.
+- El despliegue no altera estructura de escritorio por arreglar movil.
+
+MOVIL / ANDROID / SAFARI IOS:
+- Pantallas sin superposiciones, top bar, idioma, privacidad, imagenes.
+- Filtros accesibles desde arriba, contraidos de inicio; mapa movible,
+  zoom, barra de scroll angosta y tactil, buscador de paradas de rutas.
+- No aparece toda la nube de puntos al crear un marcador personal.
+- Crear ruta, mostrarla, ocultarla, reordenarla y conservarla al volver.
+- Cambiar idioma y comprobar que fichas y valores sean coherentes.
+
+DATOS:
+- Crear un favorito/pendiente y actualizar web sin perderlo.
+- Feeds firmados schema1/schema205 reconocidos; otra firma RECHAZADA.
+- Noticias oficiales e independientes diferenciadas, Wiki fuente real.
+- Revisiones no retroceden; fuente externa caida preserva feed previo.
+- ES/EN/PT sin valores ingleses presentados como traducidos.
+
+SEO:
+- /guia-gta-6/ tiene "Wiki GTA 6", H1, contenido util,
+  canonical correcto y index,follow (NO preview).
+- /guia-gta-6/wiki/ agrupa registros; detalles con al menos 2 hechos
+  localizados; /noticias/independientes/ separa origen independiente.
+- Sitemap Pages incorpora las nuevas landings y novedades; NO
+  incluye /app/ espejo, archivos noindex, previews ni rutas con #.
+- Sitemap Firebase incorpora /app/ canonical solamente.
+- Una nueva revision firmada dispara HTML + sitemap, NO un deploy
+  Firebase ni un nuevo AAB/IPA.
+- Comprobar Search Console: cobertura, indexacion, impresiones,
+  clics y consultas. No prometer posicion ni trafico garantizado.
+
+PUBLICACION:
+- Si falta derecho/licencia/privacidad/secreto/firma: SE BLOQUEA.
+- GitHub Pages y Firebase deben servir HTML exacto de V220,
+  catalogo y comunitario firmados; URL live probada, no supuesta.
+- No publicar ni declarar final hasta cumplir todos estos puntos.
+
+======================================================================
+08. INCIDENTES Y REPARACION / ROLLBACK
+======================================================================
+NO APARECE UNA NOTICIA:
+- Revisar Actions PUBLICO, automation/v210-last-check.json,
+  cuarentenas y URL/fecha original. Verificar firma, revision y cron.
+- No forzar anuncios con traduccion fallida ni mezclar fuentes.
+
+WIKI NUEVA SIN PAGINA SEO:
+- Verificar que exista en community-envelope-v205.json, que el
+  navegador la reciba y que el escaner haya revisado su infobox.
+- Una ficha con pocos hechos o sin traducciones ES no genera pagina
+  SEO individual; SI puede figurar en indice y app. Es intencional.
+- Revisar automation/seo/last-indexed-v220.json y el run del cron.
+
+FALLO DE SEO AUTOMATICO:
+- La revision firmada previa y SEO anterior deben conservarse;
+  nunca saltar tests o publicar contenido no validado para "arreglar".
+- Comparar hash de ambos sobres y revision del checkpoint.
+- Ejecutar primero tests Node en copia aislada. Un cambio de payload
+  con MISMA revision se bloquea para evitar reescritura silenciosa.
+
+NO SE ACTUALIZA EL CLIENTE:
+- Confirmar URL del feed, clave publica, revision, cache service
+  worker y comprobacion de 30 minutos/visibilidad.
+- NO borrar localStorage del usuario sin respaldo.
+
+SIN CREDITOS GITHUB PRIVATE:
+- No ejecutar builds, cron ni despliegues privados salvo la nueva
+  VERSION WEB aprobada y necesaria; el recolector programado y el SEO
+  residen en repositorio PUBLICO tras V220.
+- Si el publico falla por cuota, no decir "automatizado funcionando":
+  ver Actions y restaurar el cron cuando exista capacidad.
+
+SE ROMPE UNA VERSION:
+- Conservar ZIP/commit/tag/manifest de la ultima release validada.
+- Restaurar EN UNA RAMA, verificar firma/feeds, migraciones y tests.
+- No usar git push --force, no sobrescribir datos firmados recientes.
+- En Firebase/Pages restaurar artefacto revisado, luego revalidar URLs.
+- No desinstalar app sin exportar progreso. No sobrescribir llaves.
+- No revelar credenciales ni incluirlas en backups.
+
+======================================================================
+09. SECRETOS, CONTACTOS TECNICOS Y LIMITACIONES ABIERTAS
+======================================================================
+SOLO NOMBRES de secretos (valores fuera de repositorios):
+- PUBLICO: CATALOG_SIGNING_KEY_PEM_BASE64 (firma Ed25519).
+- PRIVADO: FIREBASE_SERVICE_ACCOUNT_GTA6MAPA (Firebase Hosting).
+- PRIVADO: PUBLIC_SITE_DEPLOY_TOKEN (push publico sin usar claves
+  personales en codigo). Revisar permisos y expiracion.
+- Android: upload keystore propietario, fuera del repo.
+- iOS: firma/certificados Apple Developer, fuera del repo.
+No confundir clave publica Ed25519 con secreto de firma.
+
+PENDIENTES REALES ANTES DE LANZAMIENTO DEFINITIVO:
+- Pruebas Node completas EN EJECUCION, no solo lectura de codigo.
+- QA visual/funcional PC, Android y Safari iOS; firmas de apps.
+- Confirmar activacion real del secreto publico y de cron/schedules.
+- Derechos de fotografias historicas Rockstar y cualquier material
+  externo; permisos vigentes, creditos y politica de privacidad.
+- Verificar ruta sobre calles y datos reales cuando haya evidencia;
+  el trazado V220 todavia no es navegacion vial.
+- Confirmar Firebase/GitHub Pages con version V220 publicada.
+- Enlazar Google Search Console para medir clics y busquedas reales;
+  OpenSEO por si solo no concede acceso a propiedades de Google.
+- Probar que cada nueva revision firmada refresca landing, indice
+  y sitemap; si falta contenido localizado permanece pendiente.
+- Completar campos/wiki reales y nuevas categorias cuando existan
+  fuentes: la automatizacion no inventa informacion.
+
+======================================================================
+10. CHECKLIST DE HERENCIA A UN NUEVO EQUIPO
+======================================================================
+[ ] Soy capaz de explicar producto, secciones y origen de cada dato.
+[ ] Tengo acceso legitimo a repositorios y commits, no dependo de chat.
+[ ] Distingo la web LIVE de la rama V220, previews y espejo GitHub.
+[ ] Conozco el SHA congelado y la fuente canonica shared/site.
+[ ] Puedo generar web y Android desde el mismo codigo y correr tests.
+[ ] Reconozco formato de ambos feeds, firma, revision y fuentes.
+[ ] Puedo recuperar progreso local sin prometer cloud sync.
+[ ] Comprendo el cron, cuotas, traduccion y cuarentenas.
+[ ] Conozco los scripts SEO y su guardia contra paginas vacias.
+[ ] Sé activar/restaurar SEO en GitHub PUBLICO sin deploy privado.
+[ ] Distingo aprobacion de WEB mediante derechos_revisados
+    de firma y publicacion de apps en Google/Apple.
+[ ] Tengo proceso para revisar derechos y privacidad sin adivinar.
+[ ] Puedo verificar bytes V220 en Pages/Firebase y guardar respaldo.
+[ ] Puedo diagnosticar fallas sin forzar pushes ni borrar datos.
+
+======================================================================
+11. INSTANTANEA DE QA DE SEO SOBRE DATOS REALES DE REVISION
+======================================================================
+Verificacion AISLADA SIN DESPLIEGUE sobre los payloads del commit publico
+congelado 7f7e849cddba1df3275f467dfa7b506e50dba90d:
+- Catalogo schema 1: revision 4, 19 registros; el generador estricto
+  habilito 13 noticias oficiales HTML y 24 paginas de guia en conjunto.
+- Comunidad schema 205: revision 10, 16 noticias independientes y
+  302 fichas wiki comunitarias.
+- Se generaron en memoria indice Wiki de 302 fichas, 4 paginas de
+  categorias (personajes, vehiculos, armas y mapa-lugares), y una
+  pagina que separa el medio independiente.
+- Se generaron CERO paginas individuales Wiki SEO con este snapshot:
+  faltan dos datos sustantivos ya traducidos al ES por ficha. Esto
+  es INTENCIONAL para no llenar Google de paginas genericas; la app
+  puede mostrar las 302 fichas con su procedencia en cualquier momento.
+- Al llegar nuevas traducciones tecnicas verificadas, las paginas
+  individuales de calidad se crean automaticamente en futuras pasadas.
+- La prueba uso un sistema de archivos simulado y contenido real de
+  envelopes; NO equivale a Node tests completos, ejecucion cron,
+  auditoria legal ni una publicacion real del sitio.
+- No hay datos reales de clics Search Console conectados para afirmar
+  que cambie el ranking o se duplique el trafico. SEO evoluciona con
+  CONTENIDO FIRMADO, no adivina busquedas futuras.
+
+ESTE TXT DOCUMENTA EL DISEÑO Y LOS PASOS PREVISTOS. LAS PRUEBAS
+REPRODUCIBLES, LOS COMMITS Y EL ESTADO DE LOS SERVICIOS EN VIVO
+SON LOS QUE CONFIRMAN QUE UNA IMPLEMENTACION FUNCIONA. FIN.
+
+
+V220 — PREPARACION DE DESCARGAS Y MERCADO PAGO (13/11/2026)
+- Fuente visual candidata actual: eeac34d28490a0dd6549ea7e0c4f9e4864c8a66c (solo revision-v216-leonida-preview-20261112; /app publico y Firebase NO modificados).
+- Seccion de descargas en Inicio y #/descargas; enlace desde barra lateral, menu Mas y pie.
+- Botones Android (Google Play) e iOS (App Store): PROXIMAMENTE, sin vinculos falsos ni binarios de pruebas.
+- Apoyo visible: solo Mercado Pago. No se cobra: paymentEnabled=false y URL publica nula.
+- Futuras URLs: atlasExternalLinksV220 en app-v137.js (mercadoPago, androidPlay, iosAppStore).
+- Para habilitar Mercado Pago: revisar Link de pago real y derechos de plataforma; cambiar URL y paymentEnabled=true; publicar nueva revision aprobada.
+- Android exige URL oficial play.google.com/store/apps/details?id=com.indie.viassistant; iOS URL apps.apple.com/.../app/.../id...
+- Los cobros se procesaran fuera de Game Atlas, sin tarjetas ni tokens en el cliente. Top donaciones sigue sin integracion automatica.
+- Estado: sintaxis JS comprobada en preparacion; falta auditoria visual de navegador y QA nativo. No equivale a autorizacion de publicacion.
+
+
+CAMBIO DE VISIBILIDAD DESCARGAS — 14/11/2026
+- Boton DESCARGAR junto a APOYAR en cabecera movil; en PC, accesos pareados dentro de sidebar-rankings.
+- Se quito el banner de descargas del final de Inicio para no ocultarlo ni agrandar la pagina.
+- #/descargas continua mostrando Google Play y App Store como Proximamente hasta que existan URLs oficiales verificadas.
+- CSS responsive especial <=480px evita superponer logo, accesos e idioma; menu Mas y pie conservan el acceso secundario.
+- Vista previa PWA con nueva cache aislada; NO publicada en Firebase /app/ ni apps nativas.
+- Candidato publico fijado por SHA eeac34d28490a0dd6549ea7e0c4f9e4864c8a66c. Ejecutar y revisar tests antes de publicar.
+
+
+MEJORA VISUAL DE DESCARGAS — 14/11/2026
+- Ventana de #/descargas redisenada con panel compacto, degradado sutil, tarjetas equilibradas y recuadros de estado en estilo coherente con el selector de idioma.
+- Iconos Android y iOS ahora son SVG incorporados y accesibles; se evita el glifo incorrecto del dispositivo anterior.
+- Android/iOS continúan como Proximamente; Mercado Pago sin link y cobros desactivados; se conserva el acceso Descargar al lado de Apoyar en PC/movil.
+- Revision publica aprobable sin deploy: eeac34d28490a0dd6549ea7e0c4f9e4864c8a66c. Servicio worker de PREVIEW aislado y cache actualizada a v8.
+- Pruebas reales en telefono y aprobacion de derechos pendientes. Publicar exclusivamente mediante workflow privado revisado.
+
+
+ESTILO DE ACCESOS EN CABECERA — 14/11/2026
+- El propietario solicito recuadros para Apoyar y Descargar iguales al selector de idioma ES/EN/PT.
+- En la preview V220: ambos controles muestran fondo oscuro #1c1f31, esquinas redondeadas y estados hover/focus; ancho y espaciado adaptados a movil <=700px y <=370px.
+- El boton Descargar permanece junto a Apoyar. No cambian la ruta de descargas ni los datos personales.
+- Sin enlaces de tiendas confirmados ni enlaces de Mercado Pago: cobros inactivos.
+- Source SHA congelado para la publicacion humana: eeac34d28490a0dd6549ea7e0c4f9e4864c8a66c. PWA preview cache v9.
+- La web /app/ Firebase no fue publicada. Validacion visual real pendiente.
+
+
+AJUSTE DE NAVEGACION 14/11/2026: Se quitaron los botones duplicados Apoyar y Descargar del bloque sidebar-commercial-links del panel lateral. Los accesos principales de la cabecera junto al selector de idioma se conservan. El menu Mas y pie de pagina mantienen enlaces secundarios. No cambia contenido, cobros ni sitio Firebase. Fuente candidata inmovil: eeac34d28490a0dd6549ea7e0c4f9e4864c8a66c.
+
+
+MAPA / FICHAS / TRADUCCION PT — 14/11/2026
+- Map popup cuando el marcador tiene itemId reutiliza window.viReviewedPhotoForRecordV220 del MISMO mapeo de la galeria visual web; si falla la carga, se conserva recurso original local.
+- Ejemplo Mount Kalaga: popup muestra foto promocional contextual que ya se usa en la ficha completa; NO prueba que la motocicleta sea una representacion exacta del parque. Derechos/atribuciones siguen pendientes de revision humana.
+- El popup usa la summary traducida de la ficha si el marcador esta enlazado, en lugar de usar la nota generica del punto.
+- Mount Kalaga corrigio summary/desc en EN/PT, que antes eran genericas y no correspondian a la version ES. Los nombres propios no se traducen automaticamente.
+- Prueba protectora scripts/test-map-popup-v220.mjs fue agregada al workflow de publicacion.
+- Fuente visual congelada SHA eeac34d28490a0dd6549ea7e0c4f9e4864c8a66c; publicacion oficial de Firebase y apps nativas NO realizada. La traduccion masiva de puntos comunitarios sin ficha sigue sin auditar.

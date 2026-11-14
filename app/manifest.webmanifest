@@ -1,7 +1,7 @@
 {
   "name": "Game Atlas Companion",
-  "short_name": "Game Atlas Companion",
-  "description": "Asistente independiente de GTA VI con mapas y fichas verificadas",
+  "short_name": "Game Atlas V220",
+  "description": "Guía independiente GTA VI: mapa de Leonida, rutas, noticias y fichas actualizadas automáticamente.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -28,5 +28,6 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "id": "/game-atlas-privacidad/revision-v216-leonida-preview-20261112/"
 }
