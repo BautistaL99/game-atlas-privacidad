@@ -62,7 +62,7 @@ jobs:
       - name: Mantener wiki y noticias encontrables en Google desde feeds firmados
         if: ${{ steps.cadence.outputs.should_run == 'true' && (github.event_name != 'workflow_dispatch' || !inputs.dry_run) }}
         run: |
-          node --test automation/seo/generate-static-seo.test.mjs automation/seo/generate-community-seo-v220.test.mjs
+          node --test automation/seo/compare-signed-envelope.test.mjs automation/seo/generate-static-seo.test.mjs automation/seo/generate-community-seo-v220.test.mjs
           node automation/v220-seo-refresh.mjs
       - name: Reportar los hallazgos sin secretos ni textos privados
         if: steps.cadence.outputs.should_run == 'true'
