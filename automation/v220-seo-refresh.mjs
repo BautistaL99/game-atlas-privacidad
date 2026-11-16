@@ -5,6 +5,7 @@
  */
 import {readFile,writeFile,access} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
+import {sameSignedEnvelopeWithNewlineOnly} from './seo/compare-signed-envelope.mjs';
 import {verifyFeed,validatePublication} from './v210-publisher.mjs';
 import {generateStaticSeo} from './seo/generate-static-seo.mjs';
 import {generateCommunitySeo} from './seo/generate-community-seo-v220.mjs';
@@ -27,7 +28,7 @@ catch(e){if(e.code!=='ENOENT')throw e}
 for(const key of ['official','community']){
  const old=prev?.[key+'Revision'],current=state[key+'Revision'];
  if(Number.isInteger(old)&&current<old)throw Error('SEO blocked signed feed revision rollback: '+key);
- if(old===current&&prev?.[key+'Hash']!==state[key+'Hash'])
+ if(old===current&&!sameSignedEnvelopeWithNewlineOnly(key==='official'?officialRaw:communityRaw,prev?.[key+'Hash']))
   throw Error('SEO blocked changed signed payload without revision increase: '+key);
 }
 let hubExists=true;
