@@ -35,3 +35,17 @@ Compilar con Gradle y firma según Play Console. Consultar workflow .github/work
 PRUEBAS: node qa/v247-public-client.mjs y cuatro scripts qa/v247-qa-*.mjs en raíz. Requiere Node.js 22.
 
 IMPORTANTE: Los tests automáticos verifican la fuente y la lógica. Falta QA manual en navegadores, Android real y orientación/teclado de diversos tamaños.
+
+
+DOCUMENTACION AMPLIADA — EDICION V247 (17/11/2026)
+--------------------------------------------------
+Leer primero: manuales-v247/LEER_PRIMERO_INDICE_V247.txt
+Explicación profunda, común a las tres apps: manuales-v247/MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt
+Manual WEB: manuales-v247/MANUAL_WEB_PC_MOVIL_V247.txt
+Manual ANDROID: manuales-v247/MANUAL_ANDROID_V247.txt
+Manual IOS: manuales-v247/MANUAL_IOS_V246.txt
+También se conserva CHECKLIST_PRUEBAS_V247.txt.
+
+Los paquetes ahora INCLUYEN manual completo e índice, NO solo este resumen; el paquete iOS además conserva los TXT anteriores V241, V242, V243, V244, V245 y V246 como historial de las correcciones. Si esos documentos muestran una rama antigua, prevalece el manual V247/V246 y el código de SHA congelado.
+Los manuales explican recursos, reconstrucción, idiomas, buscadores, mapas, rutas, noticias y Wiki Ed25519, copias de Mi partida, QA, errores, publicación y recuperación, separando lo hecho de lo pendiente.
+Estas guías son documentación: NO firman apps, NO actualizan clientes instalados y NO publican el sitio público por su existencia.
