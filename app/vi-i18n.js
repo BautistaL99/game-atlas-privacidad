@@ -127,6 +127,47 @@ Object.assign(VI_UI_DICTIONARY,{
  'Guardar ruta':{en:'Save route',pt:'Salvar rota'},
  'Borrar ruta':{en:'Delete route',pt:'Excluir rota'}
 });
+
+/* iOS V246: remaining static labels in cards, progress, category pages and My game.
+   Specific dynamic labels are translated at render time in app-v137.js. */
+Object.assign(VI_UI_DICTIONARY,{
+ 'MI SEGUIMIENTO':{en:'MY PROGRESS',pt:'MEU PROGRESSO'},
+ 'PROGRESO DE LA MISIÓN':{en:'MISSION PROGRESS',pt:'PROGRESSO DA MISSÃO'},
+ 'RESUMEN INFORMATIVO · NO ES UNA MISIÓN JUGABLE':{en:'INFORMATIONAL SUMMARY · NOT A PLAYABLE MISSION',pt:'RESUMO INFORMATIVO · NÃO É UMA MISSÃO JOGÁVEL'},
+ 'Estado personal':{en:'Personal status',pt:'Estado pessoal'},
+ 'seguimiento personal':{en:'personal progress',pt:'progresso pessoal'},
+ 'Descubierto':{en:'Discovered',pt:'Descoberto'},
+ 'No descubierto':{en:'Not discovered',pt:'Não descoberto'},
+ 'Registrada':{en:'Registered',pt:'Registrada'},
+ 'No registrada':{en:'Not registered',pt:'Não registrada'},
+ 'Visitado':{en:'Visited',pt:'Visitado'},
+ 'No visitado':{en:'Not visited',pt:'Não visitado'},
+ 'Encontrado':{en:'Found',pt:'Encontrado'},
+ 'No encontrado':{en:'Not found',pt:'Não encontrado'},
+ 'Conocido':{en:'Known',pt:'Conhecido'},
+ 'No conocido':{en:'Not known',pt:'Não conhecido'},
+ 'Quitar del progreso':{en:'Remove from progress',pt:'Remover do progresso'},
+ 'Marcar como registrado':{en:'Mark as registered',pt:'Marcar como registrado'},
+ 'Marcar como pendiente':{en:'Mark as pending',pt:'Marcar como pendente'},
+ 'Marcar como completada':{en:'Mark as completed',pt:'Marcar como concluída'},
+ 'Marcar como leída':{en:'Mark as read',pt:'Marcar como lida'},
+ 'Marcar como no leída':{en:'Mark as unread',pt:'Marcar como não lida'},
+ 'Ficha informativa':{en:'Informational entry',pt:'Ficha informativa'},
+ 'Todos':{en:'All',pt:'Todos'},
+ 'Me faltan':{en:'Missing',pt:'Faltam'},
+ 'Registrados':{en:'Registered',pt:'Registrados'},
+ 'Filtrar contenido':{en:'Filter content',pt:'Filtrar conteúdo'},
+ 'Datos confirmados':{en:'Confirmed facts',pt:'Dados confirmados'},
+ 'No hay elementos para mostrar con ese filtro.':{en:'No entries match this filter.',pt:'Nenhuma ficha corresponde a este filtro.'},
+ 'Aún no hay fichas verificadas para esta sección.':{en:'There are no verified entries in this section yet.',pt:'Ainda não há fichas verificadas nesta seção.'},
+ '¡Ya registraste todos los elementos disponibles!':{en:'You have registered every available entry!',pt:'Você já registrou todas as fichas disponíveis!'},
+ '— todavía no hay elementos individuales verificables':{en:'— no individually verifiable entries yet',pt:'— ainda não há fichas individuais verificáveis'},
+ 'Todavía no marcaste elementos como completados.':{en:'You have not marked any entries as completed yet.',pt:'Você ainda não marcou nenhuma ficha como concluída.'},
+ 'No hay elementos pendientes para mostrar.':{en:'There are no pending entries to display.',pt:'Não há fichas pendentes para mostrar.'},
+ 'Datos pendientes':{en:'Data pending',pt:'Dados pendentes'},
+ 'Ver todos ↗':{en:'View all ↗',pt:'Ver todos ↗'}
+});
+
 (function(){
  // Keep the Spanish source of text/attributes so a language switch can be
  // repeated without leaving stale translations from the previous language.
@@ -188,7 +229,7 @@ Object.assign(VI_UI_DICTIONARY,{
    return value.slice(0,value.indexOf(trimmed))+translated+value.slice(value.indexOf(trimmed)+trimmed.length);
  }
  window.viApplyI18n=function(){
-  const selected=localStorage.getItem('vi_demo_locale')||'es';
+  const selected=window.viAppLocale||localStorage.getItem('vi_demo_locale')||'en';
   const lang=['es','en','pt'].includes(selected)?selected:'es';
   document.documentElement.lang=lang;
   const root=document.getElementById('root');if(!root)return;

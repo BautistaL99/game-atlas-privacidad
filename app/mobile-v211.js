@@ -3,7 +3,7 @@
  * Relies only on existing DOM; safely re-applies when the SPA rerenders.
  */
 (()=>{'use strict';
- const mobile=matchMedia('(max-width:700px)');
+ const mobile=matchMedia('(max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse)');
  const shapes={
   '/':'<path d="m3 10 9-7 9 7"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/>',
   '/explorar':'<rect x="3" y="3" width="7" height="7" rx="1.1"/><rect x="14" y="3" width="7" height="7" rx="1.1"/><rect x="3" y="14" width="7" height="7" rx="1.1"/><rect x="14" y="14" width="7" height="7" rx="1.1"/>',

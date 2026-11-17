@@ -4,7 +4,7 @@
  // Portrait AND landscape phones: landscape viewport can exceed 700 CSS px.
  const mobile=()=>window.matchMedia('(max-width:700px), (pointer:coarse) and (max-width:1150px)').matches;
  const mapPage=()=>/^#\/mapa(?:[/?]|$)/.test(location.hash||'');
- const enabled=()=>mobile()&&mapPage();
+ const enabled=()=>mobile()&&mapPage()&&!document.body.classList.contains('vi-map-modal-active');
  const words={
   es:'Agarrá esta barra para subir o bajar la página',
   en:'Drag this bar to scroll the page up or down',
@@ -68,6 +68,9 @@
  function drawThumb(){
   if(!rail||!thumb)return;
   if(!enabled()){rail.hidden=true;return}
+  // A previously hidden rail has display:none; measuring first returns 0px
+  // and would trap it hidden forever when leaving fullscreen.
+  rail.hidden=false;
   const max=scrollMax(),height=rail.getBoundingClientRect().height;
   rail.hidden=height<70;
   if(rail.hidden)return;
@@ -114,6 +117,9 @@
    root.addEventListener('scroll',schedule,{passive:true});
    new MutationObserver(schedule).observe(root,{childList:true,subtree:true});
  }
+ // A fullscreen exit only toggles body class; root child mutations may be
+ // coalesced before our animation frame, leaving the rail hidden.
+ new MutationObserver(schedule).observe(document.body,{attributes:true,attributeFilter:['class']});
  document.addEventListener('DOMContentLoaded',schedule,{once:true});
  schedule();
 })();

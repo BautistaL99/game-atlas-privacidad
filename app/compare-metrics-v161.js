@@ -255,13 +255,33 @@
   document.addEventListener('click',event=>{
    const pick=event.target.closest?.('[data-vi-compare-pick]');
    if(pick){
-    event.preventDefault();event.stopPropagation();
+    event.preventDefault();event.stopImmediatePropagation();
     const cat=pick.dataset.viCompareCategory,id=pick.dataset.viComparePick;
     if(!fields[cat]||!id||cat!==activeCategory())return;
     const list=chosen(cat);
     if(list.has(id))list.delete(id);
     else if(list.size<3)list.set(id,pick.dataset.viCompareName||id);
-    syncPickButtons();syncCompareBar();return;
+    syncPickButtons();syncCompareBar();
+    // After the third distinct selection, open the REAL comparator immediately.
+    // Re-use the verified category/ids URL. The route renderer resolves those
+    // IDs from the catalog; selection remains ephemeral (no stored state touched).
+    if(list.size===3){
+      const ids=[...list.keys()].slice(0,3);
+      const dest='#/comparar?cat='+encodeURIComponent(cat)+'&ids='+encodeURIComponent(ids.join(','));
+      // iOS WKWebView can pair a location.hash assignment with popstate.
+      // The native nested-back reconciler then mistakes this forward move for
+      // a Back gesture and redirects /explorar/<category> to /explorar.
+      // pushState + explicit render is a deliberate navigation, no popstate.
+      // Wait for the current click to finish before replacing its card DOM.
+      root.requestAnimationFrame(()=>{
+       root.viIosCompareNavLockUntil=Date.now()+750;
+       root.history.pushState({...root.history.state,viCompareForward:true},'',dest);
+       if(typeof root.viRefreshApp==='function')root.viRefreshApp();
+       else root.location.hash=dest;
+       root.scrollTo({top:0,behavior:'instant'});
+      });
+    }
+    return;
    }
    if(event.target.closest?.('[data-vi-compare-clear]')){
     event.preventDefault();
