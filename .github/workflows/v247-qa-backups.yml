@@ -47,14 +47,51 @@ jobs:
           fi
           node --check gameatlas-ios/ios-v220/scripts/qa-ios-v246-i18n.mjs
           test -s gameatlas-ios/LEER_PRIMERO_IOS_V246.txt
-      - name: Generar tres ZIP separados con manuales
+      - name: Verificar manuales específicos y antecedentes históricos
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in LEER_PRIMERO_INDICE_V247.txt MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt MANUAL_WEB_PC_MOVIL_V247.txt MANUAL_ANDROID_V247.txt MANUAL_IOS_V246.txt; do
+            test -s "manuales-v247/$f"
+          done
+          for f in GAME_ATLAS_IOS_V241_GUIA_CAMBIOS_Y_PRUEBAS.txt LEER_PRIMERO_IOS_V242.txt LEER_PRIMERO_IOS_V243.txt LEER_PRIMERO_V244.txt LEER_PRIMERO_IOS_V245.txt LEER_PRIMERO_IOS_V246.txt; do
+            test -s "gameatlas-ios/$f"
+          done
+
+      - name: Generar tres ZIP separados con manuales completos
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p dist
-          zip -qr dist/GAME-ATLAS-WEB-PC-MOVIL-V247-FUENTES.zip app README_LANZAMIENTO_V247.txt CHECKLIST_PRUEBAS_V247.txt
-          zip -qr dist/GAME-ATLAS-ANDROID-V247-FUENTES.zip app android-v215 .github/workflows/android-v215-build-apk-aab.yml README_LANZAMIENTO_V247.txt CHECKLIST_PRUEBAS_V247.txt qa
-          zip -qr dist/GAME-ATLAS-IOS-V246-FUENTES.zip gameatlas-ios/ios-v220 gameatlas-ios/.github/workflows gameatlas-ios/README.md gameatlas-ios/LEER_PRIMERO_IOS_V246.txt README_LANZAMIENTO_V247.txt CHECKLIST_PRUEBAS_V247.txt
+          zip -qr dist/GAME-ATLAS-WEB-PC-MOVIL-V247-FUENTES.zip \
+            app README_LANZAMIENTO_V247.txt CHECKLIST_PRUEBAS_V247.txt \
+            manuales-v247/LEER_PRIMERO_INDICE_V247.txt \
+            manuales-v247/MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt \
+            manuales-v247/MANUAL_WEB_PC_MOVIL_V247.txt
+          zip -qr dist/GAME-ATLAS-ANDROID-V247-FUENTES.zip \
+            app android-v215 .github/workflows/android-v215-build-apk-aab.yml \
+            README_LANZAMIENTO_V247.txt CHECKLIST_PRUEBAS_V247.txt qa \
+            manuales-v247/LEER_PRIMERO_INDICE_V247.txt \
+            manuales-v247/MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt \
+            manuales-v247/MANUAL_ANDROID_V247.txt
+          zip -qr dist/GAME-ATLAS-IOS-V246-FUENTES.zip \
+            gameatlas-ios/ios-v220 gameatlas-ios/.github/workflows \
+            gameatlas-ios/README.md \
+            gameatlas-ios/GAME_ATLAS_IOS_V241_GUIA_CAMBIOS_Y_PRUEBAS.txt \
+            gameatlas-ios/LEER_PRIMERO_IOS_V242.txt \
+            gameatlas-ios/LEER_PRIMERO_IOS_V243.txt \
+            gameatlas-ios/LEER_PRIMERO_V244.txt \
+            gameatlas-ios/LEER_PRIMERO_IOS_V245.txt \
+            gameatlas-ios/LEER_PRIMERO_IOS_V246.txt \
+            README_LANZAMIENTO_V247.txt CHECKLIST_PRUEBAS_V247.txt \
+            manuales-v247/LEER_PRIMERO_INDICE_V247.txt \
+            manuales-v247/MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt \
+            manuales-v247/MANUAL_IOS_V246.txt
+          # Comprueba presencia de los TXT para no entregar un ZIP incompleto.
+          unzip -Z1 dist/GAME-ATLAS-WEB-PC-MOVIL-V247-FUENTES.zip | grep -Fxq 'manuales-v247/MANUAL_WEB_PC_MOVIL_V247.txt'
+          unzip -Z1 dist/GAME-ATLAS-ANDROID-V247-FUENTES.zip | grep -Fxq 'manuales-v247/MANUAL_ANDROID_V247.txt'
+          unzip -Z1 dist/GAME-ATLAS-IOS-V246-FUENTES.zip | grep -Fxq 'manuales-v247/MANUAL_IOS_V246.txt'
+          unzip -Z1 dist/GAME-ATLAS-IOS-V246-FUENTES.zip | grep -Fxq 'gameatlas-ios/LEER_PRIMERO_IOS_V246.txt'
           (cd dist && sha256sum *.zip > SHA256SUMS.txt)
           ls -lh dist
       - name: Entregar descargas verificadas en GitHub Actions
