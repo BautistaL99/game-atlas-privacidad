@@ -1,6 +1,11 @@
 name: Game Atlas Companion V247 - compilar Android APK y AAB
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - qa-v247-web-android-20261117
+    paths:
+      - '.github/workflows/android-v215-build-apk-aab.yml'
 permissions:
   contents: write
 concurrency:
