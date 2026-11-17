@@ -38,6 +38,17 @@ const ctx={
  mapResults:()=>[]
 };
 vm.createContext(ctx);
+vm.runInContext(section('function viMapDerivedCategories(p){','function viMapCategoryIntent(raw){'),ctx);
+const originalMap=JSON.parse(fs.readFileSync(path.join(root,process.argv.includes('--ios')?'www/assets/leonida-landmarks-v216.json':'app/assets/leonida-landmarks-v216.json'),'utf8'));
+const originalCommunity=originalMap.items.filter(p=>p.kind==='community');
+assert(originalCommunity.length>500,'Missing original community map');
+const gunStores=originalCommunity.filter(p=>ctx.viMapDerivedCategories(p).includes('tiendas-armas'));
+const vehicleServices=originalCommunity.filter(p=>ctx.viMapDerivedCategories(p).includes('vehiculos'));
+assert(gunStores.some(p=>p.title.includes('Ammu-Nation')),'Actual Ammu-Nation points not classified');
+assert(gunStores.some(p=>p.title.includes('Pawn & Gun')),'Actual gun-store marker not classified');
+assert(vehicleServices.some(p=>p.title.includes('Vapid Dealership')),'Actual vehicle dealership not classified');
+assert(!ctx.viMapDerivedCategories({kind:'community',title:'Ocean Beach',tags:[]}).length,'Unknown beach must not be called a gun store or vehicle shop');
+console.log('PASS V248: real map dataset reveals '+gunStores.length+' gun stores and '+vehicleServices.length+' vehicle service POIs');
 vm.runInContext(section('function viMapCategoryIntent(raw){','function mapMatches(p,q,linkedIds){'),ctx);
 const ids=q=>Array.from(ctx.viMapCategoryIntent(q));
 assert.deepEqual(ids('armas'),['tiendas-armas','armas']);
@@ -56,6 +67,8 @@ assert.deepEqual(ids('PTT YOUNGINS Illegal Goods Store'),[]);
 vm.runInContext(section('function mapMatches(p,q,linkedIds){','function mapCatalogMatches(q){'),ctx);
 assert(ctx.mapMatches({category:'tiendas-armas',title:'Gun Shop'},'armas',new Set()),'Armas must include existing gun-store pins');
 assert(!ctx.mapMatches({category:'misiones',title:'Mission A'},'armas',new Set()),'Armas must not display missions');
+assert(ctx.mapMatches(gunStores[0],'armas',new Set()),'Actual map gun store must appear for armas');
+assert(ctx.mapMatches(vehicleServices[0],'vehículos',new Set()),'Actual vehicle-service POI must appear for vehículos');
 assert(ctx.mapMatches({category:'vehiculos',title:'Mapped Vehicle'},'vehicles',new Set()),'Vehicle filters must show existing mapped cars');
 const pins=[
  {id:'gun1',category:'tiendas-armas',title:'Gun Shop'},
@@ -96,6 +109,8 @@ assert(app.includes("if(a==='clear'){mapSpotlightId=null;mapSpotlightHidden=fals
 assert(app.includes("mapCategories=mapCategories.length===mapFilterCategories.length?[]:"),'Hide all toggle must be available');
 assert(app.includes("if(mapSpotlightId)mapPopupOpen=false;else mapActive=null;"),'Popup X must not delete highlighted pin');
 assert(css.includes('vi-map-spotlight-muted')&&css.includes('vi-v241-options'),'Pale pin and fullscreen suggestion CSS not present');
+const suggestionScript=fs.readFileSync(path.join(root,process.argv.includes('--ios')?'www/ios-v241-qa.js':'app/atlas-v247-ios-v241-qa.js'),'utf8');
+assert(suggestionScript.includes("x.kind==='pin'&&x.id")&&suggestionScript.includes('window.viIosMapFocusFromSearch?.(x.id)'),'Selecting a real location must open the pin directly');
 console.log('PASS V248: generic map categories ES/EN/PT and no invented locations');
 console.log('PASS V248: Clear -> specific search reactivates matching markers');
 console.log('PASS V248: pale spotlight, two-stage dismissal, positions preserved');
