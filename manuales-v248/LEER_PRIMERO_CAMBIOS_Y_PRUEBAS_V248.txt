@@ -1,0 +1,50 @@
+GAME ATLAS V248 — CORRECCIONES DEL MAPA, BÚSQUEDA Y PRUEBAS
+17/11/2026 · Estado: CANDIDATA DE PRUEBAS, no publicación final
+================================================================
+
+BASE
+WEB PC/MÓVIL y ANDROID: rama qa-v248-map-focus-search-20261117
+iOS: rama qa-ios-v248-map-fixes
+Mantener el historial previo V247 y V246: son las versiones anteriores, NO reemplazan esta guía.
+NO se han modificado cuentas, datos personales, nombres de paquetes de producción, firmas Ed25519, fuentes de noticias ni las rutas guardadas.
+
+QUÉ REPORTÓ EL PROPIETARIO / QUÉ CAMBIÓ / CÓMO COMPROBAR
+1. Clic en tienda desde el buscador web: la sugerencia copiaba solo el texto en vez de abrir el punto. CORREGIDO en el script V241 compartido: sugerencias con ID real llaman directamente al controlador de foco. PRUEBA: "PTT YOUNGIN$ Illegal Goods Store" en mapa; tocar sugerencia de lugar; debe abrir popup, marcar punto destacado y centrarlo. No confundir con sugerencia de palabra de categoría.
+2. Vista de mapa en pantalla completa PC: palabras largas del cuadro de sugerencias se veían letra/palabra por línea; buscador acoplado a panel angosto. CORREGIDO: el buscador queda dentro de la superficie fullscreen y las sugerencias usan mayor anchura, con título y descripción en líneas separadas. PRUEBA: abrir pantalla completa, teclear nombre de tienda largo y comprobar que no se corte.
+3. Círculo amarillo pegado a la tarjeta en PC: estaba colocado junto al punto, dificultando lectura e interacción. CORREGIDO CSS V248: la ficha se ancla a la derecha, el punto se centra en la porción libre izquierda cuando se enfoca por primera vez; cambios de ficha no desplazan el mapa innecesariamente. PRUEBA: abrir punto en normal y fullscreen, PC ancha, pantalla chica y zoom del navegador.
+4. "Limpiar" y luego buscar: la búsqueda no regeneraba los botones de puntos que habían desaparecido. CORREGIDO: reconciliación incremental de marcadores en DOM sin reconstruir el input de teclado; buscar puede reactivar la categoría relevante. PRUEBA: Limpiar -> escribir "Vice City", "PTT", "armas" o "vehículos" -> aparecen coincidencias existentes sin pulsar "Mostrar todo".
+5. "Ocultar todo" al dibujar ruta PC: el foco o la consulta anterior mantenían visibles los puntos. CORREGIDO: el botón y "Limpiar" quitan consulta activa/punto destacado y deseleccionan categorías sin afectar la capa independiente de rutas. PRUEBA: crear/seleccionar ruta -> Ocultar todo -> solo ruta visible; Mostrar todo -> puntos regresan. No confundir con "Limpiar" que deselecciona filtros y no borra rutas ni favoritos.
+6. Buscar categoría genérica "armas"/"vehículos": existían sugerencias, pero no ubicaciones porque todos los 926 POI comunitarios empaquetados están clasificados como "lugares" (866) o "economía" (60), ninguno con categoría "armas" o "vehículos". CORREGIDO: agrupación DERIVADA del nombre y etiquetas del POI existente (3 tiendas de armas, 18 comercios/servicios vinculados a vehículos según el catálogo actual). El sistema NO inventa puntos ni afirma ubicaciones de aparición de vehículos. PRUEBA ES "armas", "tiendas de armas", "vehículos", "autos"; EN "weapons", "gun stores", "vehicles"; PT "armas", "lojas de armas", "veículos". Deben aparecer ubicaciones comunitarias relacionadas, cuando realmente existan.
+   Ejemplos actuales: Phil's Ammu-Nation, Pawn & Gun, Vapid Dealership, Euroform Automotive. El título "PTT YOUNGIN$ Illegal Goods Store" es un lugar conocido por nombre, NO se clasifica automáticamente como tienda de armas si los tags no sustentan esa afirmación.
+   Texto explícito de sugerencias: "Lugar comunitario relacionado · sin aparición confirmada". Faltan datos oficiales de aparición/estadísticas del juego; el buscador no debe falsearlos.
+7. Último destino recordado (todos): al abrir búsqueda, pin amarillo fuerte + ficha + banner. Clic X de la ficha: SOLO oculta la ficha; el pin amarillo y banner permanecen. Primer toque en fondo de mapa: se oculta ficha/banner, aparecen otros puntos según filtros y se conserva el último punto en amarillo PÁLIDO sin mover zoom/posición. Un toque sobre el pin pálido reabre ficha y banner sin recentrar. Segundo toque en fondo suelta el punto recordado y vuelve al mapa normal. PRUEBA con touch Android/iPhone, mouse PC y fullscreen.
+8. Fallos por filtros desactivados: ahora las categorías se reactivan a partir de una búsqueda concreta o temática; el usuario no tiene que tocar Mostrar todo. No se borra ninguna preferencia guardada en Mi partida.
+9. Icono Android: se escribía el PNG VI en mipmap, pero el Android adaptativo podía conservar el foreground genérico de Capacitor. CORREGIDO en android-v215/prepare-android.mjs: logos ic_launcher clásicos + XML adaptativo para ambos iconos normales/redondos, con PNG VI en drawable-nodpi, inset y fondo oscuro. El APK DEBUG de QA sigue separado de la app de Play por com.indie.viassistant.qa. PRUEBA: instalar Android V248 TEST y comprobar icono en launcher (no basta abrir la web).
+10. Web PC/móvil: CSS compartido map-v248-focus-search.css. No reemplazar ni renombrar sin actualizar index.html y sw.js. Web de prueba en carpeta separada, noindex, almacenamiento aislado de /app/.
+11. iOS: mismas correcciones de motor + búsqueda/mapa trasladadas al código qa-ios-v248-map-fixes y CSS nuevo; test de fuente CI PASS. NO se ha compilado ni instalado nueva IPA, ni se ha enviado una V248 a Apple. Ajustes específicos de barra de estado y firma de iOS siguen separados.
+
+CÓMO PROBAR (EN ORDEN)
+A. Iniciar web V248 con almacenamiento vacío; comprobar iconos e imágenes.
+B. Buscar "PTT YOUNGIN$ Illegal Goods Store" y tocar el resultado; verificar punto/ficha/badge.
+C. Cerrar X, tocar fuera una vez, tocar punto pálido, tocar fuera dos veces.
+D. Limpiar filtros; consultar "armas" ES y "vehicles" EN; seleccionar Ammu-Nation y Vapid Dealership; comprobar correspondencia con datos.
+E. Crear ruta con 2-3 paradas, usar Ocultar todo y volver Mostrar todo.
+F. Abrir mapa fullscreen PC y teclear una ubicación larga; revisar caja sin scroll extraño ni texto cortado.
+G. Probar Android normal/horizontal, teclado abierto, filtros, popup, cerrar y reiniciar conservando datos.
+H. Probar iOS V248 en TestFlight cuando se compile y repetir A-G.
+I. En todos los idiomas ES/EN/PT, buscar casos reales y confirmar que no se anuncian ubicaciones no registradas.
+J. No publicar en Firebase/Play/App Store hasta completar estas pruebas manuales y autorizarlo expresamente.
+
+RESTRICCIONES DE VERACIDAD
+Los 926 POI provienen de una reconstrucción de la comunidad (no Rockstar oficial), pueden cambiar y su posición puede ser aproximada. Una tienda o concesionario NO confirma que allí aparezcan armas/vehículos. Los rankings de velocidad/daño requieren datos numéricos verificables, no se crean a partir del mapa. Los feeds firmados se mantienen independientes del motor del mapa.
+NO reconstruir una IPA o APK con secretos de Apple/Google dentro del ZIP público. Exportar una copia de Mi partida antes de desinstalar o reemplazar aplicaciones de prueba.
+
+ARCHIVOS IMPORTANTES
+app/app-v137.js (mapa, búsquedas, estado visual)
+app/atlas-v247-ios-v241-qa.js (suggestions de lugar -> foco por ID)
+app/map-v248-focus-search.css (desktop normal/fullscreen y pin pálido)
+android-v215/prepare-android.mjs (ic_launcher adaptativo y build)
+qa/v248-map-regressions.mjs (regresiones mapa V248)
+.github/workflows/v248-map-qa.yml (prueba ES/EN/PT web, Android e iOS en Linux)
+README_LANZAMIENTO_V247.txt, CHECKLIST_PRUEBAS_V247.txt y manuales-v247/ (manuales completos históricos V247)
+Fin de manual de correcciones V248.
