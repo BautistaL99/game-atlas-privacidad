@@ -1,0 +1,52 @@
+name: Game Atlas V248 - QA map search, IOS/Android/Web (no publicar)
+on:
+  push:
+    branches:
+      - qa-v248-map-focus-search-20261117
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: game-atlas-v248-source-qa
+  cancel-in-progress: true
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Descargar V248 web/Android
+        uses: actions/checkout@v4
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validar frontend y regresiones anteriores
+        run: |
+          set -euo pipefail
+          node --check app/app-v137.js
+          node qa/v247-public-client.mjs
+          node qa/v247-qa-marker-switch.mjs
+          node qa/v247-qa-ranking-truth.mjs
+          node qa/v247-qa-ios-v245-map-and-samples.mjs
+          node qa/v247-qa-ios-v246-i18n.mjs
+      - name: Validar casos nuevos y recursos Android
+        run: |
+          set -euo pipefail
+          node qa/v248-map-regressions.mjs
+          node android-v215/prepare-android.mjs stage
+          node --check android-v215/prepare-android.mjs
+          cmp app/app-v137.js android-v215/www/app-v137.js
+      - name: Verificar el mismo motor y QA en iOS (sin usar macOS)
+        run: |
+          set -euo pipefail
+          git clone --quiet --depth 1 --branch qa-ios-v248-map-fixes https://github.com/BautistaL99/game-atlas-ios-build-free.git gameatlas-ios
+          cmp app/app-v137.js gameatlas-ios/ios-v220/www/app-v137.js
+          cmp app/map-v248-focus-search.css gameatlas-ios/ios-v220/www/map-v248-focus-search.css
+          cd gameatlas-ios/ios-v220
+          node --check www/app-v137.js
+          node scripts/verify-ios.mjs
+          node scripts/qa-marker-switch.mjs
+          node scripts/qa-ranking-truth.mjs
+          node scripts/qa-ios-v245-map-and-samples.mjs
+          node scripts/qa-ios-v246-i18n.mjs
+          node scripts/qa-ios-v248-map-regressions.mjs --ios
