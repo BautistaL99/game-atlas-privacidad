@@ -1,0 +1,118 @@
+GAME ATLAS COMPANION — MANUAL COMPLETO WEB (PC + MÓVIL)
+Edición V247 / copia de código de lanzamiento y recuperación
+==============================================================
+
+INSTRUCCIÓN DE LECTURA: primero 'manuales-v247/LEER_PRIMERO_INDICE_V247.txt', después 'manuales-v247/MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt'. Este manual es específico para navegadores. No reemplazar las instrucciones de publicación protegida del repositorio privado.
+
+1. IDENTIFICAR ESTA COPIA
+Origen: repositorio público BautistaL99/game-atlas-privacidad
+Rama del desarrollo de prueba: qa-v247-web-android-20261117
+Contenido del ZIP: carpeta app/, los TXT comunes, el manual web, README_LANZAMIENTO_V247.txt y CHECKLIST_PRUEBAS_V247.txt.
+No se trata de la carpeta 'revision-v216...', una vista previa histórica. 'app/LEER-V216-PREVIEW.txt' es un TXT histórico que puede permanecer dentro de los recursos; NO describe el estado V247.
+Sitio principal conocido: https://gta6mapa.web.app/app/
+Espejo GitHub Pages: https://bautistal99.github.io/game-atlas-privacidad/app/
+La rama QA y este ZIP NO sustituyen por sí solos ninguno de los sitios.
+
+2. ESTRUCTURA REAL DEL CLIENTE
+app/index.html: punto de entrada, orden de carga de CSS/JS y rutas (#/inicio, #/mapa, etc.).
+app/app-v137.js: contenido inicial, lógica central de navegación, estado personal, búsquedas, ficha, mapa, comparador, traducciones de la base y control de marcadores.
+app/app-v137.css, app/app-v155.css y desktop-fixes-*.css: base visual y preservación de la presentación PC.
+app/mobile-v*.css/js: adaptación móvil y navegación táctil; mobile-v224-native.js también se carga donde corresponde en el entorno común.
+app/atlas-v247-ios-v240-qa.* + v241/v242: componentes de búsqueda y diseño adaptado desde iOS para web y Android; su nombre histórico 'ios' NO significa que estén restringidos al teléfono Apple en esta rama.
+app/map-v216.css, map-v217-mobile.css, map-v232/233/236-*.css: posicionamiento del mapa, popups, desplazamiento, filtros y orientación.
+app/routes-v145.js/.css: recorrido ilustrativo por paradas, almacenado localmente.
+app/compare-metrics-v161.js: comparaciones y limitaciones de estadísticas.
+app/news-v155.js: vista de Noticias.
+app/community-v206.js: fichas/noticias independientes firmadas, etiquetadas aparte de Rockstar.
+app/online-updates.js: validación y fusión de contenido oficial remoto firmado.
+app/online-config.json: endpoint del catálogo y clave pública Ed25519. La clave privada NO está en este ZIP.
+app/atlas-v247-ios-v242-remote-map.js: punto de extensión opcional para imagen/pins de mapa autorizados, versión y SHA-256.
+app/vi-i18n.js: puente para textos no cubiertos por strings base.
+app/partida-transfer-v225.js: exportación e importación de progreso desde web hacia app instalada.
+app/sw.js: service worker y política de caché/offline; no borra la partida personal.
+app/manifest.webmanifest, app/icons/, app/assets/: metadatos PWA, iconos, obras y créditos.
+NOTA: algunos nombres conservan números históricos por compatibilidad. No renombrarlos para “ordenar” sin comprobar referencias en index.html.
+
+3. QUÉ HACE EN PC Y EN UN CELULAR
+Es el mismo catálogo y lógica compartida, con CSS responsivo.
+PC: conservar topbar, menú, comparación y disposición habitual; las sugerencias quedan en flujo del documento para que no tapen resultados.
+Móvil: el teclado no debe bloquear sugerencias, panel de filtros y editor; barra de desplazamiento del área del mapa, modal a pantalla completa, controles de zoom, marcadores y rutas.
+Navegación de categorías de Explorar y Noticias: retroceso al nivel padre esperado; no enviar al inicio al salir de una subcategoría.
+No es una “app por país”: idioma inicial según idiomas preferidos del navegador/dispositivo; si no hay ES/EN/PT, fallback EN. Elección manual 'vi_demo_locale' persistente.
+Mismo funcionamiento de noticias y fichas que las aplicaciones nativas, sujeto a navegador, políticas de red y caché.
+
+4. PONER EN MARCHA EN UNA PC SIN PUBLICAR
+Requisitos: Windows/macOS/Linux, navegador moderno y un servidor HTTP local. No hace falta un dominio para inspeccionar la interfaz. En Windows con Python instalado:
+  (desde la carpeta donde están 'app/' y estos TXT)
+  python -m http.server 8765
+  abrir en Chrome: http://localhost:8765/app/
+Alternativa: npx http-server . -p 8765 (si Node y npx están disponibles; verificar comportamiento de rutas/recursos).
+No abrir app/index.html con file:// como test de producción: fetch, módulos, cache, CORS y service worker pueden comportarse distinto.
+Con servidor local la interfaz y contenido empaquetados funcionan, pero feeds nuevos requieren conexión y HTTPS permitido. Usar consola F12 > Network/Console para revisar errores.
+Cerrar el servidor: Ctrl+C. Esta vista local NO publica, no reemplaza Firebase, no habilita descargas de tiendas ni toca datos de otros usuarios.
+
+5. VALIDACIÓN DEL PAQUETE (CON NODE.JS 22)
+Desde la raíz del respaldo ANDROID o de un clon de la rama que incluya 'qa/':
+  node qa/v247-public-client.mjs
+  node qa/v247-qa-marker-switch.mjs
+  node qa/v247-qa-ranking-truth.mjs
+  node qa/v247-qa-ios-v245-map-and-samples.mjs
+  node qa/v247-qa-ios-v246-i18n.mjs
+El ZIP web por sí solo contiene la carpeta app y documentación, NO necesariamente qa/. Por eso las pruebas completas se ejecutan desde el clon de la rama o desde el ZIP Android.
+Un resultado PASS garantiza estructura/semántica testeada, no prueba que el teclado de cada celular, permisos de imágenes o todos los textos dinámicos funcionen perfectamente.
+
+6. NOTICIAS, WIKI, SEO Y PUBLICACIÓN DE CONTENIDO
+El frontend escucha dos feeds Ed25519 y los actualiza cuando vuelve a estar visible, aparece conexión y periódicamente (según configuración).
+Oficial y comunitario son dos caminos con validaciones distintas. No editar feeds a mano sin firma válida.
+El publicador actual está en el repo público main bajo workflow 'v210-free-scheduled-catalog.yml' con scripts de automation/.
+Cuando cambia un feed firmado, el sitio puede mostrar nuevas entradas sin reemplazar app/index.html. El HTML/SEO estático puede requerir su proceso de regeneración según el workflow.
+El sitio web en producción también debe comprobar redirecciones, canonical, sitemaps, privacy.html, atribución del mapa y licencia. No eliminar avisos de obra promocional ni fuente comunitaria.
+No confundir un feed descargable con veracidad del contenido: cada fuente conserva su categoría editorial.
+
+7. COPIA Y RESTAURACIÓN DE MI PARTIDA EN WEB
+Se guarda en localStorage vinculado al ORIGEN de la web (GitHub Pages != Firebase != localhost). Abrir un dominio diferente no trae automáticamente favoritos, completados ni marcadores.
+Desde Mi partida, exportar el archivo JSON, guardarlo en lugar seguro, abrir la instalación/origen de destino e importar mediante la herramienta incorporada. Verificar el número de marcadores, favoritos y rutas antes de descartar copia.
+No borrar localStorage, cookies o datos de sitio por un problema visual sin respaldar. Actualizar CSS/JS en el mismo origen normalmente conserva la partida; no es garantía frente a limpieza de datos.
+La función 'partida-transfer-v225.js' da instrucciones de transferencia a Android/iOS; no realiza migración automática silenciosa de almacenamiento entre navegadores y apps nativas.
+
+8. PUBLICAR WEB DE MANERA SEGURA (DESPUÉS DEL OK)
+A. Confirmar qué SHA exacto de V247 fue probado en PC, Chrome Android, Safari móvil y en los tres idiomas. Si falla QA, corregir en rama y repetir.
+B. Exportar Mi partida de equipos de prueba y conservar respaldo del sitio anterior.
+C. Revisar licencias y derechos de imágenes, créditos del mapa, privacidad y contenido. Las pruebas técnicas no sustituyen permiso sobre material.
+D. Proyecto privado histórico 'BautistaL99/-gta-vi-game-assistant' contiene flujo protegido '.github/workflows/publish-reviewed.yml' y sincronización 'shared/site' -> productos, además de generación de sitio Firebase. No copiar sin verificar la rama vigente; el protocolo privado exige aprobación explícita y entrada de derechos revisados. Este ZIP no contiene ese pipeline ni los secretos para ejecutarlo.
+E. Firebase: configuración histórica confirmada 'firebase.json' con site 'gta6mapa', public 'firebase-hosting/site' y redirección '/' -> '/app/'. Para el despliegue se necesita preparar ese directorio preservando los recursos y hosting del proyecto. NO ejecutar deploy directo desde raíz del ZIP web.
+F. GitHub Pages: repositorio público main sirve /app/ y /updates/. Conservar la revisión más reciente de los dos feeds, los recursos SEO y sitemaps; no sobrescribir feeds con copias viejas incluidas en ZIP. Evitar force-push.
+G. Solo después de una vista previa funcional y OK humano, publicar siguiendo el flujo autorizado. Verificar DESPUÉS que ambas URLs muestran el SHA/render correcto y que los feeds están firmados; dos dominios no se actualizan necesariamente de forma atómica.
+Si solo se actualizó el código en qa-v247, escribir 'CÓDIGO LISTO / WEB PÚBLICA SIN CAMBIOS'.
+
+9. DIAGNÓSTICO SI ALGO FALLA
+- Página blanca/404: comprobar carpeta app/ y ruta /app/, index.html, referencias relativas y consola. Si falta un asset, falla precache.
+- Sigue versión vieja: mirar pestaña Network de DevTools, service worker app/sw.js y caché del sitio, no borrar localStorage indiscriminadamente. El SW usa network-first para JS/CSS/HTML y mantiene assets para offline.
+- No aparecen noticias: revisar https://bautistal99.github.io/game-atlas-privacidad/updates/catalog-envelope.json y /updates/community-envelope-v205.json, validación, cron y Console. No desactivar firma Ed25519.
+- Falta ficha: revisar categoría permitida, revisión wiki, origen y estado de verificación; no crear un hecho no verificado.
+- No sale el mapa: revisar imagen local, permisos, tamaño y attribution; si remoto firmado no disponible vuelve al empaquetado.
+- Popup/touch/teclado: repetir con normal/fullscreen y rotación, verificar z-index de CSS V247 y si las sugerencias ocupan flujo normal.
+- El comparador no muestra números: las fichas probablemente no aportan estadísticas comparables; comprobar source, no inventar métricas.
+- Falta contenido después de instalar Android: cliente nativo se reconstruye por separado, no hereda la web publicada.
+- Pérdida de partida al usar otro navegador: son orígenes locales distintos; restaurar archivo de copia.
+
+10. CRITERIOS DE ACEPTACIÓN PC/MÓVIL
+[ ] Navegación sin saltos (Inicio, Explorar, Mapa, Noticias, Mi partida, Más).
+[ ] Autocompletado ES/EN/PT y última búsqueda; resultados nunca detrás del teclado.
+[ ] Rankings “fastest/slowest” honestos con/ sin estadísticas.
+[ ] Marcador A->B con un toque; arrastrar encima del marcador; círculo destacado y fondo sin recentrar.
+[ ] Ocultar todos los filtros deja dibujada la ruta, sin mensaje molesto.
+[ ] Editor de pins y popup no tapan controles ni se deforman.
+[ ] Noticias oficiales y medios independientes etiquetados correctamente.
+[ ] Fichas Wiki con fuentes, sin declararlas Rockstar-confirmadas.
+[ ] Comparar 3 ítems; filtros de categoría estables.
+[ ] Reiniciar navegador: favoritos, progreso, idioma, pins y rutas conservados.
+[ ] Exportar/importar JSON de partida entre orígenes (con confirmación).
+[ ] Verificar licencias, política de privacidad, manifest/SW y SEO antes de PUBLICAR.
+
+11. RECONSTRUIR EN EL FUTURO
+Conservar exactamente carpeta app/, recursos binarios/JSON, este manual y SHA del respaldo. Para publicación real también se requiere acceso al repositorio privado, controles legales y credenciales de hosting del propietario. Una copia de código no otorga permiso sobre marcas o imágenes ni acceso al dominio.
+Si una versión nueva cambia estructura de almacenamiento, diseñar migración ANTES de distribuirla; no renombrar 'vi_demo_locale' ni claves 'gta6-assistant:v1:*' sin migración.
+El respaldo actual es un punto de retorno; guardar una copia separada antes de futuras correcciones.
+
+FIN — MANUAL WEB V247.
