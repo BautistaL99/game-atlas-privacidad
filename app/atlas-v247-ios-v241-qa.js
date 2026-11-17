@@ -46,7 +46,7 @@
  function mapProposals(query){
   const q=N(query);if(q.length<2)return [];
   const all=(geo[L()]||[]).map(x=>({label:x,kind:'topic'}));
-  try{for(const p of window.viIosMapNames?.()||[])if(p.name)all.push({label:p.name,kind:'pin'})}catch{}
+  try{for(const p of window.viIosMapNames?.()||[])if(p.name&&p.id)all.push({label:p.name,kind:'pin',id:p.id})}catch{}
   const used=new Set();
   return all.filter(x=>isMatch(q,x.label)).sort((a,b)=>
    (N(a.label).startsWith(q)?0:2)-(N(b.label).startsWith(q)?0:2)||
@@ -102,7 +102,7 @@
    if(input.id==='mapSearchText'){
     const options=mapProposals(q);
     if(options.length)title(panel,lbl.map);
-    for(const x of options){option(panel,x.label,x.kind==='pin'?lbl.place:lbl.related,()=>commit(input,x.label));count++}
+    for(const x of options){option(panel,x.label,x.kind==='pin'?lbl.place:lbl.related,()=>{if(x.kind==='pin'&&x.id){close();input.blur();window.viIosMapFocusFromSearch?.(x.id)}else commit(input,x.label)});count++}
     const matches=window.viIosMapLiveMatches?.(q,12)||[];
     if(matches.length)title(panel,({es:'Ubicaciones encontradas',en:'Matching locations',pt:'Locais encontrados'})[g]);
     for(const m of matches){option(panel,m.title,m.category,()=>{close();input.blur();window.viIosMapFocusFromSearch?.(m.id)},true);count++}
