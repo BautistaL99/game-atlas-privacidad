@@ -8,6 +8,8 @@ LEER ANTES:
   README_LANZAMIENTO_V247.txt / CHECKLIST_PRUEBAS_V247.txt
 Este TXT es la guía de la copia ANDROID. El código Android de V247 está en rama QA, NO distribuido automáticamente en Google Play por generar el ZIP.
 
+APLICACIÓN DE PRUEBA PARALELA: Desde esta revisión el workflow produce una APK DEBUG con applicationId 'com.indie.viassistant.qa' y nombre 'Game Atlas V247 TEST'. Puede coexistir con la app instalada de Google Play ('com.indie.viassistant'). El AAB RELEASE SIN FIRMAR conserva el identificador real 'com.indie.viassistant'. Los datos de ambas instalaciones son INDEPENDIENTES: la app TEST no importa automáticamente progreso/favoritos de la otra; usar exportación/importación JSON si se desea. No confundir esta APK con una actualización oficial de Play.
+
 1. QUÉ CONTIENE ESTE ZIP Y QUÉ NO
 Incluye:
  - app/ (cliente V247 compartido con web PC/móvil; HTML, CSS, JS, imágenes, mapas, manifest y biblioteca de contenidos)

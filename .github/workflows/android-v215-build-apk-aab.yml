@@ -6,6 +6,7 @@ on:
       - qa-v247-web-android-20261117
     paths:
       - '.github/workflows/android-v215-build-apk-aab.yml'
+      - 'android-v215/prepare-android.mjs'
 permissions:
   contents: write
 concurrency:
@@ -76,7 +77,7 @@ jobs:
           unzip -l "$APK" | grep -q 'assets/public/online-updates.js'
           unzip -l "$AAB" | grep -q 'base/assets/public/community-v206.js'
           AAPT="$ANDROID_HOME/build-tools/36.0.0/aapt"
-          "$AAPT" dump badging "$APK" | grep 'package: name=.com.indie.viassistant.'
+          "$AAPT" dump badging "$APK" | grep -F "package: name='com.indie.viassistant.qa'"
           "$AAPT" dump badging "$APK" | grep "versionCode='247'"
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify "$APK"
           cp "$APK" dist/android-v215/Game-Atlas-Companion-V247-PRUEBA.apk
@@ -84,12 +85,13 @@ jobs:
           (cd dist/android-v215 && sha256sum Game-Atlas-Companion-V247-PRUEBA.apk Game-Atlas-Companion-V247-SIN-FIRMAR.aab > SHA256SUMS.txt)
           cat > dist/android-v215/LEEME-ANDROID-V247.txt <<'TXT'
           Game Atlas Companion - Android V247 (versionName 1.50.0; versionCode 247)
-          Package ID: com.indie.viassistant (mismo ID del proyecto de Play)
+          APK DEBUG: com.indie.viassistant.qa (INSTALACIÓN PARALELA)
+          AAB RELEASE: com.indie.viassistant (mismo ID original de Google Play)
           APK: archivo instalable de PRUEBA, firmado con clave de desarrollo
           AAB: paquete de lanzamiento SIN FIRMAR. NO puede enviarse directamente a Play Console.
           La AAB definitiva requiere firmarla con la clave de SUBIDA de Google Play ya autorizada.
-          Si tenes una version de Play instalada, NO la reemplaces con la APK de depuracion:
-          puede tener una firma distinta. Exporta antes los datos de Mi partida.
+          Este APK se llama Game Atlas V247 TEST y NO reemplaza tu app de Play.
+          Los datos estan aislados: importar Mi partida JSON si queres trasladarlos.
           Novedades: misma V247 web/movil; noticias oficiales y medios independientes;
           fichas comunitarias separadas; catalogos remotos firmados Ed25519;
           idiomas ES/EN/PT; mapa, marcadores, favoritos y progreso local.

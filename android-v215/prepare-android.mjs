@@ -39,6 +39,10 @@ if(stage==='stage'){
   check(/versionCode\s+\d+/.test(g)&&/versionName\s+['"][^'"]+['"]/.test(g),'No Android version fields');
   g=g.replace(/versionCode\s+\d+/,'versionCode 247')
     .replace(/versionName\s+['"][^'"]+['"]/,'versionName "1.50.0"');
+  // QA debug APK can coexist with the Play Store app: only debug gets a suffix.
+  const buildTypes=/buildTypes\s*\{\s*release\s*\{/;
+  check(buildTypes.test(g),'Expected buildTypes with release block in Gradle');
+  g=g.replace(buildTypes,'buildTypes {\n        debug {\n            applicationIdSuffix ".qa"\n        }\n        release {');
   fs.writeFileSync(gradle,g);
   const vars=path.join(dir,'variables.gradle');
   let v=read(vars);
@@ -62,6 +66,10 @@ if(stage==='stage'){
   text=text.replace(/<string\s+name="app_name">[^<]*<\/string>/,
     '<string name="app_name">Game Atlas Companion</string>');
   fs.writeFileSync(strings,text);
+  // Distinct debug launcher name; release preserves the original display name.
+  const debugStrings=path.join(dir,'app','src','debug','res','values','strings.xml');
+  fs.mkdirSync(path.dirname(debugStrings),{recursive:true});
+  fs.writeFileSync(debugStrings,'<resources><string name="app_name">Game Atlas V247 TEST</string></resources>\n');
   const base=path.join(dir,'app','src','main','java');
   const candidates=[];
   const walk=(folder)=>{for(const f of fs.readdirSync(folder,{withFileTypes:true})){
