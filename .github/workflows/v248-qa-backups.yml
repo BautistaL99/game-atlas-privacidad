@@ -69,14 +69,14 @@ jobs:
           set -euo pipefail
           mkdir -p dist
           zip -qr dist/GAME-ATLAS-WEB-PC-MOVIL-V248-FUENTES.zip \
-            app README_LANZAMIENTO_V247.txt README_LANZAMIENTO_V248.txt CHECKLIST_PRUEBAS_V247.txt
+            app README_LANZAMIENTO_V247.txt README_LANZAMIENTO_V248.txt CHECKLIST_PRUEBAS_V247.txt \
             manuales-v248/LEER_PRIMERO_CAMBIOS_Y_PRUEBAS_V248.txt \
             manuales-v247/LEER_PRIMERO_INDICE_V247.txt \
             manuales-v247/MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt \
             manuales-v247/MANUAL_WEB_PC_MOVIL_V247.txt
           zip -qr dist/GAME-ATLAS-ANDROID-V248-FUENTES.zip \
             app android-v215 .github/workflows/android-v215-build-apk-aab.yml \
-            README_LANZAMIENTO_V247.txt README_LANZAMIENTO_V248.txt CHECKLIST_PRUEBAS_V247.txt qa
+            README_LANZAMIENTO_V247.txt README_LANZAMIENTO_V248.txt CHECKLIST_PRUEBAS_V247.txt qa \
             manuales-v248/LEER_PRIMERO_CAMBIOS_Y_PRUEBAS_V248.txt \
             manuales-v247/LEER_PRIMERO_INDICE_V247.txt \
             manuales-v247/MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt \
