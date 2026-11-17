@@ -88,3 +88,31 @@
   max-height:min(80%,320px)!important;
  }
 }
+
+/* V247 desktop: the shared autocomplete renders in document flow.
+   Prevent unstyled or overlapping suggestion panels on PC. */
+@media (min-width:701px) and (pointer:fine) {
+ html.vi-atlas-v247 #root .vi-ios-autocomplete{
+  display:block;position:relative;inset:auto;width:100%;max-width:780px;
+  box-sizing:border-box;margin:9px 0 14px;padding:8px;
+  background:#102534;color:#e8fffb;border:1px solid #5ad7cc;
+  border-radius:12px;box-shadow:0 8px 24px #06101880;
+  max-height:min(42vh,340px);overflow-y:auto;z-index:55;
+ }
+ html.vi-atlas-v247 #root .vi-ios-autocomplete[hidden]{display:none!important}
+ html.vi-atlas-v247 #root .vi-ios-suggest-title,
+ html.vi-atlas-v247 #root .vi-v241-group-title{
+  color:#80e6dc;font-size:12px;font-weight:750;padding:7px 10px;
+ }
+ html.vi-atlas-v247 #root .vi-ios-suggest-option{
+  width:100%;min-height:42px;display:flex;justify-content:space-between;
+  align-items:center;gap:12px;padding:10px 12px;text-align:left;
+  color:#e8fffb;background:transparent;border:0;
+  border-bottom:1px solid #ffffff22;cursor:pointer;
+ }
+ html.vi-atlas-v247 #root .vi-ios-suggest-option:last-child{border-bottom:0}
+ html.vi-atlas-v247 #root .vi-ios-suggest-option strong{flex:1;min-width:0}
+ html.vi-atlas-v247 #root .vi-ios-suggest-option small{color:#a3bfc7;font-size:12px}
+ html.vi-atlas-v247 #root .vi-ios-suggest-option:focus-visible{outline:2px solid #69eddd;outline-offset:-3px}
+ html.vi-atlas-v247 #root #headerSuggestions{display:none!important}
+}
