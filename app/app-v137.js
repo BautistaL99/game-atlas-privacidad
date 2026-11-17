@@ -434,6 +434,20 @@ function viMapQueryWords(raw){
 }
 
 /* V248 generic searches only reveal real positions, not invented coordinates. */
+
+/* Source-derived groups for existing community POIs. These are shops/services,
+   NOT confirmed vehicle or weapon spawn locations. Original category/data and
+   attribution remain untouched. No new map pins or coordinates are added. */
+function viMapDerivedCategories(p){
+ if(p?.kind!=='community')return [];
+ const title=normalizeSearch(p.title||''),tags=(p.tags||[]).map(normalizeSearch);
+ const gun=/(?:\bammu nation\b|\bguns?\b|\bweapons?\b|\barmory\b|\barmoury\b|\barmerias?\b|\bfirearms?\b)/.test(title)
+   ||tags.some(t=>t==='guns'||t==='weapons'||t==='gunshop');
+ const vehicle=/(?:\bdealership\b|\bautomotive\b|\bmotors\b|\bmotorcycle customs\b|\bcar wash\b|\bauto parts\b|\bgarage\b|\bbody shop\b|\bvehicle repair\b|\brepair salvage\b|\bmechanic\b|\bworkshop\b)/.test(title)
+   ||tags.some(t=>['modshop','bikeshop','pay n spray','carwash','mechanic'].includes(t));
+ const retail=/(?:\bshop\b|\bstore\b|\bmarket\b|\bsupermarket\b|\bpawn\b|\bammu nation\b)/.test(title)||tags.includes('retail');
+ return [...(gun?['tiendas-armas','armas']:[]),...(vehicle?['vehiculos','garajes']:[]),...(retail?['tiendas-armas-genericas']:[])];
+}
 function viMapCategoryIntent(raw){
  const words=viMapQueryWords(raw),q=words.join(' '),whole=normalizeSearch(raw);
  if(!words.length||words.length>5)return [];
@@ -462,7 +476,11 @@ function mapMatches(p,q,linkedIds){
  const item=mapItem(p),words=viMapQueryWords(q);
  if(!words.length)return false;
  const generic=viMapCategoryIntent(q);
- if(generic.length)return generic.includes(p.category);
+ if(generic.length){
+  const categories=viMapDerivedCategories(p);
+  if(generic.includes('lugares')&&['tiendas','tienda','shops','shop','stores','store','lojas','loja'].includes(viMapQueryWords(q).join(' ')))return categories.includes('tiendas-armas-genericas')||categories.includes('tiendas-armas');
+  return generic.includes(p.category)||categories.some(id=>generic.includes(id));
+ }
  const query=words.join(' ');
  const titlesAndTags=viMapNormalized([p.title,...(p.tags||[])].filter(v=>typeof v==='string').join(' '));
  const related=viMapNormalized([p.note||'',...(item?.tags||[]),
@@ -497,7 +515,7 @@ const mapShown=()=>{if(mapSpotlightId&&!mapSpotlightHidden){const target=allMapP
  const linked=mapQuery.trim()?mapCatalogMatches(mapQuery):new Set();return allMapPins().filter(p=>{
  if(mapSpotlightId&&mapSpotlightHidden&&p.id===mapSpotlightId)return true;
  const found=mapQuery.trim()&&mapMatches(p,mapQuery,linked);
- if(!found&&!mapCategories.includes(p.category))return false; // empty by default
+ if(!found&&!mapCategories.includes(p.category)&&!viMapDerivedCategories(p).some(id=>mapCategories.includes(id)))return false; // empty by default
  if(mapQuery.trim()&&!found)return false;
  if(mapMissing&&store('done').includes(p.itemId||p.id))return false;
  if(mapCompleted&&!store('done').includes(p.itemId||p.id))return false;
@@ -1566,7 +1584,7 @@ window.viIosMapLiveMatches=(query,limit=12)=>{
  const linked=mapCatalogMatches(query),q=viMapNormalized(query);
  const rank=p=>{const n=viMapNormalized(p.title||'');return n===q?0:n.startsWith(q)?1:n.split(' ').some(w=>w.startsWith(q))?2:3};
  return allMapPins().filter(p=>mapMatches(p,query,linked)).sort((a,b)=>rank(a)-rank(b)||String(a.title).localeCompare(String(b.title)))
-   .slice(0,Math.max(1,Math.min(20,Number(limit)||12))).map(p=>({id:p.id,title:p.title,category:mapCategoryName(mapFilterCategories.find(c=>c.id===p.category)||{id:p.category,name:p.category})}));
+   .slice(0,Math.max(1,Math.min(20,Number(limit)||12))).map(p=>({id:p.id,title:p.title,category:viMapDerivedCategories(p).some(id=>['tiendas-armas','vehiculos'].includes(id))?tr({es:'Lugar comunitario relacionado · sin aparición confirmada',en:'Related community place · no confirmed spawn',pt:'Local comunitário relacionado · sem aparição confirmada'}):mapCategoryName(mapFilterCategories.find(c=>c.id===p.category)||{id:p.category,name:p.category})}));
 };
 window.viIosMapFocusFromSearch=id=>mapFocusPin(id);
 window.viIosMapRelocationDraft=()=>mapRelocatingId?mapArchivedPins().find(p=>p.id===mapRelocatingId)||null:null;
