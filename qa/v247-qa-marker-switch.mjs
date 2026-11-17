@@ -9,7 +9,9 @@ const code=fs.readFileSync(path.resolve('app/app-v137.js'),'utf8');
 const a=code.indexOf('function mapBind(){');
 const b=code.indexOf('/* V233: focus',a);
 assert(a>=0&&b>a,'No se encontró el controlador real del mapa');
-const handler=code.slice(a,b);
+const beginDismiss=code.indexOf('function viDismissMapBackdrop(){');
+assert(beginDismiss>0&&beginDismiss<a,'V248 backdrop dismissal helper must be defined before mapBind');
+const handler=code.slice(beginDismiss,b);
 function scenario(eventType,pointType){
  let updateCount=0;const events={};
  const marker={closest:q=>q==='.atlas-pin,.atlas-cluster'?{dataset:{map:'pin',value:'pin-B'}}:null};
@@ -23,7 +25,7 @@ function scenario(eventType,pointType){
   document:{getElementById:()=>map},
   mapDockSearch(){},mapTransform(){},viPositionMapSuggestions(){},viAlignLandscapeFilters(){},
   requestAnimationFrame(){},mapPanEnabled:true,
-  mapAdd:false,mapActive:'pin-A',mapSpotlightId:null,mapQuery:'',mapDX:0,mapDY:0,
+  mapAdd:false,mapActive:'pin-A',mapSpotlightId:null,mapSpotlightHidden:false,mapPopupOpen:true,mapQuery:'',mapDX:0,mapDY:0,
   mapUpdate(){updateCount++},Date,Math,
   viMapFit(){return 1},MAP_WIDTH:1200,MAP_HEIGHT:1600,
  };
