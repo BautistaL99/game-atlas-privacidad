@@ -1,0 +1,156 @@
+GAME ATLAS COMPANION — MANUAL COMPLETO IOS V246
+Copia de lanzamiento candidata · Xcode/Capacitor/TestFlight/App Store
+===============================================================
+
+ANTES DE EMPEZAR
+Leer 'manuales-v247/LEER_PRIMERO_INDICE_V247.txt' y 'manuales-v247/MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt'.
+Conservar, además, los TXT históricos iOS V241, V242, V243, V244, V245 y V246; dan contexto de correcciones anteriores, pero algunas ramas/versiones de sus instrucciones son HISTÓRICAS.
+Este manual describe un PROYECTO CANDIDATO en código, no una app aprobada en App Store. Un workflow de GitHub exitoso no sustituye pruebas en iPhone ni la revisión Apple.
+
+1. IDENTIDAD DEL RESPALDO
+Repositorio público: https://github.com/BautistaL99/game-atlas-ios-build-free
+Rama congelada: qa-ios-v246
+Commit congelado usado por los ZIP: 3ecef61e2a3ed08fb84b99f28621028b4b4bed63
+Carpeta de la app: gameatlas-ios/ios-v220/ (históricamente V220; el cliente actual es V246).
+Nombre visible: Game Atlas / Game Atlas Companion según configuración; Bundle ID inmutable: com.indie.viassistant.
+Los TXT están dentro del ZIP junto con 'gameatlas-ios/README.md' y 'gameatlas-ios/LEER_PRIMERO_IOS_V246.txt'.
+No incluir en este respaldo .p8, .p12, certificados, MobileProvision, contraseñas ni IPA pública.
+
+2. POR QUÉ HACE FALTA MAC O GITHUB PARA IOS
+iOS necesita compilar y firmar con Xcode/macOS. Desde Windows puede prepararse HTML/JS, gestionar GitHub y lanzar la compilación remota; NO equivale a compilar nativamente iOS desde Windows sin un macOS.
+El proyecto usa Capacitor 8.0.0 y los plugins declarados en ios-v220/package.json: @capacitor/app, @capacitor/core, @capacitor/ios, @capacitor/status-bar, @capacitor/filesystem, @capacitor/share.
+La estructura ios/App/... se genera con 'npx cap add ios' y se sincroniza con 'npx cap sync ios'; el contenido HTML, JS y CSS ya está en ios-v220/www/.
+Xcode 26 o superior es la versión verificada por el workflow V246. Requisitos Apple, políticas y compatibilidad pueden cambiar con el tiempo; comprobar antes de producir una compilación nueva.
+
+3. ARCHIVOS IMPORTANTES Y QUÉ HACE CADA UNO
+ios-v220/www/index.html: carga la aplicación y los scripts y estilos iOS adicionales.
+ios-v220/www/app-v137.js: catálogo, navegación, búsqueda, mapa, progreso, favoritos, idioma y ficha.
+ios-v220/www/vi-i18n.js: traducciones extra y puente de idioma.
+ios-v220/www/ios-v240-qa.js + .css: sugerencias ES/EN/PT, presentación de búsqueda, fichas, popups y controles.
+ios-v220/www/ios-v241-qa.js + .css: autocompletado basado en catálogo, teclado y editor de marcadores.
+ios-v220/www/ios-v242-qa.js + .css: unificación de resultados reales y sugerencias en mapa.
+ios-v220/www/ios-v242-remote-map.js: cartografía remota opcional Ed25519 + imagen verificada SHA-256.
+ios-v220/www/ios-v244-ranking.css: aviso visible de datos insuficientes para rankings.
+ios-v220/www/ios-v246-safe-area.css: separación con hora/isla dinámica y barra de estado; el resultado visual NO se deduce de un test JS.
+ios-v220/www/mobile-v224-native.js/.css y mobile-v226-ios.js/.css: navegación/gestos, back y estilos específicos iOS.
+ios-v220/www/partida-transfer-v225.js/.css: onboarding/importación de Mi partida.
+ios-v220/www/routes-v145.js, online-updates.js, community-v206.js, compare-metrics-v161.js, news-v155.js: mismas funciones conceptuales que la web/Android.
+ios-v220/package.json y capacitor.config.json: Capacitor y Bundle ID.
+ios-v220/scripts/verify-ios.mjs: valida contenido y referencias locales, parses JS, navegación y soporte de backup.
+ios-v220/scripts/qa-marker-switch.mjs, qa-ranking-truth.mjs, qa-ios-audit.mjs, qa-ios-v245-map-and-samples.mjs, qa-ios-v246-i18n.mjs: regresiones de marcadores, ranking, datos y locales.
+ios-v220/scripts/configure-ios-native.mjs: prepara icono y versión del proyecto generado.
+ios-v220/scripts/ci-version.mjs: verifica Bundle ID y ajusta versión pública (por ejemplo 1.0) y build incremental desde GITHUB_RUN_NUMBER.
+ios-v220/scripts/use-saved-signing.mjs: importa certificado y perfil de distribución ya autorizados desde GitHub Secrets. NO genera ni revoca certificados.
+.github/workflows/game-atlas-ios-testflight.yml: valida fuentes, compila y sube IPA directamente a TestFlight. No distribuye IPA en GitHub.
+
+4. NUEVAS FUNCIONES DE IOS V240-V246
+ - Datos de las fichas y estados en ES, EN y PT, incluyendo favoritos, progresos y filtros.
+ - Idioma de primera apertura = primer idioma del iPhone admitido (es/en/pt); otro = inglés; recuerda la elección manual con 'vi_demo_locale'.
+ - Autocompletado de prefijos y frases en Inicio, Buscar y Mapa; panel de resultados cerca del campo; distingue entradas reales y sugerencias de palabras.
+ - Búsquedas descriptivas como “fastest car”/“slowest car” solo generan ranking si existen datos verificados suficientes; si no, muestran imposibilidad de ranking verídico.
+ - Tocar marcador A y después B debe abrir B con un solo toque, sin bloquear el tap con touchend/pointerup.
+ - Arrastrar iniciando sobre un pin no debe abrirlo accidentalmente.
+ - Círculo del pin destacado: un toque debería ocultarlo sin recentrar, y tocar fondo quitar el estado de búsqueda/foco y restaurar puntos según filtros sin alterar mapa; comprobar visualmente.
+ - Filtros vacíos por decisión del usuario: no aparece aviso molesto; la ruta permanece.
+ - Editor del marcador adaptado al teclado, con controles de fondo inactivos al editar.
+ - Navegación por gesto Atrás desde categorías de Explorar y Noticias.
+ - Ajustes de barra superior iOS para reducir solapamiento con hora/indicadores de estado.
+ - Noticias y Wiki automáticas a partir de feeds firmados; NO se generó nueva información de GTA VI ni un mapa definitivo por el mero cambio de versión.
+IMPORTANTE: pruebas sintácticas y unitarias no prueban todas las interacciones reales en iPhone. Guardar screenshots de bugs sin compartir datos personales.
+
+5. RECONSTRUIR EN MAC CON XCODE, SIN GITHUB ACTIONS
+Partir del ZIP íntegro y reproducir la estructura de directorios.
+Requisitos: macOS, Xcode 26+ compatible, Node.js 22, cuenta Apple Developer con permisos adecuados, Bundle ID existente y certificados/profiles de distribución disponibles de forma segura.
+Desde gameatlas-ios/ios-v220:
+  node scripts/verify-ios.mjs
+  node scripts/qa-marker-switch.mjs
+  node scripts/qa-ios-audit.mjs
+  node scripts/qa-ranking-truth.mjs
+  node scripts/qa-ios-v245-map-and-samples.mjs
+  node scripts/qa-ios-v246-i18n.mjs
+  npm install --no-audit --no-fund
+  npx cap add ios              (solo cuando ios/ no existe)
+  npx cap sync ios
+  node scripts/configure-ios-native.mjs
+  npx cap open ios
+En Xcode: confirmar Team, Bundle ID 'com.indie.viassistant', target, iconos, permisos, versión comercial y número de build. Configurar la firma con la cuenta legítima del propietario.
+Para exportar y distribuir por Apple se requiere firma válida. Este ZIP NO es suficiente para firmar por sí solo. No compartir credenciales en repositorios.
+
+6. RECONSTRUIR Y SUBIR A TESTFLIGHT DESDE WINDOWS CON GITHUB
+Este método utiliza un ejecutor macOS de GitHub Actions. El repositorio iOS debe conservar sus GitHub Secrets de la cuenta del propietario y permisos de App Store Connect.
+Workflow: https://github.com/BautistaL99/game-atlas-ios-build-free/actions/workflows/game-atlas-ios-testflight.yml
+A. Entrar a GitHub > Actions > Game Atlas iOS V246 - TestFlight.
+B. Pulsar 'Run workflow', elegir exactamente la rama 'qa-ios-v246'.
+C. Elegir 'version' según la ficha de App Store Connect (p.ej., 1.0 si se actualiza esa versión aún en prueba; no incrementar arbitrariamente sin revisar).
+D. Runner: macos-26-intel por defecto. Si GitHub no consigue asignar esa familia de máquina, se puede probar macos-26. No iniciar varias compilaciones simultáneas como solución automática a una cola.
+E. Ejecutar y leer el job 'validar-fuentes' en Linux. Si no pasa, hay un error en fuentes/pruebas; NO perder tiempo compilando macOS.
+F. Si pasa, 'enviar-testflight' usa macOS, Xcode, firma, archivo .xcarchive, exportación IPA y envío con altool.
+G. Solo una ejecución VERDE en el paso de envío significa que se envió una IPA; luego Apple necesita procesarla y puede rechazarla por motivos independientes.
+H. Abrir App Store Connect > la ficha correcta de Game Atlas > TestFlight; verificar que exista nueva build y número mayor que anterior, declaraciones que solicite Apple, grupo interno y disponibilidad en el iPhone.
+I. Desde TestFlight instalar actualización y realizar QA con la build exacta antes de enviarla a revisión de App Store.
+NO usar 'Re-run jobs' sobre un commit antiguo que falló por sintaxis: hay que iniciar una ejecución NUEVA desde el SHA corregido.
+
+7. FIRMA Y SECRETOS: QUÉ NECESITA EL WORKFLOW
+La clave App Store Connect se usa para autenticar solicitudes Apple: nombres de secretos ASC_KEY_ID, ASC_ISSUER_ID y ASC_KEY_P8; APPLE_TEAM_ID según configuración.
+Firma de distribución reutilizable: GA_DIST_P12_B64, GA_DIST_P12_PASSWORD, GA_PROFILE_B64, GA_APPLE_TEAM_ID.
+La clave privada .p8 de Apple NO es la clave Ed25519 del publicador de noticias ni puede sustituirla.
+'iOS scripts/use-saved-signing.mjs' comprueba Team ID, perfil correspondiente a com.indie.viassistant y certificado Apple Distribution antes de compilar.
+Los valores nunca van dentro de README, TXT, ZIP público, screenshot, issue o un chat. Si se pierden, recuperar/renovar a través de Apple y la cuenta autorizada; no inventarlos ni copiar una firma de otra app.
+
+8. POR QUÉ PUEDE FALLAR GITHUB Y QUÉ HACER
+A. 'queued', sin runner asignado ni pasos: problema de disponibilidad de macOS o permisos/cuota de GitHub. No es un error de la app; revisar ejecución y runner. Intentar otra familia compatible solo si corresponde.
+B. 'validar-fuentes' falla: revisar archivo/linea, node --check y pruebas; es fuente o regresión. Corregir ANTES de macOS.
+C. Apple API HTTP 500/502/503 o red: fallo de servicio temporal; el workflow ya reintenta códigos transitorios del preflight. No confundir con credenciales erróneas.
+D. Apple API HTTP 401: credenciales/tokens/clave revocados o equivocados.
+E. Apple API HTTP 403: rol/permisos Apple insuficientes; comprobar acceso al recurso autorizado.
+F. Error importación .p12/.mobileprovision: revisar Team ID, perfil, certificado Apple Distribution y secretos, sin exponer contenido.
+G. Xcode error: revisar versión Xcode 26+, Bundle ID, firma, deployment target, plugin Capacitor y logs.
+H. Exportó IPA pero altool falla: leer mensaje, conexión, API, Bundle ID, build y estado de Apple Connect.
+I. TestFlight no muestra IPA: puede estar aún procesando o requerir información/regulaciones; confirmar en App Store Connect y comparar build actual, no suponer rechazo.
+J. App Store Connect muestra lista vacía/error rojo: podría ser incidencia del servicio, pero verificar estado oficial antes de afirmar caída. No crear otra ficha de app para resolver una pantalla sin cargar.
+
+9. IDIOMA, BARra SUPERIOR Y CAPTURAS DE APP STORE
+La ficha de App Store puede anunciar inglés como idioma principal de su descripción, pero eso no determina por sí mismo el idioma inicial de la interfaz. La app detecta preferencia del iPhone ES/EN/PT y recuerda elección manual local.
+Probar estado inicial con iPhone en inglés; pasar a español/portugués, cerrar y volver a abrir; la elección manual debe conservarse. Verificar todas las pantallas, textos de Mi partida, botones y aria-label.
+Especial atención a la hora, red, batería, TestFlight y Dynamic Island: no deben tapar el logo, buscador, títulos o imágenes. Revisar normal, con scroll y horizontal.
+Captura original: abrir la app instalada, ubicar pantalla, presionar botón lateral + volumen arriba; Fotos > (i) muestra dimensiones nativas; transferir archivo PNG original desde iCloud Fotos/AirDrop/USB a la computadora, sin comprimir por WhatsApp.
+Subir dimensiones y formatos que App Store Connect acepte para el modelo/categoría de pantalla. Nunca agrandar una captura reducida: repetir desde el dispositivo con interfaz corregida.
+Para ASO usar pantallas reales: mapa, rutas, búsqueda, Mi partida, noticias con fuente, comparador con datos. No prometer ranking o mapa oficial cuando faltan datos verificables. Revisar imágenes y atribuciones antes de publicar.
+
+10. MI PARTIDA Y CONTINUIDAD DE LOS USUARIOS
+Favoritos, progreso, marcadores, rutas e idioma se guardan localmente en el contexto de la app.
+Reiniciar o apagar el iPhone normalmente NO los elimina.
+Desinstalar app, borrar almacenamiento, reinstalar con identidad diferente o cambiar de origen puede perderlos. Exportar copia JSON antes de cualquier intervención potencialmente destructiva.
+Al pasar desde Chrome/Safari web a iOS, el archivo de copia se importa deliberadamente desde Mi partida; la instalación de App Store NO puede copiar automáticamente el localStorage del navegador.
+Conservar el archivo privado fuera de GitHub. Probar recuperación en un dispositivo de test antes de enviar una versión final.
+La copia local no equivale a sincronización cloud ni a respaldo automático permanente.
+
+11. QA COMPLETA ANTES DE APROBACIÓN FINAL
+[ ] App instalada desde la nueva build de TestFlight; número de build comprobado.
+[ ] Idioma inglés en primera apertura de equipo con inglés; español/portugués manual recordados.
+[ ] Portada, categorías, fichas, botones y mensajes sin mezcla de idiomas.
+[ ] UI iPhone con/sin Dynamic Island: hora no tapa logo, buscador o imagen; ambas orientaciones.
+[ ] Mapa fullscreen y normal: mover, arrastrar sobre pin, abrir A y luego B.
+[ ] Círculo destacado: tocar pin oculta solo pin; fondo cierra búsqueda/popup/restaura puntos sin mover mapa.
+[ ] Buscador mapa vi/vice; auto-sugerencias ES/EN/PT y resultados justo debajo.
+[ ] Teclado abierto en Inicio/Buscar/Mapa/editor; ventanas legibles y sin botones tapados.
+[ ] Filtros vacíos + ruta visible; no aparece aviso molesto.
+[ ] Crear/editar/guardar marcador; no tocar controles detrás.
+[ ] Comparar 3 elementos; resultados sin ranking inventado.
+[ ] Noticias oficiales/independientes y Wiki correctamente identificadas, enlaces válidos.
+[ ] Mi partida: crear favorito, marcador y ruta; cerrar/reiniciar app, verificar permanencia.
+[ ] Exportar e importar copia en entorno controlado.
+[ ] Licencias, política de privacidad y ficha de App Store listas, luego solicitar revisión pública.
+Si falla cualquiera, documentar caso, iPhone/modelo/iOS/build/idioma, corregir y crear nueva build; no enviar a Apple una versión que se sabe defectuosa.
+
+12. DOCUMENTOS VIEJOS Y RESPALDO DE RECUPERACIÓN
+LEER_PRIMERO_IOS_V246.txt = registro de cambios de traducción y workflow.
+LEER_PRIMERO_IOS_V245.txt = filtros vacíos/ejemplos.
+LEER_PRIMERO_V244.txt = ranking y noticias firmadas.
+LEER_PRIMERO_IOS_V243.txt = gesto A→B y mapa.
+LEER_PRIMERO_IOS_V242.txt = unificación del buscador de mapa y mapa remoto.
+GAME_ATLAS_IOS_V241_GUIA_CAMBIOS_Y_PRUEBAS.txt = autocompletado/editor.
+Conservar como HISTÓRICOS; las instrucciones antiguas de rama V241–V245 NO sustituyen qa-ios-v246 actual.
+Una copia de código no garantiza continuidad de cuentas Apple/Google, derechos sobre imágenes ni acceso a secretos. Para reconstruir igual, además del ZIP se necesitan cuenta del propietario, configuraciones activas y QA.
+
+FIN — MANUAL IOS V246. (No contiene credenciales ni afirma aprobación de App Store.)
