@@ -38,7 +38,7 @@ if(stage==='stage'){
   let g=read(gradle);
   check(/versionCode\s+\d+/.test(g)&&/versionName\s+['"][^'"]+['"]/.test(g),'No Android version fields');
   g=g.replace(/versionCode\s+\d+/,'versionCode 247')
-    .replace(/versionName\s+['"][^'"]+['"]/,'versionName "1.48.0"');
+    .replace(/versionName\s+['"][^'"]+['"]/,'versionName "1.50.0"');
   fs.writeFileSync(gradle,g);
   const vars=path.join(dir,'variables.gradle');
   let v=read(vars);
