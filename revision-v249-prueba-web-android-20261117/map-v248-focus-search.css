@@ -1,0 +1,58 @@
+/* V248: three-state remembered search destination; never change coordinates. */
+#root .atlas-v119.vi-map-spotlight-muted #mapStage .atlas-pin.vi-spotlight-pin{
+ border-color:#ffe8a7!important;background:linear-gradient(145deg,#fff2d5,#ffc989)!important;
+ color:#63431a!important;outline:2px solid #ffedd3c2!important;outline-offset:3px!important;
+ box-shadow:0 0 0 6px #fce9b155,0 3px 14px #08152688!important;
+ opacity:.87!important;animation:none!important;z-index:65!important;
+}
+/* Desktop: keep search options readable, and the selected place card separate
+   from the pin and the right-side zoom/fullscreen buttons. */
+@media (min-width:980px) and (pointer:fine){
+ #root .atlas-v119:not(.vi-fullscreen-map) .atlas-map>.atlas-popup,
+ #root .atlas-v119.vi-fullscreen-map .atlas-map>.atlas-popup{
+  position:absolute!important;top:auto!important;left:auto!important;
+  right:16px!important;bottom:18px!important;
+  width:min(344px,37%)!important;max-width:min(344px,37%)!important;
+  max-height:min(54%,320px)!important;box-sizing:border-box!important;
+  overflow:auto!important;z-index:78!important;
+ }
+ #root .atlas-v119.vi-map-has-spotlight .atlas-map>.vi-map-spotlight-banner{
+  position:absolute!important;top:10px!important;bottom:auto!important;
+  left:12px!important;right:auto!important;
+  max-width:min(360px,calc(100% - 88px))!important;
+  z-index:87!important;box-sizing:border-box!important;
+ }
+ #root .atlas-v119.vi-fullscreen-map>.vi-v241-options{
+  position:absolute!important;top:var(--v241-map-options-top,65px)!important;
+  left:14px!important;right:auto!important;width:min(580px,calc(100% - 90px))!important;
+  max-width:min(580px,calc(100% - 90px))!important;
+  max-height:var(--v241-map-options-height,40vh)!important;overflow-y:auto!important;
+  z-index:500!important;
+ }
+ #root .atlas-v119 .vi-v241-options .vi-ios-suggest-option{
+  display:flex!important;flex-wrap:wrap!important;align-items:flex-start!important;
+  justify-content:flex-start!important;gap:4px!important;min-width:0!important;
+  width:100%!important;text-align:left!important;box-sizing:border-box!important;
+ }
+ #root .atlas-v119 .vi-v241-options .vi-ios-suggest-option>strong{
+  display:block!important;flex:1 1 100%!important;white-space:normal!important;
+  overflow-wrap:break-word!important;word-break:normal!important;
+ }
+ #root .atlas-v119 .vi-v241-options .vi-ios-suggest-option>small{
+  display:block!important;flex:1 1 100%!important;color:#a8ccd1!important;
+  white-space:normal!important;
+ }
+}
+/* Smaller screens: popup stays a separate sheet and not glued to the
+   highlighted dot. Touch outside dismisses without changing map position. */
+@media (max-width:979px), (pointer:coarse){
+ #root .atlas-v119 .atlas-map>.atlas-popup{
+  top:auto!important;left:8px!important;right:8px!important;
+  bottom:72px!important;max-height:min(43%,300px)!important;
+  overflow-y:auto!important;box-sizing:border-box!important;
+  z-index:74!important;
+ }
+ #root .atlas-v119.vi-map-has-spotlight .atlas-map>.vi-map-spotlight-banner{
+  z-index:80!important;
+ }
+}

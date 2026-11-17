@@ -1,0 +1,118 @@
+/* Game Atlas iOS V240: V239 safety areas + in-flow multilingual suggestions
+ * and map popup placement. Applied only when the platform is native iOS. */
+@media (max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse) {
+ html.vi-ios-v240.vi-ios-app #root .topbar{
+  box-sizing:border-box!important;
+  padding-top:calc(max(48px,env(safe-area-inset-top,0px)) + 9px)!important;
+  top:0!important;position:sticky!important;z-index:95!important;
+ }
+ html.vi-ios-v240.vi-ios-app #root .topbar .mobile-brand{min-height:42px!important}
+ /* WKWebView's 16px rule prevents involuntary zoom when typing or naming routes. */
+ html.vi-ios-v240 input,html.vi-ios-v240 textarea,html.vi-ios-v240 select,
+ html.vi-ios-v240 #root .top-search-wrap input,
+ html.vi-ios-v240 #root .search-box input,
+ html.vi-ios-v240 #root .home-smart-search input,
+ html.vi-ios-v240 #root .atlas-search-label input,
+ html.vi-ios-v240 #root .vi-route-manager input,
+ html.vi-ios-v240 #root .atlas-pin-editor input{
+  font-size:16px!important;-webkit-text-size-adjust:100%!important;
+ }
+ /* The map NEVER changes size just because a pin is selected. */
+ html.vi-ios-v240 #root .atlas-v119:not(.vi-fullscreen-map) .atlas-layout .atlas-map{
+  height:clamp(440px,62dvh,640px)!important;min-height:0!important;
+ }
+ /* Clear separation from the controls and quick filters. JS refines bottom
+    offset from measured toolbar geometry on each render. */
+ html.vi-ios-v240 #root .atlas-v119:not(.vi-fullscreen-map) .atlas-map>.atlas-popup{
+  box-sizing:border-box!important;top:auto!important;bottom:72px!important;
+  left:8px!important;right:8px!important;width:auto!important;
+  max-height:min(43%,280px)!important;overflow-y:auto!important;
+  overscroll-behavior:contain!important;z-index:38!important;
+  padding:11px!important;
+ }
+ html.vi-ios-v240 #root .atlas-v119 .atlas-map:has(.atlas-popup) .vi-map-filter-chips{
+  position:relative!important;z-index:50!important;
+ }
+ html.vi-ios-v240 #root .vi-record-map-action{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  gap:10px!important;align-items:stretch!important;
+ }
+ html.vi-ios-v240 #root .vi-record-map-action>*{
+  position:static!important;min-width:0!important;max-width:100%!important;
+ }
+ html.vi-ios-v240 #root .vi-record-map-action .vi-record-map-button{
+  display:block!important;width:100%!important;
+ }
+ /* Autocomplete is IN DOCUMENT FLOW: cannot cover the result counter/cards. */
+ html.vi-ios-v240 #root .vi-ios-autocomplete{
+  display:block;position:relative!important;inset:auto!important;
+  width:100%!important;max-width:100%!important;box-sizing:border-box;
+  margin:7px 0 13px!important;z-index:32!important;
+  max-height:min(30dvh,240px);overflow-y:auto!important;
+  border:1px solid #5ad7cc;border-radius:13px;
+  background:#102534;box-shadow:0 5px 18px #061018a6;
+  padding:5px!important;
+ }
+ html.vi-ios-v240 #root .vi-ios-autocomplete[hidden]{display:none!important}
+ html.vi-ios-v240 #root .vi-ios-suggest-title{
+  font-size:11px;font-weight:800;letter-spacing:.06em;color:#7de5dc;
+  padding:5px 10px 7px;
+ }
+ html.vi-ios-v240 #root .vi-ios-suggest-option{
+  display:flex!important;align-items:center;justify-content:space-between;
+  gap:8px;width:100%!important;min-height:46px;
+  text-align:left;box-sizing:border-box;padding:9px 11px;
+  background:transparent!important;border:0!important;
+  border-bottom:1px solid #ffffff25!important;color:#e8fffb!important;
+  border-radius:0!important;cursor:pointer;
+ }
+ html.vi-ios-v240 #root .vi-ios-suggest-option:last-child{border-bottom:0!important}
+ html.vi-ios-v240 #root .vi-ios-suggest-option strong{
+  font-size:14px;line-height:1.3;white-space:normal;overflow-wrap:anywhere;
+  font-weight:700;flex:1;min-width:0;
+ }
+ html.vi-ios-v240 #root .vi-ios-suggest-option small{
+  color:#9fb7bf;font-size:10px;white-space:nowrap;flex-shrink:0;
+ }
+ html.vi-ios-v240 #root .vi-ios-suggest-option:focus-visible{outline:2px solid #69eddd!important;outline-offset:-3px}
+ html.vi-ios-v240 #root #headerSuggestions{display:none!important}
+ html.vi-ios-v240 #root #searchResults{
+  display:block;position:relative;scroll-margin-top:12px;margin:14px 0 18px;
+ }
+}
+@media (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+ html.vi-ios-v240.vi-ios-app #root .topbar{
+  padding-top:calc(max(10px,env(safe-area-inset-top,0px)) + 6px)!important;
+ }
+ html.vi-ios-v240 #root .atlas-v119.vi-fullscreen-map .atlas-map>.atlas-popup{
+  max-height:min(80%,320px)!important;
+ }
+}
+
+/* V247 desktop: the shared autocomplete renders in document flow.
+   Prevent unstyled or overlapping suggestion panels on PC. */
+@media (min-width:701px) and (pointer:fine) {
+ html.vi-atlas-v247 #root .vi-ios-autocomplete{
+  display:block;position:relative;inset:auto;width:100%;max-width:780px;
+  box-sizing:border-box;margin:9px 0 14px;padding:8px;
+  background:#102534;color:#e8fffb;border:1px solid #5ad7cc;
+  border-radius:12px;box-shadow:0 8px 24px #06101880;
+  max-height:min(42vh,340px);overflow-y:auto;z-index:55;
+ }
+ html.vi-atlas-v247 #root .vi-ios-autocomplete[hidden]{display:none!important}
+ html.vi-atlas-v247 #root .vi-ios-suggest-title,
+ html.vi-atlas-v247 #root .vi-v241-group-title{
+  color:#80e6dc;font-size:12px;font-weight:750;padding:7px 10px;
+ }
+ html.vi-atlas-v247 #root .vi-ios-suggest-option{
+  width:100%;min-height:42px;display:flex;justify-content:space-between;
+  align-items:center;gap:12px;padding:10px 12px;text-align:left;
+  color:#e8fffb;background:transparent;border:0;
+  border-bottom:1px solid #ffffff22;cursor:pointer;
+ }
+ html.vi-atlas-v247 #root .vi-ios-suggest-option:last-child{border-bottom:0}
+ html.vi-atlas-v247 #root .vi-ios-suggest-option strong{flex:1;min-width:0}
+ html.vi-atlas-v247 #root .vi-ios-suggest-option small{color:#a3bfc7;font-size:12px}
+ html.vi-atlas-v247 #root .vi-ios-suggest-option:focus-visible{outline:2px solid #69eddd;outline-offset:-3px}
+ html.vi-atlas-v247 #root #headerSuggestions{display:none!important}
+}

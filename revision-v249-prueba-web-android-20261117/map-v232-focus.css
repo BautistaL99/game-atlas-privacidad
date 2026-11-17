@@ -1,0 +1,29 @@
+/* V232 candidate: a search destination stays distinguishable from hundreds of points.
+   Contextual action from Explore/search details never invents map coordinates. */
+.atlas-v119 #mapStage .atlas-pin.vi-spotlight-pin{
+ z-index:50!important;border-color:#ffe88d!important;
+ background:linear-gradient(145deg,#ffdb64,#9e5307)!important;
+ color:#101c24!important;
+ box-shadow:0 0 0 5px #132b39,0 0 0 11px #ffdf6690,0 0 28px 12px #ffe273a6!important;
+ outline:3px solid #fff3b8!important;outline-offset:6px!important;
+ animation:vi-spotlight-glow 1.6s ease-in-out infinite alternate;
+}
+@keyframes vi-spotlight-glow{from{filter:brightness(1)}to{filter:brightness(1.23)}}
+.atlas-v119 .vi-map-spotlight-banner,.atlas-v119 .vi-map-unlocated-banner{
+ position:absolute;top:83px;right:12px;z-index:21;max-width:min(360px,calc(100% - 24px));
+ background:#0b2632f5;border:2px solid #ffde75;border-radius:13px;
+ color:#fff3ca;padding:10px 11px;display:flex;align-items:center;gap:8px;
+ box-shadow:0 5px 20px #061018dc;font-size:12px;line-height:1.35;
+}
+.atlas-v119 .vi-map-spotlight-banner strong{display:block;color:white;font-size:13px}
+.atlas-v119 .vi-map-spotlight-banner button,.atlas-v119 .vi-map-unlocated-banner button{
+ border:1px solid #ffe6a2;border-radius:9px;padding:8px 9px;
+ background:#ffdf78;color:#152130;font:inherit;font-weight:800;cursor:pointer;
+}
+.atlas-v119 .vi-map-unlocated-banner{top:83px;left:12px;right:12px;max-width:none;justify-content:space-between}
+.vi-record-map-action{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:14px 0 16px}
+.vi-record-map-action .vi-record-map-button{border:1px solid #65dac7;border-radius:11px;padding:11px 15px;background:#144c56;color:#ecfffb;font-weight:800;cursor:pointer;font-size:14px;min-height:43px}
+.vi-record-map-action .vi-record-map-button:hover,.vi-record-map-action .vi-record-map-button:focus-visible{background:#1c6470;outline:2px solid #abf3e7;outline-offset:2px}
+.vi-record-map-action small{font-size:11px;line-height:1.45;color:#9db4c4;flex:1 1 180px}
+@media(max-width:700px){.atlas-v119 .vi-map-unlocated-banner{top:72px}.atlas-v119 .vi-map-spotlight-banner{top:72px;right:9px;max-width:calc(100% - 18px);font-size:11px;padding:8px}.atlas-v119 .vi-map-spotlight-banner button{padding:7px 8px;font-size:11px}.vi-record-map-action{align-items:stretch}.vi-record-map-action .vi-record-map-button{width:100%}}
+@media(prefers-reduced-motion:reduce){.atlas-v119 #mapStage .atlas-pin.vi-spotlight-pin{animation:none}}

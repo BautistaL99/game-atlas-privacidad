@@ -1,0 +1,373 @@
+/* Game Atlas Companion V211 · Android / iOS mobile web only.
+   Additive presentation layer. Desktop >=701px, signed data, routes and user
+   progress are deliberately untouched. */
+@media (max-width:700px) {
+  :root{
+    --v211-ink:#f3f9ff;
+    --v211-aqua:#64f2dc;
+    --v211-tap:44px;
+    --v211-bottom:calc(76px + env(safe-area-inset-bottom,0px));
+  }
+
+  /* Viewport ergonomics, not native WebView status-bar overrides. */
+  html { scroll-padding-bottom:var(--v211-bottom); }
+  body { -webkit-tap-highlight-color:transparent; }
+  :is(a,button,summary,[role="button"]):not(.atlas-marker):not(.atlas-pin){
+    touch-action:manipulation;
+  }
+  :is(a,button,input,select,summary,textarea):focus-visible{
+    outline:2px solid #79ffed!important;
+    outline-offset:3px;
+  }
+  :is(input,select,textarea){font-size:max(16px,1em);}
+  .topbar{
+    background:linear-gradient(120deg,#101a2bfa 0%,#0b1423fa 75%,#0f2030fa 100%)!important;
+    border-bottom:1px solid #315066!important;
+    box-shadow:0 5px 20px #03081345!important;
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+  }
+  .topbar .mobile-brand{
+    letter-spacing:.015em;
+    line-height:1.1!important;
+    display:inline-flex!important;
+    gap:8px!important;
+    max-width:100%;
+    white-space:nowrap;
+  }
+  .topbar .mobile-brand>span:last-child{
+    letter-spacing:.075em!important;
+    font-size:clamp(10px,2.95vw,12px)!important;
+  }
+  .topbar .mobile-actions{gap:6px!important;}
+  .topbar .mobile-donate,
+  .topbar .lang-badge{
+    min-height:38px!important;
+    border-radius:11px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+  }
+  .topbar .top-search-wrap,
+  .topbar .top-search-wrap form{min-width:0!important;}
+  .topbar .top-search-wrap form{
+    border-radius:14px!important;
+    box-shadow:0 2px 11px #050c1c55;
+  }
+  .topbar #headerSearchInput{
+    min-width:0!important;
+    font-size:16px!important; /* Prevents Safari input-focus zoom. */
+    line-height:1.25!important;
+    text-overflow:ellipsis;
+  }
+  .topbar .top-search-submit{
+    min-width:42px!important;
+    min-height:42px!important;
+    display:grid!important;
+    place-items:center!important;
+  }
+  .topbar #headerSuggestions{
+    max-height:min(52dvh,400px)!important;
+    overflow-y:auto!important;
+    overscroll-behavior:contain;
+  }
+
+  /* Six genuinely touchable destination slots. Icon SVGs replace missing
+     glyphs on Android and iOS without changing route labels or targets. */
+  .bottom-nav{
+    display:grid!important;
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    align-items:stretch!important;
+    column-gap:2px!important;
+    margin:0!important;
+    min-height:76px!important;
+    padding:6px 5px max(7px,env(safe-area-inset-bottom,0px))!important;
+    border-top:1px solid #396477c9!important;
+    background:linear-gradient(0deg,#0b1525f7,#112437f7)!important;
+    box-shadow:0 -8px 30px #04101b9c!important;
+    backdrop-filter:blur(22px) saturate(135%);
+    -webkit-backdrop-filter:blur(22px) saturate(135%);
+    isolation:isolate;
+  }
+  .bottom-nav>a,
+  .bottom-nav .mobile-more,
+  .bottom-nav .mobile-more>summary{
+    box-sizing:border-box!important;
+    min-width:0!important;
+    min-height:52px!important;
+    border-radius:12px!important;
+  }
+  .bottom-nav>a,
+  .bottom-nav .mobile-more>summary{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:4px!important;
+    padding:6px 0!important;
+    font-size:10px!important;
+    font-weight:650!important;
+    line-height:1.13!important;
+    letter-spacing:-.015em;
+    color:#bbcbdc!important;
+    text-decoration:none!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    background:transparent!important;
+    border:1px solid transparent!important;
+  }
+  .bottom-nav>a.nav-active,
+  .bottom-nav>a[aria-current="page"]{
+    color:#a7fff2!important;
+    background:linear-gradient(180deg,#1c554f,#164040)!important;
+    border-color:#3bb8ae55!important;
+    box-shadow:inset 0 1px 0 #a9fdef22!important;
+  }
+  .bottom-nav .nav-symbol{
+    display:grid!important;
+    place-items:center!important;
+    flex:none!important;
+    width:24px!important;
+    height:24px!important;
+    margin:0!important;
+    font-size:21px!important;
+    line-height:1!important;
+    color:inherit!important;
+    overflow:visible!important;
+  }
+  .bottom-nav .nav-symbol svg{
+    display:block!important;
+    width:21px!important;
+    height:21px!important;
+    max-width:100%!important;
+    stroke:currentColor!important;
+    stroke-width:1.85;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    overflow:visible;
+    pointer-events:none!important;
+  }
+  .bottom-nav>a.nav-active .nav-symbol svg{
+    stroke-width:2.2;
+    filter:drop-shadow(0 0 5px #53f3d34f);
+  }
+  .mobile-more>summary{cursor:pointer!important;}
+  .mobile-more[open]>summary{
+    background:#173a42!important;
+    border-color:#48cbbb70!important;
+    color:#a3ffec!important;
+  }
+  .mobile-more .mobile-more-panel{
+    box-sizing:border-box!important;
+    right:5px!important;
+    bottom:calc(100% + 10px)!important;
+    width:min(330px,calc(100vw - 18px))!important;
+    max-height:min(65dvh,480px)!important;
+    border:1px solid #4b8791!important;
+    border-radius:17px!important;
+    padding:12px!important;
+    background:linear-gradient(165deg,#172b41,#101e30 85%)!important;
+    box-shadow:0 22px 65px #020913eb!important;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .mobile-more .mobile-more-panel>a{
+    min-height:46px!important;
+    border-radius:11px!important;
+  }
+  .vi-v211-keyboard-open .bottom-nav{
+    display:none!important;
+  }
+
+  /* News: swipeable filter pills instead of four overly tall columns. */
+  .vi-news-page{min-width:0!important;}
+  .vi-news-hero{
+    margin:5px 0 17px!important;
+    padding:20px 18px!important;
+    border-radius:20px!important;
+    background:radial-gradient(circle at 90% 0%,#2b5b6877,transparent 65%),
+      linear-gradient(140deg,#102239,#112e44)!important;
+  }
+  .vi-news-hero h1{
+    font-size:clamp(28px,7.4vw,35px)!important;
+    line-height:1.09!important;
+    letter-spacing:-.025em!important;
+  }
+  .vi-news-hero p{font-size:14px!important;line-height:1.52!important;}
+  .vi-news-tabs{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    align-items:stretch!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    gap:8px!important;
+    margin:0 0 17px!important;
+    padding:2px 3px 7px!important;
+    scroll-snap-type:x proximity;
+    scrollbar-width:none;
+    overscroll-behavior-x:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .vi-news-tabs::-webkit-scrollbar,
+  .filter-tabs::-webkit-scrollbar{display:none;}
+  .vi-news-tabs>a{
+    display:inline-flex!important;
+    flex:0 0 auto!important;
+    align-items:center!important;
+    justify-content:center!important;
+    box-sizing:border-box!important;
+    width:auto!important;
+    min-height:45px!important;
+    padding:10px 15px!important;
+    border-radius:13px!important;
+    font-size:12px!important;
+    line-height:1.25!important;
+    text-align:center!important;
+    white-space:nowrap!important;
+    scroll-snap-align:start;
+  }
+  .vi-news-tabs>a.is-active{
+    background:#23635c!important;
+    border-color:#69f5da!important;
+    box-shadow:0 3px 14px #1ecba02a!important;
+  }
+  .vi-news-archive-counter{flex:0 0 auto;}
+  .vi-news-list{gap:15px!important;}
+  .vi-news-card{
+    border-radius:19px!important;
+    border-color:#3a627d!important;
+    box-shadow:0 10px 27px #0006!important;
+  }
+  .vi-news-card .vi-news-image-link{
+    aspect-ratio:1.7!important;
+  }
+  .vi-news-card .vi-news-body{
+    padding:17px 17px 18px!important;
+  }
+  .vi-news-body h2{
+    font-size:clamp(18px,4.8vw,21px)!important;
+    line-height:1.28!important;
+    letter-spacing:-.015em;
+  }
+  .vi-news-date{font-size:11px!important;}
+  .vi-news-actions{gap:14px!important;}
+  .vi-news-actions>a{
+    display:inline-flex;
+    min-height:40px;
+    align-items:center;
+  }
+
+  /* Explore / favourites: preserve actual item operations, improve density
+     and keep filter groups usable with thumb interactions. */
+  .filter-tabs{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    gap:8px!important;
+    max-width:100%!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:2px 0 6px!important;
+    margin-bottom:14px!important;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .filter-tabs .filter-tab{
+    flex:0 0 auto!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-height:42px!important;
+    padding:9px 13px!important;
+    border-radius:12px!important;
+    font-size:12px!important;
+    text-align:center;
+    white-space:nowrap;
+  }
+  .filter-tabs .filter-tab.is-selected{
+    background:#164c49!important;
+    color:#95ffe8!important;
+    border-color:#62f2d9!important;
+  }
+  .container .item-stack .content-card{
+    border-radius:17px!important;
+    border-color:#324f68!important;
+    box-shadow:0 7px 23px #0004!important;
+  }
+  .container .item-stack .content-card .content-text h3{
+    font-size:15px!important;
+    line-height:1.25!important;
+  }
+  .container .item-stack .content-card .card-inline-actions .quick-fav{
+    min-width:44px!important;
+    min-height:44px!important;
+    width:44px!important;
+    height:44px!important;
+  }
+
+  /* Home: the hero and actual progress controls remain fully interactive. */
+  .home-v18 .home-permanent-frame{
+    border-radius:19px!important;
+    border-color:#396a7d!important;
+    box-shadow:0 12px 28px #0007!important;
+  }
+  .home-v18 .v18-section-kicker{
+    letter-spacing:.14em!important;
+    font-weight:850!important;
+  }
+  .home-v18 .home-permanent-copy h1{
+    font-size:clamp(25px,6.8vw,31px)!important;
+    line-height:1.12!important;
+  }
+  .home-v18 .home-permanent-frame .vi-hero-cta{
+    border-radius:11px!important;
+    min-height:38px!important;
+  }
+  .home-v18 .v18-progress-zone,
+  .home-v18 .v18-catalog-zone{
+    border-radius:19px!important;
+  }
+
+  /* Map: preserve gestures and full-screen; make touch controls comfortably
+     sized without moving the map pins or changing the verified image. */
+  #root .atlas-v119 .atlas-map .vi-map-fullscreen-btn{
+    min-width:44px!important;min-height:44px!important;
+  }
+  #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle{
+    min-height:43px!important;
+    border-radius:11px!important;
+  }
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips{
+    max-width:calc(100% - 74px)!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+    white-space:nowrap;
+  }
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips::-webkit-scrollbar{display:none;}
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips button{
+    min-height:34px!important;
+    flex:0 0 auto!important;
+  }
+  #root .atlas-v119 .atlas-filters.mobile-open{
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-y:contain;
+  }
+}
+
+@media (max-width:355px){
+  .bottom-nav{padding-inline:3px!important;column-gap:0!important;}
+  .bottom-nav>a,.bottom-nav .mobile-more>summary{
+    font-size:9px!important;
+    letter-spacing:-.04em;
+  }
+  .topbar .mobile-actions{gap:4px!important;}
+  .topbar .mobile-brand>span:last-child{font-size:10px!important;}
+  .vi-news-hero h1{font-size:27px!important;}
+}
+@media (prefers-reduced-motion:reduce) and (max-width:700px){
+  .bottom-nav *,
+  .vi-news-card *,
+  .filter-tabs *{animation:none!important;transition:none!important;}
+}

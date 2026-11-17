@@ -1,0 +1,43 @@
+/* V220 Android QA R4 — accessible page scrollbar and pointer-safe modal. */
+@media (max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+ html.vi-route-map body .v217-page-scroll-rail:not([hidden]){
+  display:block!important;visibility:visible!important;opacity:1!important;
+  right:0!important;width:27px!important;
+  top:calc(105px + env(safe-area-inset-top,0px))!important;
+  bottom:calc(88px + env(safe-area-inset-bottom,0px))!important;
+  z-index:2147482010!important;touch-action:none!important;
+ }
+ html.vi-route-map body .v217-page-scroll-rail:not([hidden]) .v217-page-scroll-thumb{
+  right:4px!important;width:15px!important;min-height:50px!important;
+  background:#24cfb8!important;border:2px solid #c7fff6!important;
+  border-radius:14px!important;box-shadow:0 1px 9px #043b47!important;
+ }
+ /* A drag beginning on a place marker must pan, not scroll the page.
+    Short stationary taps still open marker information normally. */
+ #root .atlas-v119 .atlas-map.vi-map-pan-enabled .atlas-pin,
+ #root .atlas-v119 .atlas-map.vi-map-pan-enabled .atlas-cluster{
+  touch-action:none!important;
+ }
+ /* Keep the title away from the left edge without shifting inputs. */
+ #root .atlas-v119 .atlas-pin-editor .atlas-pin-editor-head>div{
+  padding-left:9px!important;
+ }
+ /* Disabled behind dialog, while Save, Cancel and fields remain clickable. */
+ html.vi-v224-marker-open #root{pointer-events:none!important;touch-action:none!important}
+ html.vi-v224-marker-open #root .atlas-pin-editor,
+ html.vi-v224-marker-open #root .atlas-pin-editor *{pointer-events:auto!important}
+ html.vi-v224-marker-open .v217-page-scroll-rail{pointer-events:none!important;opacity:0!important}
+}
+
+/* On touch devices the native WebView often paints a yellow focus rectangle
+   while a marker is being used as a drag handle. Do not hide keyboard focus. */
+@media (pointer:coarse){
+ #root .atlas-v119 .atlas-map .atlas-pin,
+ #root .atlas-v119 .atlas-map .atlas-cluster{
+  -webkit-tap-highlight-color:transparent!important;
+ }
+ html.vi-v225-touch-marker #root .atlas-v119 .atlas-map .atlas-pin:focus-visible,
+ html.vi-v225-touch-marker #root .atlas-v119 .atlas-map .atlas-cluster:focus-visible{
+  outline:0!important;outline-offset:0!important;
+ }
+}

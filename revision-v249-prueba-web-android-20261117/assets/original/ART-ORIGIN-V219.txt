@@ -1,0 +1,17 @@
+V219 — FONDOS PROPIOS PARA «MI PARTIDA» — 12/11/2026
+
+Archivos:
+- atlas-neon-coast-v219.svg
+- atlas-marina-road-v219.svg
+
+Procedencia: composiciones SVG originales creadas para Game Atlas Companion.
+No reutilizan ilustraciones, fotografías ni capturas de Rockstar, Take-Two o
+terceros; no incorporan logos GTA, personajes, marcas, mapas ni material de juego.
+Los edificios, palmeras, cielo, mar y muelle son trazados geométricos originales
+generados mediante código, aptos para su uso como arte interno del proyecto.
+
+Uso previsto: fondos únicamente de la pantalla móvil «Mi partida» V219,
+respetando la composición aprobada y sin cambiar las imágenes de escritorio.
+
+No atribuir estas escenas al juego real ni a material oficial de Rockstar.
+No equivale a auditoría de los demás recursos del sitio ni a licencia sobre marcas.

@@ -1,0 +1,57 @@
+/* Game Atlas iOS V241. Load after ios-v240-qa.css, iPhone only. */
+@media (max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+/* Never allow the underlying map search field or filters to cover a marker editor. */
+html.vi-ios-v241 #root .atlas-v119.vi-marker-editing>.atlas-toolbar,
+html.vi-ios-v241 #root .atlas-v119.vi-marker-editing>.atlas-search-results,
+html.vi-ios-v241 #root .atlas-v119.vi-marker-editing>.vi-v241-options,
+html.vi-ios-v241 #root .atlas-v119.vi-marker-editing .atlas-controls,
+html.vi-ios-v241 #root .atlas-v119.vi-marker-editing .atlas-mobile-filter-toggle{
+ visibility:hidden!important;pointer-events:none!important;
+}
+/* Keep the form within the actual keyboard-visible area, independent of map size.
+   The JS computes top and maximum height from visualViewport on focus / resize. */
+html.vi-ios-v241.v241-marker-open #root .atlas-v119 .atlas-map .atlas-pin-editor{
+ position:fixed!important;top:var(--v241-editor-top,64px)!important;bottom:auto!important;
+ left:max(10px,env(safe-area-inset-left,0px))!important;
+ right:max(10px,env(safe-area-inset-right,0px))!important;
+ width:auto!important;height:auto!important;min-height:0!important;
+ max-height:var(--v241-editor-max-height,65dvh)!important;
+ box-sizing:border-box!important;overflow-y:auto!important;overflow-x:hidden!important;
+ overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;
+ touch-action:pan-y!important;z-index:2147483005!important;transform:none!important;
+}
+html.vi-ios-v241.v241-marker-open #root .atlas-v119 .atlas-pin-editor .atlas-pin-editor-head{
+ position:sticky!important;top:-12px!important;z-index:5!important;
+}
+html.vi-ios-v241.v241-marker-keyboard #root .bottom-nav{
+ visibility:hidden!important;pointer-events:none!important;
+}
+/* Actual data-backed record suggestions and phrase suggestions share one list.
+   In normal pages, the list occupies space and cannot obscure result counts. */
+html.vi-ios-v241 #root .vi-v241-options{
+ display:block;position:relative!important;top:auto!important;left:auto!important;
+ right:auto!important;width:auto!important;max-height:min(35dvh,340px)!important;
+ overflow:auto!important;margin:6px 0 12px!important;z-index:155!important;
+ border:1px solid #58d7c8!important;border-radius:13px!important;
+ background:#102734!important;box-shadow:0 9px 22px #00151d9c!important;
+ padding:6px!important;
+}
+html.vi-ios-v241 #root .vi-v241-options[hidden]{display:none!important}
+html.vi-ios-v241 #root .vi-v241-options .vi-v241-group-title{
+ color:#82e8db;font-size:11px;font-weight:800;letter-spacing:.07em;
+ padding:8px 9px 5px;
+}
+html.vi-ios-v241 #root .vi-v241-options .vi-v241-record strong{color:#f4ffff!important}
+html.vi-ios-v241 #root .atlas-v119>.vi-v241-options{
+ margin:4px 8px 10px!important;max-height:min(30dvh,260px)!important;
+}
+html.vi-ios-v241 #root .atlas-v119.vi-fullscreen-map>.vi-v241-options{
+ position:absolute!important;z-index:245!important;
+ left:10px!important;right:10px!important;top:var(--v241-map-options-top,60px)!important;
+ width:auto!important;max-height:var(--v241-map-options-height,170px)!important;
+ margin:0!important;
+}
+html.vi-ios-v241 #root .atlas-v119.vi-fullscreen-map>.atlas-search-results{
+ top:var(--v241-map-results-top,var(--vi-map-suggestions-top,80px))!important;
+}
+}
