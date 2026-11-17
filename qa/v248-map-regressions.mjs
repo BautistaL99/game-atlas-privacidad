@@ -73,7 +73,7 @@ ctx.mapCategories=[];
 ctx.mapQuery='PTT YOUNGINS Illegal Goods Store';
 vm.runInContext('viMapPrepareSearch(mapQuery);',ctx);
 assert.deepEqual(Array.from(ctx.mapCategories),['tiendas-armas'],'Searching a specific place after Clear re-enables its category');
-vm.runInContext(section('const mapShown=()=>{','let mobileMapFiltersOpen='),ctx);
+vm.runInContext(section('const mapShown=()=>{','let mobileMapFiltersOpen=')+';globalThis.mapShown=mapShown;',ctx);
 ctx.mapQuery='';ctx.mapCategories=[];ctx.mapSpotlightId='gun1';ctx.mapSpotlightHidden=false;
 assert.deepEqual(Array.from(ctx.mapShown(),p=>p.id),['gun1'],'Bright spotlight isolates the selected pin');
 ctx.mapSpotlightHidden=true;
