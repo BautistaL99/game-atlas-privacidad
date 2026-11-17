@@ -1,38 +1,23 @@
 {
-  "checkedAt": "2026-11-17T17:52:59.833Z",
-  "mode": "wiki",
+  "checkedAt": "2026-11-17T23:55:02.834Z",
+  "mode": "news",
   "runner": "public-free",
   "publisher": "SIGNED_READY_TO_COMMIT",
   "officialRevision": 4,
-  "communityRevision": 18,
+  "communityRevision": 20,
   "previousOfficialCount": 19,
   "previousIndependentCount": 26,
-  "previousWikiCount": 406,
+  "previousWikiCount": 457,
   "newOfficial": 0,
-  "newIndependent": 0,
-  "newWiki": 52,
+  "newIndependent": 4,
+  "newWiki": 0,
   "quarantined": [
     {
-      "source": "GTA Wiki",
-      "url": "",
-      "reason": "wiki-community-009cf1a84d773caba9aff8f1 home es: Description not translated; retry later instead of mislabeling language"
-    },
-    {
-      "source": "GTA Wiki",
-      "url": "",
-      "reason": "wiki-community-043f5ca57fa247425736fba7 affiliations es: Description not translated; retry later instead of mislabeling language"
-    },
-    {
-      "source": "GTA Wiki",
-      "url": "",
-      "reason": "wiki-community-052a5e721d0f2de9b7dcec38 lineup es: Description not translated; retry later instead of mislabeling language"
+      "source": "RockstarINTEL",
+      "url": "https://rockstarintel.com/gta-vi-could-make-2-billion-this-week-15-million-pre-orders-already",
+      "reason": "Translation withheld: untrusted output"
     }
   ],
   "warnings": [],
-  "specsInspected": 60,
-  "withWikiSpecifications": 59,
-  "specsTranslated": 14,
-  "specsPending": 1082,
-  "translationRequests": 9,
   "changesSigned": true
 }
