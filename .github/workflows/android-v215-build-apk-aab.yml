@@ -35,8 +35,13 @@ jobs:
           SDK_MANAGER=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -print -quit)
           test -n "$SDK_MANAGER"
           "$SDK_MANAGER" --install "platform-tools" "platforms;android-36" "build-tools;36.0.0"
-      - name: Comprobar app V248 y copiarla completa a Capacitor
+      - name: Comprobar app V248, búsquedas y correcciones del mapa antes de compilar
         run: |
+          node --check app/app-v137.js
+          node qa/v247-public-client.mjs
+          node qa/v248-map-regressions.mjs
+          node qa/v247-qa-marker-switch.mjs
+          node qa/v247-qa-ranking-truth.mjs
           node android-v215/prepare-android.mjs stage
           node --check android-v215/www/mobile-v215.js
           node --check android-v215/www/community-v206.js
@@ -87,9 +92,9 @@ jobs:
           "$AAPT" dump badging "$APK" | grep -F "package: name='com.indie.viassistant.qa'"
           "$AAPT" dump badging "$APK" | grep "versionCode='248'"
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify "$APK"
-          cp "$APK" dist/android-v215/Game-Atlas-Companion-V248-PRUEBA.apk
-          cp "$AAB" dist/android-v215/Game-Atlas-Companion-V248-SIN-FIRMAR.aab
-          (cd dist/android-v215 && sha256sum Game-Atlas-Companion-V248-PRUEBA.apk Game-Atlas-Companion-V248-SIN-FIRMAR.aab > SHA256SUMS.txt)
+          cp "$APK" dist/android-v215/Game-Atlas-Companion-V248-R2-PRUEBA.apk
+          cp "$AAB" dist/android-v215/Game-Atlas-Companion-V248-R2-SIN-FIRMAR.aab
+          (cd dist/android-v215 && sha256sum Game-Atlas-Companion-V248-R2-PRUEBA.apk Game-Atlas-Companion-V248-R2-SIN-FIRMAR.aab > SHA256SUMS.txt)
           cat > dist/android-v215/LEEME-ANDROID-V248.txt <<'TXT'
           Game Atlas Companion - Android V248 (versionName 1.51.0; versionCode 248)
           APK DEBUG: com.indie.viassistant.qa (INSTALACIÓN PARALELA)
@@ -120,11 +125,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          TAG="android-v248-prueba"
+          TAG="android-v248-r2-prueba"
           if ! gh release view "$TAG" >/dev/null 2>&1; then
             gh release create "$TAG" --target "$GITHUB_SHA" --title "Game Atlas Companion Android V248 - APK de prueba" --prerelease \
-              --notes "Version movil aprobada V248. APK de prueba, NO reemplazar la app de Play sin respaldo de Mi partida. AAB sin firmar incluido solo como candidato; requiere firma de subida para Play."
+              --notes "Candidata QA V248-R2, pendiente de pruebas reales. APK de prueba, NO reemplazar la app de Play sin respaldo de Mi partida. AAB sin firmar incluido solo como candidato; requiere firma de subida para Play."
           fi
           gh release upload "$TAG" dist/android-v215/* --clobber
-          echo "APK de prueba: https://github.com/BautistaL99/game-atlas-privacidad/releases/download/$TAG/Game-Atlas-Companion-V248-PRUEBA.apk" >> "$GITHUB_STEP_SUMMARY"
-          echo "AAB candidato SIN FIRMAR (no subir a Play): https://github.com/BautistaL99/game-atlas-privacidad/releases/download/$TAG/Game-Atlas-Companion-V248-SIN-FIRMAR.aab" >> "$GITHUB_STEP_SUMMARY"
+          echo "APK de prueba: https://github.com/BautistaL99/game-atlas-privacidad/releases/download/$TAG/Game-Atlas-Companion-V248-R2-PRUEBA.apk" >> "$GITHUB_STEP_SUMMARY"
+          echo "AAB candidato SIN FIRMAR (no subir a Play): https://github.com/BautistaL99/game-atlas-privacidad/releases/download/$TAG/Game-Atlas-Companion-V248-R2-SIN-FIRMAR.aab" >> "$GITHUB_STEP_SUMMARY"
