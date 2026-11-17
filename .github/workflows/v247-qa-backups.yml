@@ -1,0 +1,79 @@
+name: Game Atlas V247 - validar y preparar 3 backups (sin publicar apps)
+on:
+  push:
+    branches:
+      - qa-v247-web-android-20261117
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: backup-game-atlas-v247
+  cancel-in-progress: false
+jobs:
+  validar-y-empacar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout código de web + Android
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Preparar Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificación de funcionamiento fuente y regresiones
+        shell: bash
+        run: |
+          set -euo pipefail
+          node qa/v247-public-client.mjs
+          node qa/v247-qa-marker-switch.mjs
+          node qa/v247-qa-ranking-truth.mjs
+          node qa/v247-qa-ios-v245-map-and-samples.mjs
+          node qa/v247-qa-ios-v246-i18n.mjs
+          node android-v215/prepare-android.mjs stage
+          node --check android-v215/prepare-android.mjs
+      - name: Descargar la versión fuente iOS V246 exacta
+        shell: bash
+        env:
+          IOS_SHA: '3ecef61e2a3ed08fb84b99f28621028b4b4bed63'
+        run: |
+          set -euo pipefail
+          git clone --quiet --depth 1 --branch qa-ios-v246 https://github.com/BautistaL99/game-atlas-ios-build-free.git gameatlas-ios
+          actual="$(git -C gameatlas-ios rev-parse HEAD)"
+          if [[ "$actual" != "$IOS_SHA" ]]; then
+            echo "::error::El código iOS cambió luego de la revisión. Actualizar el SHA verificado para generar respaldos coherentes."
+            exit 1
+          fi
+          node --check gameatlas-ios/ios-v220/scripts/qa-ios-v246-i18n.mjs
+          test -s gameatlas-ios/LEER_PRIMERO_IOS_V246.txt
+      - name: Generar tres ZIP separados con manuales
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          zip -qr dist/GAME-ATLAS-WEB-PC-MOVIL-V247-FUENTES.zip app README_LANZAMIENTO_V247.txt CHECKLIST_PRUEBAS_V247.txt
+          zip -qr dist/GAME-ATLAS-ANDROID-V247-FUENTES.zip app android-v215 .github/workflows/android-v215-build-apk-aab.yml README_LANZAMIENTO_V247.txt CHECKLIST_PRUEBAS_V247.txt qa
+          zip -qr dist/GAME-ATLAS-IOS-V246-FUENTES.zip gameatlas-ios/ios-v220 gameatlas-ios/.github/workflows gameatlas-ios/README.md gameatlas-ios/LEER_PRIMERO_IOS_V246.txt README_LANZAMIENTO_V247.txt CHECKLIST_PRUEBAS_V247.txt
+          (cd dist && sha256sum *.zip > SHA256SUMS.txt)
+          ls -lh dist
+      - name: Entregar descargas verificadas en GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: GAME-ATLAS-V247-TRES-COPIAS-DEL-LANZAMIENTO
+          path: dist/
+          retention-days: 90
+          if-no-files-found: error
+      - name: Publicar las tres COPIAS DE CÓDIGO como prerelease (no app stores)
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="backup-v247-${GITHUB_RUN_NUMBER}"
+          gh release create "$TAG" dist/*.zip dist/SHA256SUMS.txt \
+            --target "$GITHUB_SHA" \
+            --title "Game Atlas V247 - copias fuente web, Android y iOS (no firmadas)" \
+            --prerelease \
+            --notes "Estas son copias de seguridad del CÓDIGO FUENTE, NO APK/AAB ni IPA firmados. QA de fuentes superada; falta probar en dispositivos antes de publicar. Las credenciales Apple/Google no se incluyen."
+          echo "Descargas directas: https://github.com/${GITHUB_REPOSITORY}/releases/tag/$TAG" >> "$GITHUB_STEP_SUMMARY"

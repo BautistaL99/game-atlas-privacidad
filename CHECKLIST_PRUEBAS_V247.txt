@@ -1,0 +1,29 @@
+GAME ATLAS — CAMBIOS Y CONTROL DE PRUEBAS V247 WEB + ANDROID (iOS: base V246)
+ESTADO: mejoras trasladadas al código de una rama de PRUEBA. Nada de lo enumerado supone aprobación visual en dispositivo real ni publicación efectiva.
+
+QUÉ ESTABA MAL / QUÉ HAY QUE COMPROBAR
+01. Círculo amarillo: antes lo tocabas y no hacía nada; ahora el toque oculta sólo ese marcador destacado, sin recentrar. Al tocar el fondo debe cerrar panel, limpiar búsqueda y restaurar puntos sin cambiar zoom/posición. Probar toque simple y arrastre, teléfono/PC.
+02. Cambio entre marcadores: antes se cerraba A antes de abrir B. Probar pasar de A a B directamente con un solo toque.
+03. Arrastre sobre marcador: antes se abría una ficha al intentar arrastrar. Probar iniciar el arrastre encima de un pin y asegurar que no abra ni seleccione otra ficha.
+04. Búsqueda vi: antes se exigía escribir más letras. Probar vi -> Vice City si existe un punto real, y buscar vice.
+05. Autocompletado: antes dónde encontrar au no sugería nada. Probar tocar dónde encontrar autos, inglés where to find ca y portugués onde encontrar ca.
+06. Resultados del mapa: antes quedaban demasiado abajo. Deben salir sugerencias y puntos en panel unificado inmediatamente debajo de buscar.
+07. Teclado: antes ocultaba resultados en Inicio, Buscar y Mapa. Probar teclado abierto, autocorrección, cierre del teclado y orientación vertical/horizontal.
+08. Superposición: antes se tapaban filtros, categorías y resultados. Probar en pantallas pequeñas/large, fullscreen, zoom y orientaciones.
+09. Buscador de fichas: antes mezclaba frases con entradas. Comprobar sección de sugerencias separada, resultados reales con enlace directo a ficha.
+10. Motor descriptivo: probar prefijos/sinónimos/preguntas ES/EN/PT, y consultas sin resultados, sin inventar datos.
+11. Vehículo más rápido/lento: antes devolvía los mismos ítems sin orden. Con estadísticas verificadas debe ordenar por números; si no existen debe avisar, sin presentar rankings falsos. Los vehículos base todavía carecen de velocidades verificadas.
+12. Historial: antes faltaba reabrir la última búsqueda. Probar buscar, vaciar campo y recuperar consulta al enfocarlo; no borrar progreso.
+13. Filtros vacíos: antes aparecía aviso molesto. Probar quitar todos los filtros con ruta en pantalla: ruta visible, sin aviso.
+14. Editor de marcador: antes teclado deformaba editor y se podían tocar botones detrás. Probar guardar, cancelar, toque fuera y scroll interno.
+15. Popup de marcador: antes tapaba filtros, zoom y botones. Probar normal/fullscreen/paisaje y scroll.
+16. Comparar y filtros Explorar: antes navegación salteaba a inicio o perdía scroll. Probar 3 ítems y cambio de filtros sin perder posición.
+17. Ejemplos de búsqueda: antes frases impropias. Verificar chips neutrales en ES/EN/PT en Inicio y Buscar; no confundir con datos aportados por el usuario.
+18. Cartografía remota: antes no existía canal firmado común de revisiones. Probar validación Ed25519 y aviso de coordenadas cuando cambia el mapa; preservar pins versionados y rutas locales.
+19. Actualizaciones de noticias/fichas: verificar consumidor Ed25519, secciones oficiales/no oficiales, formato de fuentes y traducciones; verificar producción del feed por separado.
+20. Adaptación: probar al menos Android pequeño/grande, Chrome móvil, Safari iOS, web PC y orientación horizontal, teclado y fullscreen.
+21. Idiomas: primera apertura sigue idioma disponible del dispositivo (ES/EN/PT) o inglés por defecto; un cambio manual queda guardado. Probar reabrir sin desinstalar, todos los títulos, badges, progreso y navegación.
+22. Iconos: se copiaron los iconos finales usados en iOS a web/Android. Verificar que el ícono en Chrome, acceso directo y launcher Android sea el esperado.
+
+PRUEBAS AUTOMÁTICAS: qa/v247-public-client.mjs + scripts V243/V244/V245/V246 adaptados. NO sustituyen QA real.
+RESULTADOS: consultar Actions del repositorio y registro de la ejecución que generó la copia. Fuente en rama qa-v247-web-android-20261117; NO publicada en main.
