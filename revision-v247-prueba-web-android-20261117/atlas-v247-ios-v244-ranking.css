@@ -1,0 +1,12 @@
+/* V244 iOS: show ranking-data limitations without fake results. */
+@media (max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+ html.vi-ios-v241 #root .vi-v241-options .vi-v244-ranking-notice{
+  display:block;box-sizing:border-box;
+  color:#dcf8f7;line-height:1.45;font-size:14px;
+  padding:7px 10px 13px;border-bottom:1px solid #ffffff24;
+  white-space:normal;
+ }
+ html.vi-ios-v241 #root .vi-v241-options .vi-v244-ranking-notice[role="status"]{
+  overflow-wrap:anywhere;
+ }
+}

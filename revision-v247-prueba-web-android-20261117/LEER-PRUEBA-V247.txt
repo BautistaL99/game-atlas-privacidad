@@ -1,0 +1,10 @@
+V247 · WEB DE PRUEBA PARA PC Y MÓVIL — 17/11/2026
+==================================================
+Esta carpeta es una copia INDEPENDIENTE de app/ en la rama qa-v247-web-android-20261117.
+Prueba pública no listada: noindex/nofollow no es privacidad; no subir datos reales ni contraseñas.
+La página usa localStorage con prefijo aislado del sitio principal; no modifica los favoritos, rutas ni marcadores de /app/.
+El service worker se limita a este directorio y usa un cache propio, sin limpiar caches de producción.
+No se modificaron archivos app/ productivos ni los catálogos oficiales firmados.
+Para probar, abrir index.html de esta carpeta desde su dirección HTTPS GitHub Pages y usar Chrome PC y Android.
+Cada revisión nueva de interfaz requiere una vista de prueba nueva o actualización explícita con revisión/backup.
+Referencias: README_LANZAMIENTO_V247.txt y CHECKLIST_PRUEBAS_V247.txt de rama qa-v247-web-android-20261117.
