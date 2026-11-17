@@ -1,0 +1,99 @@
+/* Android V220 QA Rev3: isolated overrides, no changes to web or iOS. */
+/* Menu More is a proper sheet: never an inline string of links on a rotated phone. */
+@media (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+ #root .bottom-nav .mobile-more[open] .mobile-more-panel{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  position:fixed!important;bottom:calc(69px + env(safe-area-inset-bottom,0px))!important;
+  right:12px!important;left:auto!important;top:auto!important;
+  width:min(480px,calc(100vw - 24px))!important;
+  max-height:calc(100dvh - 95px)!important;overflow-y:auto!important;
+  gap:7px!important;box-sizing:border-box!important;padding:12px!important;
+  border-radius:14px!important;border:1px solid #57a7ac!important;
+  background:#102637f7!important;box-shadow:0 12px 30px #000b!important;
+  z-index:2147482005!important;
+ }
+ #root .bottom-nav .mobile-more[open] .mobile-more-panel .mobile-more-label{
+  display:block!important;grid-column:1 / -1!important;font-size:12px!important;
+  padding:0 6px 7px!important;color:#a3fff0!important;
+ }
+ #root .bottom-nav .mobile-more[open] .mobile-more-panel>a{
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  min-width:0!important;width:100%!important;box-sizing:border-box!important;
+  min-height:42px!important;margin:0!important;padding:8px 10px!important;
+  font-size:13px!important;line-height:1.3!important;white-space:normal!important;
+  border:1px solid #456171!important;border-radius:10px!important;
+  background:#20364a!important;color:#f2fffd!important;text-decoration:none!important;
+ }
+ /* In rotated fullscreen, the Filters control stays visible ABOVE map legend. */
+ #root .atlas-v119.vi-fullscreen-map .atlas-map>.atlas-mobile-filter-toggle{
+  display:flex!important;visibility:visible!important;opacity:1!important;
+  align-items:center!important;justify-content:center!important;
+  position:absolute!important;left:11px!important;bottom:14px!important;top:auto!important;
+  z-index:2147482002!important;width:auto!important;min-width:121px!important;
+  min-height:46px!important;max-width:168px!important;
+  padding:8px 12px!important;border-radius:12px!important;
+  color:#fff!important;background:#11635f!important;
+  border:2px solid #82efe2!important;box-shadow:0 5px 15px #0009!important;
+  pointer-events:auto!important;
+ }
+ #root .atlas-v119.vi-fullscreen-map .atlas-map>.v216-map-legend,
+ #root .atlas-v119.vi-fullscreen-map .atlas-map>.v216-map-legend{bottom:64px!important}
+ #root .atlas-v119.vi-fullscreen-map .atlas-layout>#atlas-map-filter-panel.mobile-open{
+  display:flex!important;z-index:2147482001!important;
+  max-height:calc(100dvh - 18px)!important;
+ }
+}
+/* Fixed-size editor no longer leaves a giant blank dark block beneath Save.
+   The complete content is accessible via internal scroll with Android keyboard. */
+@media (max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+ #root .atlas-v119 .atlas-map .atlas-pin-editor{
+  height:max-content!important;min-height:0!important;max-height:calc(100% - 16px)!important;
+  bottom:auto!important;top:8px!important;
+  border:1px solid #75d7c9!important;border-radius:19px!important;
+  background:linear-gradient(160deg,#112f3a,#0e2230 75%)!important;
+  box-shadow:0 15px 36px #001723ce!important;
+  padding:15px 15px 12px!important;
+  overscroll-behavior:contain!important;overflow-y:auto!important;
+ }
+ #root .atlas-v119 .atlas-map .atlas-pin-editor .atlas-pin-editor-head{
+  top:-15px!important;padding:8px 0 12px!important;
+  background:#112936f8!important;border-bottom:1px solid #326c72!important;
+  border-radius:9px!important;
+ }
+ #root .atlas-v119 .atlas-map .atlas-pin-editor .vi-v221-scroll-hint{display:none!important}
+ #root .atlas-v119 .atlas-map .atlas-pin-editor>p:not(.atlas-pin-editor-error){
+  font-size:13px!important;line-height:1.4!important;color:#c5e3e4!important;
+  margin:12px 0!important;
+ }
+ #root .atlas-v119 .atlas-map .atlas-pin-editor label{margin-bottom:10px!important}
+ #root .atlas-v119 .atlas-map .atlas-pin-editor .atlas-pin-editor-actions{
+  display:flex!important;flex-wrap:wrap!important;gap:9px!important;
+  margin-top:11px!important;padding-top:12px!important;
+  border-top:1px solid #2a505d!important;
+ }
+ html.vi-v222-marker-keyboard #root .atlas-v119 .atlas-map .atlas-pin-editor{
+  position:fixed!important;top:var(--vi-v222-editor-top,12px)!important;
+  left:10px!important;right:10px!important;bottom:auto!important;
+  width:auto!important;height:auto!important;
+  max-height:var(--vi-v222-editor-height,320px)!important;
+  box-sizing:border-box!important;overflow:auto!important;
+ }
+}
+/* Fullscreen filter sheet always has a visible, independent close control. */
+@media (max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+ #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel.mobile-open>.vi-map-filter-close{
+  display:grid!important;place-items:center!important;align-self:flex-end!important;
+  position:sticky!important;top:0!important;right:0!important;z-index:2147482003!important;
+  flex:0 0 36px!important;width:36px!important;min-width:36px!important;
+  height:36px!important;min-height:36px!important;margin:0 0 3px auto!important;
+  border:1px solid #8adbd7!important;border-radius:9px!important;
+  background:#162f3f!important;color:#fff!important;font-size:23px!important;
+  pointer-events:auto!important;
+ }
+}
+/* Map controls: preserve a reachable filter toggle in regular embedded mode. */
+@media (max-width:700px){
+ #root .atlas-v119:not(.vi-fullscreen-map) .atlas-filters.mobile-open{
+  border-radius:17px!important;box-shadow:0 12px 30px #0009!important;
+ }
+}

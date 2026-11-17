@@ -1,0 +1,133 @@
+/* Game Atlas V220 | Corrección específica del control Filtros en celular.
+   Los rótulos anteriores se duplicaban porque convivían el texto del botón
+   con un pseudo-elemento. En landscape normal, @media(min-width:701px)
+   ocultaba el botón aunque el dispositivo fuera táctil.
+   Se mantienen las traducciones originales desde data-map-label (ES/EN/PT).
+   No afecta ratón/PC ni la geometría del mapa. */
+@media (max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+  #root .atlas-v119 .atlas-map>.atlas-mobile-filter-toggle{
+    box-sizing:border-box!important;
+    position:absolute!important;
+    display:inline-flex!important;
+    visibility:visible!important;
+    opacity:1!important;
+    pointer-events:auto!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:8px!important;
+    left:10px!important;
+    bottom:10px!important;
+    right:auto!important;
+    top:auto!important;
+    z-index:2147482002!important;
+    width:auto!important;
+    min-width:115px!important;
+    max-width:min(160px,calc(100% - 20px))!important;
+    min-height:44px!important;
+    height:44px!important;
+    max-height:44px!important;
+    margin:0!important;
+    padding:0 13px!important;
+    border-radius:12px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+    /* Oculta únicamente el texto visual base, no el texto accesible. */
+    font-size:0!important;
+    line-height:0!important;
+  }
+  #root .atlas-v119 .atlas-map>.atlas-mobile-filter-toggle::before{
+    content:'☷'!important;
+    display:inline-block!important;
+    flex:0 0 auto!important;
+    font-size:19px!important;
+    font-weight:850!important;
+    line-height:1!important;
+  }
+  #root .atlas-v119 .atlas-map>.atlas-mobile-filter-toggle::after,
+  #root .atlas-v119 .atlas-map>.atlas-mobile-filter-toggle[aria-expanded='true']::after{
+    content:attr(data-map-label)!important;
+    display:inline-block!important;
+    flex:0 0 auto!important;
+    font-size:13px!important;
+    font-weight:850!important;
+    line-height:1!important;
+  }
+  /* Con un marcador abierto no se tapa Favorito ni Ficha completa. */
+  #root .atlas-v119.vi-fullscreen-map .atlas-map:has(.atlas-popup)>.atlas-mobile-filter-toggle{
+    display:none!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+  }
+}
+/* El ancho de un teléfono girado suele superar 700 CSS px. No tratarlo
+   como escritorio: Filtros debe abrirse también SIN mapa ampliado. */
+@media (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+  #root .atlas-v119:not(.vi-fullscreen-map) .atlas-layout{
+    position:relative!important;
+  }
+  #root .atlas-v119:not(.vi-fullscreen-map) .atlas-map>.atlas-mobile-filter-toggle{
+    display:inline-flex!important;
+    visibility:visible!important;
+    opacity:1!important;
+    pointer-events:auto!important;
+    position:absolute!important;
+    background:#173945!important;
+    color:#e9f9fb!important;
+    border:1px solid #69bfc1!important;
+    box-shadow:0 4px 14px #0008!important;
+    left:11px!important;
+    bottom:11px!important;
+    top:auto!important;
+  }
+  #root .atlas-v119:not(.vi-fullscreen-map) .atlas-layout>#atlas-map-filter-panel.mobile-closed{
+    display:none!important;
+  }
+  #root .atlas-v119:not(.vi-fullscreen-map) .atlas-layout>#atlas-map-filter-panel.mobile-open{
+    position:absolute!important;
+    display:block!important;
+    top:8px!important;
+    bottom:auto!important;
+    left:8px!important;
+    right:auto!important;
+    grid-row:auto!important;
+    box-sizing:border-box!important;
+    width:min(408px,calc(100% - 85px))!important;
+    max-width:calc(100% - 85px)!important;
+    min-height:0!important;
+    height:auto!important;
+    max-height:min(340px,calc(100dvh - 84px))!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    touch-action:pan-y!important;
+    overscroll-behavior:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+    z-index:2147482001!important;
+    box-shadow:0 12px 32px #000a!important;
+  }
+  #root .atlas-v119:not(.vi-fullscreen-map) #atlas-map-filter-panel.mobile-open .atlas-filter-scroll{
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+  }
+  #root .atlas-v119:not(.vi-fullscreen-map) #atlas-map-filter-panel.mobile-open>.vi-map-filter-close{
+    display:grid!important;
+    position:sticky!important;
+    top:0!important;
+    z-index:3!important;
+  }
+}
+
+/* V220 | Regresión V230: ficha abierta en mapa normal O ampliado.
+   Antes solamente se ocultaba Filtros con .vi-fullscreen-map; en el mapa
+   normal el botón flotante tapaba la acción Favorito. No afecta al panel
+   de filtros abierto, al desplazamiento, ni al diseño PC. */
+@media (max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+  #root .atlas-v119:not(.vi-fullscreen-map) .atlas-map:has(> .atlas-popup) > .atlas-mobile-filter-toggle,
+  #root .atlas-v119.vi-fullscreen-map .atlas-map:has(> .atlas-popup) > .atlas-mobile-filter-toggle{
+    display:none!important;
+    visibility:hidden!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+}

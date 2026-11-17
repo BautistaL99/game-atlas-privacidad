@@ -1,0 +1,55 @@
+/* V220 / 2026-11-15 · Fullscreen landscape filter-scroll correction.
+   THE FILTER PANEL is the only scrollable column: nested .atlas-filter-scroll
+   must grow to its natural height instead of swallowing touch gestures.
+   Mobile/rotated phones ONLY. Desktop layouts and stored coordinates unchanged. */
+@media (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+  #root .atlas-v119.vi-fullscreen-map .atlas-layout>#atlas-map-filter-panel.mobile-open{
+    display:block!important;
+    position:absolute!important;
+    --vi-v227-top:max(7px,env(safe-area-inset-top,0px));
+    --vi-v227-bottom:max(7px,env(safe-area-inset-bottom,0px));
+    top:var(--vi-v227-top)!important;
+    bottom:auto!important;
+    height:calc(100% - var(--vi-v227-top) - var(--vi-v227-bottom))!important;
+    min-height:0!important;
+    max-height:calc(100% - var(--vi-v227-top) - var(--vi-v227-bottom))!important;
+    box-sizing:border-box!important;
+    overflow-x:hidden!important;
+    overflow-y:scroll!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-y!important;
+    overscroll-behavior-y:contain!important;
+    scrollbar-width:thin!important;
+    scrollbar-color:#65e5d9 #173747!important;
+    scroll-padding-top:42px!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel.mobile-open .atlas-filter-scroll{
+    display:flex!important;
+    flex:0 0 auto!important;
+    flex-direction:column!important;
+    min-height:0!important;
+    max-height:none!important;
+    height:auto!important;
+    overflow:visible!important;
+    overflow-x:visible!important;
+    overflow-y:visible!important;
+    touch-action:pan-y!important;
+    overscroll-behavior:auto!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel.mobile-open :is(.atlas-filter-group,.atlas-group-options,.atlas-check,.atlas-filter-head,.atlas-filter-section,.atlas-filter-actions){
+    touch-action:pan-y!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel.mobile-open>.vi-map-filter-close{
+    position:sticky!important;
+    top:0!important;
+    z-index:20!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel.mobile-open::-webkit-scrollbar{width:7px!important}
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel.mobile-open::-webkit-scrollbar-thumb{
+    background:#65e5d9!important;border-radius:8px!important;
+    border:1px solid #173747!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map #atlas-map-filter-panel.mobile-open::-webkit-scrollbar-track{
+    background:#173747!important;border-radius:8px!important;
+  }
+}

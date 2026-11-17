@@ -1,0 +1,40 @@
+/* Native iOS V242. Keep suggestions and REAL map matches in one panel. */
+@media (max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse) {
+ html.vi-ios-v242 #root #mapApp .atlas-v119>.vi-v241-options {
+  position:relative!important;inset:auto!important;max-height:min(48dvh,390px)!important;
+  margin:5px 8px 12px!important;box-sizing:border-box!important;
+  z-index:215!important;overflow-y:auto!important;
+ }
+ html.vi-ios-v242 #root #mapApp .atlas-v119>.atlas-search-results {
+  display:none!important;
+ }
+ html.vi-ios-v242 #root #mapApp .atlas-v119 .vi-v241-options .vi-ios-suggest-option {
+  min-height:44px!important;
+ }
+ html.vi-ios-v242 #root .vi-map-archive-warning{
+  margin:12px 0;padding:12px;border:1px solid #e8b66e;border-radius:12px;
+  background:#332a22;color:#fff2cf;
+ }
+ html.vi-ios-v242 #root .vi-map-archive-warning p {font-size:13px;line-height:1.4}
+ html.vi-ios-v242 #root .vi-map-archive-warning button{
+  margin:5px 0;padding:8px 12px;background:#65d5cb;color:#082333;
+  border:0;border-radius:8px;font-weight:800;
+ }
+}
+@media (max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+ html.vi-ios-v242 #root #mapApp .atlas-v119.vi-fullscreen-map>.vi-v241-options{
+  position:absolute!important;top:var(--v241-map-options-top,68px)!important;
+  left:max(8px,env(safe-area-inset-left,0px))!important;
+  right:max(8px,env(safe-area-inset-right,0px))!important;
+  max-height:var(--v241-map-options-height,220px)!important;
+  z-index:215!important;
+ }
+}
+@media (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+ html.vi-ios-v242 #root #mapApp .atlas-v119.vi-fullscreen-map>.vi-v241-options{
+  position:absolute!important;top:var(--v241-map-options-top,68px)!important;
+  left:max(8px,env(safe-area-inset-left,0px))!important;
+  right:max(8px,env(safe-area-inset-right,0px))!important;
+  max-height:var(--v241-map-options-height,160px)!important;z-index:215!important;
+ }
+}

@@ -1,0 +1,23 @@
+/* V249: cross-platform map search layout, highlighted target and route-only control. */
+#root #mapApp .vi-v241-options{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+#root #mapApp .vi-v241-options .vi-ios-suggest-option{display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-items:start!important;gap:4px!important;width:100%!important;min-width:0!important;text-align:left!important;white-space:normal!important;padding:11px 13px!important}
+#root #mapApp .vi-v241-options .vi-ios-suggest-option>strong{display:block!important;min-width:0!important;overflow-wrap:break-word!important;word-break:normal!important;white-space:normal!important;line-height:1.25!important;flex:none!important;max-width:100%!important}
+#root #mapApp .vi-v241-options .vi-ios-suggest-option>small{display:block!important;min-width:0!important;white-space:normal!important;overflow-wrap:break-word!important;line-height:1.35!important;flex:none!important;max-width:100%!important}
+#root #mapApp .vi-v241-options:not([hidden]){overflow-y:auto!important;overscroll-behavior:contain!important}
+#root #mapApp .vi-v249-route-only{position:absolute!important;left:50%!important;top:14px!important;transform:translateX(-50%)!important;z-index:88!important;background:#0a2532ee!important;color:#e8fffc!important;border:1px solid #73e7d7!important;border-radius:12px!important;padding:9px 13px!important;min-height:38px!important;white-space:normal!important;max-width:min(260px,58%)!important;text-align:center!important;font-size:12px!important;font-weight:800!important;box-shadow:0 4px 16px #0009!important;cursor:pointer!important}
+#root #mapApp .vi-v249-route-only[aria-pressed="true"]{background:#56e2d1!important;color:#04292a!important}
+@media (max-width:700px){
+ #root #mapApp .vi-v241-options{max-width:calc(100% - 18px)!important;width:calc(100% - 18px)!important;left:9px!important;right:9px!important;}
+ #root #mapApp .vi-v241-options .vi-ios-suggest-option{grid-template-columns:minmax(0,1fr)!important;padding:11px 13px!important}
+ #root #mapApp .vi-v241-options .vi-ios-suggest-option>strong{font-size:14px!important}
+ #root #mapApp .vi-v249-route-only{left:50%!important;top:69px!important;max-width:62%!important;font-size:11px!important}
+}
+.vi-v249-billing{max-width:900px;margin:0 auto;padding:18px;color:#d7f5f3}
+.vi-v249-billing h1{font-size:clamp(23px,4vw,35px);line-height:1.2}
+.vi-v249-billing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:22px 0}
+.vi-v249-billing-grid>section{background:#122c3e;border:1px solid #457478;border-radius:16px;padding:16px}
+.vi-v249-billing-grid h2{font-size:18px;margin:0 0 12px}
+.vi-v249-price-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.vi-v249-price{border:1px solid #376d75;border-radius:11px;padding:9px 7px;background:#102032;color:#e5fff8;font-size:16px;text-align:center;font-weight:700}
+.vi-v249-price small{font-size:12px;font-weight:500}
+.vi-v249-billing-status{background:#173947;border:1px solid #548f8b;border-radius:10px;padding:12px;font-weight:750}

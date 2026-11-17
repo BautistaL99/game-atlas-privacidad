@@ -1,0 +1,379 @@
+/* ANDROID V220 mobile polish · 2026-11-15 · mobile-only; no changes to web/iOS.
+   Repairs visible on-device QA defects without changing records, hashes,
+   Ed25519 verification, map geometry, routes or localStorage. */
+
+@media (max-width:700px) {
+  /* A) Hide the bright outer frame painted *inside* the original SVG, while
+     keeping the familiar VI graphic and its original color palette. */
+  #root .topbar .mobile-brand .brand-mark{
+    width:34px!important;height:34px!important;flex:0 0 34px!important;
+    border-radius:11px!important;background-color:#091326!important;
+    background-size:113% 113%!important;background-position:center center!important;
+    box-shadow:0 0 0 1px #3ac3ca65,0 3px 13px #08021f6b!important;
+    overflow:hidden!important;
+  }
+  /* Equal visual type size for GAME ATLAS and GTA 6, no tiny suffix. */
+  #root .topbar .mobile-brand>span:last-child,
+  #root .topbar .mobile-brand>span:last-child small{
+    font-size:12px!important;line-height:1.2!important;font-weight:850!important;
+    letter-spacing:.055em!important;color:#f2f9ff!important;
+  }
+  #root .topbar .mobile-brand>span:last-child small{
+    display:inline!important;margin:0 0 0 3px!important;opacity:1!important;
+  }
+  /* B) Only the rounded search shell gets focus styling, not an inset square
+     around the editable input. Keep keyboard focus visibly discoverable. */
+  #root .topbar #headerSearchInput:focus,
+  #root .topbar #headerSearchInput:focus-visible{
+    outline:none!important;box-shadow:none!important;border:0!important;
+  }
+  #root .topbar #headerSearchForm:focus-within{
+    outline:none!important;border-color:#59d4c5!important;
+    box-shadow:0 0 0 2px #53e0d777!important;
+    border-radius:inherit!important;
+  }
+  /* C) Quick card actions follow text. A long localized description naturally
+     grows the card, instead of reserving space for ~double-length text. */
+  #root .container .item-stack>.content-card.has-quick{
+    display:flex!important;flex-direction:column!important;
+    height:auto!important;min-height:0!important;max-height:none!important;
+    align-items:stretch!important;justify-content:flex-start!important;
+    gap:0!important;padding:12px!important;
+  }
+  #root .container .item-stack>.content-card.has-quick>.content-card-link{
+    display:grid!important;grid-template-columns:90px minmax(0,1fr)!important;
+    align-items:start!important;align-content:start!important;gap:11px!important;
+    flex:0 0 auto!important;width:100%!important;min-height:0!important;
+    height:auto!important;max-height:none!important;padding:0!important;margin:0!important;
+  }
+  #root .container .item-stack>.content-card.has-quick .thumb{
+    width:90px!important;height:90px!important;max-height:90px!important;
+    min-height:0!important;flex:none!important;object-fit:cover!important;
+  }
+  #root .container .item-stack>.content-card.has-quick .content-text{
+    min-width:0!important;min-height:0!important;flex:none!important;
+    padding:0!important;margin:0!important;
+  }
+  #root .container .item-stack>.content-card.has-quick .content-text p{
+    display:-webkit-box!important;-webkit-line-clamp:4!important;
+    -webkit-box-orient:vertical!important;overflow:hidden!important;
+    margin:0!important;
+  }
+  #root .container .item-stack>.content-card.has-quick>.card-inline-actions{
+    position:static!important;inset:auto!important;transform:none!important;
+    display:flex!important;flex-wrap:nowrap!important;align-items:center!important;
+    justify-content:space-between!important;gap:8px!important;
+    margin:10px 0 0!important;padding:10px 0 0!important;
+    width:100%!important;min-height:0!important;height:auto!important;
+    border-top:1px solid #39495e!important;
+  }
+  #root .container .item-stack>.content-card.has-quick>.card-inline-actions .quick-fav{
+    position:static!important;inset:auto!important;transform:none!important;
+    flex:0 0 44px!important;width:44px!important;height:44px!important;
+  }
+  #root .container .item-stack>.content-card.has-quick>.card-inline-actions .quick-complete,
+  #root .container .item-stack>.content-card.has-quick>.card-inline-actions .vi-compare-pick{
+    flex:0 1 auto!important;min-width:0!important;
+    white-space:normal!important;overflow-wrap:normal!important;
+  }
+  /* Do not overwrite the approved discovery/home card arrangements. */
+  #root .home-v18 .v18-catalog-zone .item-stack>.content-card.has-quick{
+    /* Content reflow is still safe inside the home catalog. */
+    min-height:0!important;
+  }
+  /* D) The illustration itself must be clipped on all four corners. */
+  #root .detail-thumb.vi-community-art,
+  #root .detail-image .vi-community-art,
+  #root .vi-news-image-link .vi-community-art{
+    border:0!important;outline:0!important;box-shadow:none!important;
+    border-radius:13px!important;overflow:hidden!important;
+    background-repeat:no-repeat!important;background-clip:padding-box!important;
+    clip-path:inset(0 round 13px);
+  }
+  /* E) Marker editor begins close to map's top edge; a longer form scrolls
+     within its own panel even when the Android software keyboard is open. */
+  #root .atlas-v119 .atlas-pin-editor{
+    position:absolute!important;left:8px!important;right:8px!important;
+    top:8px!important;bottom:8px!important;
+    width:auto!important;height:auto!important;max-height:calc(100% - 16px)!important;
+    overflow-y:auto!important;overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;overscroll-behavior-y:contain!important;
+    touch-action:pan-y!important;scrollbar-width:thin!important;
+    scrollbar-color:#63d7c2 #14273b!important;
+    box-shadow:0 9px 26px #000b!important;
+  }
+  #root .atlas-v119 .atlas-pin-editor .atlas-pin-editor-head{
+    position:sticky!important;top:-12px!important;z-index:2!important;
+    padding:5px 0 7px!important;background:#101f2df0!important;
+  }
+  #root .atlas-v119 .atlas-pin-editor .vi-v221-scroll-hint{
+    display:block!important;font-size:11px!important;color:#95e6d9!important;
+    margin:5px 0 9px!important;
+  }
+  /* F) Promote Compare without making the existing six tabs too small.
+     The real comparator retains its category and item-selection behavior. */
+  #root>.vi-v221-compare-shortcut{
+    position:fixed;right:14px;bottom:calc(83px + env(safe-area-inset-bottom,0px));
+    z-index:103;display:inline-flex;align-items:center;justify-content:center;
+    gap:8px;min-height:44px;padding:9px 15px;border-radius:24px;
+    border:1px solid #90f3e8;background:#135657f5;color:#edfffb;
+    font-size:13px;font-weight:850;box-shadow:0 5px 18px #001c28b9;
+    text-decoration:none;max-width:calc(100vw - 32px);
+  }
+  html.vi-v211-keyboard-open #root>.vi-v221-compare-shortcut,
+  #root:has(.mobile-more[open])>.vi-v221-compare-shortcut{display:none!important}
+  #root .mobile-more-panel>a[href="#/comparar"]{
+    color:#adfff3!important;border:1px solid #3d9f98!important;
+    background:#163f45!important;
+  }
+}
+
+/* On a rotated PHONE the CSS width frequently exceeds the 700px mobile
+   breakpoint. Use an explicit height + coarse pointer gate, not tablet width. */
+@media (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+ html,body{max-width:100%!important;overflow-x:hidden!important}
+ #root .shell{display:block!important;min-width:0!important;width:100%!important}
+ #root .sidebar{display:none!important}
+ #root .main{display:block!important;min-width:0!important;width:100%!important;max-width:100%!important}
+ #root .topbar{
+  display:grid!important;grid-template-columns:minmax(130px,1fr) minmax(180px,2fr) auto!important;
+  grid-template-areas:'brand search settings'!important;
+  grid-template-rows:auto!important;gap:8px!important;
+  height:auto!important;min-height:62px!important;padding:8px 12px!important;
+ }
+ #root .topbar .mobile-brand{display:flex!important;grid-area:brand!important;align-items:center!important;gap:8px!important;min-width:0!important}
+ #root .topbar .mobile-brand .brand-mark{flex:0 0 35px!important;width:35px!important;height:35px!important;border-radius:11px!important;background-size:113% 113%!important}
+ #root .topbar .mobile-brand>span:last-child,#root .topbar .mobile-brand small{font-size:12px!important;line-height:1.15!important;letter-spacing:.04em!important}
+ #root .topbar .top-search-wrap{grid-area:search!important;min-width:0!important;width:100%!important}
+ #root .topbar .mobile-actions{grid-area:settings!important;display:flex!important;align-items:center!important;gap:4px!important}
+ #root .topbar .mobile-actions>.mobile-donate{display:none!important}
+ #root .topbar .mobile-actions>.mobile-download{min-width:84px!important}
+ #root .container{max-width:100%!important;padding:14px 16px 90px!important}
+ #root .bottom-nav{
+  display:grid!important;position:fixed!important;bottom:0!important;left:0!important;right:0!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:2px!important;
+  align-items:stretch!important;justify-content:space-around!important;
+  box-sizing:border-box!important;min-height:60px!important;
+  padding:4px 9px max(5px,env(safe-area-inset-bottom,0px))!important;
+  z-index:101!important;background:#101f30f8!important;border-top:1px solid #34687b!important;
+ }
+ #root .bottom-nav>a,#root .bottom-nav .mobile-more>summary{
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  justify-content:center!important;gap:3px!important;min-width:0!important;
+  min-height:52px!important;font-size:11px!important;text-align:center!important;
+  color:#cbdae8!important;border-radius:10px!important;
+ }
+ #root .bottom-nav .nav-symbol{font-size:22px!important;line-height:1!important}
+ #root .bottom-nav .nav-symbol svg{width:22px!important;height:22px!important;stroke:currentColor!important;stroke-width:1.9!important;fill:none!important}
+ #root .bottom-nav .mobile-more{position:relative!important;min-width:0!important}
+ #root .bottom-nav .mobile-more-panel{
+  position:absolute!important;right:0!important;bottom:calc(100% + 8px)!important;
+  width:min(340px,90vw)!important;max-height:70dvh!important;overflow:auto!important;
+  border-radius:12px!important;padding:12px!important;
+  background:#142238!important;border:1px solid #397a83!important;
+ }
+ #root .atlas-v119 .atlas-layout{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:auto auto!important;gap:10px!important;
+  width:100%!important;min-width:0!important;
+ }
+ #root .atlas-v119 .atlas-center{min-width:0!important;grid-row:1!important}
+ #root .atlas-v119 .atlas-map{
+  box-sizing:border-box!important;position:relative!important;
+  display:block!important;width:100%!important;max-width:100%!important;
+  height:clamp(215px,70dvh,420px)!important;min-height:215px!important;
+  overflow:hidden!important;touch-action:none!important;
+ }
+ #root .atlas-v119 .atlas-filters{
+  position:static!important;grid-row:2!important;display:block!important;
+  box-sizing:border-box!important;width:100%!important;max-width:100%!important;
+  height:auto!important;min-height:0!important;max-height:260px!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  margin:0!important;padding:11px!important;
+ }
+ #root .atlas-v119 .atlas-filter-scroll{max-height:110px!important;overflow:auto!important}
+ #root .atlas-v119 .atlas-toolbar{width:100%!important;min-width:0!important;display:flex!important;flex-wrap:wrap!important}
+ #root .atlas-v119 .atlas-search-label{min-width:0!important;flex:1 1 200px!important}
+ #root .atlas-v119 .atlas-pin-editor{
+  top:8px!important;bottom:8px!important;left:8px!important;right:8px!important;
+  width:auto!important;max-height:calc(100% - 16px)!important;overflow:auto!important;
+ }
+ #root>.vi-v221-compare-shortcut{display:none!important}
+}
+
+
+/* V222 · real device screenshot regressions: category cards, compare, portrait
+   marker keyboard, landscape navigation and ACTUAL full-screen map. Android
+   ONLY. CSS deliberately overrides previous mobile/desktop rules. */
+@media (max-width:700px){
+  /* Some community entries are not trackable and have no .has-quick; previous
+     polish skipped them, leaving their absolute actions/huge reserved height. */
+  #root .container:not(.container-home-v111) .item-stack>.content-card:not(.has-quick){
+    display:flex!important;flex-direction:column!important;align-items:stretch!important;
+    justify-content:flex-start!important;box-sizing:border-box!important;
+    gap:0!important;height:auto!important;min-height:0!important;max-height:none!important;
+    padding:12px!important;
+  }
+  #root .container:not(.container-home-v111) .item-stack>.content-card:not(.has-quick)>.content-card-link{
+    display:grid!important;grid-template-columns:90px minmax(0,1fr)!important;
+    align-items:start!important;align-content:start!important;gap:11px!important;
+    width:100%!important;min-width:0!important;height:auto!important;min-height:0!important;
+    max-height:none!important;flex:0 0 auto!important;padding:0!important;margin:0!important;
+  }
+  #root .container:not(.container-home-v111) .item-stack>.content-card:not(.has-quick) .thumb{
+    width:90px!important;height:90px!important;min-height:0!important;max-height:90px!important;
+    flex:none!important;object-fit:cover!important;
+  }
+  #root .container:not(.container-home-v111) .item-stack>.content-card:not(.has-quick) .content-text{
+    min-width:0!important;min-height:0!important;flex:none!important;padding:0!important;margin:0!important;
+  }
+  #root .container:not(.container-home-v111) .item-stack>.content-card:not(.has-quick) .content-text p{
+    display:-webkit-box!important;-webkit-line-clamp:4!important;-webkit-box-orient:vertical!important;
+    overflow:hidden!important;margin:0!important;
+  }
+  #root .container:not(.container-home-v111) .item-stack>.content-card:not(.has-quick)>.card-inline-actions{
+    position:static!important;inset:auto!important;transform:none!important;
+    display:flex!important;flex-wrap:nowrap!important;align-items:center!important;
+    justify-content:flex-end!important;gap:8px!important;
+    box-sizing:border-box!important;width:100%!important;height:auto!important;min-height:0!important;
+    margin:10px 0 0!important;padding:10px 0 0!important;
+    border-top:1px solid #39495e!important;
+  }
+  #root .container:not(.container-home-v111) .item-stack>.content-card:not(.has-quick)>.card-inline-actions:empty{
+    display:none!important;
+  }
+  #root .container:not(.container-home-v111) .item-stack>.content-card:not(.has-quick)>.card-inline-actions .quick-fav{
+    position:static!important;inset:auto!important;transform:none!important;
+    flex:0 0 44px!important;width:44px!important;height:44px!important;
+  }
+  #root .container:not(.container-home-v111) .item-stack>.content-card:not(.has-quick)>.card-inline-actions .vi-compare-pick{
+    flex:0 1 auto!important;min-width:0!important;
+  }
+}
+
+@media (max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+  /* The dialog stays IN the map's event delegation but is viewport-fixed while
+     the Android keyboard is visible. Height now depends on visible viewport,
+     not shrinking map-container height. Contents keep scroll access. */
+  html.vi-v222-marker-keyboard #root .atlas-v119 .atlas-pin-editor{
+    position:fixed!important;left:10px!important;right:10px!important;
+    top:var(--vi-v222-editor-top,12px)!important;bottom:auto!important;
+    width:auto!important;height:var(--vi-v222-editor-height,320px)!important;
+    max-height:var(--vi-v222-editor-height,320px)!important;
+    box-sizing:border-box!important;overflow-y:auto!important;overflow-x:hidden!important;
+    z-index:2147483000!important;overscroll-behavior:contain!important;
+  }
+  html.vi-v222-marker-keyboard #root .atlas-v119 .atlas-pin-editor .atlas-pin-editor-head{
+    position:sticky!important;top:-12px!important;z-index:2!important;
+  }
+  html.vi-v222-marker-keyboard #root .bottom-nav{
+    visibility:hidden!important;pointer-events:none!important;
+  }
+}
+
+@media (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+  /* Restore the actual SIXTH bottom tab. It was display:none by a portrait-only
+     base rule, despite the landscape grid declaring six columns. */
+  #root .bottom-nav>.mobile-more{
+    display:block!important;position:relative!important;
+    box-sizing:border-box!important;width:100%!important;min-width:0!important;
+    height:100%!important;visibility:visible!important;
+    grid-column:6!important;grid-row:1!important;
+  }
+  #root .bottom-nav>.mobile-more>summary{
+    display:flex!important;visibility:visible!important;width:100%!important;
+    min-height:52px!important;box-sizing:border-box!important;
+  }
+  #root .bottom-nav>.mobile-more>summary>.nav-symbol{
+    display:grid!important;place-items:center!important;
+    width:22px!important;height:22px!important;
+  }
+
+  /* Fullscreen is a separate, viewport-wide composition. When rotated, the
+     earlier landscape rule incorrectly made its map a 70dvh grid strip and
+     pushed filters/personal manager over it. Isolate map as ONE viewport. */
+  body.vi-map-modal-active{overflow:hidden!important;overscroll-behavior:none!important;}
+  #root .atlas-v119.vi-fullscreen-map{
+    position:fixed!important;inset:0!important;z-index:2147482100!important;
+    display:flex!important;flex-direction:column!important;
+    box-sizing:border-box!important;width:100vw!important;height:100dvh!important;
+    min-height:0!important;max-height:none!important;
+    overflow:hidden!important;margin:0!important;padding:6px!important;
+    background:#081724!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map>.atlas-toolbar,
+  #root .atlas-v119.vi-fullscreen-map>.atlas-search-results,
+  #root .atlas-v119.vi-fullscreen-map>.vi-map-integrity-note,
+  #root .atlas-v119.vi-fullscreen-map>.atlas-footer-note,
+  #root .atlas-v119.vi-fullscreen-map .atlas-center>.vi-personal-manager,
+  #root .atlas-v119.vi-fullscreen-map .atlas-center>.atlas-card{
+    display:none!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map>.atlas-layout{
+    display:block!important;position:relative!important;
+    flex:1 1 0!important;width:100%!important;height:100%!important;
+    min-height:0!important;max-height:100%!important;
+    margin:0!important;padding:0!important;overflow:hidden!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-layout>.atlas-center{
+    display:block!important;position:absolute!important;
+    inset:0!important;order:0!important;grid-row:auto!important;
+    width:100%!important;height:100%!important;max-height:100%!important;
+    min-height:0!important;overflow:hidden!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-layout .atlas-center>.atlas-map{
+    display:block!important;position:absolute!important;inset:0!important;
+    width:100%!important;height:100%!important;min-height:0!important;
+    max-height:100%!important;box-sizing:border-box!important;
+    touch-action:none!important;overflow:hidden!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-layout>#atlas-map-filter-panel.mobile-closed{
+    display:none!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-layout>#atlas-map-filter-panel.mobile-open{
+    display:flex!important;flex-direction:column!important;
+    position:absolute!important;z-index:110!important;
+    left:8px!important;right:auto!important;top:8px!important;bottom:8px!important;
+    grid-row:auto!important;order:0!important;
+    width:min(330px,42vw)!important;max-width:calc(100% - 16px)!important;
+    height:auto!important;min-height:0!important;max-height:calc(100% - 16px)!important;
+    box-sizing:border-box!important;overflow-y:auto!important;overflow-x:hidden!important;
+    margin:0!important;padding:10px!important;
+    border-radius:12px!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-map>.vi-map-fullscreen-btn{
+    position:absolute!important;top:7px!important;right:9px!important;
+    display:grid!important;z-index:115!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-map>.atlas-controls{
+    position:absolute!important;right:9px!important;top:56px!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-map>.atlas-mobile-filter-toggle{
+    position:absolute!important;left:9px!important;bottom:10px!important;
+    top:auto!important;right:auto!important;z-index:114!important;
+    max-width:180px!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-layout .atlas-map .vi-map-filter-chips{
+    max-width:calc(100% - 70px)!important;
+    overflow-x:auto!important;white-space:nowrap!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-map .atlas-pin-editor{
+    max-height:calc(100% - 16px)!important;
+  }
+  /* The map owns the whole screen; the page nav remains behind it. */
+  body.vi-map-modal-active #root .bottom-nav{visibility:hidden!important;pointer-events:none!important;}
+}
+
+/* While entering a marker the editor is the active workspace: keep every
+   field legible instead of letting the sticky header or green scroll-rail
+   cover its upper section on a reduced Android keyboard viewport. */
+@media (max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+ html.vi-v222-marker-keyboard #root .topbar{
+  visibility:hidden!important;pointer-events:none!important;
+ }
+ html.vi-v222-marker-keyboard #root .atlas-v119 .atlas-pin-editor{
+  background:#102332fa!important;box-shadow:0 0 0 999px #05101a70,0 6px 24px #000a!important;
+  backdrop-filter:blur(6px)!important;
+ }
+ html.vi-v222-marker-keyboard body .v217-page-scroll-rail{display:none!important}
+}

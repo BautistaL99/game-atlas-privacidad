@@ -1,10 +1,14 @@
-name: Game Atlas Companion V215 - compilar Android APK y AAB
+name: Game Atlas Companion V249 - compilar Android APK y AAB
+# V249: manual only, to avoid unwanted builds or cost.
 on:
+  push:
+    branches:
+      - qa-android-v249-build
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 concurrency:
-  group: game-atlas-v215-android-build
+  group: game-atlas-v249-android-build
   cancel-in-progress: false
 jobs:
   android:
@@ -29,8 +33,13 @@ jobs:
           SDK_MANAGER=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -print -quit)
           test -n "$SDK_MANAGER"
           "$SDK_MANAGER" --install "platform-tools" "platforms;android-36" "build-tools;36.0.0"
-      - name: Comprobar app V215 y copiarla completa a Capacitor
+      - name: Comprobar app V249, búsquedas y correcciones del mapa antes de compilar
         run: |
+          node --check app/app-v137.js
+          node qa/v247-public-client.mjs
+          node qa/v249-map-monetization-regressions.mjs
+          node qa/v247-qa-marker-switch.mjs
+          node qa/v247-qa-ranking-truth.mjs
           node android-v215/prepare-android.mjs stage
           node --check android-v215/www/mobile-v215.js
           node --check android-v215/www/community-v206.js
@@ -45,10 +54,18 @@ jobs:
       - name: Mantener identidad de Play, apariencia y API 36
         run: |
           node android-v215/prepare-android.mjs native
-          grep -q 'versionCode 215' android-v215/android/app/build.gradle
+          grep -q 'versionCode 249' android-v215/android/app/build.gradle
           grep -q 'targetSdkVersion = 36' android-v215/android/variables.gradle
           grep -q 'community-v206.js' android-v215/www/index.html
           grep -q 'mobile-v215.css' android-v215/www/index.html
+      - name: Verificar iconos adaptativos del VI en la aplicación
+        run: |
+          test -s android-v215/android/app/src/main/res/drawable-nodpi/ga_launcher_logo.png
+          test -s android-v215/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png
+          grep -q 'ic_launcher_foreground' android-v215/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+          grep -q 'ic_launcher_foreground' android-v215/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+          grep -q 'ga_launcher_background' android-v215/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+          grep -q 'map-v248-focus-search.css' android-v215/www/index.html
       - name: Compilar APK para pruebas y AAB de release sin firmar
         working-directory: android-v215/android
         env:
@@ -71,21 +88,22 @@ jobs:
           unzip -l "$APK" | grep -q 'assets/public/online-updates.js'
           unzip -l "$AAB" | grep -q 'base/assets/public/community-v206.js'
           AAPT="$ANDROID_HOME/build-tools/36.0.0/aapt"
-          "$AAPT" dump badging "$APK" | grep 'package: name=.com.indie.viassistant.'
-          "$AAPT" dump badging "$APK" | grep "versionCode='215'"
+          "$AAPT" dump badging "$APK" | grep -F "package: name='com.indie.viassistant.qa'"
+          "$AAPT" dump badging "$APK" | grep "versionCode='249'"
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify "$APK"
-          cp "$APK" dist/android-v215/Game-Atlas-Companion-V215-PRUEBA.apk
-          cp "$AAB" dist/android-v215/Game-Atlas-Companion-V215-SIN-FIRMAR.aab
-          (cd dist/android-v215 && sha256sum Game-Atlas-Companion-V215-PRUEBA.apk Game-Atlas-Companion-V215-SIN-FIRMAR.aab > SHA256SUMS.txt)
-          cat > dist/android-v215/LEEME-ANDROID-V215.txt <<'TXT'
-          Game Atlas Companion - Android V215 (versionName 1.48.0; versionCode 215)
-          Package ID: com.indie.viassistant (mismo ID del proyecto de Play)
+          cp "$APK" dist/android-v215/Game-Atlas-Companion-V249-PRUEBA-PRUEBA.apk
+          cp "$AAB" dist/android-v215/Game-Atlas-Companion-V249-PRUEBA-SIN-FIRMAR.aab
+          (cd dist/android-v215 && sha256sum Game-Atlas-Companion-V249-PRUEBA-PRUEBA.apk Game-Atlas-Companion-V249-PRUEBA-SIN-FIRMAR.aab > SHA256SUMS.txt)
+          cat > dist/android-v215/LEEME-ANDROID-V249.txt <<'TXT'
+          Game Atlas Companion - Android V249 (versionName 1.52.0; versionCode 249)
+          APK DEBUG: com.indie.viassistant.qa (INSTALACIÓN PARALELA)
+          AAB RELEASE: com.indie.viassistant (mismo ID original de Google Play)
           APK: archivo instalable de PRUEBA, firmado con clave de desarrollo
           AAB: paquete de lanzamiento SIN FIRMAR. NO puede enviarse directamente a Play Console.
           La AAB definitiva requiere firmarla con la clave de SUBIDA de Google Play ya autorizada.
-          Si tenes una version de Play instalada, NO la reemplaces con la APK de depuracion:
-          puede tener una firma distinta. Exporta antes los datos de Mi partida.
-          Novedades: misma V215 web/movil; noticias oficiales y medios independientes;
+          Este APK se llama Game Atlas V249 TEST y NO reemplaza tu app de Play.
+          Los datos estan aislados: importar Mi partida JSON si queres trasladarlos.
+          Novedades: misma V249 web/movil; noticias oficiales y medios independientes;
           fichas comunitarias separadas; catalogos remotos firmados Ed25519;
           idiomas ES/EN/PT; mapa, marcadores, favoritos y progreso local.
           Se consultan al abrir/reanudar y aproximadamente cada 30 min si esta abierta.
@@ -96,21 +114,7 @@ jobs:
       - name: Entregar APK y AAB descargables desde Actions
         uses: actions/upload-artifact@v4
         with:
-          name: GAME-ATLAS-ANDROID-V215-APK-Y-AAB
+          name: GAME-ATLAS-ANDROID-V249-APK-Y-AAB
           path: dist/android-v215/
           retention-days: 30
           if-no-files-found: error
-      - name: Publicar APK de prueba como descarga directa
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          TAG="android-v215-prueba"
-          if ! gh release view "$TAG" >/dev/null 2>&1; then
-            gh release create "$TAG" --target "$GITHUB_SHA" --title "Game Atlas Companion Android V215 - APK de prueba" --prerelease \
-              --notes "Version movil aprobada V215. APK de prueba, NO reemplazar la app de Play sin respaldo de Mi partida. AAB sin firmar incluido solo como candidato; requiere firma de subida para Play."
-          fi
-          gh release upload "$TAG" dist/android-v215/* --clobber
-          echo "APK de prueba: https://github.com/BautistaL99/game-atlas-privacidad/releases/download/$TAG/Game-Atlas-Companion-V215-PRUEBA.apk" >> "$GITHUB_STEP_SUMMARY"
-          echo "AAB candidato SIN FIRMAR (no subir a Play): https://github.com/BautistaL99/game-atlas-privacidad/releases/download/$TAG/Game-Atlas-Companion-V215-SIN-FIRMAR.aab" >> "$GITHUB_STEP_SUMMARY"

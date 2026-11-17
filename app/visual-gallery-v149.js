@@ -2,10 +2,12 @@
    Rockstar Games official screenshot. Images load FROM Rockstar, not copied to our host.
    Origin: https://www.rockstargames.com/VI/media/screenshots
    This is an independent companion, not Rockstar's official app.
-   Web-only presentation: do not change Play Store Android bundles with this skin. */
+   Native preview uses the SAME remote official-photo URLs as the Web V220, with
+   locally bundled illustrations as fallbacks. Image hosting remains external;
+   verify redistribution / use rights and connectivity before Play submission. */
 (() => {
  'use strict';
- if(window.Capacitor?.isNativePlatform?.() || document.documentElement.classList.contains('vi-native-app')) return;
+ // Reviewed V220 native parity: render the visual gallery in WebView as well.
  const base='https://www.rockstargames.com/VI/_next/static/media/';
  const assets={
  "vice-1": "Vice_City_01.135x56yoeu.6t.jpg",
@@ -220,7 +222,6 @@
   if(detail)for(const host of document.querySelectorAll('.detail-card'))replaceCover(host,detail);
  }
  function apply(){
-   if(window.Capacitor?.isNativePlatform?.())return;
    document.documentElement.classList.add('vi-real-gallery');
    for(const el of document.querySelectorAll('a.category-tile')){
      const href=el.getAttribute('href')||'';
@@ -272,7 +273,7 @@
  document.addEventListener('vi:catalog-refresh',schedule);
  // The map popup must reuse the same reviewed image as the full entry.
  // Do not treat an illustration or a contextual promotion as verified evidence
- // of the precise location, and do not use the remote photo on native clients.
+ // of the precise location. Native images use the same reviewed web mapping.
  window.viReviewedPhotoForRecordV220=(id)=>{
   if(typeof id!=='string'||!Object.prototype.hasOwnProperty.call(cards,id))return '';
   const key=cards[id],url=photo(key);

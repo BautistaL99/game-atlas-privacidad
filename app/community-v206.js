@@ -4,7 +4,7 @@
  */
 (()=>{'use strict';
  const KEY='vi-community-v206-signed', LANGS=['es','en','pt'],MAX=2200000,MAX_NEWS=220,MAX_WIKI=1000;
- const allowedCategories=new Set(['personajes','vehiculos','armas','mapa-lugares']);
+ const allowedCategories=new Set(['personajes','vehiculos','armas','mapa-lugares','misiones','coleccionables','secretos','economia','actividades','mundo']);
  let cfg=null,issue=null,lastRevision=-1,checking=false,lastCheck=0,timer=null;
  const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const clean=(x,n)=>typeof x==='string'&&x.length>0&&x.length<=n&&!/[<>\x00-\x1f]/.test(x);

@@ -1,0 +1,15 @@
+/* V1.44 · personal marker management, without altering the established map design */
+#root .vi-personal-manager{margin:12px 0 4px;border:1px solid #3e7a79;border-radius:13px;background:linear-gradient(135deg,#112f3b,#162438);color:#e3faf5;overflow:hidden}
+#root .vi-personal-manager>summary{min-height:46px;display:flex;gap:10px;align-items:center;padding:11px 15px;font-size:13px;font-weight:800;cursor:pointer;list-style-position:inside;user-select:none}
+#root .vi-personal-manager .vi-marker-count{margin-left:auto;display:grid;place-items:center;padding:3px 9px;background:#35675f;border-radius:50px;color:white;font-variant-numeric:tabular-nums}
+#root .vi-personal-manager-content{border-top:1px solid #345b68;padding:10px 12px 13px}
+#root .vi-personal-manager-content>p{margin:4px 0 12px;color:#b9ceda;font-size:12px;line-height:1.5}
+#root .vi-personal-marker-list{display:grid;gap:8px;max-height:340px;overflow-y:auto;overscroll-behavior:contain}
+#root .vi-personal-marker-item{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px;border:1px solid #314a60;background:#111e2e;border-radius:10px}
+#root .vi-personal-marker-title{font-size:13px;font-weight:700;overflow-wrap:anywhere;flex:1 1 130px}
+#root .vi-personal-marker-buttons{display:flex;gap:7px;flex-wrap:wrap}
+#root .vi-personal-marker-buttons button{min-height:39px;padding:8px 11px;color:#e2fff9;border:1px solid #528a8a;background:#1d3b47;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer}
+#root .atlas-v15 .vi-delete-marker,#root .vi-personal-marker-buttons .vi-delete-marker,#root .atlas-card-actions .vi-delete-marker{background:#54252d!important;color:#ffe9e9!important;border:1px solid #dc7b89!important;border-radius:9px!important;min-height:40px!important;font-size:12px!important;font-weight:750!important;padding:9px 11px!important;cursor:pointer}
+#root .atlas-v15 .atlas-popup-actions .vi-delete-marker{margin-left:auto}
+#root .vi-delete-marker:focus-visible,#root .vi-personal-marker-buttons button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+@media(max-width:620px){#root .vi-personal-manager>summary{min-height:48px}#root .vi-personal-marker-item{align-items:stretch}#root .vi-personal-marker-buttons{width:100%}#root .vi-personal-marker-buttons button{flex:1 1 auto}}

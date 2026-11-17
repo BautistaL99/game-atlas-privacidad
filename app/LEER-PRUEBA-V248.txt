@@ -1,0 +1,9 @@
+WEB DE PRUEBA V248 — Game Atlas, PC/móvil, 17/11/2026
+Esta carpeta contiene la versión de fuentes QA-V248 del mapa con el buscador,
+filtros recuperables y la ubicación destacada recordada. Se aloja separada de /app/.
+localStorage tiene prefijo exclusivo y el service worker usa caché independiente.
+La dirección es pública aunque tenga noindex. No usar datos personales.
+Si no aparecen imágenes, revisar la red y la caché; no borrar la partida del sitio principal.
+La primera pulsación fuera del punto amarillo deja el punto pálido y muestra
+marcadores cercanos; la segunda suelta el punto. El botón X cierra solo la ficha.
+No se han publicado cambios de Android/Google Play ni de iOS/App Store por esta vista.
