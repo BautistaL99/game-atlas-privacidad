@@ -1,0 +1,155 @@
+GAME ATLAS COMPANION — MANUAL ANDROID V247
+Código, arquitectura, reconstrucción, pruebas y Google Play
+=========================================================
+
+LEER ANTES:
+  manuales-v247/LEER_PRIMERO_INDICE_V247.txt
+  manuales-v247/MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt
+  README_LANZAMIENTO_V247.txt / CHECKLIST_PRUEBAS_V247.txt
+Este TXT es la guía de la copia ANDROID. El código Android de V247 está en rama QA, NO distribuido automáticamente en Google Play por generar el ZIP.
+
+1. QUÉ CONTIENE ESTE ZIP Y QUÉ NO
+Incluye:
+ - app/ (cliente V247 compartido con web PC/móvil; HTML, CSS, JS, imágenes, mapas, manifest y biblioteca de contenidos)
+ - android-v215/ (proyecto CAPACITOR configurado; nombres de directorios heredados V215)
+ - .github/workflows/android-v215-build-apk-aab.yml (procedimiento de construcción documentado)
+ - qa/ (pruebas automáticas), los TXT de lanzamiento y estos manuales.
+No incluye: una APK lista para instalar, AAB firmada para Google Play, clave de firma, credenciales Firebase ni partida de usuarios.
+El número V215 del directorio NO significa que la versión nueva sea V215. El script nativo 'android-v215/prepare-android.mjs' fija versionCode 247 y versionName "1.50.0". Verificar que 247 supere TODOS los versionCode ya usados en el track destino de Play antes de subir (no suponerlo). package.json conserva metadatos históricos 1.48.0; el valor de Android se escribe en build.gradle por el script de preparación, NO se deduce del nombre de carpeta.
+
+2. IDENTIDAD DE LA APLICACIÓN
+Bundle/Package ID: com.indie.viassistant
+Nombre de aplicación: Game Atlas Companion
+Config base: android-v215/capacitor.config.json
+Stack: Capacitor 8.0.0, Java 21, SDK Android 36, Node.js 22, Gradle de la plataforma generada.
+NO cambiar Package ID si querés que Google Play lo reconozca como actualización de la misma app: hacerlo generaría otra identidad e interrumpiría el acceso al almacenamiento local anterior.
+El código web se carga en la WebView nativa desde archivos empaquetados; modificaciones en la web publicada no actualizan la aplicación que ya tiene un usuario en su dispositivo.
+
+3. QUÉ SE USA DE LA WEB Y QUÉ SE AGREGA EN ANDROID
+La fuente común está en app/. La preparación con 'stage' copia esa carpeta íntegramente a android-v215/www/, verificando nombres, catálogo firmado y configuración de IDs.
+Los comportamientos que comparte con la web:
+ - ES/EN/PT, elección inicial por idioma preferido del dispositivo y persistencia manual 'vi_demo_locale';
+ - noticias oficiales y no oficiales claramente separadas, fichas Wiki y feeds firmados;
+ - buscador descriptivo y autocompletado de frases/prefijos, ranking numérico solo si hay datos;
+ - mapa, controles, filtrado, puntos, rutas ilustrativas y marcadores personales;
+ - navegación, comparador y Mi partida con exportación/importación.
+Funciones/capas Android: WebView Capacitor, botón Atrás del sistema, apariencia de barra de estado, insets por notch/status/navigation bars, permisos/compartir según plugins realmente incluidos.
+'android-v215/prepare-android.mjs native' modifica el proyecto Android generado, fija nombre/íconos, API 36, versionCode/versionName y MainActivity con gestión de barras e insets para las pantallas. No editar MainActivity anterior pensando que siempre existirá: 'npx cap add android' puede regenerarlo.
+Las rutas se dibujan entre puntos; NO hay navegación por calles ni GPS activo por el simple uso de Android.
+
+4. RECONSTRUIR EN UNA PC WINDOWS
+Requisitos: acceso al ZIP, Node.js 22, JDK Java 21, Android SDK 36 y herramientas de compilación 36.0.0, Android Studio/Gradle según plataforma. No requiere Mac para compilar Android.
+IMPORTANTE: ejecutar los comandos desde la raíz del ZIP, donde estén juntos 'app/' y 'android-v215/'.
+
+PASO A — Resguardar datos y extraer fuente
+ - Guardar el ZIP original y su SHA256SUMS.txt.
+ - No instalar APK debug encima de una app de Play con datos, porque las firmas pueden no coincidir.
+ - Si el dispositivo tiene Mi partida: exportar su JSON desde la app anterior.
+ - Extraer a una carpeta nueva, NO encima de una construcción antigua.
+
+PASO B — Preparar web para Capacitor (en raíz)
+  node android-v215/prepare-android.mjs stage
+Valida app/index.html, online-config.json y recursos mínimos y copia a android-v215/www/. Si falla, no seguir: revisar archivo faltante o configuración.
+
+PASO C — Generar estructura Android (dentro de android-v215)
+  cd android-v215
+  npm install --no-fund --no-audit
+  npx cap add android             (solo si 'android/' no existe)
+  npx cap sync android
+  cd ..
+No introducir plugins nativos ajenos sin registrar permisos/licencias y probar en móviles reales.
+
+PASO D — Aplicar configuración Android (desde la raíz)
+  node android-v215/prepare-android.mjs native
+Debe indicar ID esperado, versión, SDK y nombre. Verificar dentro de android-v215/android/app/build.gradle los campos versionCode/versionName y en variables.gradle los SDK. Si el script falla porque falta MainActivity o un recurso, no compilar hasta restaurar el proyecto.
+
+PASO E — Compilar
+  cd android-v215/android
+  (Windows) gradlew.bat assembleDebug bundleRelease
+  (Linux/macOS) ./gradlew assembleDebug bundleRelease --no-daemon
+Archivos esperados (rutas relativos a android-v215/android/):
+  app/build/outputs/apk/debug/app-debug.apk
+  app/build/outputs/bundle/release/app-release.aab
+La APK debug está firmada por una clave DE DESARROLLO y solo sirve para pruebas. El AAB release generado por este flujo es SIN FIRMAR; no debe presentarse como listo para Google Play. Se necesita firmar con la clave autorizada de subida de la cuenta Play Console, que NO se incluye en el ZIP.
+Si no usás Windows o se requiere depuración de gradle, Android Studio permite revisar SDK y plugins, pero no reemplaza los pasos de firma.
+
+5. CONSTRUIR EN GITHUB ACTIONS
+Repositorio: BautistaL99/game-atlas-privacidad
+Workflow versionado: .github/workflows/android-v215-build-apk-aab.yml
+En una copia/branch que GitHub Actions pueda ejecutar: Actions > Game Atlas Companion V247 - compilar Android APK y AAB > Run workflow, seleccionar rama de prueba adecuada, ejecutar y revisar logs. El workflow:
+  checkout; Node22/Java21/SDK36; stage; npm/Capacitor; native; Gradle debug APK+release AAB sin firmar; verifica ID, versionCode, assets y firmas de debug; genera SHA256 y artifacts; opcionalmente publica prerelease 'android-v247-prueba'.
+NO pulsar el workflow en main si el código V247 solo está en qa-v247-web-android-20261117. Verificar head_sha del run.
+Que GitHub comparta un APK no significa que Google Play esté actualizado.
+AVISO: los GitHub Actions de un repo público requieren permisos de cuenta y pueden fallar por límites/cuotas/servicios de terceros.
+
+6. SUBIR A GOOGLE PLAY (NO ES AUTOMÁTICO)
+ - Confirmar pantalla/idiomas/bugs en APK de prueba y hacer respaldo de Mi partida.
+ - Confirmar versionCode mayor que la versión instalada/en cualquier track que la cuenta considere para actualización. Nunca reutilizar un versionCode rechazado o existente sin revisar consola.
+ - Identificar la CLAVE DE SUBIDA original autorizada por Play Console. No confundir con la firma debug del APK ni con la clave Ed25519 de feeds.
+ - Generar AAB release FIRMADO mediante Android Studio o pipeline protegido (solicitar datos privados solo a mecanismo seguro; nunca pegarlos en TXT o GitHub público).
+ - Verificar ID com.indie.viassistant, targetSdk, firma, versión, permisos y contenido.
+ - En Play Console elegir track correcto (prueba cerrada / producción según aprobación); cargar AAB, notas y completar declaraciones/privacidad/revisión. Enviar a revisión si el propietario lo autoriza.
+ - Esperar a que Play procese/revise; la compilación de AAB no implica distribución. No afirmar que ya llegó a dispositivos.
+No cambiar el diseño de web PC al corregir Android: la fuente es compartida pero el CSS responsivo se prueba por separado.
+
+7. DATOS, FAVORITOS, PROGRESO Y MÍ PARTIDA
+Claves locales de navegación y seguimiento forman parte del mismo esquema web, por ejemplo 'gta6-assistant:v1:routes', 'gta6-assistant:v1:map-pins', 'vi_demo_locale'. Estas claves están dentro de WebView y se conservan al reiniciar normalmente el teléfono.
+NO están ligadas a cuenta de Google; no existe sincronización automática garantizada entre Chrome, Android e iPhone.
+Cuando un usuario viene desde web: exportar su copia JSON desde navegador, transferir archivo, abrir Game Atlas Android -> Mi partida -> restaurar/importar. La ayuda de primera apertura aparece cuando corresponde; la importación no puede tomar automáticamente el localStorage del navegador.
+La desinstalación, borrar datos de la app, firmar con otra clave o cambiar Package ID pueden provocar pérdida/no actualización. Hacer backups antes de cada actualización.
+El manual compartido explica el esquema JSON y sus límites. No guardar ni enviar archivos de usuarios en el repositorio.
+
+8. ACTUALIZACIONES AUTOMÁTICAS EN ANDROID
+En cada apertura/reactivación y durante el uso visible, el JS puede consultar los endpoints HTTPS de feeds firmados según online-config.json. Esto actualiza noticias, wiki, rutas aprobadas o mapas cuando el contenido compatible y firmado existe.
+No actualiza código nativo, permisos, iconos, pantalla o versión instalada; eso requiere nuevo APK/AAB.
+Si la app se queda sin red, conserva última copia local firmada válida si existe. Si no hay revisión nueva o la firma falla, no debería inventar novedades; revisar cron y feed del repo público.
+El mapa remoto exige un manifiesto opcional firmado distinto al feed de noticias; no cambiar mapaVersion de marcadores manualmente.
+
+9. IDIOMA DE PRIMER INICIO Y CAMBIO DE IDIOMA
+No se lee la geolocalización; Android entrega preferencias del sistema a la WebView. Si el primer idioma admitido es ES/EN/PT, la app selecciona ese; de lo contrario inglés. Una elección del selector se guarda en 'vi_demo_locale', que tiene prioridad en aperturas posteriores.
+Prueba:
+ - En instalación limpia con Android en inglés: UI en inglés.
+ - Cambiar a español, cerrar por completo y abrir: sigue en español.
+ - Cambiar a portugués, cerrar y abrir: sigue en portugués.
+ - Volver a inglés y probar categorías, noticias, fichas y mensajes de progreso.
+Advertencia: un usuario con datos existentes NO debería perder el idioma guardado porque el sistema detectó región nueva.
+
+10. PROBLEMAS COMUNES Y CÓMO DETECTARLOS
+ - GitHub Actions falló en stage: archivo obligatorio ausente, config firmada cambiada o index sin recurso; corregir fuente, NO quitar validación.
+ - APK no instala sobre Play: firma debug distinta; no forzar desinstalación antes de backup.
+ - Play rechaza AAB: verificar firma de subida, versionCode, paquete, target API, políticas; leer rechazo exacto.
+ - Pantalla blanca: revisar assets android-v215/www vs app/, logs Android Studio/Chrome remote inspect, error JS.
+ - Teclado tapa resultados: comprobar CSS V240/241 y visualViewport en el modelo afectado; reportar orientación y modelo, no hardcodear solo un celular.
+ - Mapa no muestra puntos: filtros activados, autorización de cartografía, consulta y fuente; no publicar coordenadas inventadas.
+ - Noticias no aparecen: revisar feed firmado en HTTPS, cron público, conexión y validador, no borrar caché a ciegas.
+ - Versión incorrecta al instalar: verificar build.gradle después de ejecutar native; el nombre del directorio no es la versión.
+ - Barra del sistema superpuesta: revisar MainActivity generado por native, target SDK y safe area; repetir vertical/horizontal.
+ - Pérdida de progreso: recuperar JSON de Mi partida; no borrar almacenamiento ni resetear llaves.
+
+11. PRUEBAS MÍNIMAS EN TELÉFONOS ANDROID REALES
+[ ] Android pequeño y grande; notch, teclado, navegación por gestos y botones.
+[ ] Inicio/Explorar/Noticias/Mapa/Mi partida/Más: atrás desde subcategorías regresa al padre.
+[ ] ES/EN/PT; cambios manuales persistentes, pantallas y accesibilidad.
+[ ] Búsquedas: vi, vice, “donde encontrar au”; la sugerencia es tocable.
+[ ] Ranking velocidad asc/desc cuando hay datos, aviso seguro cuando no.
+[ ] Marcador A->B, arrastre desde pin, círculo amarillo, toque en fondo sin recentrar.
+[ ] Filtros ocultos + ruta; mapa fullscreen normal/horizontal y barra de scroll.
+[ ] Crear/editar marcador sin tocar botones detrás del formulario con teclado abierto.
+[ ] Comparador de 3 elementos; sin salto de scroll.
+[ ] Mi partida: favorito, completado, ruta y marcador sobreviven reinicio.
+[ ] Exportar JSON, importar en una instalación de prueba y confirmar datos.
+[ ] Noticias y Wiki con fuentes y fecha correcta; enlaces externos HTTPS.
+[ ] Probar sin conexión y luego reconexión; no borrar datos.
+[ ] Revisar consentimiento, imágenes/créditos y ficha Play Console antes de publicar.
+
+12. RESTAURACIÓN Y CONTINUIDAD
+Guardá el ZIP ANDROID, este TXT, README y SHA256SUMS.txt. Si otra persona reconstruye desde cero, necesita:
+ - código fuente V247 de la rama guardada;
+ - dependencias Node/Java/SDK y acceso a Gradle;
+ - cuenta y clave de subida autorizada para publicar en la MISMA ficha de Google Play;
+ - copia de datos del usuario para probar migración;
+ - acceso a repositorio público de feeds (sin suplantar su clave privada).
+Un ZIP de fuentes NO puede regenerar la firma original de Play si no se dispone de la clave.
+Tampoco documentar una app como publicada porque GitHub muestra un workflow verde.
+
+FIN — MANUAL ANDROID V247.
