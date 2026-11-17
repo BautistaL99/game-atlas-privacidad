@@ -1,0 +1,27 @@
+LEER PRIMERO — ÍNDICE ACTUAL DE RESPALDOS GAME ATLAS
+17/11/2026 · Fuente web/Android V247 · Fuente iOS V246
+=======================================================
+
+Estos ZIP contienen CÓDIGO FUENTE, recursos y manuales. No contienen aplicaciones compiladas ni credenciales privadas.
+
+PRIMERA LECTURA (según ZIP):
+  WEB:     manuales-v247/MANUAL_WEB_PC_MOVIL_V247.txt
+  ANDROID: manuales-v247/MANUAL_ANDROID_V247.txt
+  IOS:     manuales-v247/MANUAL_IOS_V246.txt
+TODOS:    manuales-v247/MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt
+AL FINAL: CHECKLIST_PRUEBAS_V247.txt y README_LANZAMIENTO_V247.txt.
+
+El manual compartido explica lo que hace la aplicación; el manual de cada plataforma explica su estructura, reconstrucción, actualizaciones y publicación sin mezclar canales. Para información histórica conservar los TXT anteriores y leerlos como historia, no como órdenes para volver a versiones viejas.
+
+FUENTES CONGELADAS AL GENERAR EL ZIP:
+Web/Android: rama 'qa-v247-web-android-20261117' de 'BautistaL99/game-atlas-privacidad'; el commit exacto se ve en la página de la release.
+iOS: commit 3ecef61e2a3ed08fb84b99f28621028b4b4bed63 de 'BautistaL99/game-atlas-ios-build-free'.
+Mantener SHA256SUMS.txt junto a los tres ZIP para verificar copias. Si cambia cualquier código, crear un respaldo NUEVO y registrar su SHA.
+
+IMPORTANTE:
+- No subir un ZIP a Google Play ni a App Store. Son fuentes, no AAB/IPA firmados.
+- No publicar la web solamente porque un test automático da verde.
+- No cargar certificados, contraseñas, .p8, .p12, keystores, JSON de partida ni datos personales al repositorio público.
+- No desinstalar versiones con partidas guardadas sin exportar Mi partida.
+- No afirmar que ya existe un mapa GTA VI oficial ni estadísticas que faltan.
+- Si una guía vieja contradice esta guía o el código del ZIP, revisar el código y registrar la corrección antes de continuar.

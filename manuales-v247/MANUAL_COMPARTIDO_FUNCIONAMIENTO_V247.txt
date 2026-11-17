@@ -1,0 +1,113 @@
+GAME ATLAS COMPANION — MANUAL TÉCNICO COMÚN
+Edición documental V247 · 17/11/2026 · ES/EN/PT
+============================================================
+
+0. PARA QUÉ SIRVE Y QUÉ NO REPRESENTA
+Game Atlas Companion es una guía independiente y no oficial sobre Grand Theft Auto VI. No está afiliada a Rockstar Games ni a Take-Two Interactive. La aplicación combina exploración del catálogo, mapa comunitario de Leonida, búsqueda, noticias, comparación de elementos y seguimiento local de Mi partida.
+
+Este manual describe el funcionamiento CONSTATADO en las fuentes de las candidatas web/Android V247 e iOS V246; no afirma aprobación de Google/Apple, funcionamiento perfecto en dispositivos reales, posiciones definitivas ni publicación de una interfaz. La información obtenida de medios independientes y wikis NO equivale a una confirmación oficial. No se debe presentar como oficial el mapa de la comunidad.
+
+1. VERSIÓN, REPOSITORIOS Y LÍMITES
+Web PC/móvil + Android: repositorio público BautistaL99/game-atlas-privacidad, rama qa-v247-web-android-20261117. Carpeta app/ contiene el cliente compartido; android-v215/ genera el contenedor nativo Android V247, pese a conservar el nombre histórico de carpeta v215. La rama main y los dominios públicos no se sustituyeron mediante estos respaldos.
+iOS: repositorio BautistaL99/game-atlas-ios-build-free, rama qa-ios-v246. El respaldo congelado referencia el commit 3ecef61e2a3ed08fb84b99f28621028b4b4bed63. La carpeta ios-v220/ conserva el nombre histórico de base.
+Web principal conocida: https://gta6mapa.web.app/app/
+Espejo público conocido: https://bautistal99.github.io/game-atlas-privacidad/app/
+Estos enlaces identifican destinos de producción, NO garantizan que allí esté cargada V247.
+
+Repositorio privado histórico / despliegues revisados: BautistaL99/-gta-vi-game-assistant. Su documentación privada V220 y el flujo de aprobación de derechos/privacidad son distintos del simple respaldo de fuentes. No mezclar manuales históricos, ramas y datos de producción sin comprobar SHA, configuraciones y pruebas.
+El código de estas copias NO incluye claves privadas Ed25519, contraseña de Firebase, certificados Apple ni keystore Google.
+
+2. ARQUITECTURA EN DOS CAPAS
+A. INTERFAZ (requiere distribución nueva para cambiar HTML, JS, CSS, iconos, estructura o binarios):
+   app/index.html + app/app-v137.js/.css, scripts de soporte.
+   Web: el navegador descarga recursos y service worker; Android/iOS incluyen assets dentro de su WebView de Capacitor.
+   Una corrección en la rama de código NO actualiza instantáneamente APK/AAB/IPA existentes ni reemplaza la web publicada.
+B. CONTENIDO REMOTO (sin cambiar interfaz):
+   Noticias y fichas publicadas en archivos JSON firmados digitalmente.
+   El cliente verifica firma Ed25519, estructura, revisión, fuentes y límites antes de fusionarlos con fichas existentes.
+   Al cambiar noticias/wikis no se debería perder la partida: fuentes remotas y datos locales están separados.
+   La aplicación NO descarga JS o CSS ejecutables desde esos feeds.
+
+3. NAVEGACIÓN Y FUNCIONES
+Barra principal: Inicio, Explorar, Mapa, Noticias, Mi partida y Más.
+Inicio: accesos a secciones principales, buscador, tarjetas destacadas y navegación.
+Explorar: categorías de contenido (vehículos, armas, personajes, misiones, lugares, coleccionables, secretos, actividades, economía, mundo, etc.), filtros de estado y fichas. Las secciones Top speedruns y Top donaciones tienen tratamiento particular; no afirmar pagos o estadísticas si no hay datos respaldados.
+Fichas: título, resumen, procedencia, estado verificado/no confirmado, datos técnicos donde existan, comparar, favorito, progreso y búsqueda vinculada en mapa. La falta de una estadística se señala con texto o guion; NO rellenar datos desconocidos.
+Comparar: permite seleccionar hasta tres elementos de la misma categoría compatible. El análisis numérico requiere valores comparables; no inferir velocidad, daño o precio que el registro no trae.
+Noticias: separa anuncios oficiales de Rockstar de noticias no confirmadas procedentes de fuentes independientes; conserva enlaces a originales y archivo. La categoría “no confirmada” no es una confirmación de Rockstar.
+Mi partida: contadores, progreso por categorías, pendientes, completados y favoritos; datos del usuario guardados localmente.
+Más: información y accesos disponibles según plataforma, configuración e importación/exportación de datos.
+No afirmar que Google Login, sincronización en nube o pagos/donaciones estén activos sin comprobar configuración y servicio real.
+
+4. BUSCADORES: QUÉ SIGNIFICAN LAS RESPUESTAS
+Existe un motor compartido de búsqueda descriptiva en app-v137.js. Las interfaces y listas de autocompletado se complementan con scripts V240/V241/V242 portados en V247.
+- Normalización de tildes/caso y términos relacionados; consultas en español, inglés y portugués.
+- Prefijos y frases: “vi” puede sugerir Vice City si existe referencia indexada; “donde encontrar au” propone la frase pertinente cuando hay coincidencia.
+- Separación entre sugerencias de frase y fichas realmente presentes en catálogo.
+- Resultado relacionado NO implica coordenada conocida ni localización confirmada.
+- Ranking “más rápido / más lento”: exige al menos dos candidatos con valores numéricos verificables y comparables; si no los hay, presenta “ranking no verificable” en vez de un orden arbitrario. El orden descendente/ascendente se usa solamente con datos suficientes.
+- Al enviar la búsqueda el campo puede quedar libre para otra consulta y la búsqueda anterior reaparece al enfocar según la interfaz.
+Pruebas recomendadas ES: “vi”, “vice”, “donde encontrar au”, “auto mas rapido”, “auto mas lento”, “personaje con pelo largo”.
+EN: “fastest car”, “slowest car”, “where to find ca”, “vice”.
+PT: “carro mais rapido”, “carro mais lento”, “onde encontrar ca”.
+Si la sugerencia aparece pero no hay datos para dar una respuesta específica, no tratar la sugerencia como información inventada.
+
+5. MAPA DE LEONIDA Y SUS CONTROLES
+El mapa empaquetado parte de un trabajo comunitario de GTADB/Yanis V17, con crédito/licencia incluidos en assets/LEONIDA-MAP-LICENSE.txt. Sus posiciones son una reconstrucción aproximada, NO un mapa oficial de Rockstar ni prueba de ubicación exacta.
+Existen puntos por categoría, filtros, marcador personal, fichas emergentes, agrupaciones, zoom, pantalla completa y accesos a rutas.
+El control de movimiento está diseñado para arrastrar incluso comenzando sobre marcadores; seleccionar dos marcadores seguidos debe abrir B en un solo toque, sin cerrar A antes.
+Búsqueda en mapa: combina lugares existentes con sugerencias de términos sin duplicar paneles; se debe comprobar con teclado y diferentes pantallas.
+Punto destacado (“círculo amarillo”): un toque en el propio pin destacado debe ocultar ese pin sin desplazamiento; tocar fondo debe terminar el foco, limpiar búsqueda/banner y volver a mostrar los puntos según filtros, conservando zoom y posición. Comprobarlo manualmente en V247/V246 antes de afirmar que es perfecto.
+Filtros vacíos por elección: al desmarcar todos no aparecerá el aviso “Abrí los filtros para mostrar puntos”; el trazado de la ruta sigue disponible independientemente de los marcadores visibles.
+Los formularios de nuevos marcadores deben permanecer dentro del área visible del teclado, impedir toques sobre controles detrás y admitir scroll interno.
+No mezclar “ver un punto en mapa” con “confirmar la aparición exacta” si la ficha carece de coordenada verificada.
+
+6. RUTAS Y GUÍAS
+Script app/routes-v145.js: claves locales 'gta6-assistant:v1:routes' y 'gta6-assistant:v1:route-progress'. El usuario puede crear rutas con >=2 paradas, ordenarlas, guardar, seleccionar, registrar paradas completadas y compartir/importar enlaces cuando proceda. Límites definidos en código: hasta 35 rutas locales, 20 paradas por ruta; conservar versiones de cartografía.
+Las líneas del mapa son ILUSTRATIVAS ENTRE PUNTOS; NO representan conducción por calles reales, indicaciones automáticas, GPS ni optimización del tráfico.
+Un cambio de imagen o versión del mapa puede invalidar coordenadas previas. El sistema conserva marcadores personales antiguos, evita dibujarlos sobre posiciones incompatibles y ofrece reubicación cuando corresponda. No convertir silenciosamente coordenadas antiguas a una cartografía nueva.
+
+7. IDIOMAS
+Idiomas de interfaz: es, en, pt. En primera apertura se examinan idiomas preferidos del dispositivo/navegador y se selecciona el primero admitido; si ninguno coincide, usar inglés. NO se usa GPS, dirección IP o país de compra como señal.
+Clave de preferencia 'vi_demo_locale': una elección manual válida prevalece en aperturas posteriores. No borrarla al actualizar.
+El contenido incluye cadenas estáticas y datos dinámicos (títulos, badges, mensajes, progress, accesibilidad, comparador y fichas comunitarias); las traducciones deben revisarse en los tres idiomas.
+Las traducciones remotas de estadísticas Wiki tienen controles y pueden quedar pendientes; no presentar “inglés original” como traducción terminada sin verificar. Probar cambios de idioma sin reinstalar y después de cerrar/reabrir.
+
+8. NOTICIAS AUTOMÁTICAS Y FICHAS WIKI: PUBLICADOR VS CLIENTE
+El sistema de PUBLICACIÓN está en el repo público, workflow activo '.github/workflows/v210-free-scheduled-catalog.yml', scripts 'automation/v210-sources.mjs', 'automation/v210-publisher.mjs', 'automation/v220-wiki-spec-translations.mjs' y generación SEO.
+Fuentes explícitas en el colector actual: anuncios Rockstar Newswire/graph.rockstargames.com como fuente oficial, RSS RockstarINTEL como fuente periodística independiente y GTA Wiki como fuente comunitaria para fichas. Son CATEGORÍAS EDITORIALES distintas:
+- Oficial: noticia procedente de fuente oficial Rockstar; debe conservar fuente/fecha.
+- Independiente: noticia atribuida al medio, no confirmada por Rockstar.
+- Wiki comunitaria: página de wiki con revisión y referencia; NO equivale a GTA VI confirmado.
+El publicador revisa límites, fecha, origen permitido, deduplicación y formato, y genera dos envoltorios:
+  updates/catalog-envelope.json (schema 1, contenido oficial);
+  updates/community-envelope-v205.json (schema 205, noticias independientes y fichas).
+Ambos usan firma Ed25519 sobre el payload base64. La clave pública está empaquetada en app/online-config.json; la firma requiere un secreto de GitHub por nombre 'CATALOG_SIGNING_KEY_PEM_BASE64'. NO copiar, imprimir ni cambiar esa clave durante la documentación.
+El workflow incluye horarios: 17:29 y 23:29 UTC para noticias, 08:43 UTC para wiki, más una ejecución horaria condicionada a ventana de lanzamiento. Son PROGRAMACIONES, no promesas de ejecución puntual: GitHub puede demorar, omitir o fallar. En ejecución manual 'dry_run=true' revisa sin publicar; para publicar se requiere un flujo autorizado con firma válida.
+El publicador modifica los feeds/SEO; NO debería sustituir app/, Firebase, mapas ni datos locales al generar contenido. Si el workflow falla, revisar el error por tipo de fuente y conservar la última revisión firmada válida; nunca falsificar una revisión o bajar la validación.
+El CLIENTE 'app/online-updates.js' valida el feed oficial y 'app/community-v206.js' el comunitario. Consulta al iniciar y cuando vuelve la conexión/visibilidad, aproximadamente cada 30 minutos cuando está abierto, sujeto a cfg, red, navegador y sistema operativo. Mantiene última copia firmada válida en localStorage para uso sin red y no transmite progreso personal.
+El cliente recibe datos, no modifica el publicador. Ver una ficha vieja no prueba por sí mismo un bug del cliente: comprobar cron, nueva revisión firmada, texto publicado, caché del navegador y nueva carga.
+
+9. CARTOGRAFÍA REMOTA FIRMADA (PREPARADA, NO SUPONER MAPA NUEVO)
+'app/atlas-v247-ios-v242-remote-map.js' (iOS: 'ios-v242-remote-map.js') busca opcionalmente 'updates/map-envelope-v242.json' desde el servidor ya autorizado en online-config.json.
+Esquema específico, Ed25519, revisión creciente, imagen HTTPS de dominio/ruta permitidos y SHA-256 del archivo. No ejecutar código remoto.
+Si no hay un manifiesto autorizado y válido, se usa el mapa empaquetado. Publicar un mapa NUEVO exige licencia verificable, calibración de posiciones, coordenadas por versión, nuevo ID de mapa y pruebas de rutas/marcadores. La existencia del mecanismo NO significa que ya esté publicado un mapa definitivo.
+
+10. PROGRESO PERSONAL, RESPALDOS Y PRIVACIDAD
+El estado de favoritos, elementos registrados/completados, rutas, marcadores e idioma se guarda en el almacenamiento LOCAL de cada instalación/origen. Reiniciar o apagar el celular normalmente no lo borra. Desinstalar, borrar datos, limpieza del navegador, cambiar de origen, otro equipo o reinstalar sin importación puede perderlo.
+La exportación/importación de Mi partida usa un archivo JSON de esquema validado ('gta-vi-guest-backup', esquema 2) y una opción visible de importación. 'app/partida-transfer-v225.js' muestra ayuda al instalar y una invitación de restauración una sola vez; NO puede leer automáticamente los datos del navegador desde una nueva app nativa.
+PROCEDIMIENTO SEGURO: 1) En instalación vieja, Mi partida > exportar; 2) conservar archivo fuera del teléfono; 3) instalar/abrir actualización sin desinstalar lo anterior si es posible; 4) importar backup; 5) revisar recuentos, rutas y marcadores; 6) conservar copia anterior. Importación puede reemplazar datos: leer confirmación.
+No se verificó sincronización en nube; no publicitarla como activa. No subir archivos de Mi partida a GitHub, catálogos públicos ni manuales.
+
+11. PRUEBAS Y ESTADOS QUE NO DEBEN CONFUNDIRSE
+A) Código preparado; B) pruebas automáticas OK; C) revisión visual en dispositivo; D) canal de prueba distribuido; E) publicación final en App Store/Google Play/Firebase/Pages. Son cinco resultados DISTINTOS.
+Automatización V247: workflow '.github/workflows/v247-qa-backups.yml' ejecuta validaciones de fuente/regresiones y empaqueta ZIP; NO genera APK ni IPA ni publica web.
+Scripts públicos de QA: qa/v247-public-client.mjs, qa/v247-qa-marker-switch.mjs, qa/v247-qa-ranking-truth.mjs, qa/v247-qa-ios-v245-map-and-samples.mjs, qa/v247-qa-ios-v246-i18n.mjs.
+Pruebas manuales: interfaz PC a zoom 100/125%, Chrome Android grande/pequeño, Safari iPhone, rotación, teclado, accesibilidad, memoria local, actualización offline, formularios y rankings ES/EN/PT. Registrar evidencia sin secretos.
+
+12. FUENTES DE VERDAD Y CONTINUIDAD SIN ESTE CHAT
+Para reconstruir o cambiar algo, identificar repositorio, rama y SHA guardados con el ZIP, abrir el MANUAL ESPECÍFICO y la lista CHECKLIST_PRUEBAS_V247.txt. Los TXT V241–V246 son historia técnica; si contradicen la fuente congelada o un manual actual, investigar en código antes de actuar.
+No renombrar categorías, IDs, claves locales o Bundle ID a la ligera: puede romper enlaces, favoritos y compatibilidad. No eliminar controles de firma para “hacer que aparezcan noticias”.
+Siempre hacer backup previo, corregir en rama de prueba, pasar pruebas, mostrar versión funcional al propietario, obtener OK de publicación y verificar el sitio/binario real. Ninguna tarea documental autoriza cambiar la web pública o subir una app a tiendas.
+
+FIN MANUAL COMÚN V247 — documento técnico, no certificado de publicación.
