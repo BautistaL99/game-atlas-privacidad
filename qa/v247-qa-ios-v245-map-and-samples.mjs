@@ -29,7 +29,7 @@ assert.equal(show([],false,['regiones']),true,'Filtered empty state should be in
 assert.equal(show([{id:'A'}],false,['regiones']),false,'No notice with visible pins');
 assert.equal(show([],true,['regiones']),false,'No notice while placing marker');
 assert(!js.includes('Abrí los filtros para mostrar puntos.'),'Old intrusive notice remains');
-assert(js.includes('mapRouteMarkup()}')&&js.includes('pins.map(p=>'),'Route overlay must be independent of filtered pins');
+assert(js.includes('mapRouteMarkup()}')&&js.includes('pins.map(mapPinMarkup)'),'Route overlay must be independent of filtered pins');
 console.log('PASS V245: sample chips in Spanish, English, Portuguese are neutral');
 console.log('PASS V245: no empty-state overlay when categories are intentionally disabled');
 console.log('PASS V245: route overlay renders independently of the visible pin list');
