@@ -10,7 +10,8 @@ const check=(condition,message)=>{if(!condition)throw Error(message)};
 const read=(p)=>fs.readFileSync(p,'utf8');
 const must=['index.html','app-v137.js','app-v137.css','news-v155.js','community-v206.js',
   'online-updates.js','online-config.json','vi-i18n.js','mobile-v215.css','mobile-v215.js',
-  'mobile-v212.css','mobile-v212.js','mobile-v211.css','mobile-v211.js','sw.js'];
+  'mobile-v212.css','mobile-v212.js','mobile-v211.css','mobile-v211.js',
+  'mobile-v224-native.js','partida-transfer-v225.js','map-v232-focus.css','atlas-v247-ios-v240-qa.js','atlas-v247-ios-v241-qa.js','atlas-v247-ios-v242-qa.js','atlas-v247-ios-v242-remote-map.js','sw.js'];
 if(stage==='stage'){
   for(const name of must)check(fs.statSync(path.join(source,name)).size>0,'App missing '+name);
   const html=read(path.join(source,'index.html'));
@@ -29,14 +30,14 @@ if(stage==='stage'){
   fs.cpSync(source,web,{recursive:true,force:true});
   check(fs.readFileSync(path.join(web,'index.html')).equals(fs.readFileSync(path.join(source,'index.html'))),
     'Web HTML must be the exact approved V215 file');
-  console.log('PASS: identical V215 web client, official/independent news, wiki and Ed25519 signed live feeds');
+  console.log('PASS: identical V247 web client, official/independent news, wiki and Ed25519 signed live feeds');
 }else if(stage==='native'){
   const dir=path.join(target,'android');
   check(fs.existsSync(path.join(dir,'app','build.gradle')),'Capacitor native Android missing');
   const gradle=path.join(dir,'app','build.gradle');
   let g=read(gradle);
   check(/versionCode\s+\d+/.test(g)&&/versionName\s+['"][^'"]+['"]/.test(g),'No Android version fields');
-  g=g.replace(/versionCode\s+\d+/,'versionCode 215')
+  g=g.replace(/versionCode\s+\d+/,'versionCode 247')
     .replace(/versionName\s+['"][^'"]+['"]/,'versionName "1.48.0"');
   fs.writeFileSync(gradle,g);
   const vars=path.join(dir,'variables.gradle');
@@ -133,7 +134,7 @@ if(stage==='stage'){
     '}'
   ];
   fs.writeFileSync(file,pkg+'\n'+java.join('\n')+'\n');
-  console.log('PASS: Android Play ID com.indie.viassistant; versionCode 215; SDK 36; safe areas; Game Atlas brand');
+  console.log('PASS: Android Play ID com.indie.viassistant; versionCode 247; SDK 36; safe areas; Game Atlas brand');
 }else{
   throw Error('Use: node android-v215/prepare-android.mjs stage|native');
 }
