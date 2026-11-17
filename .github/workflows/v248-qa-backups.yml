@@ -1,0 +1,125 @@
+name: Game Atlas V248 - validar y preparar 3 backups (sin publicar apps)
+on:
+  push:
+    branches:
+      - qa-v248-map-focus-search-20261117
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: backup-game-atlas-v248
+  cancel-in-progress: false
+jobs:
+  validar-y-empacar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout código de web + Android
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Preparar Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificación de funcionamiento fuente y regresiones
+        shell: bash
+        run: |
+          set -euo pipefail
+          node qa/v247-public-client.mjs
+          node qa/v248-map-regressions.mjs
+          node qa/v247-qa-marker-switch.mjs
+          node qa/v247-qa-ranking-truth.mjs
+          node qa/v247-qa-ios-v245-map-and-samples.mjs
+          node qa/v247-qa-ios-v246-i18n.mjs
+          node android-v215/prepare-android.mjs stage
+          node --check android-v215/prepare-android.mjs
+          test -s README_LANZAMIENTO_V248.txt
+          test -s manuales-v248/LEER_PRIMERO_CAMBIOS_Y_PRUEBAS_V248.txt
+      - name: Descargar la versión fuente iOS V246 exacta
+        shell: bash
+        env:
+          IOS_SHA: 'abd5caa6b756a97a80ca1f2cdb6860d392e92d1f'
+        run: |
+          set -euo pipefail
+          git clone --quiet --depth 1 --branch qa-ios-v248-map-fixes https://github.com/BautistaL99/game-atlas-ios-build-free.git gameatlas-ios
+          actual="$(git -C gameatlas-ios rev-parse HEAD)"
+          if [[ "$actual" != "$IOS_SHA" ]]; then
+            echo "::error::El código iOS cambió luego de la revisión. Actualizar el SHA verificado para generar respaldos coherentes."
+            exit 1
+          fi
+          node --check gameatlas-ios/ios-v220/scripts/qa-ios-v246-i18n.mjs
+          test -s gameatlas-ios/LEER_PRIMERO_IOS_V246.txt
+          test -s gameatlas-ios/LEER_PRIMERO_IOS_V248.txt
+          (cd gameatlas-ios/ios-v220 && node scripts/qa-ios-v248-map-regressions.mjs --ios)
+      - name: Verificar manuales específicos y antecedentes históricos
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in LEER_PRIMERO_INDICE_V247.txt MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt MANUAL_WEB_PC_MOVIL_V247.txt MANUAL_ANDROID_V247.txt MANUAL_IOS_V246.txt; do
+            test -s "manuales-v247/$f"
+          done
+          for f in GAME_ATLAS_IOS_V241_GUIA_CAMBIOS_Y_PRUEBAS.txt LEER_PRIMERO_IOS_V242.txt LEER_PRIMERO_IOS_V243.txt LEER_PRIMERO_V244.txt LEER_PRIMERO_IOS_V245.txt LEER_PRIMERO_IOS_V246.txt LEER_PRIMERO_IOS_V248.txt; do
+            test -s "gameatlas-ios/$f"
+          done
+
+      - name: Generar tres ZIP separados con manuales completos
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          zip -qr dist/GAME-ATLAS-WEB-PC-MOVIL-V248-FUENTES.zip \
+            app README_LANZAMIENTO_V247.txt README_LANZAMIENTO_V248.txt CHECKLIST_PRUEBAS_V247.txt
+            manuales-v248/LEER_PRIMERO_CAMBIOS_Y_PRUEBAS_V248.txt \
+            manuales-v247/LEER_PRIMERO_INDICE_V247.txt \
+            manuales-v247/MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt \
+            manuales-v247/MANUAL_WEB_PC_MOVIL_V247.txt
+          zip -qr dist/GAME-ATLAS-ANDROID-V248-FUENTES.zip \
+            app android-v215 .github/workflows/android-v215-build-apk-aab.yml \
+            README_LANZAMIENTO_V247.txt README_LANZAMIENTO_V248.txt CHECKLIST_PRUEBAS_V247.txt qa
+            manuales-v248/LEER_PRIMERO_CAMBIOS_Y_PRUEBAS_V248.txt \
+            manuales-v247/LEER_PRIMERO_INDICE_V247.txt \
+            manuales-v247/MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt \
+            manuales-v247/MANUAL_ANDROID_V247.txt
+          zip -qr dist/GAME-ATLAS-IOS-V248-FUENTES.zip \
+            gameatlas-ios/ios-v220 gameatlas-ios/.github/workflows \
+            gameatlas-ios/README.md \
+            gameatlas-ios/GAME_ATLAS_IOS_V241_GUIA_CAMBIOS_Y_PRUEBAS.txt \
+            gameatlas-ios/LEER_PRIMERO_IOS_V242.txt \
+            gameatlas-ios/LEER_PRIMERO_IOS_V243.txt \
+            gameatlas-ios/LEER_PRIMERO_V244.txt \
+            gameatlas-ios/LEER_PRIMERO_IOS_V245.txt \
+            gameatlas-ios/LEER_PRIMERO_IOS_V246.txt \
+            gameatlas-ios/LEER_PRIMERO_IOS_V248.txt \
+            README_LANZAMIENTO_V247.txt README_LANZAMIENTO_V248.txt CHECKLIST_PRUEBAS_V247.txt \
+            manuales-v248/LEER_PRIMERO_CAMBIOS_Y_PRUEBAS_V248.txt \
+            manuales-v247/LEER_PRIMERO_INDICE_V247.txt \
+            manuales-v247/MANUAL_COMPARTIDO_FUNCIONAMIENTO_V247.txt \
+            manuales-v247/MANUAL_IOS_V246.txt
+          # Comprueba presencia de los TXT para no entregar un ZIP incompleto.
+          unzip -Z1 dist/GAME-ATLAS-WEB-PC-MOVIL-V248-FUENTES.zip | grep -Fxq 'manuales-v247/MANUAL_WEB_PC_MOVIL_V247.txt'
+          unzip -Z1 dist/GAME-ATLAS-ANDROID-V248-FUENTES.zip | grep -Fxq 'manuales-v247/MANUAL_ANDROID_V247.txt'
+          unzip -Z1 dist/GAME-ATLAS-IOS-V248-FUENTES.zip | grep -Fxq 'manuales-v247/MANUAL_IOS_V246.txt'
+          unzip -Z1 dist/GAME-ATLAS-IOS-V248-FUENTES.zip | grep -Fxq 'gameatlas-ios/LEER_PRIMERO_IOS_V248.txt'
+          (cd dist && sha256sum *.zip > SHA256SUMS.txt)
+          ls -lh dist
+      - name: Entregar descargas verificadas en GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: GAME-ATLAS-V248-TRES-COPIAS-DEL-LANZAMIENTO
+          path: dist/
+          retention-days: 90
+          if-no-files-found: error
+      - name: Publicar las tres COPIAS DE CÓDIGO como prerelease (no app stores)
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="backup-v248-${GITHUB_RUN_NUMBER}"
+          gh release create "$TAG" dist/*.zip dist/SHA256SUMS.txt \
+            --target "$GITHUB_SHA" \
+            --title "Game Atlas V248 - tres copias fuente con correcciones del mapa (no firmadas)" \
+            --prerelease \
+            --notes "Código fuente V248 para las tres plataformas, NO APK/AAB/IPA firmados. Incluye TXT V248 de errores y regresiones. QA automática aprobada, falta prueba visual. Las credenciales Apple/Google no se incluyen."
+          echo "Descargas directas: https://github.com/${GITHUB_REPOSITORY}/releases/tag/$TAG" >> "$GITHUB_STEP_SUMMARY"
