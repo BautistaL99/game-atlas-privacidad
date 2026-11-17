@@ -37,8 +37,8 @@ if(stage==='stage'){
   const gradle=path.join(dir,'app','build.gradle');
   let g=read(gradle);
   check(/versionCode\s+\d+/.test(g)&&/versionName\s+['"][^'"]+['"]/.test(g),'No Android version fields');
-  g=g.replace(/versionCode\s+\d+/,'versionCode 247')
-    .replace(/versionName\s+['"][^'"]+['"]/,'versionName "1.50.0"');
+  g=g.replace(/versionCode\s+\d+/,'versionCode 248')
+    .replace(/versionName\s+['"][^'"]+['"]/,'versionName "1.51.0"');
   // QA debug APK can coexist with the Play Store app: only debug gets a suffix.
   const buildTypes=/buildTypes\s*\{\s*release\s*\{/;
   check(buildTypes.test(g),'Expected buildTypes with release block in Gradle');
@@ -60,6 +60,21 @@ if(stage==='stage'){
       fs.writeFileSync(out,logo);
     }
   }
+  // Adaptive launcher icons on Android 8+: Capacitor's default foreground can
+  // override mipmap PNGs, so explicitly bind the VI logo for BOTH icon shapes.
+  // Keep the full VI artwork within the adaptive icon's safety area.
+  const qaLogo=path.join(res,'drawable-nodpi','ga_launcher_logo.png');
+  fs.mkdirSync(path.dirname(qaLogo),{recursive:true});
+  fs.writeFileSync(qaLogo,logo);
+  const fg=path.join(res,'drawable','ga_launcher_foreground.xml');
+  fs.mkdirSync(path.dirname(fg),{recursive:true});
+  fs.writeFileSync(fg,'<?xml version="1.0" encoding="utf-8"?>\n<inset xmlns:android="http://schemas.android.com/apk/res/android" android:drawable="@drawable/ga_launcher_logo" android:inset="18dp"/>\n');
+  const colors=path.join(res,'values','ga_launcher_colors.xml');
+  fs.writeFileSync(colors,'<?xml version="1.0" encoding="utf-8"?>\n<resources><color name="ga_launcher_background">#080D25</color></resources>\n');
+  const adaptive='<?xml version="1.0" encoding="utf-8"?>\n<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n<background android:drawable="@color/ga_launcher_background"/>\n<foreground android:drawable="@drawable/ga_launcher_foreground"/>\n</adaptive-icon>\n';
+  const anydpi=path.join(res,'mipmap-anydpi-v26');
+  fs.mkdirSync(anydpi,{recursive:true});
+  for(const name of ['ic_launcher.xml','ic_launcher_round.xml'])fs.writeFileSync(path.join(anydpi,name),adaptive);
   const strings=path.join(res,'values','strings.xml');
   let text=read(strings);
   check(/<string\s+name="app_name">[^<]*<\/string>/.test(text),'Missing Android brand string');
@@ -69,7 +84,7 @@ if(stage==='stage'){
   // Distinct debug launcher name; release preserves the original display name.
   const debugStrings=path.join(dir,'app','src','debug','res','values','strings.xml');
   fs.mkdirSync(path.dirname(debugStrings),{recursive:true});
-  fs.writeFileSync(debugStrings,'<resources><string name="app_name">Game Atlas V247 TEST</string></resources>\n');
+  fs.writeFileSync(debugStrings,'<resources><string name="app_name">Game Atlas V248 TEST</string></resources>\n');
   const base=path.join(dir,'app','src','main','java');
   const candidates=[];
   const walk=(folder)=>{for(const f of fs.readdirSync(folder,{withFileTypes:true})){
@@ -142,7 +157,7 @@ if(stage==='stage'){
     '}'
   ];
   fs.writeFileSync(file,pkg+'\n'+java.join('\n')+'\n');
-  console.log('PASS: Android Play ID com.indie.viassistant; versionCode 247; SDK 36; safe areas; Game Atlas brand');
+  console.log('PASS: Android Play ID com.indie.viassistant; versionCode 248; SDK 36; safe areas; Game Atlas brand');
 }else{
   throw Error('Use: node android-v215/prepare-android.mjs stage|native');
 }
