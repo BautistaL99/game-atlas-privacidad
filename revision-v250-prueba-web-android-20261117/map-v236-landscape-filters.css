@@ -1,0 +1,39 @@
+/* Game Atlas V220 V236: two landscape-only map fixes.
+   1) A search closes an already-open filter panel without remounting the IME input.
+   2) The open panel aligns with the actual visible map top (not an outdated offset).
+   No changes to pins, spotlight, marker locations, map drag or portrait layouts. */
+@media (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+  #root .atlas-v119.vi-fullscreen-map .atlas-layout>#atlas-map-filter-panel.mobile-open{
+    position:fixed!important;
+    top:var(--vi-v236-landscape-panel-top,8px)!important;
+    left:var(--vi-v236-landscape-panel-left,8px)!important;
+    right:auto!important;
+    bottom:auto!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:var(--vi-v236-landscape-panel-height,320px)!important;
+    width:min(408px,calc(100vw - 85px))!important;
+    max-width:calc(100vw - 85px)!important;
+    margin:0!important;
+    transform:none!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    overscroll-behavior-y:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+  #root .atlas-v119.vi-fullscreen-map .atlas-layout>#atlas-map-filter-panel.mobile-closed{
+    display:none!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+  }
+}
+
+/* V237 — ajuste solicitado: el botón Filtros debe quedar ENCIMA de la
+   leyenda «Número = grupo · Tocá para acercar» en horizontal.
+   Solo se desplaza el botón con el panel CERRADO. No cambia la posición
+   del panel ABIERTO, el buscador ni el comportamiento del teclado. */
+@media (orientation: landscape) and (max-height: 600px) and (pointer: coarse) {
+  #root .atlas-v119.vi-fullscreen-map .atlas-map > .atlas-mobile-filter-toggle[aria-expanded="false"] {
+    bottom: 54px !important;
+  }
+}

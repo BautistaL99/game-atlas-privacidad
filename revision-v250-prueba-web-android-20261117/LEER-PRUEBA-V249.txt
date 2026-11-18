@@ -1,0 +1,6 @@
+GAME ATLAS V249 — PREVIEW WEB PC/MOVIL 17/11/2026
+URL prevista: https://bautistal99.github.io/game-atlas-privacidad/revision-v249-prueba-web-android-20261117/#/mapa
+Preview independiente: no modifica el sitio /app/ ni la version V248.
+Almacenamiento local aislado y cache de Service Worker independiente.
+No cargar datos personales; vista publica para QA.
+Cobros reales, eliminacion de anuncios y anunciantes NO activos.

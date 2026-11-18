@@ -1,0 +1,209 @@
+/* GTA VI Game Assistant Android 1.37. Only phone-size overrides, applied last.
+   Keep desktop/tablet layout and public web code unchanged. */
+@media (max-width:700px) {
+  :root { --vi-safe-bg:#101827; }
+  html,body,#root { overflow-x:hidden!important; overscroll-behavior-x:none!important; }
+  html,body { touch-action:pan-y!important; }
+  .topbar {padding-top:8px!important;padding-bottom:8px!important;height:auto!important;min-height:65px!important;}
+  .top-search-wrap {min-width:0!important;}
+  .top-search-wrap input {font-size:14px!important;min-width:0!important;text-overflow:ellipsis!important;}
+  .bottom-nav {background:#111a2b!important;border-top-color:#273044!important;box-shadow:0 -3px 12px #0004!important;}
+  #vi-build-badge {display:none!important;}
+
+  /* Hero: one carousel row for its dots, fixed-size identical arrows. */
+  .home-v18 .home-permanent-frame {height:300px!important;max-height:300px!important;}
+  .home-v18 .home-permanent-arrows {position:absolute!important;right:9px!important;bottom:10px!important;display:flex!important;gap:7px!important;align-items:center!important;z-index:8!important;}
+  .home-v18 .home-permanent-arrows button {width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;max-width:40px!important;max-height:40px!important;flex:0 0 40px!important;padding:0!important;display:grid!important;place-items:center!important;font-size:23px!important;font-weight:400!important;line-height:1!important;aspect-ratio:1!important;}
+  .home-v18 .home-permanent-dots {position:absolute!important;left:44%!important;right:auto!important;bottom:20px!important;transform:translateX(-50%)!important;display:flex!important;gap:5px!important;align-items:center!important;width:max-content!important;max-width:110px!important;z-index:8!important;}
+  .home-v18 .home-permanent-dots button {width:11px!important;min-width:11px!important;height:7px!important;flex:0 0 11px!important;padding:0!important;border-radius:8px!important;}
+  .home-v18 .home-permanent-dots button.is-active {width:22px!important;min-width:22px!important;flex-basis:22px!important;}
+  .home-v18 .home-permanent-copy h1 {font-size:clamp(21px,6vw,29px)!important;max-width:100%!important;}
+  .home-v18 .home-permanent-cta {max-width:49%!important;font-size:11px!important;padding:7px 10px!important;min-height:37px!important;}
+
+  /* Discovery cards and category detail cards: no buttons over image/text. */
+  .home-v18 .v18-catalog-zone .content-card,
+  .container .item-stack .content-card {display:flex!important;flex-direction:column!important;gap:5px!important;min-width:0!important;min-height:0!important;padding:9px!important;position:relative!important;align-items:stretch!important;overflow:hidden!important;}
+  .home-v18 .v18-catalog-zone .content-card-link,
+  .container .item-stack .content-card-link {display:grid!important;grid-template-columns:98px minmax(0,1fr)!important;gap:11px!important;align-items:center!important;flex:initial!important;min-height:104px!important;width:100%!important;padding:2px 4px!important;position:relative!important;overflow:visible!important;}
+  .home-v18 .v18-catalog-zone .content-card .thumb,
+  .container .item-stack .content-card .thumb {display:block!important;width:96px!important;height:96px!important;min-width:96px!important;max-width:96px!important;max-height:96px!important;flex:none!important;object-fit:cover!important;border-radius:10px!important;}
+  .container .item-stack .content-card .content-text {min-width:0!important;padding-right:0!important;margin:0!important;align-self:center!important;}
+  .container .item-stack .content-card .content-text h3 {font-size:15px!important;margin:3px 0 4px!important;line-height:1.23!important;}
+  .container .item-stack .content-card .content-text p {font-size:12px!important;line-height:1.32!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:3!important;line-clamp:3!important;overflow:hidden!important;}
+  .container .item-stack .content-card .pill {position:absolute!important;top:8px!important;right:8px!important;font-size:9px!important;padding:4px 7px!important;z-index:2!important;}
+  .container .item-stack .content-card-link .arrow {display:none!important;}
+  .home-v18 .v18-catalog-zone .card-inline-actions,
+  .container .item-stack .content-card .card-inline-actions {position:static!important;inset:auto!important;transform:none!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;width:100%!important;min-height:40px!important;gap:8px!important;flex-wrap:nowrap!important;padding:7px 3px 1px!important;margin:4px 0 0!important;border-top:1px solid #354257!important;}
+  .container .item-stack .card-inline-actions .quick-complete {position:static!important;min-height:36px!important;height:auto!important;max-width:calc(100% - 58px)!important;font-size:12px!important;line-height:1.2!important;margin:0!important;padding:6px 9px!important;}
+  .container .item-stack .card-inline-actions .quick-fav {position:static!important;right:auto!important;bottom:auto!important;width:40px!important;min-width:40px!important;max-width:40px!important;flex:0 0 40px!important;height:40px!important;min-height:40px!important;padding:0!important;margin:0 0 0 auto!important;display:grid!important;place-items:center!important;}
+  .home-v18 .v18-catalog-zone .item-stack {gap:10px!important;}
+  .home-v18 .v18-catalog-zone .content-card .thumb {height:96px!important;flex-basis:auto!important;}
+
+  /* Community thumbnails: the play button must sit in the photo center. */
+  .v113-community .youtube-tile-art,.youtube-home .youtube-tile-art {position:relative!important;display:block!important;flex:0 0 110px!important;width:110px!important;min-width:110px!important;max-width:110px!important;min-height:112px!important;overflow:hidden!important;background-position:center!important;background-size:cover!important;}
+  .v113-community .youtube-tile-play,.youtube-home .youtube-tile-play {position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;padding:0 0 0 2px!important;display:grid!important;place-items:center!important;margin:0!important;z-index:4!important;line-height:1!important;}
+  .v113-community .youtube-tile-body,.youtube-home .youtube-tile-body {min-width:0!important;flex:1!important;padding:10px!important;}
+  .v113-community .youtube-tile,.youtube-home .youtube-tile {min-height:112px!important;overflow:hidden!important;}
+
+  /* Top category tiles need actual offline art and enough text area. */
+  .home-v18 .v18-category-grid .ranking-tile,
+  .category-grid .ranking-tile {background-color:#112035!important;}
+  .ranking-tile .ranking-tile-art {background-size:cover!important;background-position:center!important;opacity:1!important;}
+  .category-grid .ranking-tile .category-info,
+  .home-v18 .v18-category-grid .ranking-tile .category-info {position:absolute!important;bottom:0!important;left:0!important;right:0!important;min-height:0!important;padding:8px 23px 11px 9px!important;background:linear-gradient(0deg,#0b1626ef,#0b1626b3)!important;}
+  .category-grid .ranking-tile .category-info b,
+  .home-v18 .v18-category-grid .ranking-tile .category-info b {font-size:13px!important;line-height:1.2!important;white-space:normal!important;overflow-wrap:break-word!important;}
+  .category-grid .ranking-tile .v121-leader-tile {font-size:10px!important;line-height:1.15!important;max-width:100%!important;display:-webkit-box!important;-webkit-line-clamp:2!important;line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important;}
+
+  /* Personal progress. Avoid oversized label inside ring and decorative dead buttons. */
+  .v120-ring {width:100px!important;height:100px!important;min-width:100px!important;}
+  .v120-ring>div {width:76px!important;height:76px!important;overflow:hidden!important;}
+  .v120-ring strong {font-size:25px!important;line-height:1!important;}
+  .v120-ring small {font-size:8px!important;letter-spacing:0!important;line-height:1.1!important;white-space:nowrap!important;display:block!important;max-width:74px!important;}
+  .v120-overview-top {grid-template-columns:108px minmax(0,1fr)!important;gap:8px!important;}
+  .v120-overview-numbers {display:flex!important;flex-direction:column!important;align-items:flex-start!important;min-width:0!important;}
+  .v120-overview-numbers>span:not(.v120-overline) {font-size:10px!important;margin:0 0 5px!important;}
+  .v120-overview-numbers>b {font-size:22px!important;}
+  .v120-overview-numbers>strong {font-size:22px!important;}
+  .v120-overview-numbers>p {margin:1px 0 4px!important;}
+  .v120-next-milestone {cursor:pointer!important;width:100%!important;color:inherit!important;text-align:left!important;font:inherit!important;}
+  .v120-next-milestone:focus-visible,.v120-stat-card:focus-visible {outline:2px solid #64e6db!important;outline-offset:2px!important;}
+  .v120-stat-card {cursor:pointer!important;font:inherit!important;}
+  .v120-overview-stats button.v120-stat-card {background:#0e2437!important;color:#e9f9ff!important;border:1px solid #26445e!important;border-radius:10px!important;display:grid!important;place-items:center!important;align-content:center!important;gap:2px!important;min-width:0!important;padding:8px!important;}
+  .v120-overview-stats .v120-stat-card {text-decoration:none!important;color:#e9f9ff!important;}
+  .v120-list-tools button[data-play-view] {display:none!important;}
+  #play-category-list {scroll-margin-top:80px!important;}
+  .v120-playthrough .v120-section-title {display:block!important;}
+  .v120-playthrough .v120-section-title>span {display:block!important;text-align:left!important;margin-top:5px!important;}
+
+  /* Category details with actions: shorter, always keep actions in their own row. */
+  .container .item-stack .content-card.has-quick {margin:0!important;}
+  .container .item-stack .content-card .overline {font-size:10px!important;}
+
+  /* Map interaction: one finger pans map; a mode toggle allows page scrolling from over map. */
+  #root .atlas-v119 .atlas-map.vi-map-pan-enabled {touch-action:none!important;}
+  #root .atlas-v119 .atlas-map.vi-map-scroll-enabled {touch-action:pan-y!important;}
+  #root .atlas-v119 .atlas-map .vi-map-filter-chips {touch-action:pan-x!important;}
+  #root .atlas-v119 .atlas-controls .vi-map-gesture-toggle {width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;border-color:#66c9bb!important;color:#63e6da!important;font-size:18px!important;}
+  #root .atlas-v119 .atlas-controls {gap:5px!important;}
+  #root .atlas-v119 .atlas-controls button {font-size:18px!important;}
+  /* Left slide-over panel with readable single-column list and independent scroll. */
+  #root .atlas-v119 .atlas-layout {position:relative!important;}
+  #root .atlas-v119 .atlas-layout>.atlas-filters.mobile-closed {display:none!important;}
+  #root .atlas-v119 .atlas-layout>.atlas-filters.mobile-open {
+    position:absolute!important;display:flex!important;flex-direction:column!important;
+    top:40px!important;left:7px!important;right:auto!important;bottom:auto!important;
+    width:min(68%,250px)!important;max-width:min(68%,250px)!important;
+    height:auto!important;max-height:min(54%,230px)!important;min-height:0!important;
+    padding:9px!important;margin:0!important;z-index:90!important;
+    border-radius:12px!important;overflow-y:auto!important;overflow-x:hidden!important;
+    touch-action:pan-y!important;overscroll-behavior-y:contain!important;
+    -webkit-overflow-scrolling:touch!important;box-shadow:0 10px 24px #0009!important;
+  }
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-filter-head {display:flex!important;flex-direction:column!important;gap:4px!important;align-items:stretch!important;margin:0 26px 5px 0!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-filter-head b {font-size:13px!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-filter-heading-actions {display:flex!important;gap:4px!important;justify-content:flex-start!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-filter-heading-actions button {font-size:11px!important;min-height:27px!important;height:27px!important;width:auto!important;padding:3px 7px!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-filter-actions {display:grid!important;grid-template-columns:1fr!important;gap:5px!important;width:100%!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-filter-actions button {width:100%!important;min-height:30px!important;height:auto!important;font-size:11px!important;padding:5px!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-filter-scroll {display:flex!important;flex:0 0 auto!important;flex-direction:column!important;gap:5px!important;max-height:none!important;overflow:visible!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-group-options {display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:3px!important;min-width:0!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-group-options .atlas-check,
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-filter-quick .atlas-check {
+    display:grid!important;grid-template-columns:20px 22px minmax(0,1fr) 25px!important;
+    gap:5px!important;align-items:center!important;min-height:33px!important;
+    padding:4px 3px!important;max-width:100%!important;min-width:0!important;
+  }
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-check input {height:18px!important;min-height:18px!important;max-height:18px!important;width:18px!important;min-width:18px!important;max-width:18px!important;align-self:center!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-check .atlas-filter-name {font-size:11px!important;line-height:1.25!important;overflow-wrap:anywhere!important;white-space:normal!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-check em {min-width:23px!important;font-size:10px!important;padding:3px!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-group-name {font-size:11px!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-filter-group>summary {padding:5px!important;min-height:33px!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .atlas-filter-extra {padding:3px 5px 6px!important;}
+  #root .atlas-v119 .atlas-filters.mobile-open .vi-map-filter-close {position:sticky!important;align-self:flex-end!important;top:0!important;right:0!important;flex:0 0 27px!important;height:27px!important;min-height:27px!important;float:none!important;margin:-5px -3px -18px auto!important;z-index:91!important;}
+  #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle {max-width:calc(100% - 176px)!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;}
+  #root .atlas-v119 .atlas-map .atlas-controls {z-index:60!important;}
+  .atlas-caption span:first-child {font-size:11px!important;}
+}
+@media(max-width:360px){
+ .home-v18 .home-permanent-dots {left:44%!important;}
+ .home-v18 .home-permanent-arrows button {height:36px!important;width:36px!important;min-height:36px!important;min-width:36px!important;flex-basis:36px!important;}
+ #root .atlas-v119 .atlas-map .atlas-mobile-filter-toggle {font-size:10px!important;max-width:calc(100% - 174px)!important;}
+ .container .item-stack .content-card-link {grid-template-columns:84px minmax(0,1fr)!important;}
+ .container .item-stack .content-card .thumb {width:82px!important;min-width:82px!important;max-width:82px!important;height:86px!important;max-height:86px!important;}
+}
+
+/* V1.38 UI FIXES: isolate new behavior to mobile APK. */
+@media (max-width:700px){
+/* Carrusel: la fila superior de puntos nunca comparte espacio con CTA o flechas. */
+.home-v18 .home-permanent-copy {bottom:76px!important;justify-content:flex-start!important;gap:8px!important;}
+.home-v18 .home-permanent-cta{position:absolute!important;left:0!important;bottom:-14px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;max-width:calc(100% - 130px)!important;min-width:0!important;width:max-content!important;min-height:40px!important;height:40px!important;box-sizing:border-box!important;padding:7px 11px!important;border-radius:10px!important;white-space:nowrap!important;font-size:12px!important;line-height:1.1!important;z-index:12!important;}
+.home-v18 .home-permanent-dots{left:50%!important;bottom:65px!important;transform:translateX(-50%)!important;right:auto!important;position:absolute!important;max-width:90%!important;z-index:10!important;gap:6px!important;}
+.home-v18 .home-permanent-arrows{right:10px!important;bottom:10px!important;position:absolute!important;display:flex!important;gap:8px!important;z-index:12!important;}
+.home-v18 .home-permanent-arrows button{all:unset!important;box-sizing:border-box!important;display:grid!important;place-items:center!important;flex:0 0 40px!important;width:40px!important;min-width:40px!important;max-width:40px!important;height:40px!important;min-height:40px!important;max-height:40px!important;border:1px solid #60748d!important;border-radius:11px!important;background:#14233cd9!important;color:#fff!important;font:400 19px/1 sans-serif!important;cursor:pointer!important;text-align:center!important;}
+.home-v18 .home-permanent-frame{min-height:300px!important;height:310px!important;overflow:hidden!important;}
+/* Descubrir: compact card, no giant empty zone between thumb and controls. */
+.home-v18 .v18-catalog-zone .item-stack .content-card{height:auto!important;min-height:0!important;max-height:none!important;padding:9px!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:0!important;}
+.home-v18 .v18-catalog-zone .item-stack .content-card-link{height:auto!important;min-height:0!important;grid-template-columns:94px minmax(0,1fr)!important;gap:9px!important;margin-bottom:3px!important;}
+.home-v18 .v18-catalog-zone .item-stack .content-card-link img{width:94px!important;height:94px!important;object-fit:cover!important;}
+.home-v18 .v18-catalog-zone .item-stack .card-inline-actions{height:48px!important;min-height:48px!important;align-items:center!important;margin:3px 0 0!important;padding:6px 2px 0!important;}
+.home-v18 .v18-catalog-zone .item-stack .card-inline-actions button{max-height:38px!important;}
+/* Map filter panel: truly small, never cover most of the map. */
+#root .atlas-v119:not(.vi-fullscreen-map) .atlas-filters.mobile-open{width:min(55%,205px)!important;max-width:min(55%,205px)!important;max-height:52%!important;height:auto!important;top:46px!important;left:7px!important;right:auto!important;bottom:auto!important;overflow-y:auto!important;}
+#root .atlas-v119:not(.vi-fullscreen-map) .atlas-filters.mobile-open .atlas-v117-sidebar-head{display:none!important;}
+#root .atlas-v119:not(.vi-fullscreen-map) .atlas-filters.mobile-open .atlas-filter-head{margin-top:16px!important;}
+#root .atlas-v119:not(.vi-fullscreen-map) .atlas-filters.mobile-open .atlas-filter-head b{font-size:11px!important;}
+#root .atlas-v119:not(.vi-fullscreen-map) .atlas-filters.mobile-open .atlas-group-options .atlas-check{grid-template-columns:18px 18px minmax(0,1fr) 20px!important;gap:3px!important;}
+#root .atlas-v119:not(.vi-fullscreen-map) .atlas-filters.mobile-open .atlas-check .atlas-filter-name{font-size:10px!important;}
+#root .atlas-v119 .atlas-controls .vi-map-fullscreen-btn{display:grid!important;place-items:center!important;font-size:17px!important;}
+/* Full-screen map is a viewport overlay, keeping Android system UI and bottom inset safe. */
+body.vi-map-modal-active{overflow:hidden!important;}
+#root .atlas-v119.vi-fullscreen-map{position:fixed!important;inset:0!important;z-index:9999!important;background:#091724!important;display:flex!important;flex-direction:column!important;box-sizing:border-box!important;padding:8px!important;margin:0!important;overflow:hidden!important;}
+#root .atlas-v119.vi-fullscreen-map .atlas-toolbar,#root .atlas-v119.vi-fullscreen-map .atlas-search-results{display:none!important;}
+#root .atlas-v119.vi-fullscreen-map .atlas-layout{display:block!important;position:relative!important;min-height:0!important;flex:1 1 auto!important;height:100%!important;margin:0!important;}
+#root .atlas-v119.vi-fullscreen-map .atlas-center{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;min-height:0!important;}
+#root .atlas-v119.vi-fullscreen-map .atlas-map{width:100%!important;height:100%!important;max-height:none!important;min-height:0!important;touch-action:none!important;}
+#root .atlas-v119.vi-fullscreen-map .atlas-caption{display:none!important;}
+#root .atlas-v119.vi-fullscreen-map .atlas-filters.mobile-open{position:absolute!important;top:52px!important;left:8px!important;bottom:auto!important;right:auto!important;width:min(52%,235px)!important;max-width:min(52%,235px)!important;max-height:calc(100% - 125px)!important;height:auto!important;overflow:auto!important;z-index:92!important;}
+#root .atlas-v119.vi-fullscreen-map .atlas-filters.mobile-closed{display:none!important;}
+#root .atlas-v119.vi-fullscreen-map .atlas-mobile-filter-toggle{max-width:165px!important;}
+#root .atlas-v119.vi-fullscreen-map .atlas-filter-scroll{overflow-y:visible!important;}
+#root .atlas-v119.vi-fullscreen-map .atlas-map .atlas-controls{right:7px!important;}
+#root .atlas-v119.vi-fullscreen-map .vi-map-filter-chips{max-width:calc(100% - 12px)!important;}
+#root .atlas-v119 .atlas-map .atlas-background{user-select:none!important;-webkit-user-drag:none!important;}
+}
+
+@media(max-width:700px){.home-v18 .home-permanent-frame>.home-permanent-cta.vi-hero-cta{position:absolute!important;left:12px!important;bottom:10px!important;top:auto!important;display:flex!important;align-items:center!important;min-height:40px!important;height:40px!important;z-index:15!important;max-width:calc(100% - 130px)!important;} }
+
+@media(max-width:700px){#root .atlas-v119.vi-fullscreen-map>.atlas-footer-note{display:none!important}#root .atlas-v119.vi-fullscreen-map .atlas-layout{min-height:0!important;height:auto!important;flex:1 1 auto!important}#root .atlas-v119.vi-fullscreen-map .atlas-map{height:100%!important;max-height:100%!important} }
+
+@media(max-width:700px){#root .atlas-v119 .atlas-map>.vi-map-fullscreen-btn{position:absolute!important;display:grid!important;place-items:center!important;right:10px!important;top:56px!important;z-index:85!important;width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;padding:0!important;margin:0!important;border-radius:11px!important;border:1px solid #7a9db0!important;background:#092d3ddf!important;color:#f1fcff!important;font-size:20px!important;box-shadow:0 2px 9px #0008!important}#root .atlas-v119.vi-fullscreen-map .atlas-map>.vi-map-fullscreen-btn{top:52px!important}}
+
+/* ===== V139: isolated final phone components, no desktop changes ===== */
+@media (max-width:700px){
+/* Hero footer: three controls in explicit separate grid areas. */
+#root .home-v18 .home-permanent-frame{height:320px!important;min-height:320px!important;position:relative!important;overflow:hidden!important;}
+#root .home-v18 .home-permanent-copy{inset:12px 13px 94px!important;max-height:calc(100% - 108px)!important;bottom:94px!important;justify-content:space-between!important;gap:6px!important;}
+#root .home-v18 .home-permanent-copy p{max-height:3.7em!important;overflow:hidden!important;}
+#root .home-v18 .vi-hero-footer{position:absolute!important;inset:auto 10px 9px!important;z-index:95!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:16px 40px!important;grid-template-areas:'dots dots' 'cta arrows'!important;column-gap:8px!important;row-gap:9px!important;align-items:center!important;pointer-events:none!important;}
+#root .home-v18 .vi-hero-footer .home-permanent-cta{position:static!important;inset:auto!important;grid-area:cta!important;justify-self:start!important;align-self:center!important;box-sizing:border-box!important;max-width:100%!important;min-width:0!important;min-height:40px!important;height:40px!important;width:auto!important;margin:0!important;padding:8px 11px!important;display:inline-flex!important;align-items:center!important;border-radius:11px!important;overflow:hidden!important;font-size:12px!important;font-weight:700!important;white-space:nowrap!important;text-overflow:ellipsis!important;pointer-events:auto!important;}
+#root .home-v18 .vi-hero-footer .home-permanent-dots{position:static!important;inset:auto!important;grid-area:dots!important;width:max-content!important;max-width:100%!important;height:15px!important;transform:none!important;justify-self:center!important;align-self:center!important;margin:0!important;display:flex!important;align-items:center!important;gap:5px!important;pointer-events:auto!important;}
+#root .home-v18 .vi-hero-footer .home-permanent-arrows{position:static!important;inset:auto!important;grid-area:arrows!important;justify-self:end!important;align-self:center!important;margin:0!important;display:flex!important;align-items:center!important;gap:7px!important;transform:none!important;pointer-events:auto!important;}
+#root .home-v18 .vi-hero-footer .home-permanent-arrows button{all:unset!important;display:grid!important;place-items:center!important;box-sizing:border-box!important;flex:0 0 40px!important;width:40px!important;max-width:40px!important;min-width:40px!important;height:40px!important;max-height:40px!important;min-height:40px!important;margin:0!important;padding:0!important;line-height:1!important;background:#13243bdc!important;border:1px solid #658095!important;border-radius:11px!important;color:#fff!important;cursor:pointer!important;}
+#root .home-v18 .vi-hero-footer .home-permanent-arrows svg{width:19px!important;height:19px!important;display:block!important;stroke-width:2!important;}
+/* Descubrir: content and actions form two natural-height rows with no blank space. */
+#root .home-v18 .v18-catalog-zone .item-stack .content-card{height:auto!important;min-height:0!important;max-height:none!important;display:grid!important;grid-template-rows:auto auto!important;align-content:start!important;row-gap:6px!important;padding:10px!important;overflow:hidden!important;}
+#root .home-v18 .v18-catalog-zone .item-stack .content-card-link{height:auto!important;min-height:96px!important;max-height:none!important;grid-row:1!important;display:grid!important;grid-template-columns:94px minmax(0,1fr)!important;gap:10px!important;align-items:start!important;margin:0!important;padding:0!important;}
+#root .home-v18 .v18-catalog-zone .item-stack .content-card-link .thumb{height:94px!important;width:94px!important;min-width:94px!important;max-width:94px!important;object-fit:cover!important;}
+#root .home-v18 .v18-catalog-zone .item-stack .content-card .content-text{padding-right:0!important;min-width:0!important;}
+#root .home-v18 .v18-catalog-zone .item-stack .content-card .content-text p{display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:3!important;line-clamp:3!important;overflow:hidden!important;}
+#root .home-v18 .v18-catalog-zone .item-stack .content-card .card-inline-actions{position:static!important;inset:auto!important;grid-row:2!important;display:flex!important;align-items:center!important;justify-content:space-between!important;min-height:42px!important;height:auto!important;max-height:none!important;width:100%!important;gap:8px!important;margin:0!important;padding:6px 0 0!important;}
+#root .home-v18 .v18-catalog-zone .item-stack .card-inline-actions .quick-complete{margin:0!important;min-height:36px!important;height:36px!important;max-height:36px!important;}
+#root .home-v18 .v18-catalog-zone .item-stack .card-inline-actions .quick-fav{margin:0 0 0 auto!important;width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;flex-basis:38px!important;}
+/* Map: small panel during normal browsing; larger but bounded in fullscreen. */
+#root .atlas-v119:not(.vi-fullscreen-map) .atlas-filters.mobile-open{width:min(44%,175px)!important;max-width:min(44%,175px)!important;top:48px!important;left:7px!important;max-height:56%!important;min-height:0!important;overflow:auto!important;}
+#root .atlas-v119.vi-fullscreen-map .atlas-filters.mobile-open{width:min(57%,235px)!important;max-width:min(57%,235px)!important;max-height:calc(100% - 132px)!important;overflow-y:auto!important;}
+#root .atlas-v119 .atlas-filters.mobile-open .atlas-check{grid-template-columns:18px 18px minmax(0,1fr) 20px!important;gap:3px!important;min-width:0!important;}
+#root .atlas-v119 .atlas-filters.mobile-open .atlas-check .atlas-filter-name{font-size:11px!important;overflow-wrap:anywhere!important;}
+#root .atlas-v119 .atlas-filters.mobile-open .atlas-filter-scroll{overflow-y:auto!important;max-height:none!important;-webkit-overflow-scrolling:touch!important;}
+}

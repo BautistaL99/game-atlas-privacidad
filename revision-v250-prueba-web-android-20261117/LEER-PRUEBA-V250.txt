@@ -1,0 +1,1 @@
+Game Atlas QA V250: preview independiente, datos locales aislados; no publicar en Firebase ni usar como aplicación oficial.

@@ -1,0 +1,11 @@
+/* V220 · Correccion puntual de superposicion del mapa.
+   Cuando una ficha de ubicacion esta abierta, el control flotante Filtros
+   no debe tapar Favorito ni Ficha completa. Al cerrar la ficha reaparece.
+   :has se soporta en Chrome/Android WebView y Safari/iOS actuales. */
+@media (max-width:700px), (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+  #root .atlas-v119.vi-fullscreen-map .atlas-map:has(.atlas-popup) > .atlas-mobile-filter-toggle{
+    display:none!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+  }
+}
