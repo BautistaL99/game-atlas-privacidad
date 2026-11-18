@@ -1,13 +1,16 @@
 {
   "cursor": {
-    "Category:Vehicles in GTA VI": null,
+    "Category:Vehicles in GTA VI": {
+      "cmcontinue": "page|42555a5a4152442028504f4c49434529|449813",
+      "continue": "-||"
+    },
     "Category:Characters in GTA VI": {
-      "cmcontinue": "page|4c494c205249434b592053415744555354|457616",
+      "cmcontinue": "page|554e4e414d4544204754412056492050455420494755414e41|435491",
       "continue": "-||"
     },
     "Category:Weapons in GTA VI": null,
     "Category:Locations in GTA VI": null
   },
-  "specCursor": 116,
-  "checkedAt": "2026-11-18T17:34:12.965Z"
+  "specCursor": 22,
+  "checkedAt": "2026-11-18T22:25:50.638Z"
 }
