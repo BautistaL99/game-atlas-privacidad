@@ -1,0 +1,107 @@
+{
+  "schema": "game-atlas-map-v18-qa-v1",
+  "date": "2026-11-18",
+  "status": "REVIEW_ONLY_DO_NOT_DEPLOY",
+  "current": {
+    "mapId": "map-v216-yanis17",
+    "source": "app/assets/leonida-landmarks-v216.json",
+    "pins": 926
+  },
+  "candidate": {
+    "mapName": "Yanis V18",
+    "sourceRepo": "https://github.com/rolux/gtadb.org",
+    "sourceLandmarks": "https://github.com/rolux/gtadb.org/blob/main/map/data/6/landmarks.json",
+    "sourceLicensing": "https://github.com/rolux/gtadb.org/blob/main/LICENSE-DATA",
+    "license": "CC BY 4.0; attribution required; game assets may have separate rights",
+    "sourceRows": 3658,
+    "namedRows": 1018,
+    "unnamedRows": 2640
+  },
+  "crosswalk": {
+    "matchedByStableSourceId": 926,
+    "stableWithin012Percent": 921,
+    "requiresManualReview": 5,
+    "fitOldXPercent": {
+      "slope": 0.007440481049111432,
+      "intercept": 78.09535489110657
+    },
+    "fitOldYPercent": {
+      "slope": -0.005580361819765289,
+      "intercept": 61.42858780169811
+    },
+    "model": "The affine transform is fitted to 921 source IDs with residuals <0.1 percentage point on each axis. It maps world positions into V17 pixel percent and MUST NOT be assumed valid for V18 without image calibration."
+  },
+  "manualReview": [
+    {
+      "id": "L1916",
+      "title": "Train Station",
+      "oldPercent": [
+        73.2135,
+        26.6566
+      ],
+      "candidateProjectedV17Percent": [
+        73.0348,
+        26.7351
+      ]
+    },
+    {
+      "id": "L2000",
+      "title": "Mount Lummox (old) / unnamed (V18)",
+      "oldPercent": [
+        49.401,
+        17.5204
+      ],
+      "candidateProjectedV17Percent": [
+        49.0445,
+        17.4226
+      ],
+      "issue": "Location renamed to '?' in new dataset; preserve original until source reviewed"
+    },
+    {
+      "id": "L2245",
+      "title": "Gas Station",
+      "oldPercent": [
+        48.6541,
+        56.4973
+      ],
+      "candidateProjectedV17Percent": [
+        38.5777,
+        55.329
+      ],
+      "issue": "Large delta; must visually check place identity before update"
+    },
+    {
+      "id": "L2603",
+      "title": "Cell Tower",
+      "oldPercent": [
+        26.8396,
+        58.9983
+      ],
+      "candidateProjectedV17Percent": [
+        26.7762,
+        58.8206
+      ]
+    },
+    {
+      "id": "L943",
+      "title": "Mason's Shrimp Shack",
+      "oldPercent": [
+        29.8636,
+        37.0781
+      ],
+      "candidateProjectedV17Percent": [
+        29.4751,
+        37.2659
+      ]
+    }
+  ],
+  "deliveryGates": [
+    "Acquire licensed V18 basemap from GTADB with source attribution and unchanged image bytes until accepted",
+    "Calibrate GTA world positions against V18 image corners and multiple anchor locations; check projection errors",
+    "Exclude unnamed, unconfirmed, demolished and duplicate landmarks by default",
+    "Verify ficha-to-pin IDs, filters, search, user-created markers and routes on Web PC/mobile",
+    "Verify remote map schema 242, Ed25519 signature, image SHA-256 and actual iOS/Android simulator loading",
+    "Document how existing routes and custom markers will behave when mapId changes",
+    "Publish via signed remote manifest only after visual QA; never bypass user-approved signed publisher"
+  ]
+}
