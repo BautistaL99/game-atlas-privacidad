@@ -55,7 +55,7 @@ assert(css.includes('grid-template-columns:minmax(0,1fr)')&&css.includes('vi-v24
 assert(app.includes("if(route==='/pagos')return billingPageV249()"),'Native payments route');
 assert(app.includes('viNativePlatformV249()!==\'web\''),'Native-only payments navigation');
 assert(mon.includes('billingEnabled:false')&&mon.includes('advertisingEnabled:false')&&mon.includes('purchaseAvailable(){return false;}'),'Never simulate payment or ad-free status');
-assert(read('index.html').includes('monetization-v249.js')&&read('index.html').includes('game-atlas-v249-fixes.css'));
+assert((read('index.html').includes('monetization-v249.js')||read('index.html').includes('monetization-v250.js'))&&(read('index.html').includes('game-atlas-v249-fixes.css')||read('index.html').includes('game-atlas-v250-fixes.css')));
 console.log('PASS V249: 3 real gun-store POIs, 18 vehicle POIs, ES/EN/PT intents');
 console.log('PASS V249: remembered map spotlight remains through filters and backdrop, route-only hides POIs');
 console.log('PASS V249: late results refresh, layout, store-facing payment prep, no fake entitlement, ads gated');
