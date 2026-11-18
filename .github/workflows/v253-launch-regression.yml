@@ -24,4 +24,4 @@ jobs:
           node --check automation/v219-launch-window.mjs
       - name: Revisar firmas, fechas, feeds, resiliencia 503 y wiki
         run: |
-          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v220-wiki-spec-translations.test.mjs automation/v220-client-integration.test.mjs automation/v253-manual-news-20261118.test.mjs automation/v253-launch-resilience.test.mjs
+          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v220-wiki-spec-translations.test.mjs automation/v220-client-integration.test.mjs automation/v253-manual-news-20261118.test.mjs automation/v253-launch-resilience.test.mjs automation/v253-client-limits.test.mjs
