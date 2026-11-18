@@ -143,3 +143,22 @@ test('V210 normalizes Rockstar GraphQL relative Newswire URLs without accepting 
  assert.equal(entries[0].url,'https://www.rockstargames.com/newswire/article/a123456/new-grand-theft-auto-vi-information');
  assert.equal(entries[0].publishedAt,'2026-11-10');
 });
+
+test('V253 keeps translated facts across a newer Wiki revision only when raw source fact is unchanged',async()=>{
+ const current=verifyFeed(JSON.parse(await readFile('updates/community-envelope-v205.json','utf8')),205);
+ const original=current.fiches[0];
+ const spec={key:'type',label:'type',value:'sports',
+  labelI18n:{es:'Tipo',en:'Type',pt:'Tipo'},
+  valueI18n:{es:'Deportivo',en:'Sports',pt:'Esportivo'}};
+ const x={...original,specs:[spec]};
+ const source={...current,revision:current.revision+1,fiches:current.fiches.map(f=>f.id===x.id?x:f)};
+ const same=mergeWiki(source,[{...original,wikiPageId:999,
+  wikiRevision:original.wikiRevision+1,
+  specs:[{key:'type',label:'type',value:'sports'}]}]);
+ assert.equal(same.changed,1);
+ assert.equal(same.next.fiches.find(f=>f.id===x.id).specs[0].valueI18n.es,'Deportivo');
+ const changed=mergeWiki(source,[{...original,wikiPageId:999,
+  wikiRevision:original.wikiRevision+1,
+  specs:[{key:'type',label:'type',value:'truck'}]}]);
+ assert.equal(changed.next.fiches.find(f=>f.id===x.id).specs[0].valueI18n,undefined);
+});
