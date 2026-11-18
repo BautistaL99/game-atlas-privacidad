@@ -9,9 +9,13 @@ test('news always checks twice daily including first seven days',()=>{
 });
 test('hourly only during seven full days starting at midnight Argentina',()=>{
  assert.equal(RELEASE_START_UTC,at);
- for(const now of ['2026-11-18T23:59:59Z','2026-11-19T02:59:59Z',end,'2026-11-27T00:00:00Z']){
+ for(const now of ['2026-11-18T17:59:59Z',end,'2026-11-27T00:00:00Z']){
   assert.equal(releaseWindow(now),false);
   assert.equal(decide({now,event:'schedule',schedule:CRON_WIKI_HOURLY}).run,false);
+ }
+ for(const now of ['2026-11-18T18:00:00Z','2026-11-18T23:59:59Z','2026-11-19T02:59:59Z']){
+  assert.equal(releaseWindow(now),false);
+  assert.equal(decide({now,event:'schedule',schedule:CRON_WIKI_HOURLY}).run,true);
  }
  for(const now of [at,'2026-11-20T05:11:00Z','2026-11-25T23:11:00Z','2026-11-26T02:59:59Z']){
   assert.equal(releaseWindow(now),true);
@@ -20,7 +24,7 @@ test('hourly only during seven full days starting at midnight Argentina',()=>{
 });
 test('daily wiki resumes after launch window and never duplicates hourly scan',()=>{
  for(const now of ['2026-11-18T08:43:00Z',end])assert.equal(decide({now,event:'schedule',schedule:CRON_WIKI_DAILY}).run,true);
- for(const now of [at,'2026-11-20T08:43:00Z'])assert.equal(decide({now,event:'schedule',schedule:CRON_WIKI_DAILY}).run,false);
+ for(const now of ['2026-11-18T23:43:00Z',at,'2026-11-20T08:43:00Z'])assert.equal(decide({now,event:'schedule',schedule:CRON_WIKI_DAILY}).run,false);
 });
 test('no accidental automatic publishing from unknown events or schedules',()=>{
  assert.equal(decide({event:'push',now:at,schedule:CRON_WIKI_HOURLY}).run,false);
