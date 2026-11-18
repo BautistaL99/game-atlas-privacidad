@@ -96,7 +96,11 @@ test('V210 safely adds unforeseen Wiki infobox cells but excludes nested templat
 });
 test('V210 Wiki updates preserve attributes at the same revision but purge stale specs after revision change',async()=>{
  const current=verifyFeed(JSON.parse(await readFile('updates/community-envelope-v205.json','utf8')),205);
- const old=current.fiches[0],sp=[{key:'available colors',label:'available colors',value:'Red'}];
+ // Use a record without prior infobox specs: the live catalog now includes
+ // enriched records, which must NOT be clobbered by a same-revision rescan.
+ const old=current.fiches.find(x=>!Array.isArray(x.specs)||!x.specs.length);
+ assert.ok(old,'Expected a blank Wiki record for the first-time infobox test');
+ const sp=[{key:'available colors',label:'available colors',value:'Red'}];
  const withSpec=mergeWiki(current,[{...old,wikiPageId:10,specs:sp}]);
  assert.equal(withSpec.changed,1);
  assert.equal(withSpec.next.fiches.length,current.fiches.length);
