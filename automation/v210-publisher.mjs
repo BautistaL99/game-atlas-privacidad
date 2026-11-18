@@ -201,7 +201,9 @@ export function mergeWiki(previous,staged){
    // Only keep infobox data bound to the exact current source revision.
    byId.set(row.id,safeRow);changed++;
   }else if(row.wikiRevision===old.wikiRevision&&safeRow.specs?.length &&
-    JSON.stringify(safeRow.specs)!==JSON.stringify(old.specs||[])){
+    !Array.isArray(old.specs)){
+   // Same source revision: add newly discovered specifications, but never
+   // overwrite previously translated facts with a less complete raw scan.
    byId.set(row.id,{...old,specs:safeRow.specs});changed++;
   }
  }
