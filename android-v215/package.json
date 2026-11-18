@@ -1,6 +1,6 @@
 {
   "name": "game-atlas-companion-android-v215-build",
-  "version": "1.54.0",
+  "version": "1.55.0",
   "private": true,
   "description": "Android Capacitor build of approved Game Atlas Companion V215 web client",
   "scripts": {},

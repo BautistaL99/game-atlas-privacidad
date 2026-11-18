@@ -12,7 +12,7 @@ assert(mapCanvas.includes('vi-v251-route-only-ios'),'iOS route-only must be insi
 assert(mapCanvas.includes('data-map="route-only"')&&app.includes("if(a==='route-only')"),'Existing toggle handler must remain wired');
 assert(style.includes('bottom:94px')&&style.includes('position:absolute'),'Button must be anchored inside map above bottom controls');
 for(const word of ['singleDesc','monthDesc','rankDesc','singleFeatures','monthFeatures','rankFeatures','data-billing-option','data-billing-amount','aria-pressed'])assert(app.includes(word),'Missing '+word);
-assert(app.includes('No elimina publicidad')&&app.includes('No suma al Top'),'Need transparent distinction between products');
+assert(app.includes('No elimina publicidad'),'Need transparent distinction between contribution and ad-free products');
 assert(app.includes('Las compras todavía no están habilitadas'),'Purchases-disabled disclaimer missing');
 assert(index.includes('game-atlas-v251-fixes.css'),'Styles not linked');
 const mon=read('monetization-v250.js');

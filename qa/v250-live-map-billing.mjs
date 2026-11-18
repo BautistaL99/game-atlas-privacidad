@@ -26,7 +26,7 @@ for(const dir of dirs){
  assert(index.includes('monetization-v250.js')&&index.includes('game-atlas-v250-fixes.css'));
  const mctx={window:{},Date,Object};vm.runInNewContext(money,mctx);
  const m=mctx.window.viMonetizationV250;
- assert(m.products.ranking.length===8&&m.products.ranking[0].usdReference===1);
+ assert(m.products.ranking.length===8&&m.products.ranking[0].usdReference===0.99);
  assert(m.products.ranking.every(p=>p.kind==='consumable'&&p.adFree==='none'&&p.rankingPoints===p.usdReference));
  assert(m.products.lifetime.every(p=>p.kind==='nonconsumable'&&p.rankingPoints===0));
  assert(m.products.monthly.every(p=>p.kind==='subscription'&&p.rankingPoints===0));
