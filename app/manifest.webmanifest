@@ -1,6 +1,6 @@
 {
-  "name": "Game Atlas V248 — PRUEBA",
-  "short_name": "GA V248 QA",
+  "name": "Game Atlas Companion",
+  "short_name": "Game Atlas",
   "description": "Independent GTA VI companion: Leonida map, routes, news and independently verified catalog entries.",
   "start_url": "./",
   "scope": "./",
@@ -29,5 +29,5 @@
       "purpose": "maskable"
     }
   ],
-  "id": "/game-atlas-privacidad/revision-v248-prueba-web-android-20261117/"
+  "id": "/app/"
 }

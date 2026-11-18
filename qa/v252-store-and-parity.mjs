@@ -18,6 +18,8 @@ const walk=dir=>{
 };
 const a=walk(appDir),b=walk(androidDir);
 assert.deepEqual([...a].sort(),[...b].sort(),'Android staging source must match APK webDir byte-for-byte');
+const manifest=JSON.parse(read(appDir,'manifest.webmanifest').toString('utf8'));
+assert.equal(manifest.id,'/app/','Do not ship a legacy preview manifest in Android/Play');
 const src=read(appDir,'app-v137.js').toString('utf8');
 const meta=read(appDir,'monetization-v250.js').toString('utf8');
 const i=src.indexOf("card('monthly',1,");

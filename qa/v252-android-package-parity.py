@@ -8,6 +8,8 @@ source,staged,apk_file,aab_file=map(Path,sys.argv[1:])
 def sha(b):return hashlib.sha256(b).hexdigest()
 files={p.relative_to(source).as_posix():p.read_bytes() for p in source.rglob('*') if p.is_file()}
 files_staged={p.relative_to(staged).as_posix():p.read_bytes() for p in staged.rglob('*') if p.is_file()}
+manifest=json.loads(files['manifest.webmanifest'].decode('utf-8'))
+assert manifest.get('id')=='/app/' and 'PRUEBA' not in manifest.get('name',''), 'Distribution manifest still points to a preview build'
 assert files.keys()==files_staged.keys(),f'Staging source file sets differ {set(files)^set(files_staged)}'
 for p,data in files.items():
  assert files_staged[p]==data, f'Android staged asset differs from source: {p}'
