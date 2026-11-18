@@ -198,8 +198,16 @@ export function mergeWiki(previous,staged){
   const old=byId.get(row.id);
   const {wikiPageId,...safeRow}=row;
   if(!old||row.wikiRevision>old.wikiRevision){
-   // Only keep infobox data bound to the exact current source revision.
-   byId.set(row.id,safeRow);changed++;
+   // A new Wiki source revision must be rechecked. Preserve previously
+   // verified translations ONLY when the same key, label and source value
+   // are still present verbatim in the new revision; stale facts disappear.
+   const enriched=old&&Array.isArray(safeRow.specs)?safeRow.specs.map(spec=>{
+    const previous=old.specs?.find(p=>p.key===spec.key&&p.label===spec.label&&p.value===spec.value);
+    return previous?{...spec,
+     ...(previous.labelI18n?{labelI18n:previous.labelI18n}:{}),
+     ...(previous.valueI18n?{valueI18n:previous.valueI18n}:{})}:spec;
+   }):safeRow.specs;
+   byId.set(row.id,enriched?{...safeRow,specs:enriched}:safeRow);changed++;
   }else if(row.wikiRevision===old.wikiRevision&&safeRow.specs?.length &&
     !Array.isArray(old.specs)){
    // Same source revision: add newly discovered specifications, but never
