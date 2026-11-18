@@ -1,0 +1,20 @@
+/* V251: map layout and store preview regression. */
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+const dir=process.argv[2]||'www';
+const read=name=>fs.readFileSync(path.join(dir,name),'utf8');
+const app=read('app-v137.js'),index=read('index.html'),style=read('game-atlas-v251-fixes.css');
+const toolbar=app.slice(app.indexOf('<div class="atlas-toolbar">'),app.indexOf('<div class="vi-map-integrity-note"'));
+assert(!toolbar.includes('vi-v251-route-only-ios'),'iOS route-only must not appear in sticky toolbar');
+const mapCanvas=app.slice(app.indexOf('id="mapCanvas"'),app.indexOf('class="vi-map-filter-chips"'));
+assert(mapCanvas.includes('vi-v251-route-only-ios'),'iOS route-only must be inside the map');
+assert(mapCanvas.includes('data-map="route-only"')&&app.includes("if(a==='route-only')"),'Existing toggle handler must remain wired');
+assert(style.includes('bottom:94px')&&style.includes('position:absolute'),'Button must be anchored inside map above bottom controls');
+for(const word of ['singleDesc','monthDesc','rankDesc','singleFeatures','monthFeatures','rankFeatures','data-billing-option','data-billing-amount','aria-pressed'])assert(app.includes(word),'Missing '+word);
+assert(app.includes('No elimina publicidad')&&app.includes('No suma al Top'),'Need transparent distinction between products');
+assert(app.includes('Las compras todavía no están habilitadas'),'Purchases-disabled disclaimer missing');
+assert(index.includes('game-atlas-v251-fixes.css'),'Styles not linked');
+const mon=read('monetization-v250.js');
+assert(mon.includes('billingEnabled:false')&&mon.includes('purchaseAvailable(){return false;}'),'No checkout permitted yet');
+console.log('PASS V251',dir,'iOS route within map; distinct native store previews ES/EN/PT, no checkout');

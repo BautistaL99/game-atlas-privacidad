@@ -20,8 +20,8 @@ for(const dir of dirs){
  root.querySelector=q=>q==='#mapStage'?stage:null;
  existing.clear();context.mapShown=()=>[{id:'car-shop'}];context.refresh();assert.deepEqual([...existing.keys()],['car-shop']);
  assert(src.includes("mapRouteDisplay&&!mapAdd&&viNativePlatformV249()==='ios'"));
- assert(src.includes('vi-v250-route-only-ios')&&css.includes('.vi-v250-route-only-ios'));
- assert(src.includes('Aportes al Top')&&src.includes('No elimina anuncios'));
+ assert((src.includes('vi-v251-route-only-ios')&&read('game-atlas-v251-fixes.css').includes('.vi-v251-route-only-ios'))||(src.includes('vi-v250-route-only-ios')&&css.includes('.vi-v250-route-only-ios')));
+ assert(src.includes('Top')&&(src.includes('No elimina publicidad')||src.includes('No elimina anuncios')));
  assert(src.includes("es:'Apoyar · Sin ads'")&&src.includes("en:'Support · No ads'")&&src.includes("pt:'Apoiar · Sem ads'"));
  assert(index.includes('monetization-v250.js')&&index.includes('game-atlas-v250-fixes.css'));
  const mctx={window:{},Date,Object};vm.runInNewContext(money,mctx);
