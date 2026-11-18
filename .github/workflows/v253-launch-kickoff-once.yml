@@ -1,0 +1,62 @@
+name: Game Atlas V253 - primer llenado automatico del lanzamiento (una vez)
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'automation/v253-launch-kickoff-20261118.trigger'
+permissions:
+  contents: write
+concurrency:
+  group: atlas-v210-public-automated-data
+  cancel-in-progress: false
+jobs:
+  kickoff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CATALOG_SIGNING_KEY_PEM_BASE64: ${{ secrets.CATALOG_SIGNING_KEY_PEM_BASE64 }}
+      GAME_ATLAS_DRY_RUN: 'false'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validar fuente y firma antes de cualquier dato
+        run: |
+          set -euo pipefail
+          test -n "$CATALOG_SIGNING_KEY_PEM_BASE64"
+          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v220-wiki-spec-translations.test.mjs automation/v220-client-integration.test.mjs automation/v253-manual-news-20261118.test.mjs automation/v253-launch-resilience.test.mjs automation/v253-client-limits.test.mjs
+      - name: Incorporar noticias originales firmadas
+        env:
+          GAME_ATLAS_MODE: news
+        run: node automation/v210-publisher.mjs
+      - name: Completar fichas Wiki y traducir campos verificados
+        env:
+          GAME_ATLAS_MODE: wiki
+        run: node automation/v210-publisher.mjs
+      - name: Regenerar páginas SEO a partir de datos firmados
+        run: |
+          node --test automation/seo/compare-signed-envelope.test.mjs automation/seo/generate-static-seo.test.mjs automation/seo/generate-community-seo-v220.test.mjs
+          node automation/v220-seo-refresh.mjs
+      - name: Publicar solamente catálogo firmado y SEO, nunca app/ ni mapa
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main --quiet
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo 'La rama main cambió; cancelado para no sobrescribir datos nuevos'
+            exit 1
+          fi
+          git add updates/catalog-envelope.json updates/community-envelope-v205.json automation/v210-last-check.json
+          if [ -f automation/v210-wiki-state.json ]; then git add automation/v210-wiki-state.json; fi
+          git add guia-gta-6 sitemap.xml automation/seo/last-indexed-v220.json
+          if git diff --cached --quiet; then
+            echo 'Sin noticias ni fichas nuevas; no se modifica el repositorio'
+          else
+            git commit -m 'Game Atlas V253: signed automatic GTA VI launch-day news and wiki'
+            git push origin HEAD:main
+          fi
