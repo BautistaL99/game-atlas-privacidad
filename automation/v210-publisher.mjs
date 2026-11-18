@@ -242,7 +242,9 @@ async function run(){
   // Source revisions are validated above. Translate a bounded number of
   // technical properties each scan, retry failures without publishing English
   // as if it were a completed ES/PT translation.
-  const i18n=await translateFacts(nextCommunity,{maxRequests:24,maxSpecs:14});
+  // Deterministic glossary can process the whole signed catalog with zero API calls.
+  // Unknown strings remain pending; remote requests are tightly bounded.
+  const i18n=await translateFacts(nextCommunity,{maxRequests:10,maxSpecs:1200});
   nextCommunity=i18n.next;
   report.specsTranslated=i18n.translated;
   report.specsPending=i18n.pending;
