@@ -7,6 +7,8 @@ on:
     - cron: '43 8 * * *'
     # First 7 days after GTA VI launch: once per hour, only while the launch gate is open.
     - cron: '11 * * * *'
+    # GTA VI launch: hourly official + approved independent news, Nov 18–Dec 2 ART.
+    - cron: '47 * * * *'
   workflow_dispatch:
     inputs:
       dry_run:
