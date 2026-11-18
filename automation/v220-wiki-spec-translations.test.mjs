@@ -70,3 +70,24 @@ test('V253: a 503 halts more remote attempts but still translates known terms',a
  assert.equal(done.pending,2);
  assert.equal(done.next.fiches[1].specs[0].valueI18n.es,'Masculino');
 });
+
+test('V253: weapons, body styles and named places localize without translator service',async()=>{
+ const list=[
+  {key:'type',label:'type',value:'handgun',es:'Pistola',pt:'Pistola'},
+  {key:'type',label:'type',value:'submachinegun',es:'Subfusil',pt:'Submetralhadora'},
+  {key:'weapon style',label:'weapon style',value:'Sniper rifle',es:'Rifle de francotirador',pt:'Rifle de precisão'},
+  {key:'body style',label:'body style',value:'Sports bike',es:'Motocicleta deportiva',pt:'Motocicleta esportiva'},
+  {key:'type',label:'type',value:'militarybase',es:'Base militar',pt:'Base militar'},
+  {key:'body style',label:'body style',value:'2-door coupé',es:'Cupé de 2 puertas',pt:'Cupê de 2 portas'},
+  {key:'home',label:'home',value:'Ambrosia, Leonida',es:'Ambrosia, Leonida',pt:'Ambrosia, Leonida'},
+  {key:'country',label:'country',value:'United States of America',es:'Estados Unidos de América',pt:'Estados Unidos da América'}
+ ];
+ const input={schema:205,revision:10,fiches:list.map((x,i)=>row({key:x.key,label:x.label,value:x.value}))};
+ const actual=await translateFacts(input,{maxRequests:0,maxSpecs:1200,fetchFn:()=>{throw Error('No remote calls allowed for verified glossary')}});
+ assert.equal(actual.requests,0);
+ assert.equal(actual.translated,list.length);
+ list.forEach((x,i)=>{
+  assert.equal(actual.next.fiches[i].specs[0].valueI18n.es,x.es);
+  assert.equal(actual.next.fiches[i].specs[0].valueI18n.pt,x.pt);
+ });
+});
