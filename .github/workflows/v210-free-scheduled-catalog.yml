@@ -7,6 +7,8 @@ on:
     - cron: '43 8 * * *'
     # First 7 days after GTA VI launch: once per hour, only while the launch gate is open.
     - cron: '11 * * * *'
+    # GTA VI launch: hourly official + approved independent news, Nov 18–Dec 2 ART.
+    - cron: '47 * * * *'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -50,7 +52,7 @@ jobs:
       - name: Comprobar modelo de firmas, fuentes y fecha original
         if: steps.cadence.outputs.should_run == 'true'
         run: |
-          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v220-wiki-spec-translations.test.mjs automation/v220-client-integration.test.mjs automation/v253-manual-news-20261118.test.mjs
+          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v220-wiki-spec-translations.test.mjs automation/v220-client-integration.test.mjs automation/v253-manual-news-20261118.test.mjs automation/v253-launch-resilience.test.mjs
           node --check automation/v220-wiki-spec-translations.mjs
           node --check automation/v210-sources.mjs
           node --check automation/v210-publisher.mjs

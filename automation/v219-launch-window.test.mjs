@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {decide,releaseWindow,CRON_NEWS,CRON_WIKI_DAILY,CRON_WIKI_HOURLY,RELEASE_START_UTC} from './v219-launch-window.mjs';
+import {decide,releaseWindow,CRON_NEWS,CRON_NEWS_LAUNCH,CRON_WIKI_DAILY,CRON_WIKI_HOURLY,RELEASE_START_UTC} from './v219-launch-window.mjs';
 const at='2026-11-19T03:00:00.000Z';
 const end='2026-11-26T03:00:00.000Z';
 test('news always checks twice daily including first seven days',()=>{
@@ -30,4 +30,15 @@ test('no accidental automatic publishing from unknown events or schedules',()=>{
 test('launch date can be moved by explicit documented configuration',()=>{
  assert.equal(releaseWindow(at,'2026-12-01T03:00:00Z'),false);
  assert.equal(releaseWindow('2026-12-01T03:00:00Z','2026-12-01T03:00:00Z'),true);
+});
+
+test('V253 checks GTA VI news hourly from Nov 18 through Dec 2 (Argentina)',()=>{
+ assert.equal(decide({event:'schedule',schedule:CRON_NEWS_LAUNCH,now:'2026-11-18T14:59:59Z'}).run,false);
+ for(const now of ['2026-11-18T15:00:00Z','2026-11-19T03:00:00Z','2026-11-24T09:00:00Z','2026-12-03T02:59:59Z']){
+  const action=decide({event:'schedule',schedule:CRON_NEWS_LAUNCH,now});
+  assert.equal(action.run,true);
+  assert.equal(action.mode,'news');
+ }
+ assert.equal(decide({event:'schedule',schedule:CRON_NEWS_LAUNCH,now:'2026-12-03T03:00:00Z'}).run,false);
+ assert.equal(decide({event:'schedule',schedule:CRON_NEWS,now:'2026-12-05T12:00:00Z'}).run,true);
 });

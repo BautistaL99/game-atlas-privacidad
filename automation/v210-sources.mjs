@@ -108,8 +108,24 @@ export function extractRockstarIntelRSS(xml,now=Date.now()){
  return [...new Map(rows.map(r=>[r.url,r])).values()];
 }
 export async function getIndependent(fetchFn=fetch,now=Date.now()){
- const xml=await boundedText('https://rockstarintel.com/feed/',fetchFn,{max:1600000,headers:{Accept:'application/rss+xml,application/xml','User-Agent':'GameAtlasReadOnlyV210/1.0'}});
- return extractRockstarIntelRSS(xml,now);
+ // A generic Wordpress RSS feed can rotate beyond ten articles during launch.
+ // Query the publisher's GTA VI category feed as well; only the same trusted
+ // RockstarINTEL domain is allowed and source pubDate is never rewritten.
+ const feeds=[
+  'https://rockstarintel.com/feed/',
+  'https://rockstarintel.com/category/gta/gta-6/feed/'
+ ];
+ const answers=await Promise.allSettled(feeds.map(async url=>{
+  const xml=await boundedText(url,fetchFn,{max:1600000,
+   headers:{Accept:'application/rss+xml,application/xml','User-Agent':'GameAtlasReadOnlyV210/1.0'}});
+  return extractRockstarIntelRSS(xml,now);
+ }));
+ const valid=answers.filter(x=>x.status==='fulfilled').flatMap(x=>x.value);
+ if(!valid.length&&answers.every(x=>x.status==='rejected'))
+  throw Error('All RockstarINTEL feeds unavailable: '+answers.map(x=>String(x.reason?.message||'error')).join('; ').slice(0,220));
+ // Stable chronological ordering; preserve article URL as sole identity.
+ return [...new Map(valid.map(row=>[row.url,row])).values()]
+  .sort((a,b)=>a.publishedAt.localeCompare(b.publishedAt)||a.url.localeCompare(b.url));
 }
 const WIKI_CATEGORIES=[
  ['Category:Vehicles in GTA VI','vehiculos'],['Category:Characters in GTA VI','personajes'],

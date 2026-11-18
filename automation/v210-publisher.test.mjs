@@ -96,7 +96,11 @@ test('V210 safely adds unforeseen Wiki infobox cells but excludes nested templat
 });
 test('V210 Wiki updates preserve attributes at the same revision but purge stale specs after revision change',async()=>{
  const current=verifyFeed(JSON.parse(await readFile('updates/community-envelope-v205.json','utf8')),205);
- const old=current.fiches[0],sp=[{key:'available colors',label:'available colors',value:'Red'}];
+ // Use a record without prior infobox specs: the live catalog now includes
+ // enriched records, which must NOT be clobbered by a same-revision rescan.
+ const old=current.fiches.find(x=>!Array.isArray(x.specs)||!x.specs.length);
+ assert.ok(old,'Expected a blank Wiki record for the first-time infobox test');
+ const sp=[{key:'available colors',label:'available colors',value:'Red'}];
  const withSpec=mergeWiki(current,[{...old,wikiPageId:10,specs:sp}]);
  assert.equal(withSpec.changed,1);
  assert.equal(withSpec.next.fiches.length,current.fiches.length);
@@ -138,4 +142,23 @@ test('V210 normalizes Rockstar GraphQL relative Newswire URLs without accepting 
  assert.equal(entries.length,1);
  assert.equal(entries[0].url,'https://www.rockstargames.com/newswire/article/a123456/new-grand-theft-auto-vi-information');
  assert.equal(entries[0].publishedAt,'2026-11-10');
+});
+
+test('V253 keeps translated facts across a newer Wiki revision only when raw source fact is unchanged',async()=>{
+ const current=verifyFeed(JSON.parse(await readFile('updates/community-envelope-v205.json','utf8')),205);
+ const original=current.fiches[0];
+ const spec={key:'type',label:'type',value:'sports',
+  labelI18n:{es:'Tipo',en:'Type',pt:'Tipo'},
+  valueI18n:{es:'Deportivo',en:'Sports',pt:'Esportivo'}};
+ const x={...original,specs:[spec]};
+ const source={...current,revision:current.revision+1,fiches:current.fiches.map(f=>f.id===x.id?x:f)};
+ const same=mergeWiki(source,[{...original,wikiPageId:999,
+  wikiRevision:original.wikiRevision+1,
+  specs:[{key:'type',label:'type',value:'sports'}]}]);
+ assert.equal(same.changed,1);
+ assert.equal(same.next.fiches.find(f=>f.id===x.id).specs[0].valueI18n.es,'Deportivo');
+ const changed=mergeWiki(source,[{...original,wikiPageId:999,
+  wikiRevision:original.wikiRevision+1,
+  specs:[{key:'type',label:'type',value:'truck'}]}]);
+ assert.equal(changed.next.fiches.find(f=>f.id===x.id).specs[0].valueI18n,undefined);
 });

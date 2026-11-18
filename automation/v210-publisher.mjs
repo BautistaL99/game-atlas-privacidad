@@ -77,11 +77,15 @@ function enToTranslated(source,target){
   /\b(?:translation quota exceeded|mymemory warning|invalid request)\b/i.test(target))throw Error('Translation withheld: untrusted output');
  return target;
 }
+let translationProviderUnavailable=false;
 async function myMemory(textToTranslate,lang,fetchFn=fetch){
+ if(translationProviderUnavailable)throw Error('Translation provider temporarily unavailable; preserve original source headline');
  const src=clean(textToTranslate,180);
  if(!src||Buffer.byteLength(src)>450)throw Error('Source title is too large to translate safely');
  const q=new URLSearchParams({q:src,langpair:'en|'+(lang==='pt'?'pt-BR':'es'),mt:'1'});
- const raw=await boundedText('https://api.mymemory.translated.net/get?'+q,fetchFn,{max:40000,headers:{Accept:'application/json'}});
+ let raw;
+ try{raw=await boundedText('https://api.mymemory.translated.net/get?'+q,fetchFn,{max:40000,headers:{Accept:'application/json'}})}
+ catch(e){if(/HTTP (?:429|500|502|503|504)|Timeout|fetch failed/i.test(String(e.message)))translationProviderUnavailable=true;throw e}
  const doc=JSON.parse(raw);
  if(Number(doc.responseStatus)!==200)throw Error('Translation provider refused request');
  return enToTranslated(src,clean(doc.responseData?.translatedText,180));
@@ -120,8 +124,11 @@ export async function officialEntry(source,fetchFn=fetch){
   throw Error('Bad Rockstar source');
  const en=clean(source.title,150);
  if(!VI.test(en))throw Error('Rockstar item not explicitly GTA VI');
- const es=await officialTitle(source.url,en,'es',fetchFn);
- const pt=await officialTitle(source.url,en,'pt',fetchFn);
+ let es,pt,pending=false;
+ try{es=await officialTitle(source.url,en,'es',fetchFn)}
+ catch{es='Rockstar Games (titular EN): '+en;pending=true}
+ try{pt=await officialTitle(source.url,en,'pt',fetchFn)}
+ catch{pt='Rockstar Games (título EN): '+en;pending=true}
  const excerpt=await officialExcerpt(source.url,fetchFn);
  return {id:'rockstar-'+sha(source.url).slice(0,24),category:'actualizaciones',status:'verified',
   title:{es,en,pt},
@@ -130,7 +137,8 @@ export async function officialEntry(source,fetchFn=fetch){
    en:'Rockstar Games published an official Grand Theft Auto VI announcement: '+en+'. Read the original Rockstar publication for details.',
    pt:'A Rockstar Games publicou uma notícia oficial sobre Grand Theft Auto VI: '+pt+'. Leia o comunicado original para conhecer os detalhes.'
   },
-  publishedAt:source.publishedAt,trackable:false,sources:[{url:source.url}]
+  publishedAt:source.publishedAt,trackable:false,sources:[{url:source.url}],
+  ...(pending?{translationPending:true}:{})
  };
 }
 export async function independentEntry(source,fetchFn=fetch){
@@ -138,33 +146,50 @@ export async function independentEntry(source,fetchFn=fetch){
   throw Error('Bad independent source');
  const en=clean(source.title,140);
  if(!VI.test(en))throw Error('RSS unrelated to GTA VI');
- const es=await myMemory(en,'es',fetchFn),pt=await myMemory(en,'pt',fetchFn);
- if(es.length>155||pt.length>155)throw Error('Translated headline exceeds the signed news card limit');
+ let es,pt,pending=false;
+ try{es=await myMemory(en,'es',fetchFn)}catch{es=en;pending=true}
+ try{pt=await myMemory(en,'pt',fetchFn)}catch{pt=en;pending=true}
+ if(es.length>155||pt.length>155)throw Error('Headline exceeds the signed news card limit');
  return {id:'community-report-'+sha(source.url).slice(0,24),
-  title:{es:'Según RockstarINTEL: '+es,en:'RockstarINTEL reports: '+en,pt:'Segundo a RockstarINTEL: '+pt},
+  title:{
+   es:'Según RockstarINTEL'+(es===en?' (EN)':'')+': '+es,
+   en:'RockstarINTEL reports: '+en,
+   pt:'Segundo a RockstarINTEL'+(pt===en?' (EN)':'')+': '+pt
+  },
   summary:{
-   es:'RockstarINTEL publicó una noticia sobre GTA VI titulada «'+es+'». Es información de un medio independiente; consultá la fuente original.',
+   es:'RockstarINTEL publicó una noticia independiente sobre GTA VI. '+(es===en?'El titular original está en inglés: «'+en+'».':'Titular: «'+es+'».')+' Consultá la fuente original.',
    en:'Independent outlet RockstarINTEL published GTA VI coverage titled '+en+'. Read the original article and evidence.',
-   pt:'O veículo independente RockstarINTEL publicou uma notícia sobre GTA VI intitulada «'+pt+'». Consulte a fonte original.'
+   pt:'O veículo independente RockstarINTEL publicou uma notícia sobre GTA VI. '+(pt===en?'Título original em inglês: «'+en+'».':'Título: «'+pt+'».')+' Consulte a fonte original.'
   },publishedAt:source.publishedAt,sourceUrl:source.url,sourceName:'RockstarINTEL',
-  sourceTier:'independent_reporting_not_official',claimStatus:'reported_not_confirmed_by_rockstar'};
+  sourceTier:'independent_reporting_not_official',claimStatus:'reported_not_confirmed_by_rockstar',
+  ...(pending?{translationPending:true}:{})};
 }
 export function appendNews(previous,staged,kind){
  validatePublication(previous);
  const items=kind==='official'?previous.items:previous.news;
  const byId=new Map(items.map(row=>[row.id,row]));
- const byUrl=new Set(items.map(row=>kind==='official'?row.sources?.[0]?.url:row.sourceUrl));
- let added=0;
+ const byUrl=new Map(items.map(row=>[kind==='official'?row.sources?.[0]?.url:row.sourceUrl,row.id]));
+ let added=0,updated=0;
  for(const item of staged){
   const uri=kind==='official'?item.sources?.[0]?.url:item.sourceUrl;
-  if(!uri||!urlValid(uri)||byId.has(item.id)||byUrl.has(uri))continue;
-  byId.set(item.id,item);byUrl.add(uri);added++;
+  if(!uri||!urlValid(uri))continue;
+  const existing=byId.get(item.id)||byId.get(byUrl.get(uri));
+  if(existing){
+   // Upgrade an earlier English-labelled fallback only after a proper
+   // multilingual translation arrives from the exact same source URL.
+   if(existing.id===item.id&&existing.translationPending===true&&!item.translationPending&&
+      (kind==='official'?existing.sources?.[0]?.url:existing.sourceUrl)===uri){
+    byId.set(item.id,item);updated++;
+   }
+   continue;
+  }
+  byId.set(item.id,item);byUrl.set(uri,item.id);added++;
  }
- if(!added)return {next:previous,added:0};
+ if(!added&&!updated)return {next:previous,added:0,updated:0};
  const next={...previous,revision:previous.revision+1,
   [kind==='official'?'items':'news']:[...byId.values()]};
  validatePublication(next);
- return {next,added};
+ return {next,added,updated};
 }
 export function mergeWiki(previous,staged){
  validatePublication(previous);
@@ -173,10 +198,20 @@ export function mergeWiki(previous,staged){
   const old=byId.get(row.id);
   const {wikiPageId,...safeRow}=row;
   if(!old||row.wikiRevision>old.wikiRevision){
-   // Only keep infobox data bound to the exact current source revision.
-   byId.set(row.id,safeRow);changed++;
+   // A new Wiki source revision must be rechecked. Preserve previously
+   // verified translations ONLY when the same key, label and source value
+   // are still present verbatim in the new revision; stale facts disappear.
+   const enriched=old&&Array.isArray(safeRow.specs)?safeRow.specs.map(spec=>{
+    const previous=old.specs?.find(p=>p.key===spec.key&&p.label===spec.label&&p.value===spec.value);
+    return previous?{...spec,
+     ...(previous.labelI18n?{labelI18n:previous.labelI18n}:{}),
+     ...(previous.valueI18n?{valueI18n:previous.valueI18n}:{})}:spec;
+   }):safeRow.specs;
+   byId.set(row.id,enriched?{...safeRow,specs:enriched}:safeRow);changed++;
   }else if(row.wikiRevision===old.wikiRevision&&safeRow.specs?.length &&
-    JSON.stringify(safeRow.specs)!==JSON.stringify(old.specs||[])){
+    !Array.isArray(old.specs)){
+   // Same source revision: add newly discovered specifications, but never
+   // overwrite previously translated facts with a less complete raw scan.
    byId.set(row.id,{...old,specs:safeRow.specs});changed++;
   }
  }
@@ -219,18 +254,20 @@ async function run(){
  if(mode==='news'){
   const sources=await Promise.allSettled([getOfficial(),getIndependent()]);
   if(sources[0].status==='fulfilled'){
-   const known=new Set(official.items.flatMap(x=>(x.sources||[]).map(s=>s.url)));
-   const fresh=sources[0].value.filter(x=>!known.has(x.url)).sort((a,b)=>a.publishedAt.localeCompare(b.publishedAt)).slice(0,5);
+   const known=new Map(official.items.map(x=>[x.sources?.[0]?.url,x]));
+   const fresh=sources[0].value.filter(x=>!known.has(x.url)||known.get(x.url)?.translationPending)
+    .sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt)).slice(0,12);
    const translated=[];
    for(const row of fresh)try{translated.push(await officialEntry(row))}catch(e){report.quarantined.push({source:'Rockstar',url:row.url,reason:e.message.slice(0,150)})}
-   const merged=appendNews(official,translated,'official');nextOfficial=merged.next;report.newOfficial=merged.added;
+   const merged=appendNews(official,translated,'official');nextOfficial=merged.next;report.newOfficial=merged.added;report.updatedOfficial=merged.updated||0;
   }else report.warnings.push('Rockstar check failed: '+sources[0].reason.message);
   if(sources[1].status==='fulfilled'){
-   const known=new Set(community.news.map(x=>x.sourceUrl));
-   const fresh=sources[1].value.filter(x=>!known.has(x.url)).sort((a,b)=>a.publishedAt.localeCompare(b.publishedAt)).slice(0,5);
+   const known=new Map(community.news.map(x=>[x.sourceUrl,x]));
+   const fresh=sources[1].value.filter(x=>!known.has(x.url)||known.get(x.url)?.translationPending)
+    .sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt)).slice(0,18);
    const translated=[];
    for(const row of fresh)try{translated.push(await independentEntry(row))}catch(e){report.quarantined.push({source:'RockstarINTEL',url:row.url,reason:e.message.slice(0,150)})}
-   const merged=appendNews(community,translated,'community');nextCommunity=merged.next;report.newIndependent=merged.added;
+   const merged=appendNews(community,translated,'community');nextCommunity=merged.next;report.newIndependent=merged.added;report.updatedIndependent=merged.updated||0;
   }else report.warnings.push('RockstarINTEL check failed: '+sources[1].reason.message);
   // Manually verified launch-day articles: original publication date and
   // independent attribution are preserved. Duplicate source URLs are ignored.
