@@ -7,6 +7,7 @@ import {createPrivateKey,createPublicKey,sign,verify} from 'node:crypto';
 import {readFile,writeFile} from 'node:fs/promises';
 import {getOfficial,getIndependent,getWikiBatch,sha,clean,boundedText} from './v210-sources.mjs';
 import {translateFacts} from './v220-wiki-spec-translations.mjs';
+import {getReviewedLaunchNews} from './v253-manual-news-20261118.mjs';
 const PUB='qxnlUBqCBknS8KL/Bymrx4COzWN9TpPJAfdHohv/ugI=';
 const MODES={official:1,community:205};
 const VI=/\b(?:grand theft auto\s*(?:vi|6)|gta\s*(?:vi|6))\b/i;
@@ -231,7 +232,14 @@ async function run(){
    for(const row of fresh)try{translated.push(await independentEntry(row))}catch(e){report.quarantined.push({source:'RockstarINTEL',url:row.url,reason:e.message.slice(0,150)})}
    const merged=appendNews(community,translated,'community');nextCommunity=merged.next;report.newIndependent=merged.added;
   }else report.warnings.push('RockstarINTEL check failed: '+sources[1].reason.message);
-  if(sources.every(x=>x.status==='rejected'))throw Error('All news providers down; signed archives unchanged');
+  // Manually verified launch-day articles: original publication date and
+  // independent attribution are preserved. Duplicate source URLs are ignored.
+  // The usual Ed25519 signer/validator handles this just like RSS content.
+  const humanReviewed=appendNews(nextCommunity,getReviewedLaunchNews(),'community');
+  nextCommunity=humanReviewed.next;
+  report.newIndependent+=humanReviewed.added;
+  if(sources.every(x=>x.status==='rejected')&&!humanReviewed.added)
+   throw Error('All news providers down; signed archives unchanged');
  }else if(mode==='wiki'){
   try{wikiState=JSON.parse(await readFile('automation/v210-wiki-state.json','utf8'))}catch(e){if(e.code!=='ENOENT')throw e}
   const scanned=await getWikiBatch(wikiState,fetch,{withSpecifications:true});
