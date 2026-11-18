@@ -37,8 +37,8 @@ if(stage==='stage'){
   const gradle=path.join(dir,'app','build.gradle');
   let g=read(gradle);
   check(/versionCode\s+\d+/.test(g)&&/versionName\s+['"][^'"]+['"]/.test(g),'No Android version fields');
-  g=g.replace(/versionCode\s+\d+/,'versionCode 252')
-    .replace(/versionName\s+['"][^'"]+['"]/,'versionName "1.55.0"');
+  g=g.replace(/versionCode\s+\d+/,'versionCode 253')
+    .replace(/versionName\s+['"][^'"]+['"]/,'versionName "1.56.0"');
   // QA debug APK can coexist with the Play Store app: only debug gets a suffix.
   const buildTypes=/buildTypes\s*\{\s*release\s*\{/;
   check(buildTypes.test(g),'Expected buildTypes with release block in Gradle');
@@ -90,7 +90,7 @@ if(stage==='stage'){
   // Distinct debug launcher name; release preserves the original display name.
   const debugStrings=path.join(dir,'app','src','debug','res','values','strings.xml');
   fs.mkdirSync(path.dirname(debugStrings),{recursive:true});
-  fs.writeFileSync(debugStrings,'<resources><string name="app_name">Game Atlas V252 TEST</string></resources>\n');
+  fs.writeFileSync(debugStrings,'<resources><string name="app_name">Game Atlas V253 TEST</string></resources>\n');
   const base=path.join(dir,'app','src','main','java');
   const candidates=[];
   const walk=(folder)=>{for(const f of fs.readdirSync(folder,{withFileTypes:true})){
@@ -163,7 +163,7 @@ if(stage==='stage'){
     '}'
   ];
   fs.writeFileSync(file,pkg+'\n'+java.join('\n')+'\n');
-  console.log('PASS: Android Play ID com.indie.viassistant; versionCode 252; SDK 36; safe areas; Game Atlas brand');
+  console.log('PASS: Android Play ID com.indie.viassistant; versionCode 253; SDK 36; safe areas; Game Atlas brand');
 }else{
   throw Error('Use: node android-v215/prepare-android.mjs stage|native');
 }

@@ -1,8 +1,8 @@
-name: Game Atlas Companion V252 - compilar Android APK y AAB
+name: Game Atlas Companion V253 - compilar Android APK y AAB
 # V252: manual only, to avoid unwanted builds or cost.
 on:
   push:
-    branches: [qa-android-v252-build]
+    branches: [qa-android-v253-build]
   workflow_dispatch:
 permissions:
   contents: read
@@ -32,7 +32,7 @@ jobs:
           SDK_MANAGER=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -print -quit)
           test -n "$SDK_MANAGER"
           "$SDK_MANAGER" --install "platform-tools" "platforms;android-36" "build-tools;36.0.0"
-      - name: Comprobar app V252, búsquedas y correcciones del mapa antes de compilar
+      - name: Comprobar app V253, búsquedas y correcciones del mapa antes de compilar
         run: |
           node --check app/app-v137.js
           node qa/v247-public-client.mjs
@@ -40,6 +40,7 @@ jobs:
           node qa/v250-live-map-billing.mjs app android-v215/www
           node qa/v251-store-ui-and-route.mjs app
           node qa/v252-store-and-parity.mjs app android-v215/www
+          node qa/v253-launch-controls.mjs app android-v215/www
           node qa/v247-qa-marker-switch.mjs
           node qa/v247-qa-ranking-truth.mjs
           node android-v215/prepare-android.mjs stage
@@ -57,7 +58,7 @@ jobs:
       - name: Mantener identidad de Play, apariencia y API 36
         run: |
           node android-v215/prepare-android.mjs native
-          grep -q 'versionCode 252' android-v215/android/app/build.gradle
+          grep -q 'versionCode 253' android-v215/android/app/build.gradle
           grep -q 'targetSdkVersion = 36' android-v215/android/variables.gradle
           grep -q 'community-v206.js' android-v215/www/index.html
           grep -q 'mobile-v215.css' android-v215/www/index.html
@@ -92,21 +93,21 @@ jobs:
           unzip -l "$AAB" | grep -q 'base/assets/public/community-v206.js'
           AAPT="$ANDROID_HOME/build-tools/36.0.0/aapt"
           "$AAPT" dump badging "$APK" | grep -F "package: name='com.indie.viassistant.qa'"
-          "$AAPT" dump badging "$APK" | grep "versionCode='252'"
+          "$AAPT" dump badging "$APK" | grep "versionCode='253'"
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify "$APK"
-          cp "$APK" dist/android-v215/Game-Atlas-Companion-V252-PRUEBA.apk
-          cp "$AAB" dist/android-v215/Game-Atlas-Companion-V252-PRUEBA-SIN-FIRMAR.aab
-          (cd dist/android-v215 && sha256sum Game-Atlas-Companion-V252-PRUEBA.apk Game-Atlas-Companion-V252-PRUEBA-SIN-FIRMAR.aab > SHA256SUMS.txt)
-          cat > dist/android-v215/LEEME-ANDROID-V252.txt <<'TXT'
-          Game Atlas Companion - Android V252 (versionName 1.55.0; versionCode 252)
+          cp "$APK" dist/android-v215/Game-Atlas-Companion-V253-PRUEBA.apk
+          cp "$AAB" dist/android-v215/Game-Atlas-Companion-V253-PRUEBA-SIN-FIRMAR.aab
+          (cd dist/android-v215 && sha256sum Game-Atlas-Companion-V253-PRUEBA.apk Game-Atlas-Companion-V253-PRUEBA-SIN-FIRMAR.aab > SHA256SUMS.txt)
+          cat > dist/android-v215/LEEME-ANDROID-V253.txt <<'TXT'
+          Game Atlas Companion - Android V253 (versionName 1.56.0; versionCode 253)
           APK DEBUG: com.indie.viassistant.qa (INSTALACIÓN PARALELA)
           AAB RELEASE: com.indie.viassistant (mismo ID original de Google Play)
           APK: archivo instalable de PRUEBA, firmado con clave de desarrollo
           AAB: paquete de lanzamiento SIN FIRMAR. NO puede enviarse directamente a Play Console.
           La AAB definitiva requiere firmarla con la clave de SUBIDA de Google Play ya autorizada.
-          Este APK se llama Game Atlas V252 TEST y NO reemplaza tu app de Play.
+          Este APK se llama Game Atlas V253 TEST y NO reemplaza tu app de Play.
           Los datos estan aislados: importar Mi partida JSON si queres trasladarlos.
-          Novedades: código V252 de Android/iOS (la web pública conserva V250); noticias oficiales y medios independientes;
+          Novedades: código V253 de Android/iOS (la web pública conserva V250); noticias oficiales y medios independientes;
           fichas comunitarias separadas; catalogos remotos firmados Ed25519;
           idiomas ES/EN/PT; mapa, marcadores, favoritos y progreso local.
           Se consultan al abrir/reanudar y aproximadamente cada 30 min si esta abierta.
@@ -116,12 +117,12 @@ jobs:
           ls -lh dist/android-v215
       - name: Comparar TODOS los recursos e imágenes del APK y AAB con los archivos probados
         run: |
-          python3 qa/v252-android-package-parity.py app android-v215/www dist/android-v215/Game-Atlas-Companion-V252-PRUEBA.apk dist/android-v215/Game-Atlas-Companion-V252-PRUEBA-SIN-FIRMAR.aab > dist/android-v215/PARIDAD_APK_AAB_V252.json
-          cat dist/android-v215/PARIDAD_APK_AAB_V252.json
+          python3 qa/v252-android-package-parity.py app android-v215/www dist/android-v215/Game-Atlas-Companion-V253-PRUEBA.apk dist/android-v215/Game-Atlas-Companion-V253-PRUEBA-SIN-FIRMAR.aab > dist/android-v215/PARIDAD_APK_AAB_V253.json
+          cat dist/android-v215/PARIDAD_APK_AAB_V253.json
       - name: Entregar APK y AAB descargables desde Actions
         uses: actions/upload-artifact@v4
         with:
-          name: GAME-ATLAS-ANDROID-V252-APK-Y-AAB
+          name: GAME-ATLAS-ANDROID-V253-APK-Y-AAB
           path: dist/android-v215/
           retention-days: 30
           if-no-files-found: error
