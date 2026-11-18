@@ -57,7 +57,21 @@ const VALUES={
  'fullsize':['Tamaño completo','Full size','Tamanho grande'],
  'singleheli':['Helicóptero','Helicopter','Helicóptero'],
  'sports':['Deportivo','Sports','Esportivo'],
- 'buggy':['Buggy','Buggy','Buggy']
+ 'buggy':['Buggy','Buggy','Buggy'],
+ // V253: exact source-backed glossary; no inferred GTA VI statistics.
+ 'artist':['Artista','Artist','Artista'],
+ 'muscle':['Muscle car','Muscle car','Carro muscle'],
+ 'mediumtruck':['Camión mediano','Medium truck','Caminhão médio'],
+ 'lighttrailer':['Remolque ligero','Light trailer','Reboque leve'],
+ 'midsize':['Tamaño mediano','Midsize','Porte médio'],
+ '2-door coupe':['Cupé de 2 puertas','2-door coupe','Cupê de 2 portas'],
+ '2-door pickup truck':['Camioneta de 2 puertas','2-door pickup truck','Picape de 2 portas'],
+ '2-door hotrod coupe':['Cupé hot rod de 2 puertas','2-door hotrod coupe','Cupê hot rod de 2 portas'],
+ '2-door coupe utility':['Utilitario cupé de 2 puertas','2-door coupe utility','Utilitário cupê de 2 portas'],
+ '4-door saloon':['Sedán de 4 puertas','4-door saloon','Sedã de 4 portas'],
+ 'deceased':['Fallecido','Deceased','Falecido'],
+ 'bay boat':['Embarcación de bahía','Bay boat','Barco de baía'],
+ 'off-roading vehicle':['Vehículo todoterreno','Off-roading vehicle','Veículo fora de estrada']
 };
 function langs(v){return {es:v[0],en:v[1],pt:v[2]}}
 function special(value,mode){
@@ -86,10 +100,11 @@ async function translateRemote(en,lang,fetchFn){
   throw Error('Description not translated; retry later instead of mislabeling language');
  return value;
 }
-export async function translateFacts(data,{fetchFn=fetch,maxRequests=24,maxSpecs=14}={}){
+export async function translateFacts(data,{fetchFn=fetch,maxRequests=10,maxSpecs=1200}={}){
  if(!Array.isArray(data?.fiches))throw Error('Missing signed wiki fiches');
  const clone={...data,fiches:data.fiches.slice()};
  let requests=0,translated=0,pending=0,errors=[],changed=false,cache=new Map();
+ let remoteUnavailable=false;
  let completed=0;
  for(let i=0;i<clone.fiches.length;i++){
   const row=clone.fiches[i],specs=row.specs;
@@ -113,10 +128,15 @@ export async function translateFacts(data,{fetchFn=fetch,maxRequests=24,maxSpecs
      if(SAFE(fallback[lang])){value[lang]=fallback[lang];continue}
      const cacheKey=lang+'|'+en;
      if(cache.has(cacheKey)){value[lang]=cache.get(cacheKey);continue}
-     if(requests>=maxRequests){failed=true;break}
+     // A 503 outage must not prevent processing known local translations.
+     if(remoteUnavailable||requests>=maxRequests){failed=true;break}
      requests++;
      try{const translated=await translateRemote(en,lang,fetchFn);value[lang]=translated;cache.set(cacheKey,translated)}
-     catch(e){errors.push({id:row.id,key:spec.key,lang,reason:String(e.message).slice(0,120)});failed=true;break}
+     catch(e){
+      errors.push({id:row.id,key:spec.key,lang,reason:String(e.message).slice(0,120)});
+      if(/Translation service (?:429|500|502|503|504)/.test(String(e.message)))remoteUnavailable=true;
+      failed=true;break;
+     }
     }
     if(failed)break;
     dataByKind[kind]={es:value.es,en,pt:value.pt};
