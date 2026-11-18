@@ -1,0 +1,35 @@
+name: Game Atlas - YANIS V18 map candidate only (no deploy)
+on:
+  push:
+    branches: [qa/map-v18-candidate-20261118]
+    paths:
+      - 'automation/map-v18-candidate.py'
+      - '.github/workflows/v253-map-v18-candidate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image compositor
+        run: python -m pip install --disable-pip-version-check Pillow==11.3.0
+      - name: Assemble publicly licensed YANIS V18 map tiles for QA ONLY
+        run: python automation/map-v18-candidate.py
+      - name: Check candidate is not a remote manifest
+        run: |
+          test -s dist/map-v18-candidate/gtadb-yanis-v18-CANDIDATE-NOT-DEPLOYED.webp
+          test -s dist/map-v18-candidate/candidate-metadata.json
+          grep -q 'CANDIDATE_ONLY_NOT_APPROVED_OR_SIGNED' dist/map-v18-candidate/candidate-metadata.json
+          test ! -f updates/map-envelope-v242.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GAME-ATLAS-V18-MAPA-CANDIDATO-NO-PUBLICADO
+          path: dist/map-v18-candidate/
+          retention-days: 14
+          if-no-files-found: error
