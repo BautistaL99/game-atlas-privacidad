@@ -1,23 +1,73 @@
 {
-  "checkedAt": "2026-11-17T23:55:02.834Z",
-  "mode": "news",
+  "checkedAt": "2026-11-18T17:34:12.965Z",
+  "mode": "wiki",
   "runner": "public-free",
   "publisher": "SIGNED_READY_TO_COMMIT",
   "officialRevision": 4,
-  "communityRevision": 20,
+  "communityRevision": 21,
   "previousOfficialCount": 19,
-  "previousIndependentCount": 26,
+  "previousIndependentCount": 30,
   "previousWikiCount": 457,
   "newOfficial": 0,
-  "newIndependent": 4,
-  "newWiki": 0,
+  "newIndependent": 0,
+  "newWiki": 148,
   "quarantined": [
     {
-      "source": "RockstarINTEL",
-      "url": "https://rockstarintel.com/gta-vi-could-make-2-billion-this-week-15-million-pre-orders-already",
-      "reason": "Translation withheld: untrusted output"
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-001c57435fdec245ecc2c989 type es: Translation service 503"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-009cf1a84d773caba9aff8f1 home es: Translation service 503"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-043f5ca57fa247425736fba7 affiliations es: Translation service 503"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-052a5e721d0f2de9b7dcec38 lineup es: Translation service 503"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-0666fa808412152c30facbaa variants es: Translation service 503"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-08d11001d69017d9b1bad3e9 type es: Translation service 503"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-08d11001d69017d9b1bad3e9 body style es: Translation service 503"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-094829817f298dc99f5ec504 make year es: Translation service 503"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-094829817f298dc99f5ec504 variants es: Translation service 503"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-094829817f298dc99f5ec504 lineup es: Translation service 503"
     }
   ],
   "warnings": [],
+  "specsInspected": 60,
+  "withWikiSpecifications": 57,
+  "specsTranslated": 14,
+  "specsPending": 1132,
+  "translationRequests": 10,
   "changesSigned": true
 }
