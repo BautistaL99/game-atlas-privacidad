@@ -12,6 +12,8 @@ export const NEWS_LAUNCH_START_UTC='2026-11-18T15:00:00.000Z';
 export const NEWS_LAUNCH_END_UTC='2026-12-03T03:00:00.000Z';
 export const CRON_WIKI_DAILY='43 8 * * *';
 export const CRON_WIKI_HOURLY='11 * * * *';
+// Begin Wiki indexing on launch eve so available info is ready when stores approve.
+export const WIKI_PRELAUNCH_START_UTC='2026-11-18T18:00:00.000Z';
 export function releaseWindow(date,releaseStart=RELEASE_START_UTC){
  const now=new Date(date).getTime(),start=new Date(releaseStart).getTime();
  if(!Number.isFinite(now)||!Number.isFinite(start))throw Error('Invalid release/window date');
@@ -27,8 +29,11 @@ export function decide({event='schedule',schedule='',wikiScan=false,dryRun=false
   return {run:active,mode:'news',reason:active?'hourly launch news':'outside launch news window'};
  }
  const launch=releaseWindow(now,releaseStart);
- if(schedule===CRON_WIKI_HOURLY)return {run:launch,mode:'wiki',reason:launch?'hourly 7-day launch window':'outside launch window'};
- if(schedule===CRON_WIKI_DAILY)return {run:!launch,mode:'wiki',reason:launch?'superseded by hourly checks':'daily maintenance'};
+ const start=new Date(releaseStart).getTime(),current=new Date(now).getTime();
+ const prelaunch=Number.isFinite(current)&&current>=Date.parse(WIKI_PRELAUNCH_START_UTC)&&current<start;
+ const wikiHourly=launch||prelaunch;
+ if(schedule===CRON_WIKI_HOURLY)return {run:wikiHourly,mode:'wiki',reason:wikiHourly?'hourly launch Wiki indexing':'outside Wiki launch window'};
+ if(schedule===CRON_WIKI_DAILY)return {run:!wikiHourly,mode:'wiki',reason:wikiHourly?'superseded by hourly checks':'daily maintenance'};
  return {run:false,mode:'none',reason:'unknown schedule'};
 }
 if(import.meta.url===new URL('file://'+process.argv[1]).href){
