@@ -1,0 +1,74 @@
+{
+  "schema": "game-atlas-source-gap-review-v1",
+  "reviewedAt": "2026-11-18",
+  "status": "REVIEW_ONLY_DO_NOT_AUTOPUBLISH",
+  "purpose": "Diferencias concretas entre GTA Wiki/RockstarINTEL, web V253 empaquetada y catálogo firmado V205. No son coordenadas ni estadísticas confirmadas.",
+  "verifiedSources": [
+    "https://gta.wiki/w/Grand_Theft_Auto_VI%3A_Ultimate_Edition",
+    "https://rockstarintel.com/all-gta-vi-rewards-for-gta-members/",
+    "https://rockstarintel.com/how-to-get-the-exclusive-gta-vi-tropical-weapon-skins/"
+  ],
+  "candidates": [
+    {
+      "name": "Klose K17",
+      "category": "armas",
+      "status": "MISSING_IN_BOTH_V253_STATIC_AND_SIGNED_WIKI",
+      "source": "https://gta.wiki/w/Grand_Theft_Auto_VI%3A_Ultimate_Edition",
+      "sourceFact": "Menciona versiones grabadas personalizadas para Jason y Lucia.",
+      "action": "Crear ficha solo tras revisar datos específicos; sin daño/alcance inventados."
+    },
+    {
+      "name": "Girardi ES9",
+      "category": "armas",
+      "status": "MISSING_IN_BOTH_V253_STATIC_AND_SIGNED_WIKI",
+      "source": "https://gta.wiki/w/Grand_Theft_Auto_VI%3A_Ultimate_Edition",
+      "sourceFact": "Menciona versiones grabadas personalizadas para Jason y Lucia.",
+      "action": "Crear ficha solo tras revisar datos específicos; sin daño/alcance inventados."
+    },
+    {
+      "name": "Annis Venturas BLVD Elegy",
+      "category": "vehiculos",
+      "status": "MISSING_IN_BOTH_V253_STATIC_AND_SIGNED_WIKI",
+      "source": "https://rockstarintel.com/all-gta-vi-rewards-for-gta-members/",
+      "sourceFact": "Artículo del 18/11 describe vehículo y garaje vinculados a GTA+, con desbloqueo en capítulo 3.",
+      "action": "Revisar nombre exacto y elegibilidad; no copiar estadísticas de otros GTA."
+    },
+    {
+      "name": "Tropical Weapon Patterns",
+      "category": "guias",
+      "status": "MISSING_GUIDE_V253",
+      "source": "https://rockstarintel.com/how-to-get-the-exclusive-gta-vi-tropical-weapon-skins/",
+      "sourceFact": "Instrucciones del 18/11 sobre vinculación de cuenta y opciones de cosméticos en Ammu-Nation.",
+      "action": "Crear guía, no ficha de arma; vincular tiendas existentes solo si los puntos están verificados."
+    },
+    {
+      "name": "Paradise Garage",
+      "category": "mapa-lugares",
+      "status": "LANDMARK_EXISTS_BUT_NEEDS_LINKED_FICHE",
+      "source": "https://gta.wiki/w/Grand_Theft_Auto_VI%3A_Ultimate_Edition",
+      "sourceFact": "Propiedad situada en Watson Bay; el paquete V253 la menciona en landmarks.",
+      "action": "Crear ficha y relacionarla con el marcador existente tras revisar ubicación exacta; no inventar coordenadas."
+    },
+    {
+      "name": "Scooter Bros / RydeMe",
+      "category": "servicios",
+      "status": "MISSING_IN_BOTH_V253_STATIC_AND_SIGNED_WIKI",
+      "source": "https://rockstarintel.com/all-gta-vi-rewards-for-gta-members/",
+      "sourceFact": "El artículo describe beneficios de GTA+ para alquileres y viajes.",
+      "action": "Revisar si son servicios, negocios o mejoras; fichas separadas solo si existe fuente suficiente."
+    }
+  ],
+  "alreadyPresentDoNotDuplicate": [
+    "Banshee y Mule: presentes en catálogo comunitario firmado",
+    "Dominator Buggy, Dinka Enduro, Crest Kayak, Squalo y Ganado: referencias presentes en la web V253",
+    "Electric Fang Tattoo, One-Eyed Willie's, Rideout Customs, Stock 305, PTT Youngin$ y Classic Car Collection: referencias presentes en V253",
+    "Hawk & Little Morgan: referencia presente en V253"
+  ],
+  "restrictions": [
+    "No copiar ilustraciones ni textos extensos ajenos",
+    "No confundir contenido de GTA V con GTA VI",
+    "No agregar pines sin coordenadas comprobadas",
+    "No editar el catálogo firmado directamente",
+    "No presentar rumor o nota independiente como confirmación oficial"
+  ]
+}
