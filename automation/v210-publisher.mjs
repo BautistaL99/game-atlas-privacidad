@@ -10,6 +10,9 @@ import {translateFacts} from './v220-wiki-spec-translations.mjs';
 import {getReviewedLaunchNews} from './v253-manual-news-20261118.mjs';
 const PUB='qxnlUBqCBknS8KL/Bymrx4COzWN9TpPJAfdHohv/ugI=';
 const MODES={official:1,community:205};
+// Fixed compatibility limits of the already submitted Web/Android/iOS V253 client.
+const MAX_CLIENT_WIKI=1000,MAX_CLIENT_NEWS=220,MAX_CLIENT_ENVELOPE=2200000;
+const maxClientPayload=MAX_CLIENT_ENVELOPE-2000;
 const VI=/\b(?:grand theft auto\s*(?:vi|6)|gta\s*(?:vi|6))\b/i;
 const DATE=/^\d{4}-\d{2}-\d{2}$/;
 const text=(x,max)=>typeof x==='string'&&x.trim().length>0&&x.length<=max&&!/[<>\x00-\x1f]/.test(x);
@@ -36,6 +39,7 @@ export function signFeed(data,secretBase64){
  const derived=createPublicKey(key).export({format:'der',type:'spki'}).subarray(-32).toString('base64');
  if(derived!==PUB)throw Error('Signer does not match the deployed web client key');
  const payload=Buffer.from(JSON.stringify(data)).toString('base64');
+ if(data.schema===205&&payload.length>maxClientPayload)throw Error('Client V253 signed community feed size exceeded; preserve existing feed');
  return {schema:data.schema,payload,signature:sign(null,Buffer.from(payload),key).toString('base64')};
 }
 export function validatePublication(data){
@@ -43,6 +47,12 @@ export function validatePublication(data){
  const ids=new Set();
  const records=data.schema===1?data.items:[...data.news,...data.fiches];
  if(!Array.isArray(records)||records.length>1500)throw Error('Overfull catalog');
+ if(data.schema===205){
+  if(data.news.length>MAX_CLIENT_NEWS||data.fiches.length>MAX_CLIENT_WIKI)
+   throw Error('Community feed exceeds V253 client entry caps');
+  if(Buffer.from(JSON.stringify(data)).toString('base64').length>maxClientPayload)
+   throw Error('Community feed exceeds V253 client payload limit');
+ }
  for(const row of records){
   if(!row||!text(row.id,128)||ids.has(row.id)||!tr(row.title,180)||!tr(row.summary,data.schema===1?1300:450))throw Error('Unsafe/duplicate item');
   ids.add(row.id);
@@ -183,6 +193,7 @@ export function appendNews(previous,staged,kind){
    }
    continue;
   }
+  if(byId.size>=(kind==='official'?1500:MAX_CLIENT_NEWS))continue;
   byId.set(item.id,item);byUrl.set(uri,item.id);added++;
  }
  if(!added&&!updated)return {next:previous,added:0,updated:0};
@@ -197,6 +208,7 @@ export function mergeWiki(previous,staged){
  for(const row of staged){
   const old=byId.get(row.id);
   const {wikiPageId,...safeRow}=row;
+  if(!old&&byId.size>=MAX_CLIENT_WIKI)continue;
   if(!old||row.wikiRevision>old.wikiRevision){
    // A new Wiki source revision must be rechecked. Preserve previously
    // verified translations ONLY when the same key, label and source value
