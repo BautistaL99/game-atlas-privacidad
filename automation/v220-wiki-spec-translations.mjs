@@ -142,7 +142,7 @@ function special(value,mode){
  // A name (not a descriptive phrase) is unchanged in all three languages.
  // Proven proper place names, e.g. "Vice City, Leonida", stay unchanged.
  // Do not confuse them with descriptive phrases or translate coordinates.
- if(mode==='value'&&/^[A-Z][\\p{L}\\p{N}'-]+(?: [A-Z][\\p{L}\\p{N}'-]+){0,4}, [A-Z][\\p{L}\\p{N}'-]+(?: [A-Z][\\p{L}\\p{N}'-]+){0,2}$/u.test(v))
+ if(mode==='value'&&/^[A-Z][\p{L}\p{N}'-]+(?: [A-Z][\p{L}\p{N}'-]+){0,4}, [A-Z][\p{L}\p{N}'-]+(?: [A-Z][\p{L}\p{N}'-]+){0,2}$/u.test(v))
   return {es:v,en:v,pt:v};
  if(mode==='value'&&/^[A-Z][\p{L}\p{N}'-]*(?:\s+[A-Z][\p{L}\p{N}'-]*){0,3}$/u.test(v)&&
     !/\b(?:County|City|Vehicle|Weapon|Truck|Sedan|Character|Street|Boat|Road)\b/i.test(v))
