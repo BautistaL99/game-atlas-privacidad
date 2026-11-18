@@ -32,7 +32,24 @@ const KEY_NAMES={
  'modelname':['Nombre del modelo','Model name','Nome do modelo'],
  'unlock':['Desbloqueo','Unlock','Desbloqueio'],
  'trade price':['Precio de intercambio','Trade price','Preço de troca'],
- 'dod':['Fecha de fallecimiento','Date of death','Data de falecimento']
+ 'dod':['Fecha de fallecimiento','Date of death','Data de falecimento'],
+ 'country':['País','Country','País'],
+ 'location':['Ubicación','Location','Localização'],
+ 'capacity':['Capacidad','Capacity','Capacidade'],
+ 'caliber':['Calibre','Caliber','Calibre'],
+ 'use':['Uso','Use','Uso'],
+ 'weapons':['Armas','Weapons','Armas'],
+ 'businesses':['Negocios','Businesses','Empresas'],
+ 'family':['Familia','Family','Família'],
+ 'capital':['Capital','Capital','Capital'],
+ 'governor':['Gobernador','Governor','Governador'],
+ 'email':['Correo electrónico','Email','E-mail'],
+ 'spawn peds':['Aparición con PNJ','NPC spawn','Aparição com PNJ'],
+ 'spawn vehicles':['Aparición en vehículos','Vehicle spawn','Aparição em veículos'],
+ 'name change':['Cambio de nombre','Name change','Alteração de nome'],
+ 'seal caption':['Leyenda del sello','Seal caption','Legenda do selo'],
+ 'flag caption':['Leyenda de la bandera','Flag caption','Legenda da bandeira'],
+ 'mocap':['Captura de movimiento','Motion capture','Captura de movimento']
 };
 const VALUES={
  'yes':['Sí','Yes','Sim'],'no':['No','No','Não'],
@@ -71,7 +88,49 @@ const VALUES={
  '4-door saloon':['Sedán de 4 puertas','4-door saloon','Sedã de 4 portas'],
  'deceased':['Fallecido','Deceased','Falecido'],
  'bay boat':['Embarcación de bahía','Bay boat','Barco de baía'],
- 'off-roading vehicle':['Vehículo todoterreno','Off-roading vehicle','Veículo fora de estrada']
+ 'off-roading vehicle':['Vehículo todoterreno','Off-roading vehicle','Veículo fora de estrada'],
+ 'handgun':['Pistola','Handgun','Pistola'],
+ 'rifle':['Rifle','Rifle','Rifle'],
+ 'submachinegun':['Subfusil','Submachine gun','Submetralhadora'],
+ 'sniper rifle':['Rifle de francotirador','Sniper rifle','Rifle de precisão'],
+ 'assault rifle':['Rifle de asalto','Assault rifle','Rifle de assalto'],
+ 'shotgun':['Escopeta','Shotgun','Espingarda'],
+ 'personal':['Personal','Personal','Pessoal'],
+ 'sports bike':['Motocicleta deportiva','Sports bike','Motocicleta esportiva'],
+ 'construction vehicle':['Vehículo de construcción','Construction vehicle','Veículo de construção'],
+ 'radio host':['Presentador de radio','Radio host','Apresentador de rádio'],
+ '2-door coupé':['Cupé de 2 puertas','2-door coupé','Cupê de 2 portas'],
+ 'dirtbike':['Moto de tierra','Dirtbike','Moto de trilha'],
+ 'motocross motorcycle':['Motocicleta de motocross','Motocross motorcycle','Moto de motocross'],
+ 'compact':['Compacto','Compact','Compacto'],
+ 'rescue vehicle':['Vehículo de rescate','Rescue vehicle','Veículo de resgate'],
+ 'public transportation vehicle':['Vehículo de transporte público','Public transportation vehicle','Veículo de transporte público'],
+ 'polymer handgun':['Pistola de polímero','Polymer handgun','Pistola de polímero'],
+ '4-door station wagon':['Familiar de 4 puertas','4-door station wagon','Perua de 4 portas'],
+ 'jet ski':['Moto acuática','Jet ski','Jet ski'],
+ 'bicycle':['Bicicleta','Bicycle','Bicicleta'],
+ '4-door hatchback':['Hatchback de 4 puertas','4-door hatchback','Hatch de 4 portas'],
+ 'yacht':['Yate','Yacht','Iate'],
+ 'militarybase':['Base militar','Military base','Base militar'],
+ '4-door luxury suv':['SUV de lujo de 4 puertas','4-door luxury SUV','SUV de luxo de 4 portas'],
+ 'music artist':['Artista musical','Music artist','Artista musical'],
+ 'cutaway van':['Furgón con cabina y chasis','Cutaway van','Van com chassi-cabine'],
+ '2-door cabriolet':['Descapotable de 2 puertas','2-door cabriolet','Conversível de 2 portas'],
+ 'utility helicopter':['Helicóptero utilitario','Utility helicopter','Helicóptero utilitário'],
+ '5-door suv':['SUV de 5 puertas','5-door SUV','SUV de 5 portas'],
+ '5-door compact suv':['SUV compacto de 5 puertas','5-door compact SUV','SUV compacto de 5 portas'],
+ 'head injury':['Lesión en la cabeza','Head injury','Lesão na cabeça'],
+ 'class a motorhome':['Autocaravana clase A','Class A motorhome','Motorhome classe A'],
+ '4-door crew cab':['Cabina doble de 4 puertas','4-door crew cab','Cabine dupla de 4 portas'],
+ 'canister':['Contenedor','Canister','Recipiente'],
+ 'humanboat':['Embarcación','Human-powered boat','Embarcação'],
+ 'car transporter trailer':['Remolque portavehículos','Car transporter trailer','Reboque cegonha'],
+ 'tracked':['Orugas','Tracked','Esteiras'],
+ 'four-bladed helicopter':['Helicóptero de cuatro palas','Four-bladed helicopter','Helicóptero de quatro pás'],
+ 'projectile':['Proyectil','Projectile','Projétil'],
+ 'thrown':['Arrojada','Thrown','Arremessada'],
+ 'n/a':['No aplica','N/A','Não se aplica'],
+ 'united states of america':['Estados Unidos de América','United States of America','Estados Unidos da América']
 };
 function langs(v){return {es:v[0],en:v[1],pt:v[2]}}
 function special(value,mode){
@@ -81,6 +140,10 @@ function special(value,mode){
  if(mode==='value'&&VALUES[key])return langs(VALUES[key]);
  if(/^[\d\s.,+/%$€£:-]+$/.test(v))return {es:v,en:v,pt:v};
  // A name (not a descriptive phrase) is unchanged in all three languages.
+ // Proven proper place names, e.g. "Vice City, Leonida", stay unchanged.
+ // Do not confuse them with descriptive phrases or translate coordinates.
+ if(mode==='value'&&/^[A-Z][\\p{L}\\p{N}'-]+(?: [A-Z][\\p{L}\\p{N}'-]+){0,4}, [A-Z][\\p{L}\\p{N}'-]+(?: [A-Z][\\p{L}\\p{N}'-]+){0,2}$/u.test(v))
+  return {es:v,en:v,pt:v};
  if(mode==='value'&&/^[A-Z][\p{L}\p{N}'-]*(?:\s+[A-Z][\p{L}\p{N}'-]*){0,3}$/u.test(v)&&
     !/\b(?:County|City|Vehicle|Weapon|Truck|Sedan|Character|Street|Boat|Road)\b/i.test(v))
    return {es:v,en:v,pt:v};
