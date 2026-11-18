@@ -39,3 +39,34 @@ test('Numerical values preserve all digits and branded proper names are not alte
  assert.equal(result.translated,2);
  assert.equal(result.next.fiches[1].specs[0].valueI18n.pt,'$120,000');
 });
+
+
+test('V253: exact-match technical glossary translates 30 records without any remote calls',async()=>{
+ const values=['artist','muscle','mediumtruck','lighttrailer','midsize','2-door coupe','2-door pickup truck','2-door hotrod coupe','2-door coupe utility','4-door saloon','deceased','bay boat','off-roading vehicle','Yes','Unknown'];
+ const source={schema:205,revision:23,fiches:values.concat(values).map((value,i)=>({
+   id:'wiki-community-test-'+i,category:'vehiculos',
+   specs:[{key:'type',label:'type',value}]
+ }))};
+ const done=await translateFacts(source,{maxRequests:0,maxSpecs:1200,fetchFn:()=>{throw Error('offline glossary must not fetch')}});
+ assert.equal(done.translated,30);
+ assert.equal(done.requests,0);
+ assert.equal(done.next.revision,24);
+ assert.equal(done.next.fiches[5].specs[0].valueI18n.es,'Cupé de 2 puertas');
+ assert.equal(done.next.fiches[11].specs[0].valueI18n.pt,'Barco de baía');
+});
+test('V253: a 503 halts more remote attempts but still translates known terms',async()=>{
+ let attempts=0;
+ const source={schema:205,revision:3,fiches:[
+  row({key:'type',label:'type',value:'Unknown descriptive phrase one'}),
+  row({key:'gender',label:'gender',value:'M'}),
+  row({key:'type',label:'type',value:'Unknown descriptive phrase two'})
+ ]};
+ const done=await translateFacts(source,{
+  maxRequests:10,maxSpecs:1200,
+  fetchFn:async()=>{attempts++;return {ok:false,status:503}}
+ });
+ assert.equal(attempts,1);
+ assert.equal(done.translated,1);
+ assert.equal(done.pending,2);
+ assert.equal(done.next.fiches[1].specs[0].valueI18n.es,'Masculino');
+});
