@@ -43,5 +43,6 @@ test('V255 fallback leaves the existing image-free data intact if all rights are
  const r=await enrichWikiImageBatch([row],new Map([[row.id,'{{Infobox\n|panel_image='+file+'\n}}']]),
   async()=>JSON.stringify({query:{pages:[{...photo,imageinfo:[{...photo.imageinfo[0],extmetadata:{LicenseShortName:{value:'Copyrighted'}}}]}]}}));
  assert.equal(r.checked,1);assert.equal(r.accepted,0);assert.equal(r.items[0].image,undefined);
+ assert.equal(r.items[0].imageSource,'https://gta.wiki/w/File:'+file);
  assert.equal(validatePublication(mergeWiki(old(),r.items).next),true);
 });
