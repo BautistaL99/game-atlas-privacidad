@@ -63,6 +63,16 @@ export function validatePublication(data){
    if(!row.id.startsWith('community-report-')||row.sourceName!=='RockstarINTEL'||row.claimStatus!=='reported_not_confirmed_by_rockstar'||!/^https:\/\/(?:www\.)?rockstarintel\.com\//.test(row.sourceUrl)||!DATE.test(row.publishedAt))throw Error('Bad independent source');
   }else if(row.sourceTier==='community_indexed_not_rockstar_confirmed'){
    if(!row.id.startsWith('wiki-community-')||row.sourceName!=='GTA Wiki'||!/^https:\/\/gta\.wiki\/w\//.test(row.sourceUrl)||!Number.isInteger(row.wikiRevision))throw Error('Bad community source');
+   if(row.image!==undefined){
+    const im=row.image;
+    const remote=typeof im?.remote==='string'?im.remote:'';
+    const u=(()=>{try{return new URL(remote)}catch{return null}})();
+    if(!im||im.type!=='wiki-licensed'||!u||u.protocol!=='https:'||
+      u.hostname!=='gta.wiki'||!/^\/images\/[a-z0-9_/%().,-]+\.(?:png|jpe?g|webp)$/i.test(u.pathname)||
+      u.search||u.hash||!['CC0','CC0 1.0','Public Domain','CC BY 2.0','CC BY 3.0','CC BY 4.0','CC BY-SA 2.0','CC BY-SA 3.0','CC BY-SA 4.0'].includes(im.license)||
+      typeof im.sourcePage!=='string'||!im.sourcePage.startsWith('https://gta.wiki/w/File:')||
+      !tr(im.caption,190))throw Error('Unlicensed or untrusted Wiki photo');
+   }
    if(row.specs!==undefined){
     if(!Array.isArray(row.specs)||row.specs.length>18)throw Error('Too many Wiki facts');
     const keys=new Set();
