@@ -70,8 +70,11 @@ app=one(app,'trackable:false,wikiSpecs:specs,wikiSource:wiki.sourceUrl,',
  'trackable:false,wikiSpecs:specs,wikiSource:wiki.sourceUrl,\n   ...(wiki.image?{image:wiki.image}:{}),\n   ...(wiki.imageSource?{imageSource:wiki.imageSource}:{}),',
  'signed image in record');
 const photoLink=between(baseApp,dollar+'{i.imageSource?'+tick,dollar+'{i.image?.remote&&i.image?.type===\'official\'?');
-const detailLink=dollar+"{i.image?.remote&&i.image?.type==='official'?";
-app=one(app,detailLink,photoLink+detailLink,'detail exact image source');
+const detailCaption='<div class="image-caption"><span>';
+if(app.split(detailCaption).length!==2)throw Error('V254 detail caption is not unique');
+const captionAt=app.indexOf(detailCaption),captionEnd=app.indexOf('</span>',captionAt+detailCaption.length);
+if(captionEnd<0)throw Error('V254 image-caption closing span missing');
+app=app.slice(0,captionEnd+7)+photoLink+app.slice(captionEnd+7);
 app=one(app,'allowed.has(p.category)&&Number.isFinite(p.x)',
  "allowed.has(p.category)&&!p.tags.some(t=>['unconfirmed','demolished'].includes(String(t).toLowerCase()))&&Number.isFinite(p.x)",
  'hide unconfirmed map points');
