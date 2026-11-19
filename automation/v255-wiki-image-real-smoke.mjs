@@ -35,4 +35,10 @@ const summary={source:sourceUrl,pageRevision:revision.revid,filename,
  image:result.items[0]?.image?.remote||null,errors:result.errors};
 console.log('V255 REAL GTA WIKI READ-ONLY CHECK',JSON.stringify(summary,null,2));
 if(result.checked!==1||result.errors.length)process.exitCode=1;
-if(result.accepted===0)console.log('Image found, but the source file did not pass the independent license/origin/size rules. Do not use it as a generic substitute.');
+if(result.accepted===0){
+ const query=new URLSearchParams({action:'query',prop:'imageinfo',iiprop:'url|size|mime|extmetadata',titles:'File:'+filename,format:'json',formatversion:'2'});
+ const imgPage=JSON.parse(await request(endpoint+'?'+query)).query?.pages?.[0];
+ const info=imgPage?.imageinfo?.[0]||{};let hostname='';try{hostname=new URL(info.url).hostname}catch{}
+ console.log('V255 IMAGE REFUSAL DIAGNOSTIC',JSON.stringify({mime:info.mime,size:info.size,host:hostname,license:info.extmetadata?.LicenseShortName?.value||null,licenseURL:info.extmetadata?.LicenseUrl?.value||null,descriptionURL:info.descriptionurl||null},null,2));
+ console.log('Image found, but source file metadata must be resolved before displaying it.');
+}
