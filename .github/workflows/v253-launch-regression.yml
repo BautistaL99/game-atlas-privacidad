@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'automation/**'
+      - 'app/**'
       - '.github/workflows/v210-free-scheduled-catalog.yml'
       - '.github/workflows/v253-launch-regression.yml'
   workflow_dispatch:
@@ -22,6 +23,14 @@ jobs:
           node --check automation/v210-sources.mjs
           node --check automation/v210-publisher.mjs
           node --check automation/v219-launch-window.mjs
+          node --check automation/v255-wiki-image-discovery.mjs
+          node --check automation/v255-wiki-image-real-smoke.mjs
+          node --check app/app-v137.js
+          node --check app/community-v206.js
+          node --check app/detail-enhancements-v160.js
       - name: Revisar firmas, fechas, feeds, resiliencia 503 y wiki
         run: |
-          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v220-wiki-spec-translations.test.mjs automation/v220-client-integration.test.mjs automation/v253-manual-news-20261118.test.mjs automation/v253-launch-resilience.test.mjs automation/v253-client-limits.test.mjs
+          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v220-wiki-spec-translations.test.mjs automation/v220-client-integration.test.mjs automation/v253-manual-news-20261118.test.mjs automation/v253-launch-resilience.test.mjs automation/v253-client-limits.test.mjs automation/v255-wiki-image-discovery.test.mjs
+      - name: Probar lectura de una ficha real con fotografia (sin publicar)
+        continue-on-error: true
+        run: node automation/v255-wiki-image-real-smoke.mjs
