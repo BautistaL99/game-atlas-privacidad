@@ -13,6 +13,7 @@ const old=()=>({schema:205,mode:'INDEPENDENT_REPORTING_AND_COMMUNITY_WIKI_NOT_OF
 test('V255 selects the GTA VI photo instead of older GTA V views',()=>{
  const wiki='{{Infobox\n|panel_image2=Mule-GTAVee-FrontQuarter.png\n|panel_image='+file+'\n|data4=Commercial\n}}';
  assert.equal(wikiPhotoCandidate(wiki),file);
+ assert.equal(wikiPhotoCandidate('{{Infobox\n|image_label=VI\n|front_image = '+file+'\n|front_image2=Mule-GTAVee-FrontQuarter.png\n}}'),file);
  assert.equal(wikiPhotoCandidate('{{Infobox|panel_image=Mule-GTAVee-FrontQuarter.png}}'),null);
 });
 test('V255 checks independent file-level rights and exact source identity',()=>{
