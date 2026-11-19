@@ -27,6 +27,7 @@ jobs:
           node --check automation/v255-wiki-image-real-smoke.mjs
           node --check automation/v255-v254-preview-readonly-smoke.mjs
           node --check automation/v255-rebase-on-v254-check.mjs
+          node --check automation/v255-merge-v254-semantic.mjs
           node --check app/app-v137.js
           node --check app/community-v206.js
           node --check app/detail-enhancements-v160.js
@@ -44,3 +45,9 @@ jobs:
       - name: Verificar que V255 se pueda superponer sobre V254 sin perder cambios
         continue-on-error: true
         run: node automation/v255-rebase-on-v254-check.mjs
+
+      - name: Probar merge semantico de correcciones sobre V254
+        continue-on-error: true
+        run: |
+          npm install --no-save --no-package-lock --ignore-scripts diff-match-patch@1.0.5
+          node automation/v255-merge-v254-semantic.mjs
