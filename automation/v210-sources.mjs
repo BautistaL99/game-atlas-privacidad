@@ -3,6 +3,7 @@
  * Read-only. Failure never edits the signed historical catalog.
  */
 import {createHash} from 'node:crypto';
+import {enrichWikiImageBatch} from './v255-wiki-image-discovery.mjs';
 export const sha=s=>createHash('sha256').update(String(s)).digest('hex');
 const TIMEOUT=18000;
 const GVI=/\b(?:grand theft auto\s*(?:vi|6)|gta\s*(?:vi|6))\b/i;
@@ -162,7 +163,7 @@ export function wikiFiche(title,category,revision,pageId=0){
  * never templates, images, scripts, citations, coordinates or page styling.
  * Unknown keys ARE allowed, so new attributes can grow new UI cells.
  */
-const BAD_SPEC_KEY=/^(?:name|title|header.*|image.*|caption.*|photo.*|file.*|logo.*|map.*|radar.*|icon.*|style.*|class|css|script|theme|width|height|coordinates?|latitude|longitude|position|reference.*|ref\d*|template.*|infobox.*|game\d*|group\d+_(?:data|header)\d*|data\d+|label\d+)$/i;
+const BAD_SPEC_KEY=/^(?:name|title|header.*|image.*|panel[ _-]?image.*|panel[ _-]?photo.*|caption.*|photo.*|file.*|logo.*|map.*|radar.*|icon.*|style.*|class|css|script|theme|width|height|coordinates?|latitude|longitude|position|reference.*|ref\d*|template.*|infobox.*|game\d*|group\d+_(?:data|header)\d*|data\d+|label\d+)$/i;
 const BAD_SPEC_TOKEN=/(?:^|[ _-])(?:front|rear|top|side|internal|exterior|interior|dashboard)[ _-]?(?:image|photo|picture|view)/i;
 export function parseWikiInfobox(source=''){
  if(typeof source!=='string'||source.length>130000)return [];
@@ -211,7 +212,7 @@ export async function enrichWikiSpecs(items,previous={},fetchFn=fetch,{maxPages=
  const candidates=items.filter(x=>Number.isSafeInteger(x.wikiPageId)&&x.wikiPageId>0);
  const offset=Math.max(0,Number(previous.specCursor)||0);
  const selected=Array.from({length:Math.min(maxPages,candidates.length)},(_,i)=>candidates[(offset+i)%candidates.length]);
- const enriched=new Map(),errors=[];let inspected=0;
+ const enriched=new Map(),contentById=new Map(),errors=[];let inspected=0;
  for(let i=0;i<selected.length;i+=10){
   const group=selected.slice(i,i+10);
   const params=new URLSearchParams({action:'query',pageids:group.map(x=>x.wikiPageId).join('|'),
@@ -224,14 +225,19 @@ export async function enrichWikiSpecs(items,previous={},fetchFn=fetch,{maxPages=
     const record=byId.get(page.pageid);
     const rev=page.revisions?.[0];
     if(!record||!rev||rev.revid!==record.wikiRevision)continue;
-    const specs=parseWikiInfobox(revisionContent(page));
+    const content=revisionContent(page);
+     const specs=parseWikiInfobox(content);
+     contentById.set(record.id,content);
     if(specs.length)enriched.set(record.id,{...record,specs});
     inspected++;
    }
   }catch(e){errors.push('Wiki infobox batch skipped: '+e.message)}
  }
- return {items:items.map(row=>enriched.get(row.id)||row),specCursor:(offset+selected.length)%Math.max(1,candidates.length),
-  withSpecs:enriched.size,inspected,errors};
+ const staged=items.map(row=>enriched.get(row.id)||row);
+ const media=await enrichWikiImageBatch(staged,contentById,url=>boundedText(url,fetchFn,{max:800000}),{max:60});
+ return {items:media.items,specCursor:(offset+selected.length)%Math.max(1,candidates.length),
+  withSpecs:enriched.size,withImages:media.accepted,imagesChecked:media.checked,inspected,
+  errors:[...errors,...media.errors]};
 }
 
 /* Scan one category page per category, persist continuation.

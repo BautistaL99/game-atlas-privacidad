@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'automation/**'
+      - 'app/**'
       - '.github/workflows/v210-free-scheduled-catalog.yml'
       - '.github/workflows/v253-launch-regression.yml'
   workflow_dispatch:
@@ -22,6 +23,32 @@ jobs:
           node --check automation/v210-sources.mjs
           node --check automation/v210-publisher.mjs
           node --check automation/v219-launch-window.mjs
+          node --check automation/v255-wiki-image-discovery.mjs
+          node --check automation/v255-wiki-image-real-smoke.mjs
+          node --check automation/v255-v254-preview-readonly-smoke.mjs
+          node --check automation/v255-rebase-on-v254-check.mjs
+          node --check automation/v255-merge-v254-semantic.mjs
+          node --check automation/v255-strict-v254-overlay.mjs
+          node --check app/app-v137.js
+          node --check app/community-v206.js
+          node --check app/detail-enhancements-v160.js
       - name: Revisar firmas, fechas, feeds, resiliencia 503 y wiki
         run: |
-          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v220-wiki-spec-translations.test.mjs automation/v220-client-integration.test.mjs automation/v253-manual-news-20261118.test.mjs automation/v253-launch-resilience.test.mjs automation/v253-client-limits.test.mjs
+          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v220-wiki-spec-translations.test.mjs automation/v220-client-integration.test.mjs automation/v253-manual-news-20261118.test.mjs automation/v253-launch-resilience.test.mjs automation/v253-client-limits.test.mjs automation/v255-wiki-image-discovery.test.mjs automation/v255-map-qa.test.mjs automation/v255-wiki-overlap.test.mjs
+      - name: Probar lectura de una ficha real con fotografia (sin publicar)
+        continue-on-error: true
+        run: node automation/v255-wiki-image-real-smoke.mjs
+
+      - name: Identificar artefactos V254 de Firebase sin modificar web
+        continue-on-error: true
+        run: node automation/v255-v254-preview-readonly-smoke.mjs
+
+      - name: Construir V255 sobre la fuente exacta V254 sin degradar la app
+        run: node automation/v255-strict-v254-overlay.mjs
+      - name: Guardar V255 para QA sin publicarlo
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-atlas-v255-v254-qa-no-publicar
+          path: qa/v255-firebase-test/
+          retention-days: 7
+
