@@ -29,7 +29,6 @@ jobs:
           node --check automation/v255-rebase-on-v254-check.mjs
           node --check automation/v255-merge-v254-semantic.mjs
           node --check automation/v255-strict-v254-overlay.mjs
-          node --check automation/v255-firebase-preview-only.mjs
           node --check app/app-v137.js
           node --check app/community-v206.js
           node --check app/detail-enhancements-v160.js
