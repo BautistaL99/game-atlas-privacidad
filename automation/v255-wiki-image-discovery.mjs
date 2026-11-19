@@ -67,6 +67,11 @@ export async function enrichWikiImageBatch(rows,contentById,requestText,{max=60}
     const page=pagesByTitle.get(('File:'+c.filename).replace(/_/g,' ').toLowerCase());
     const image=licensedWikiPhoto(page,c.filename,c.row.sourceUrl);
     if(image){byId.set(c.row.id,{...c.row,image});accepted++}
+    else if(page?.imageinfo?.[0]&&String(page.title||'').replace(/^File:/i,'').replace(/_/g,' ').toLowerCase()===c.filename.replace(/_/g,' ').toLowerCase()){
+     // A source-link is safe even when there is NO licence to embed/copy bytes.
+     const imageSource='https://gta.wiki/w/File:'+encodeURIComponent(c.filename.replace(/ /g,'_'));
+     byId.set(c.row.id,{...c.row,imageSource});
+    }
    }
   }catch(e){errors.push('Wiki image batch skipped: '+String(e.message).slice(0,120))}
  }
