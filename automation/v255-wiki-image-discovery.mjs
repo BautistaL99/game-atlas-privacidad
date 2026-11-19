@@ -10,7 +10,7 @@ const LICENSE=/^(?:CC0(?: 1\.0)?|Public Domain|CC BY(?:-SA)? [234]\.0)$/i;
 
 export function wikiPhotoCandidate(wikitext=''){
  if(typeof wikitext!=='string'||wikitext.length>130000)return null;
- const rows=[...wikitext.matchAll(/^\s*\|\s*(panel_image|image[1-6]?)\s*=\s*([^\r\n]{1,180})/gmi)];
+ const rows=[...wikitext.matchAll(/^\s*\|\s*(panel_image|front_image[1-6]?|rear_image[1-6]?|side_image[1-6]?|image[1-6]?)\s*=\s*([^\r\n]{1,180})/gmi)];
  const candidates=[];
  for(const m of rows){
   let filename=m[2].trim().replace(/^File:/i,'').replace(/^\[\[\s*File:/i,'').replace(/\]\].*$/,'').trim();
