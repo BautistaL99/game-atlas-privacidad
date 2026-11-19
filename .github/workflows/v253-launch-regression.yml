@@ -29,6 +29,7 @@ jobs:
           node --check automation/v255-rebase-on-v254-check.mjs
           node --check automation/v255-merge-v254-semantic.mjs
           node --check automation/v255-strict-v254-overlay.mjs
+          node --check automation/v255-firebase-preview-only.mjs
           node --check app/app-v137.js
           node --check app/community-v206.js
           node --check app/detail-enhancements-v160.js
@@ -51,3 +52,9 @@ jobs:
           name: game-atlas-v255-v254-qa-no-publicar
           path: qa/v255-firebase-test/
           retention-days: 7
+
+      - name: Publicar solamente canal temporal de V255 (nunca live)
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'fix/v255-wiki-image-map-qa-20261118' && github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          FIREBASE_SERVICE_ACCOUNT_GTA6MAPA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_GTA6MAPA }}
+        run: node automation/v255-firebase-preview-only.mjs
