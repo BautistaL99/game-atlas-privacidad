@@ -360,7 +360,7 @@ async function loadCommunityMapPins(){
   const data=await response.json();
   if(data.schema!==216||data.mapVersion!==MAP_VERSION||data.license!=='CC BY 4.0'||!Array.isArray(data.items)||data.items.length>4000)throw Error('Map dataset mismatch');
   const allowed=new Set(mapFilterCategories.map(c=>c.id));
-  communityMapPins=data.items.filter(p=>p&&p.kind==='community'&&/^community-l\d+$/.test(p.id)&&typeof p.title==='string'&&p.title.length<=120&&Array.isArray(p.tags)&&p.tags.length<=8&&allowed.has(p.category)&&Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.x>=0&&p.x<=100&&p.y>=0&&p.y<=100).map(p=>({...p,confidence:'community-reconstruction'}));
+  communityMapPins=data.items.filter(p=>p&&p.kind==='community'&&/^community-l\d+$/.test(p.id)&&typeof p.title==='string'&&p.title.length<=120&&Array.isArray(p.tags)&&p.tags.length<=8&&allowed.has(p.category)&&!p.tags.some(t=>['unconfirmed','demolished'].includes(String(t).toLowerCase()))&&Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.x>=0&&p.x<=100&&p.y>=0&&p.y<=100).map(p=>({...p,confidence:'community-reconstruction'}));
   communityMapStatus='loaded';
   if(location.hash.startsWith('#/mapa'))mapUpdate();
  }catch(err){communityMapStatus='unavailable';console.warn('V216 community map not loaded:',err.message);}
