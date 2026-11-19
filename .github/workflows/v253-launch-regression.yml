@@ -25,6 +25,7 @@ jobs:
           node --check automation/v219-launch-window.mjs
           node --check automation/v255-wiki-image-discovery.mjs
           node --check automation/v255-wiki-image-real-smoke.mjs
+          node --check automation/v255-v254-preview-readonly-smoke.mjs
           node --check app/app-v137.js
           node --check app/community-v206.js
           node --check app/detail-enhancements-v160.js
@@ -34,3 +35,7 @@ jobs:
       - name: Probar lectura de una ficha real con fotografia (sin publicar)
         continue-on-error: true
         run: node automation/v255-wiki-image-real-smoke.mjs
+
+      - name: Identificar artefactos V254 de Firebase sin modificar web
+        continue-on-error: true
+        run: node automation/v255-v254-preview-readonly-smoke.mjs
