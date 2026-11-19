@@ -58,7 +58,7 @@ function communityArtwork(i,cl){
  const [icon,label,note]=(labels[locale]||labels.es)[kind];
  return '<span class="'+esc(cl)+' vi-community-art vi-community-art-'+kind+'" role="img" aria-label="'+esc(label+' — '+note)+'"><span class="vi-community-art-icon" aria-hidden="true">'+esc(icon)+'</span><span class="vi-community-art-caption"><strong>'+esc(label)+'</strong><small>'+esc(note)+'</small></span></span>';
 }
-function thumb(i,cl='thumb'){if(i.facets?.community===1&&!i.image)return communityArtwork(i,cl);const fallback=categoryArt[i.category]||'./assets/original/scene.svg';const officialPhoto=typeof i.image?.remote==='string'&&/^https:\/\/media-rockstargames-com\.akamaized\.net\/tina-uploads\/posts\/[a-z0-9]+\/[a-f0-9]{40}\.(?:jpg|jpeg|png|webp)$/.test(i.image.remote)?i.image.remote:null;const provided=typeof i.image?.data==='string'&&i.image.data.startsWith('blob:')?i.image.data:(officialPhoto||(typeof i.image?.path==='string'&&i.image.path.startsWith('./assets/original/')?i.image.path:fallback));return `<img class="${cl}" src="${esc(provided)}" data-vi-image-fallback="${esc(fallback)}" alt="${esc(tr(i.title))}" loading="lazy" referrerpolicy="no-referrer">`;}
+function thumb(i,cl='thumb'){if(i.facets?.community===1&&!i.image)return communityArtwork(i,cl);const fallback=categoryArt[i.category]||'./assets/original/scene.svg';const officialPhoto=typeof i.image?.remote==='string'&&/^https:\/\/media-rockstargames-com\.akamaized\.net\/tina-uploads\/posts\/[a-z0-9]+\/[a-f0-9]{40}\.(?:jpg|jpeg|png|webp)$/.test(i.image.remote)?i.image.remote:null;const wikiPhoto=i.image?.type==='wiki-licensed'&&/^https:\/\/gta\.wiki\/images\/[a-z0-9_/%().,-]+\.(?:png|jpe?g|webp)$/i.test(i.image.remote||'')?i.image.remote:null;const provided=typeof i.image?.data==='string'&&i.image.data.startsWith('blob:')?i.image.data:(officialPhoto||wikiPhoto||(typeof i.image?.path==='string'&&i.image.path.startsWith('./assets/original/')?i.image.path:fallback));return `<img class="${cl}" src="${esc(provided)}" data-vi-image-fallback="${esc(fallback)}" alt="${esc(tr(i.title))}" loading="lazy" referrerpolicy="no-referrer">`;}
 function fave(i,small=true){const yes=store('fav').includes(i.id);return `<button type="button" class="quick-fav ${yes?'is-fav':''}" data-toggle="fav" data-id="${esc(i.id)}" aria-pressed="${yes}" aria-label="${yes?'Quitar de favoritos':'Marcar como favorito'}: ${esc(tr(i.title))}" title="${yes?'Quitar de favoritos':'Marcar como favorito'}">${yes?'★':'☆'}</button>`}
 function newsStatusLabel(i){return i.facets?.source_tier==='wiki_verified'?(locale==='en'?'WIKI VERIFIED':locale==='pt'?'WIKI VERIFICADA':'WIKI VERIFICADA'):i.facets?.community===1?(locale==='en'?'UNCONFIRMED':locale==='pt'?'NÃO CONFIRMADO':'NO CONFIRMADO'):i.status==='verified'?(locale==='en'?'VERIFIED':locale==='pt'?'VERIFICADO':'VERIFICADO'):'DEMO'}
 function card(i,compareMode=false){return `<article class="content-card ${trackable(i)?'has-quick':''}${compareMode?' vi-compare-ready':''}"><a class="content-card-link" ${href('/ficha/'+i.id)}>${thumb(i)}<span class="content-text"><span class="overline">${esc(tr(cat(i.category).label))}</span><h3>${esc(tr(i.title))}</h3><p>${esc(tr(i.desc))}</p></span><span class="pill ${i.facets?.community===1?'pill-warning':i.status==='verified'?'pill-official':'pill-warning'}">${newsStatusLabel(i)}</span><span class="arrow">↗</span></a><span class="card-inline-actions">${quickProgress(i)}${fave(i)}${window.viDetailEnhancements?.comparePickButton(i,locale,compareMode===true?'pick':'open')||''}</span></article>`}
@@ -966,22 +966,26 @@ window.viApplyCommunityFeed=function(feed){
  const byId=new Map(records.map(x=>[x.id,x]));
  const bySource=new Map();
  for(const row of records)for(const src of row.sources||[])if(src?.url)bySource.set(String(src.url).replace(/\/$/,''),row.id);
+ const canonical=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+ const byExactTitle=new Map();
+ for(const row of records){if(row.wikiSource)continue;const k=row.category+'|'+canonical(row.title?.en||row.title?.es);if(!k.endsWith('|'))byExactTitle.set(k,byExactTitle.has(k)?null:row.id)}
  let added=0,updated=0;
  function insert(row,source){
-  const matchedId=bySource.get(source)||row.id;
+  const matchedId=bySource.get(source)||(row.wikiSource&&byExactTitle.get(row.category+'|'+canonical(row.title?.en||row.title?.es)))||row.id;
   const old=byId.get(matchedId);
   if(old&&!old.wikiSource&&row.wikiSource){
    // Curated row owns its title, illustrations and category. Wiki only enriches
    // verified missing technical attributes from its independently signed source.
    const existingSources=old.sources||[];
    const sources=existingSources.some(x=>x.url===source)?existingSources:[...existingSources,{url:source,label:'GTA Wiki',checkedAt:''}];
-   const next={...old,sources,wikiSpecs:row.wikiSpecs,wikiSource:source};
+   const next={...old,sources,wikiSpecs:row.wikiSpecs,wikiSource:source,
+    image:row.image&&(!old.image||old.image.type==='concept')?row.image:old.image};
    viWikiApplyLocale(next,locale);
    byId.set(matchedId,next);updated++;return;
   }
   if(!old){byId.set(row.id,row);bySource.set(source,row.id);added++}
   else if(row.wikiSource||old.facets?.source_tier==='independent_reporting'){
-   byId.set(matchedId,{...old,...row,facets:{...(old.facets||{}),...row.facets}});updated++;
+   byId.set(matchedId,{...old,...row,facets:{...(old.facets||{}),...row.facets},image:row.image});updated++;
   }
  }
  for(const wiki of feed.fiches){
@@ -995,6 +999,7 @@ window.viApplyCommunityFeed=function(feed){
   const row=viWikiApplyLocale({id:wiki.id,slug:wiki.id,category:wiki.category,
    title:wiki.title,summary:wiki.summary,desc:wiki.summary,status:'verified',
    trackable:false,wikiSpecs:specs,wikiSource:wiki.sourceUrl,
+   ...(wiki.image?{image:wiki.image}:{}),
    wikiRevision:wiki.wikiRevision,
    facets:{source_tier:'wiki_verified',wiki_revision:wiki.wikiRevision},
    tags:[...new Set(specs.flatMap(spec=>[spec.labelI18n.es,spec.labelI18n.en,
