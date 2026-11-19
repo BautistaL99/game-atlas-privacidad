@@ -971,9 +971,17 @@ window.viApplyCommunityFeed=function(feed){
  const canonical=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
  const byExactTitle=new Map();
  for(const row of records){if(row.wikiSource)continue;const k=row.category+'|'+canonical(row.title?.en||row.title?.es);if(!k.endsWith('|'))byExactTitle.set(k,byExactTitle.has(k)?null:row.id)}
+ // Explicit, reviewed identity crosswalk: a brand prefix or model year must NEVER
+ // be inferred from string similarity alone. Original record ID stays stable.
+ const wikiCuratedSourceIds=new Map([
+  ['vehiculos|https://gta.wiki/w/Enduro','dinka-enduro'],
+  ['vehiculos|https://gta.wiki/w/Stanier_(1955)','55-vapid-stanier'],
+  ['vehiculos|https://gta.wiki/w/Dominator_Buggy','67-vapid-dominator-buggy'],
+  ['vehiculos|https://gta.wiki/w/Squalo','shitzu-squalo']
+ ]);
  let added=0,updated=0;
  function insert(row,source){
-  const matchedId=bySource.get(source)||(row.wikiSource&&byExactTitle.get(row.category+'|'+canonical(row.title?.en||row.title?.es)))||row.id;
+  const matchedId=bySource.get(source)||(row.wikiSource&&wikiCuratedSourceIds.get(row.category+'|'+source))||(row.wikiSource&&byExactTitle.get(row.category+'|'+canonical(row.title?.en||row.title?.es)))||row.id;
   const old=byId.get(matchedId);
   if(old&&!old.wikiSource&&row.wikiSource){
    // Curated row owns its title, illustrations and category. Wiki only enriches
