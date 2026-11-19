@@ -63,6 +63,9 @@ export function validatePublication(data){
    if(!row.id.startsWith('community-report-')||row.sourceName!=='RockstarINTEL'||row.claimStatus!=='reported_not_confirmed_by_rockstar'||!/^https:\/\/(?:www\.)?rockstarintel\.com\//.test(row.sourceUrl)||!DATE.test(row.publishedAt))throw Error('Bad independent source');
   }else if(row.sourceTier==='community_indexed_not_rockstar_confirmed'){
    if(!row.id.startsWith('wiki-community-')||row.sourceName!=='GTA Wiki'||!/^https:\/\/gta\.wiki\/w\//.test(row.sourceUrl)||!Number.isInteger(row.wikiRevision))throw Error('Bad community source');
+   if(row.imageSource!==undefined&&!(typeof row.imageSource==='string'&&
+      /^https:\/\/gta\.wiki\/w\/File:[a-z0-9%_.()\-]+\.(?:png|jpe?g|webp)$/i.test(row.imageSource)))
+    throw Error('Invalid Wiki source file link');
    if(row.image!==undefined){
     const im=row.image;
     const remote=typeof im?.remote==='string'?im.remote:'';
@@ -231,12 +234,14 @@ export function mergeWiki(previous,staged){
    }):safeRow.specs;
    byId.set(row.id,enriched?{...safeRow,specs:enriched}:safeRow);changed++;
   }else if(row.wikiRevision===old.wikiRevision&&(
-    (safeRow.specs?.length&&!Array.isArray(old.specs))||(safeRow.image&&!old.image))){
+    (safeRow.specs?.length&&!Array.isArray(old.specs))||(safeRow.image&&!old.image)||
+    (safeRow.imageSource&&!old.imageSource))){
    // Same source revision: newly licensed picture or unimported specs can arrive
    // after the first scan. Never downgrade previous translations or imagery.
    byId.set(row.id,{...old,
     ...(safeRow.specs?.length&&!Array.isArray(old.specs)?{specs:safeRow.specs}:{}),
-    ...(safeRow.image&&!old.image?{image:safeRow.image}:{})});changed++;
+    ...(safeRow.image&&!old.image?{image:safeRow.image}:{}),
+    ...(safeRow.imageSource&&!old.imageSource?{imageSource:safeRow.imageSource}:{})});changed++;
   }
  }
  if(!changed)return {next:previous,changed:0};
