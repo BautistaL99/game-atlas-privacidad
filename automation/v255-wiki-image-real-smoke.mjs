@@ -22,7 +22,11 @@ const page=data.query?.pages?.[0],revision=page?.revisions?.[0];
 const raw=revision?.slots?.main?.content??revision?.slots?.main?.['*'];
 if(typeof raw!=='string'||!revision?.revid)throw Error('GTA Wiki Mule revision unavailable');
 const filename=wikiPhotoCandidate(raw);
-if(!filename)throw Error('No exact GTA VI photo found for Mule; review infobox parser');
+if(!filename){
+ const mediaLines=raw.split(/\r?\n/).filter(line=>/(?:panel.?image|GTAVI|GTA.?VI|image|Mule-)/i.test(line)).slice(0,20).map(line=>line.slice(0,210));
+ console.log('REAL WIKITEXT MEDIA FIELDS',JSON.stringify({length:raw.length,first:raw.slice(0,180),mediaLines},null,2));
+ throw Error('No exact GTA VI photo found for Mule; review infobox parser');
+}
 const row={id:'wiki-community-aaaaaaaaaaaaaaaaaaaaaaaa',sourceUrl};
 const result=await enrichWikiImageBatch([row],new Map([[row.id,raw]]),request,{max:1});
 const summary={source:sourceUrl,pageRevision:revision.revid,filename,
