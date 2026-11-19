@@ -104,4 +104,35 @@ await writeFile(join(appPath,'community-v206.js'),community);
 await writeFile(join(appPath,'detail-enhancements-v160.js'),gallery);
 await cp('updates',join(OUT,'updates'),{recursive:true});
 await writeFile(join(OUT,'index.html'),'<meta http-equiv="refresh" content="0;url=./app/">');
+const config={hosting:{site:'gta6mapa',public:'.',ignore:['firebase.json','**/.*','**/node_modules/**'],
+ headers:[
+  {source:'**/*.html',headers:[{key:'Cache-Control',value:'no-cache, no-store, must-revalidate'}]},
+  {source:'**/*.json',headers:[{key:'Cache-Control',value:'no-cache, max-age=0, must-revalidate'}]},
+  {source:'**/sw.js',headers:[{key:'Cache-Control',value:'no-cache, no-store, must-revalidate'}]}
+ ]}};
+await writeFile(join(OUT,'firebase.json'),JSON.stringify(config,null,2));
+const windowsCmd=[
+ '@echo off','chcp 65001 >nul','cd /d "%~dp0"',
+ 'echo ===============================================',
+ 'echo GAME ATLAS V255 - SOLO CANAL DE PRUEBA',
+ 'echo NO modifica gta6mapa.web.app ni publica LIVE',
+ 'echo ===============================================',
+ 'npx --yes firebase-tools@15.22.1 hosting:channel:deploy prueba-web-v255-qa --project gta6mapa --expires 3d --non-interactive',
+ 'if errorlevel 1 (',
+ ' echo.',
+ ' echo Error de Firebase. Si aparece error de inicio de sesion, ejecuta:',
+ ' echo npx --yes firebase-tools@15.22.1 login',
+ ' echo y despues ejecuta este archivo nuevamente.',
+ ' pause','exit /b 1',')',
+ 'echo.','echo Canal de prueba publicado. Copia el enlace mostrado arriba.','pause'
+].join('\r\n')+'\r\n';
+await writeFile(join(OUT,'PUBLICAR_SOLO_PRUEBA_V255.bat'),windowsCmd);
+await writeFile(join(OUT,'LEER-V255-PRUEBA.txt'),
+ 'Game Atlas V255 sobre fuente web V254 real.\n'+
+ '1. Extrae el ZIP completo en una carpeta. No ejecutes los archivos dentro del ZIP.\n'+
+ '2. Haz doble clic en PUBLICAR_SOLO_PRUEBA_V255.bat (Windows).\n'+
+ '3. Si Firebase requiere iniciar sesion, ejecuta npx --yes firebase-tools@15.22.1 login en la terminal y vuelve al paso 2.\n'+
+ '4. Usa la URL temporal impresa por Firebase y abri /app/#/explorar.\n'+
+ '5. No publicar LIVE ni actualizar apps Android/iOS antes de las pruebas visuales.\n'+
+ 'IMPORTANTE: imagenes de GTA Wiki sin licencia clara solo incluyen enlace a fuente; no se incorporan automaticamente.\n');
 console.log('V255 V254 STRICT OVERLAY',JSON.stringify({baseV254Bytes:original.length,resultBytes:app.length,referencedAssetsFetched:fetched,result:'READY_FOR_QA_NOT_DEPLOYED'}));
