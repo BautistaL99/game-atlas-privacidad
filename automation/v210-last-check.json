@@ -1,19 +1,19 @@
 {
-  "checkedAt": "2026-11-19T22:28:41.594Z",
+  "checkedAt": "2026-11-19T23:40:33.190Z",
   "mode": "news",
   "runner": "public-free",
-  "publisher": "SIGNED_READY_TO_COMMIT",
-  "officialRevision": 4,
-  "communityRevision": 35,
-  "previousOfficialCount": 19,
-  "previousIndependentCount": 37,
+  "publisher": "UNCHANGED_SIGNED_ARCHIVES_PRESERVED",
+  "officialRevision": 5,
+  "communityRevision": 36,
+  "previousOfficialCount": 20,
+  "previousIndependentCount": 40,
   "previousWikiCount": 577,
-  "newOfficial": 1,
-  "newIndependent": 3,
+  "newOfficial": 0,
+  "newIndependent": 0,
   "newWiki": 0,
   "quarantined": [],
   "warnings": [],
   "updatedOfficial": 0,
   "updatedIndependent": 0,
-  "changesSigned": true
+  "changesSigned": false
 }
