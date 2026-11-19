@@ -38,6 +38,9 @@
      !translations(item.title,160)||!translations(item.summary,450)||
      !Number.isSafeInteger(item.wikiRevision)||item.wikiRevision<0||
      item.facts!==undefined||item.mapPoint!==undefined||item.gallery!==undefined)throw Error('Untrusted community profile');
+   if(item.imageSource!==undefined&&!(typeof item.imageSource==='string'&&
+      /^https:\/\/gta\.wiki\/w\/File:[a-z0-9%_.()\-]+\.(?:png|jpe?g|webp)$/i.test(item.imageSource)))
+    throw Error('Untrusted Wiki image-source link');
    if(item.image!==undefined){
     const pic=item.image;let u;try{u=new URL(pic.remote)}catch{}
     if(pic?.type!=='wiki-licensed'||!u||u.protocol!=='https:'||u.hostname!=='gta.wiki'||
