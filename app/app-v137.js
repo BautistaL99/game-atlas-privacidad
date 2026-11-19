@@ -955,7 +955,9 @@ document.addEventListener('submit',e=>{if(e.target.id==='homeSearchForm'){e.prev
    No local user progress, map calibration or private marker is overwritten. */
 const viWikiGoodLang=(x,max=190)=>x&&typeof x==='object'&&['es','en','pt'].every(l=>typeof x[l]==='string'&&x[l].trim()&&x[l].length<=max&&!/[<>\x00-\x1f]/.test(x[l]));
 function viWikiApplyLocale(item,lang){
- const specs=(item.wikiSpecs||[]).filter(x=>viWikiGoodLang(x.labelI18n,80)&&viWikiGoodLang(x.valueI18n,190));
+ const specs=(item.wikiSpecs||[]).filter(x=>viWikiGoodLang(x.labelI18n,80)&&viWikiGoodLang(x.valueI18n,190)&&
+  !/^(?:panel[ _-]?(?:image|photo)|image|photo|file|caption)/i.test(x.key||'')&&
+  !/\.(?:jpe?g|png|webp)(?:\s|$)/i.test(x.valueI18n?.en||''));
  item.facts=[...(item.facts||[]).filter(x=>x.source!=='wiki'),...specs.slice(0,18).map(x=>({key:x.labelI18n[lang]||x.labelI18n.es,value:x.valueI18n[lang]||x.valueI18n.es,verified:true,source:'wiki'}))];
  item.attributes={...(item.attributes||{}),...Object.fromEntries(specs.map(x=>[x.key,(x.valueI18n[lang]||x.valueI18n.es)]))};
  return item;
