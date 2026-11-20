@@ -304,6 +304,12 @@ async function run(){
     if(cover)translated.push({...known.get(row.url),image:cover});
    }
    const merged=appendNews(official,translated,'official');nextOfficial=merged.next;report.newOfficial=merged.added;report.updatedOfficial=merged.updated||0;
+   const knownAfter=new Set(nextOfficial.items.flatMap(x=>(x.sources||[]).map(y=>y.url)));
+   report.latestRockstarSourceDate=sources[0].value.map(x=>x.publishedAt).sort().at(-1)||null;
+   report.latestPublishedOfficialDate=nextOfficial.items.filter(x=>x.category==='actualizaciones'&&x.facets?.community!==1).map(x=>x.publishedAt).filter(Boolean).sort().at(-1)||null;
+   report.unpublishedRockstarUrls=sources[0].value.filter(x=>!knownAfter.has(x.url)).map(x=>x.url).slice(0,12);
+   if(report.unpublishedRockstarUrls.length)
+    report.warnings.push('Some verified Rockstar sources require retry or review: '+report.unpublishedRockstarUrls.length);
   }else report.warnings.push('Rockstar check failed: '+sources[0].reason.message);
   if(sources[1].status==='fulfilled'){
    const known=new Map(community.news.map(x=>[x.sourceUrl,x]));
@@ -312,6 +318,10 @@ async function run(){
    const translated=[];
    for(const row of fresh)try{translated.push(await independentEntry(row))}catch(e){report.quarantined.push({source:'RockstarINTEL',url:row.url,reason:e.message.slice(0,150)})}
    const merged=appendNews(community,translated,'community');nextCommunity=merged.next;report.newIndependent=merged.added;report.updatedIndependent=merged.updated||0;
+   const independentUrls=new Set(nextCommunity.news.map(x=>x.sourceUrl));
+   report.latestIndependentSourceDate=sources[1].value.map(x=>x.publishedAt).sort().at(-1)||null;
+   report.latestPublishedIndependentDate=nextCommunity.news.map(x=>x.publishedAt).filter(Boolean).sort().at(-1)||null;
+   report.unpublishedIndependentUrls=sources[1].value.filter(x=>!independentUrls.has(x.url)).map(x=>x.url).slice(0,12);
   }else report.warnings.push('RockstarINTEL check failed: '+sources[1].reason.message);
   // Manually verified launch-day articles: original publication date and
   // independent attribution are preserved. Duplicate source URLs are ignored.
