@@ -197,3 +197,18 @@ test('V266 R18 missing or unrelated official photos never change an existing sig
  assert.equal(await getPhotoForOfficialArticle(url,async()=>{throw Error('offline')}),null);
  assert.equal(await getPhotoForOfficialArticle(url,async()=>new Response('<meta property="og:image" content="https://example.org/test.jpg">')),null);
 });
+
+test('V266 R18 retrieves exact Rockstar post art from localized page HTML without relying on og:image',async()=>{
+ const article='https://www.rockstargames.com/newswire/article/k4a8955a93o747/grand-theft-auto-vi-the-album-now-available';
+ const art='https://media-rockstargames-com.akamaized.net/tina-uploads/posts/k4a8955a93o747/'+'b'.repeat(40)+'.png';
+ const fake='https://media-rockstargames-com.akamaized.net/tina-uploads/posts/wrongpost/'+'c'.repeat(40)+'.jpg';
+ const visited=[];
+ const result=await getPhotoForOfficialArticle(article,async url=>{
+  visited.push(url);
+  if(url.includes('/es/newswire/'))return new Response('<script>const photo="'+fake+'";const official="'+art.replaceAll('/','\\/')+'"</script>');
+  return new Response('<html><head></head><body>no meta</body></html>');
+ });
+ assert.equal(result.remote,art);
+ assert.equal(result.officialPage,article);
+ assert.equal(visited.length,2,'stops after a valid matching image');
+});
