@@ -1,0 +1,87 @@
+name: Game Atlas V266 R18 - imagen de respaldo firmada para Noticias (una vez)
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/v266-r18-owned-news-media-once.yml'
+permissions:
+  contents: write
+concurrency:
+  group: atlas-v210-public-automated-data
+  cancel-in-progress: false
+jobs:
+  only-official-news-art:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      CATALOG_SIGNING_KEY_PEM_BASE64: ${{ secrets.CATALOG_SIGNING_KEY_PEM_BASE64 }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Probar firma, PNG original, resguardo y catálogo existente
+        run: |
+          set -euo pipefail
+          test -n "$CATALOG_SIGNING_KEY_PEM_BASE64"
+          node --check automation/v266-owned-news-art.mjs
+          node --test automation/v210-publisher.test.mjs automation/v253-client-limits.test.mjs
+      - name: Generar imagen ORIGINAL y firmar solo dos noticias sin alterar lo demás
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          import {createHash} from 'node:crypto';
+          import {verifyFeed,validatePublication,signFeed} from './automation/v210-publisher.mjs';
+          import {ensureOwnedNewsAsset} from './automation/v266-owned-news-art.mjs';
+          const catalogPath='updates/catalog-envelope.json';
+          const old=verifyFeed(JSON.parse(readFileSync(catalogPath,'utf8')),1);
+          validatePublication(old);
+          const ids=new Set(['rockstar-585094a46f8882dd13607ab2','rockstar-d2760b55b1af3f1db47400ad']);
+          if(old.items.filter(x=>ids.has(x.id)).length!==2)throw Error('Expected two exact official news records');
+          for(const row of old.items.filter(x=>ids.has(x.id))){
+            if(row.category!=='actualizaciones'||row.status!=='verified'||!/^https:\/\/www\.rockstargames\.com\/newswire\/article\//.test(row.sources?.[0]?.url||''))
+              throw Error('Not official Rockstar Newswire story: '+row.id);
+          }
+          const asset=ensureOwnedNewsAsset();
+          const bytes=readFileSync(asset.record.path);
+          if(createHash('sha256').update(bytes).digest('hex')!==asset.sha||bytes.length>=600000)
+            throw Error('Owned PNG digest/size mismatch');
+          const items=old.items.map(row=>ids.has(row.id)?{...row,image:asset.record}:row);
+          const changed=old.items.filter((row,i)=>JSON.stringify(row)!==JSON.stringify(items[i]));
+          if(!changed.length){console.log('OWNED_OFFICIAL_ART_ALREADY_APPLIED');process.exit(0)}
+          if(changed.length!==2||changed.some(x=>!ids.has(x.id)))throw Error('Unexpected catalog changes');
+          const next={...old,revision:old.revision+1,items};
+          validatePublication(next);
+          const signed=signFeed(next,process.env.CATALOG_SIGNING_KEY_PEM_BASE64);
+          const check=verifyFeed(signed,1);
+          if(check.revision!==next.revision||check.items.length!==old.items.length)throw Error('Invalid signed revision');
+          for(let i=0;i<old.items.length;i++){
+            const {image:ignoredOld,...beforeWithoutImage}=old.items[i];
+            const {image:ignoredNew,...afterWithoutImage}=check.items[i];
+            if(JSON.stringify(beforeWithoutImage)!==JSON.stringify(afterWithoutImage))throw Error('Article modified outside image');
+          }
+          writeFileSync(catalogPath,JSON.stringify(signed)+'\n');
+          console.log('V266_OWNED_NEWS_ART_READY',asset.record.path,asset.size);
+          console.log('V266_NEWS_SIGNED_REVISION',next.revision,'only_news_updated',changed.map(x=>x.id).join(','));
+          NODE
+      - name: Publicar solamente imagen propia y catálogo firmado (nunca app)
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main --quiet
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo 'main cambió. No sobrescribir el catálogo, para seguridad.'
+            exit 1
+          fi
+          git add updates/catalog-envelope.json
+          git add updates/assets/*.png
+          if git diff --cached --quiet; then
+            echo 'Sin cambios: no publicar otra revisión'
+            exit 0
+          fi
+          git commit -m 'Game Atlas: branded verified news fallback for V266 Android, without AAB'
+          git push origin HEAD:main
