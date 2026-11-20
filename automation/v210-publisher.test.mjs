@@ -4,7 +4,7 @@ import {renderOwnedNewsArt,ownedNewsImageRecord} from './v266-owned-news-art.mjs
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {publicationDate,extractRockstarGraph,extractRockstarIntelRSS,wikiFiche,sha,parseWikiInfobox,getOfficial,officialLinksFromHtml} from './v210-sources.mjs';
-import {verifyFeed,validatePublication,appendNews,mergeWiki} from './v210-publisher.mjs';
+import {verifyFeed,validatePublication,appendNews,mergeWiki,safeOfficialExcerpt} from './v210-publisher.mjs';
 import {getPhotoForOfficialArticle,matchRockstarArticleImage} from './v210-news-photos.mjs';
 test('V210 verify old Ed25519 feeds with the existing client public key',async()=>{
  const a=JSON.parse(await readFile('updates/catalog-envelope.json','utf8'));
@@ -237,4 +237,49 @@ test('V266 R18 own-art remote fallback is deterministic, client-compatible and u
  assert.equal(next.items.length,live.items.length,'no new news added');
  assert.deepEqual(next.items.find(x=>x.id===old.id).sources,old.sources,'source stays Rockstar');
  assert.deepEqual(next.items.find(x=>x.id===old.id).title,old.title,'translations preserved');
+});
+
+
+test('V266 preserves complete Rockstar summary sentences and never cuts a word',()=>{
+ const content='Grand Theft Auto VI: The Album, the official soundtrack created with Atlantic Records, is available everywhere now. Stream it on major music streaming services and at selected retailers.';
+ assert.equal(safeOfficialExcerpt(content,170),
+  'Grand Theft Auto VI: The Album, the official soundtrack created with Atlantic Records, is available everywhere now.');
+ const incomplete='An entirely different official article title with a long description that continues with extra material about locations and several details from the official launch gallery beyond the expected limit before finally ending.';
+ const clipped=safeOfficialExcerpt(incomplete,110);
+ assert(clipped.endsWith('…'));
+ assert(!clipped.includes('materia…'),'do not slice inside a word');
+ assert.equal(safeOfficialExcerpt('Rockstar published another GTA VI item.'),'Rockstar published another GTA VI item.');
+});
+test('V266 detects a Rockstar GTA VI-tagged story even when headline does not contain GTA VI',async()=>{
+ const page='<a href="/newswire/article/9k2a49ook82o57/pre-order-the-goodtime-state-vice-city-collection-now-while-supplies-l">Related</a>';
+ const article='<meta property="og:title" content="Pre-Order The Goodtime State – Vice City Collection Now While Supplies Last">'+
+  '<meta property="og:description" content="Explore the Grand Theft Auto VI Collection from Rockstar Games.">'+
+  '<meta property="article:published_time" content="2026-09-24T13:30:00Z">';
+ const fetchFn=async url=>{
+  url=String(url);
+  if(url.includes('graph.rockstargames.com'))throw Error('offline');
+  if(url.includes('/newswire/article/'))return new Response(article,{status:200});
+  if(url.includes('?tag=722'))return new Response(page,{status:200});
+  return new Response('<html>no news</html>',{status:200});
+ };
+ const fetched=await getOfficial(fetchFn);
+ assert.equal(fetched.length,1);
+ assert.equal(fetched[0].publishedAt,'2026-09-24');
+ assert.equal(fetched[0].verifiedContext,'rockstar_gtavi_description');
+});
+test('V266 does not accept unrelated Rockstar stories from category index',async()=>{
+ const page='<a href="/newswire/article/safe1/gta-vi-news">GTA</a><a href="/newswire/article/unrelated/other-game">Other</a>';
+ const fetchFn=async url=>{
+  url=String(url);
+  if(url.includes('graph.rockstargames.com'))throw Error('offline');
+  if(url.includes('/newswire/article/safe1/'))return new Response(
+   '<meta property="og:title" content="Grand Theft Auto VI News"><meta property="article:published_time" content="2026-11-20T13:30:00Z">',{status:200});
+  if(url.includes('/newswire/article/'))return new Response(
+   '<meta property="og:title" content="Some unrelated game"><meta property="og:description" content="New discounts today."><meta property="article:published_time" content="2026-11-20T13:30:00Z">',{status:200});
+  if(url.includes('?tag=722'))return new Response(page,{status:200});
+  return new Response('',{status:200});
+ };
+ const fetched=await getOfficial(fetchFn);
+ assert.equal(fetched.length,1);
+ assert(fetched[0].title.includes('Grand Theft Auto VI'));
 });
