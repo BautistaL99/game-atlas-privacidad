@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {publicationDate,extractRockstarGraph,extractRockstarIntelRSS,wikiFiche,sha,parseWikiInfobox,getOfficial,officialLinksFromHtml} from './v210-sources.mjs';
 import {verifyFeed,validatePublication,appendNews,mergeWiki} from './v210-publisher.mjs';
+import {getPhotoForOfficialArticle,matchRockstarArticleImage} from './v210-news-photos.mjs';
 test('V210 verify old Ed25519 feeds with the existing client public key',async()=>{
  const a=JSON.parse(await readFile('updates/catalog-envelope.json','utf8'));
  const b=JSON.parse(await readFile('updates/community-envelope-v205.json','utf8'));
@@ -161,4 +162,38 @@ test('V253 keeps translated facts across a newer Wiki revision only when raw sou
   wikiRevision:original.wikiRevision+1,
   specs:[{key:'type',label:'type',value:'truck'}]}]);
  assert.equal(changed.next.fiches.find(f=>f.id===x.id).specs[0].valueI18n,undefined);
+});
+
+
+test('V266 R18 remote Rockstar news-photo backfill is source-exact, signed-feed compatible and idempotent',async()=>{
+ const url='https://www.rockstargames.com/newswire/article/k4a8955a93o747/grand-theft-auto-vi-the-album-now-available';
+ const src='https://media-rockstargames-com.akamaized.net/tina-uploads/posts/k4a8955a93o747/'+'a'.repeat(40)+'.jpg';
+ const cover=await getPhotoForOfficialArticle(url,async()=>new Response('<meta content="'+src+'" property="og:image">'));
+ assert.equal(cover.remote,src);
+ assert.equal(cover.officialPage,url);
+ assert.deepEqual(Object.keys(cover.caption),['es','en','pt']);
+ assert.equal(matchRockstarArticleImage(url,src.replace('k4a8955a93o747','7599a881942544')),null,'wrong Newswire post');
+ assert.equal(matchRockstarArticleImage(url,src.replace('media-rockstargames-com.akamaized.net','other.example')),null,'wrong origin');
+ const feed=verifyFeed(JSON.parse(await readFile('updates/catalog-envelope.json','utf8')),1);
+ const row={id:'rockstar-'+sha(url).slice(0,24),category:'actualizaciones',status:'verified',
+  title:{es:'GTA 6 álbum',en:'GTA 6 Album',pt:'GTA 6 álbum disponível'},
+  summary:{es:'Novedad oficial',en:'Official news',pt:'Notícia oficial'},
+  sources:[{url}],publishedAt:'2026-11-20',trackable:false};
+ // If real signed feed already contains this id, keep its original text/date.
+ const without=feed.items.find(x=>x.id===row.id);
+ const baseline=without?feed:appendNews(feed,[row],'official').next;
+ const original=baseline.items.find(x=>x.id===row.id);
+ const input={...original,image:cover};
+ const result=appendNews(baseline,[input],'official');
+ assert.equal(result.next.items.length,baseline.items.length,'no new card or duplicate');
+ assert.equal(result.next.items.find(x=>x.id===row.id).image.remote,src);
+ assert.deepEqual(result.next.items.find(x=>x.id===row.id).title,original.title);
+ assert.equal(result.next.items.find(x=>x.id===row.id).publishedAt,original.publishedAt);
+ assert.deepEqual(result.next.items.find(x=>x.id===row.id).sources,original.sources);
+ assert.equal(appendNews(result.next,[input],'official').next.revision,result.next.revision,'no repeat');
+});
+test('V266 R18 missing or unrelated official photos never change an existing signed article',async()=>{
+ const url='https://www.rockstargames.com/newswire/article/k4a8955a93o747/grand-theft-auto-vi-the-album-now-available';
+ assert.equal(await getPhotoForOfficialArticle(url,async()=>{throw Error('offline')}),null);
+ assert.equal(await getPhotoForOfficialArticle(url,async()=>new Response('<meta property="og:image" content="https://example.org/test.jpg">')),null);
 });
