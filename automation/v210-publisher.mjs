@@ -85,7 +85,7 @@ export function validatePublication(data){
 const urlValid=x=>{try{const u=new URL(x);return u.protocol==='https:'&&!u.username&&!u.password&&!u.port&&!u.search&&!u.hash}catch{return false}};
 function enToTranslated(source,target){
  const sourceNumbers=source.match(/\d+/g)||[],targetNumbers=target.match(/\d+/g)||[];
- if(!text(target,180)||source.toLocaleLowerCase()===target.toLocaleLowerCase()||
+ if(!text(target,180)||/\bj\s+dispon\s+vel\b/i.test(target)||source.toLocaleLowerCase()===target.toLocaleLowerCase()||
   sourceNumbers.some(n=>!targetNumbers.includes(n))||
   VI.test(source)&&!VI.test(target)||
   /\b(?:translation quota exceeded|mymemory warning|invalid request)\b/i.test(target))throw Error('Translation withheld: untrusted output');
@@ -123,10 +123,23 @@ async function officialTitle(url,original,lang,fetchFn=fetch){
 /* Prefer a genuine Rockstar metadata description, translated into all
  * three locales. If unavailable, the existing safe summary template remains.
  * Never automatically hotlink unreviewed promotional photographs. */
+export function safeOfficialExcerpt(raw,limit=170){
+ // Never publish a description cut in the middle of a word. Prefer the
+ // original first complete sentence; otherwise a visibly abbreviated excerpt.
+ const source=clean(raw,1100);
+ if(!source)return '';
+ if(source.length<=limit)return source;
+ const sentence=source.match(/^.{45,220}?[.!?](?=\s|$)/u);
+ if(sentence&&sentence[0].length<=limit)return sentence[0].trim();
+ const clipped=source.slice(0,limit-1);
+ const last=clipped.lastIndexOf(' ');
+ if(last<70)return '';
+ return clipped.slice(0,last).replace(/[\s,;:–-]+$/u,'')+'…';
+}
 async function officialExcerpt(url,fetchFn=fetch){
  try{
   const html=await boundedText(url,fetchFn,{max:1200000,headers:{Accept:'text/html'}});
-  const en=clean(meta(html,'og:description')||meta(html,'description'),170);
+  const en=safeOfficialExcerpt(meta(html,'og:description')||meta(html,'description'));
   if(!en||en.length<34||/cookies?|privacy|javascript required|accept all/i.test(en))return null;
   const es=await myMemory(en,'es',fetchFn),pt=await myMemory(en,'pt',fetchFn);
   return tr({es,en,pt},190)?{es,en,pt}:null;
