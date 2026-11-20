@@ -144,7 +144,6 @@ export async function officialEntry(source,fetchFn=fetch){
  try{pt=await officialTitle(source.url,en,'pt',fetchFn)}
  catch{pt='Rockstar Games (título EN): '+en;pending=true}
  const excerpt=await officialExcerpt(source.url,fetchFn);
- const cover=await getPhotoForOfficialArticle(source.url,fetchFn);
  return {id:'rockstar-'+sha(source.url).slice(0,24),category:'actualizaciones',status:'verified',
   title:{es,en,pt},
   summary:excerpt||{
