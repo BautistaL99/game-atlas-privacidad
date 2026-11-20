@@ -3,14 +3,17 @@
  * exposed in this public repository. The published clients keep their
  * existing public verification key and only accept signed original schemas.
  */
-import {createPrivateKey,createPublicKey,sign,verify} from 'node:crypto';
+import {createPrivateKey,createPublicKey,sign,verify,createHash} from 'node:crypto';
 import {readFile,writeFile} from 'node:fs/promises';
 import {getOfficial,getIndependent,getWikiBatch,sha,clean,boundedText} from './v210-sources.mjs';
 import {translateFacts} from './v220-wiki-spec-translations.mjs';
 import {getReviewedLaunchNews} from './v253-manual-news-20261118.mjs';
 import {getPhotoForOfficialArticle} from './v210-news-photos.mjs';
+import {ownedNewsImageRecord,renderOwnedNewsArt} from './v266-owned-news-art.mjs';
 const PUB='qxnlUBqCBknS8KL/Bymrx4COzWN9TpPJAfdHohv/ugI=';
 const MODES={official:1,community:205};
+let ownedArtDigest;
+function sha256OwnedNewsArt(){return ownedArtDigest||(ownedArtDigest=createHash('sha256').update(renderOwnedNewsArt()).digest('hex'))}
 // Fixed compatibility limits of the already submitted Web/Android/iOS V253 client.
 const MAX_CLIENT_WIKI=1000,MAX_CLIENT_NEWS=220,MAX_CLIENT_ENVELOPE=2200000;
 const maxClientPayload=MAX_CLIENT_ENVELOPE-2000;
@@ -151,7 +154,10 @@ export async function officialEntry(source,fetchFn=fetch){
   },
   publishedAt:source.publishedAt,trackable:false,sources:[{url:source.url}],
   ...(pending?{translationPending:true}:{}),
-  ...(cover?{image:cover}:{})
+  // V266 has a client-side renderer bug for official HTTP image URLs.
+  // Safe unsigned remote images are NOT executable and cannot repair that bug.
+  // Provide an owned branded fallback via SHA-verified signed image bytes.
+  image:ownedNewsImageRecord(sha256OwnedNewsArt())
  };
 }
 export async function independentEntry(source,fetchFn=fetch){
