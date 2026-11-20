@@ -24,12 +24,24 @@ export function matchRockstarArticleImage(article,raw){
 }
 export async function getPhotoForOfficialArticle(article,fetchFn=fetch){
  if(typeof article!=='string'||!NEWSWIRE.test(article))return null;
- try{
-  const html=await boundedText(article,fetchFn,{max:1800000,headers:{Accept:'text/html'}});
-  for(const key of ['og:image','og:image:url','twitter:image']){
-   const image=matchRockstarArticleImage(article,metadata(html,key));
-   if(image)return image;
-  }
- }catch{} // A failed source must never poison the previously signed catalog.
+ // Rockstar localizes Newswire independently. Some pages expose image data only
+ // in their embedded page payload rather than in og:image metadata.
+ // Keep the article ID identical; never use another story's cover.
+ for(const locale of ['', 'es', 'br', 'jp']){
+  const page=locale?article.replace('/newswire/','/'+locale+'/newswire/'):article;
+  try{
+   const html=await boundedText(page,fetchFn,{max:1800000,headers:{Accept:'text/html'}});
+   for(const key of ['og:image','og:image:url','twitter:image']){
+    const image=matchRockstarArticleImage(article,metadata(html,key));
+    if(image)return image;
+   }
+   const unescaped=html.replace(/\\\//g,'/').replace(/\\u002[fF]/g,'/');
+   const media=unescaped.match(/https:\/\/media-rockstargames-com\.akamaized\.net\/tina-uploads\/posts\/[a-z0-9_-]+\/[a-f0-9]{40}\.(?:jpe?g|png|webp)/gi)||[];
+   for(const url of media.slice(0,16)){
+    const image=matchRockstarArticleImage(article,url);
+    if(image)return image;
+   }
+  }catch{} // Keep signed history unchanged if a locale fails.
+ }
  return null;
 }
