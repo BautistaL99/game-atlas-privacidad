@@ -1,0 +1,84 @@
+name: Game Atlas V266 R18 - recuperar fotos oficiales remotas (una vez, sin app)
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/v266-r18-official-news-photos-once.yml'
+permissions:
+  contents: write
+concurrency:
+  group: atlas-v210-public-automated-data
+  cancel-in-progress: false
+jobs:
+  official-photo-backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      CATALOG_SIGNING_KEY_PEM_BASE64: ${{ secrets.CATALOG_SIGNING_KEY_PEM_BASE64 }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificar firmas, fuentes, fotos y regresiones ANTES de escribir
+        run: |
+          set -euo pipefail
+          test -n "$CATALOG_SIGNING_KEY_PEM_BASE64"
+          node --check automation/v210-news-photos.mjs
+          node --check automation/v210-publisher.mjs
+          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v253-client-limits.test.mjs
+      - name: Recuperar SOLO fotos de noticias existentes de 19 y 20 noviembre sin app ni mapa
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          import {getPhotoForOfficialArticle} from './automation/v210-news-photos.mjs';
+          import {verifyFeed,validatePublication,signFeed} from './automation/v210-publisher.mjs';
+          const path='updates/catalog-envelope.json';
+          const before=verifyFeed(JSON.parse(readFileSync(path,'utf8')),1);
+          validatePublication(before);
+          const wanted=new Set(['rockstar-585094a46f8882dd13607ab2','rockstar-d2760b55b1af3f1db47400ad']);
+          let changed=0;
+          const items=[];
+          for(const original of before.items){
+            if(!wanted.has(original.id)||original.image){items.push(original);continue}
+            const source=original.sources?.[0]?.url;
+            if(!source){items.push(original);continue}
+            const image=await getPhotoForOfficialArticle(source);
+            if(!image){console.log('IMAGE_NOT_VERIFIABLE',original.id);items.push(original);continue}
+            console.log('OFFICIAL_IMAGE_RECOVERED',original.id,image.remote);
+            items.push({...original,image});
+            changed++;
+          }
+          if(!changed){console.log('NO_VERIFIED_IMAGES; source catalog unchanged');process.exit(0)}
+          const next={...before,revision:before.revision+1,items};
+          validatePublication(next);
+          const envelope=signFeed(next,process.env.CATALOG_SIGNING_KEY_PEM_BASE64);
+          const check=verifyFeed(envelope,1);
+          if(check.revision!==next.revision||check.items.length!==before.items.length)throw Error('Signed feed mismatch');
+          for(let i=0;i<before.items.length;i++){
+            if(!wanted.has(before.items[i].id)&&JSON.stringify(before.items[i])!==JSON.stringify(check.items[i]))
+              throw Error('Unexpected change outside the two selected official stories');
+          }
+          writeFileSync(path,JSON.stringify(envelope)+'\n');
+          console.log('SIGNED_OFFICIAL_IMAGES_ADDED',changed,'catalog_revision',next.revision);
+          NODE
+      - name: Publicar SOLO catálogo Ed25519 si hay fotos nuevas verificadas
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main --quiet
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo "main cambió, no sobrescribir el catálogo"
+            exit 1
+          fi
+          git add updates/catalog-envelope.json
+          if git diff --cached --quiet; then
+            echo "No hay cambios seguros: no se publica nada"
+            exit 0
+          fi
+          git commit -m 'Game Atlas: reparar fotografías oficiales existentes mediante catálogo firmado'
+          git push origin HEAD:main
