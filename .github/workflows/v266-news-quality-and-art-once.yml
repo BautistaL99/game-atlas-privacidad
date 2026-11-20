@@ -1,0 +1,86 @@
+name: V266 - corregir arte y resúmenes Rockstar sin actualizar la app (una vez)
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/v266-news-quality-and-art-once.yml'
+permissions:
+  contents: write
+concurrency:
+  group: atlas-v210-public-automated-data
+  cancel-in-progress: false
+jobs:
+  news-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CATALOG_SIGNING_KEY_PEM_BASE64: ${{ secrets.CATALOG_SIGNING_KEY_PEM_BASE64 }}
+    steps:
+      - name: Obtener el último catálogo firmado sin cambiar la app
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Comprobar que siguen intactos firmas, rutas, fichas y noticias
+        run: |
+          set -euo pipefail
+          test -n "$CATALOG_SIGNING_KEY_PEM_BASE64"
+          node --check automation/v210-sources.mjs
+          node --check automation/v210-publisher.mjs
+          node --check automation/v266-news-maintenance-20261120.mjs
+          python -m py_compile automation/v266-news-illustrations.py
+          node --test automation/v210-publisher.test.mjs automation/v219-launch-window.test.mjs automation/v253-client-limits.test.mjs
+      - name: Convertir arte ORIGINAL existente a dos imágenes diferentes
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check Pillow==12.0.0 CairoSVG==2.8.2
+          python automation/v266-news-illustrations.py
+          test -s automation/v266-news-illustrations-generated.json
+      - name: Reparar textos de Rockstar y firmar las imágenes sin tocar funciones
+        run: |
+          set -euo pipefail
+          node automation/v266-news-maintenance-20261120.mjs
+          test -s automation/v266-news-quality-report.json
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          import {createHash} from 'node:crypto';
+          import {verifyFeed} from './automation/v210-publisher.mjs';
+          const env=JSON.parse(readFileSync('updates/catalog-envelope.json','utf8'));
+          const feed=verifyFeed(env,1);
+          const ids=new Set(['rockstar-585094a46f8882dd13607ab2','rockstar-d2760b55b1af3f1db47400ad']);
+          if(feed.items.filter(x=>ids.has(x.id)).length!==2)throw Error('News records missing');
+          const imgs=new Set();
+          for(const row of feed.items.filter(x=>ids.has(x.id))){
+            const photo=row.image;
+            if(photo.rights!=='owned'||!photo.path.startsWith('updates/assets/'))throw Error('Unsafe image');
+            const bytes=readFileSync(photo.path);
+            if(bytes.length>600000||createHash('sha256').update(bytes).digest('hex')!==photo.sha256)throw Error('Hash/size');
+            imgs.add(photo.sha256);
+          }
+          if(imgs.size!==2)throw Error('The two official news stories must have different artwork');
+          console.log('V266_ART_AND_NEWS_VERIFIED',feed.revision,imgs.size);
+          NODE
+      - name: Publicar SOLO dos ilustraciones propias, resúmenes y catálogo Ed25519
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main --quiet
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo "main avanzó, abortando antes de sobrescribir noticias más recientes"
+            exit 1
+          fi
+          git add updates/catalog-envelope.json updates/assets/*.png automation/v266-news-quality-report.json
+          git diff --cached --name-only | grep -Ev '^(updates/catalog-envelope\.json|updates/assets/[a-f0-9]{64}\.png|automation/v266-news-quality-report\.json)$' && { echo 'Unexpected file'; exit 1; } || true
+          if git diff --cached --quiet; then
+            echo 'Sin cambios necesarios'
+            exit 0
+          fi
+          git commit -m 'Game Atlas: corrected official news and two original signed illustrations, no app release'
+          git push origin HEAD:main
