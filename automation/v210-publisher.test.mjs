@@ -183,7 +183,7 @@ test('V266 R18 remote Rockstar news-photo backfill is source-exact, signed-feed 
   sources:[{url}],publishedAt:'2026-11-20',trackable:false};
  // If real signed feed already contains this id, keep its original text/date.
  const without=feed.items.find(x=>x.id===row.id);
- const baseline=without?feed:appendNews(feed,[row],'official').next;
+ const baseline=without?{...feed,items:feed.items.map(x=>{if(x.id!==row.id)return x;const {image,...withoutPhoto}=x;return withoutPhoto})}:appendNews(feed,[row],'official').next;
  const original=baseline.items.find(x=>x.id===row.id);
  const input={...original,image:cover};
  const result=appendNews(baseline,[input],'official');
