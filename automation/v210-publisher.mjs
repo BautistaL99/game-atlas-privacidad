@@ -150,7 +150,7 @@ export async function officialEntry(source,fetchFn=fetch){
  if(!urlValid(source.url)||!/^https:\/\/www\.rockstargames\.com\/newswire\/article\//.test(source.url)||!DATE.test(source.publishedAt))
   throw Error('Bad Rockstar source');
  const en=clean(source.title,150);
- if(!VI.test(en))throw Error('Rockstar item not explicitly GTA VI');
+ if(!VI.test(en)&&source.verifiedContext!=='rockstar_gtavi_description')throw Error('Rockstar item not explicitly GTA VI');
  let es,pt,pending=false;
  try{es=await officialTitle(source.url,en,'es',fetchFn)}
  catch{es='Rockstar Games (titular EN): '+en;pending=true}
