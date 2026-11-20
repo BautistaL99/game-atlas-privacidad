@@ -8,6 +8,7 @@ import {readFile,writeFile} from 'node:fs/promises';
 import {getOfficial,getIndependent,getWikiBatch,sha,clean,boundedText} from './v210-sources.mjs';
 import {translateFacts} from './v220-wiki-spec-translations.mjs';
 import {getReviewedLaunchNews} from './v253-manual-news-20261118.mjs';
+import {getPhotoForOfficialArticle} from './v210-news-photos.mjs';
 const PUB='qxnlUBqCBknS8KL/Bymrx4COzWN9TpPJAfdHohv/ugI=';
 const MODES={official:1,community:205};
 // Fixed compatibility limits of the already submitted Web/Android/iOS V253 client.
@@ -140,6 +141,7 @@ export async function officialEntry(source,fetchFn=fetch){
  try{pt=await officialTitle(source.url,en,'pt',fetchFn)}
  catch{pt='Rockstar Games (título EN): '+en;pending=true}
  const excerpt=await officialExcerpt(source.url,fetchFn);
+ const cover=await getPhotoForOfficialArticle(source.url,fetchFn);
  return {id:'rockstar-'+sha(source.url).slice(0,24),category:'actualizaciones',status:'verified',
   title:{es,en,pt},
   summary:excerpt||{
@@ -148,7 +150,8 @@ export async function officialEntry(source,fetchFn=fetch){
    pt:'A Rockstar Games publicou uma notícia oficial sobre Grand Theft Auto VI: '+pt+'. Leia o comunicado original para conhecer os detalhes.'
   },
   publishedAt:source.publishedAt,trackable:false,sources:[{url:source.url}],
-  ...(pending?{translationPending:true}:{})
+  ...(pending?{translationPending:true}:{}),
+  ...(cover?{image:cover}:{})
  };
 }
 export async function independentEntry(source,fetchFn=fetch){
@@ -189,7 +192,10 @@ export function appendNews(previous,staged,kind){
    // multilingual translation arrives from the exact same source URL.
    if(existing.id===item.id&&existing.translationPending===true&&!item.translationPending&&
       (kind==='official'?existing.sources?.[0]?.url:existing.sourceUrl)===uri){
-    byId.set(item.id,item);updated++;
+    byId.set(item.id,{...item,image:item.image||existing.image});updated++;
+   }else if(kind==='official'&&existing.id===item.id&&!existing.image&&item.image&&existing.sources?.[0]?.url===uri){
+    // Add only a source-matched Rockstar photo; preserve title/date/summary and IDs.
+    byId.set(item.id,{...existing,image:item.image});updated++;
    }
    continue;
   }
@@ -271,6 +277,14 @@ async function run(){
     .sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt)).slice(0,12);
    const translated=[];
    for(const row of fresh)try{translated.push(await officialEntry(row))}catch(e){report.quarantined.push({source:'Rockstar',url:row.url,reason:e.message.slice(0,150)})}
+   // Restore verified images for existing recent posts without republishing news
+   // or changing translations, dates, favorites, app files or map content.
+   const photoBackfill=sources[0].value.filter(x=>known.has(x.url)&&!known.get(x.url)?.image&&!known.get(x.url)?.translationPending)
+    .sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt)).slice(0,8);
+   for(const row of photoBackfill){
+    const cover=await getPhotoForOfficialArticle(row.url);
+    if(cover)translated.push({...known.get(row.url),image:cover});
+   }
    const merged=appendNews(official,translated,'official');nextOfficial=merged.next;report.newOfficial=merged.added;report.updatedOfficial=merged.updated||0;
   }else report.warnings.push('Rockstar check failed: '+sources[0].reason.message);
   if(sources[1].status==='fulfilled'){
