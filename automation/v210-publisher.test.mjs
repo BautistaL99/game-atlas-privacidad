@@ -1,4 +1,6 @@
 import test from 'node:test';
+import {createHash} from 'node:crypto';
+import {renderOwnedNewsArt,ownedNewsImageRecord} from './v266-owned-news-art.mjs';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {publicationDate,extractRockstarGraph,extractRockstarIntelRSS,wikiFiche,sha,parseWikiInfobox,getOfficial,officialLinksFromHtml} from './v210-sources.mjs';
@@ -211,4 +213,28 @@ test('V266 R18 retrieves exact Rockstar post art from localized page HTML withou
  assert.equal(result.remote,art);
  assert.equal(result.officialPage,article);
  assert.equal(visited.length,2,'stops after a valid matching image');
+});
+
+
+test('V266 R18 own-art remote fallback is deterministic, client-compatible and under signed image cap',async()=>{
+ const png=renderOwnedNewsArt(),again=renderOwnedNewsArt();
+ assert.deepEqual(png,again,'deterministic PNG for signed digest');
+ assert(png.length>2000&&png.length<500000,'APK verified asset size cap');
+ assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a','actual PNG magic bytes');
+ assert.equal(png.readUInt32BE(16),960);
+ assert.equal(png.readUInt32BE(20),540);
+ const digest=createHash('sha256').update(png).digest('hex');
+ const img=ownedNewsImageRecord(digest);
+ assert.equal(img.path,'updates/assets/'+digest+'.png');
+ assert.equal(img.rights,'owned');
+ assert.deepEqual(Object.keys(img.alt),['es','en','pt']);
+ assert(img.alt.es.includes('genérica')&&!img.alt.es.includes('fotografía oficial'));
+ const live=verifyFeed(JSON.parse(await readFile('updates/catalog-envelope.json','utf8')),1);
+ const old=live.items.find(x=>x.id==='rockstar-585094a46f8882dd13607ab2');
+ assert(old,'20 November album report exists');
+ const next={...live,revision:live.revision+1,items:live.items.map(x=>x.id===old.id?{...x,image:img}:x)};
+ assert(validatePublication(next),'signed catalog allows owned artwork');
+ assert.equal(next.items.length,live.items.length,'no new news added');
+ assert.deepEqual(next.items.find(x=>x.id===old.id).sources,old.sources,'source stays Rockstar');
+ assert.deepEqual(next.items.find(x=>x.id===old.id).title,old.title,'translations preserved');
 });
