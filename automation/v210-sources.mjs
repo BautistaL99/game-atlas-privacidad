@@ -82,8 +82,14 @@ export async function getOfficial(fetchFn=fetch){
     try{
      const article=await boundedText(link,fetchFn,{max:1600000,headers:{Accept:'text/html'}});
      const title=articleMeta(article,'og:title');
+     const summary=articleMeta(article,'og:description');
      const publishedAt=publicationDate(articleMeta(article,'article:published_time'));
-     if(title&&GVI.test(title)&&publishedAt)candidates.set(link,{url:link,title,publishedAt});
+     // Some Rockstar posts are tagged GTA VI but omit that name from the
+     // headline (e.g. the Goodtime State collection). Require a genuine GTA VI
+     // reference in the SAME article's metadata and the official tagged feed.
+     const verifiedContext=!GVI.test(title)&&indexUrl.includes('?tag=722')&&GVI.test(summary);
+     if(title&&(GVI.test(title)||verifiedContext)&&publishedAt)
+      candidates.set(link,{url:link,title,publishedAt,...(verifiedContext?{verifiedContext:'rockstar_gtavi_description'}:{})});
     }catch{}
    }
   }catch(e){issues.push('Official index unavailable: '+e.message)}

@@ -85,7 +85,7 @@ export function validatePublication(data){
 const urlValid=x=>{try{const u=new URL(x);return u.protocol==='https:'&&!u.username&&!u.password&&!u.port&&!u.search&&!u.hash}catch{return false}};
 function enToTranslated(source,target){
  const sourceNumbers=source.match(/\d+/g)||[],targetNumbers=target.match(/\d+/g)||[];
- if(!text(target,180)||source.toLocaleLowerCase()===target.toLocaleLowerCase()||
+ if(!text(target,180)||/\bj\s+dispon\s+vel\b/i.test(target)||source.toLocaleLowerCase()===target.toLocaleLowerCase()||
   sourceNumbers.some(n=>!targetNumbers.includes(n))||
   VI.test(source)&&!VI.test(target)||
   /\b(?:translation quota exceeded|mymemory warning|invalid request)\b/i.test(target))throw Error('Translation withheld: untrusted output');
@@ -123,10 +123,23 @@ async function officialTitle(url,original,lang,fetchFn=fetch){
 /* Prefer a genuine Rockstar metadata description, translated into all
  * three locales. If unavailable, the existing safe summary template remains.
  * Never automatically hotlink unreviewed promotional photographs. */
+export function safeOfficialExcerpt(raw,limit=170){
+ // Never publish a description cut in the middle of a word. Prefer the
+ // original first complete sentence; otherwise a visibly abbreviated excerpt.
+ const source=clean(raw,1100);
+ if(!source)return '';
+ if(source.length<=limit)return source;
+ const sentence=source.match(/^.{45,220}?[.!?](?=\s|$)/u);
+ if(sentence&&sentence[0].length<=limit)return sentence[0].trim();
+ const clipped=source.slice(0,limit-1);
+ const last=clipped.lastIndexOf(' ');
+ if(last<70)return '';
+ return clipped.slice(0,last).replace(/[\s,;:–-]+$/u,'')+'…';
+}
 async function officialExcerpt(url,fetchFn=fetch){
  try{
   const html=await boundedText(url,fetchFn,{max:1200000,headers:{Accept:'text/html'}});
-  const en=clean(meta(html,'og:description')||meta(html,'description'),170);
+  const en=safeOfficialExcerpt(meta(html,'og:description')||meta(html,'description'));
   if(!en||en.length<34||/cookies?|privacy|javascript required|accept all/i.test(en))return null;
   const es=await myMemory(en,'es',fetchFn),pt=await myMemory(en,'pt',fetchFn);
   return tr({es,en,pt},190)?{es,en,pt}:null;
@@ -137,7 +150,7 @@ export async function officialEntry(source,fetchFn=fetch){
  if(!urlValid(source.url)||!/^https:\/\/www\.rockstargames\.com\/newswire\/article\//.test(source.url)||!DATE.test(source.publishedAt))
   throw Error('Bad Rockstar source');
  const en=clean(source.title,150);
- if(!VI.test(en))throw Error('Rockstar item not explicitly GTA VI');
+ if(!VI.test(en)&&source.verifiedContext!=='rockstar_gtavi_description')throw Error('Rockstar item not explicitly GTA VI');
  let es,pt,pending=false;
  try{es=await officialTitle(source.url,en,'es',fetchFn)}
  catch{es='Rockstar Games (titular EN): '+en;pending=true}
@@ -291,6 +304,12 @@ async function run(){
     if(cover)translated.push({...known.get(row.url),image:cover});
    }
    const merged=appendNews(official,translated,'official');nextOfficial=merged.next;report.newOfficial=merged.added;report.updatedOfficial=merged.updated||0;
+   const knownAfter=new Set(nextOfficial.items.flatMap(x=>(x.sources||[]).map(y=>y.url)));
+   report.latestRockstarSourceDate=sources[0].value.map(x=>x.publishedAt).sort().at(-1)||null;
+   report.latestPublishedOfficialDate=nextOfficial.items.filter(x=>x.category==='actualizaciones'&&x.facets?.community!==1).map(x=>x.publishedAt).filter(Boolean).sort().at(-1)||null;
+   report.unpublishedRockstarUrls=sources[0].value.filter(x=>!knownAfter.has(x.url)).map(x=>x.url).slice(0,12);
+   if(report.unpublishedRockstarUrls.length)
+    report.warnings.push('Some verified Rockstar sources require retry or review: '+report.unpublishedRockstarUrls.length);
   }else report.warnings.push('Rockstar check failed: '+sources[0].reason.message);
   if(sources[1].status==='fulfilled'){
    const known=new Map(community.news.map(x=>[x.sourceUrl,x]));
@@ -299,6 +318,10 @@ async function run(){
    const translated=[];
    for(const row of fresh)try{translated.push(await independentEntry(row))}catch(e){report.quarantined.push({source:'RockstarINTEL',url:row.url,reason:e.message.slice(0,150)})}
    const merged=appendNews(community,translated,'community');nextCommunity=merged.next;report.newIndependent=merged.added;report.updatedIndependent=merged.updated||0;
+   const independentUrls=new Set(nextCommunity.news.map(x=>x.sourceUrl));
+   report.latestIndependentSourceDate=sources[1].value.map(x=>x.publishedAt).sort().at(-1)||null;
+   report.latestPublishedIndependentDate=nextCommunity.news.map(x=>x.publishedAt).filter(Boolean).sort().at(-1)||null;
+   report.unpublishedIndependentUrls=sources[1].value.filter(x=>!independentUrls.has(x.url)).map(x=>x.url).slice(0,12);
   }else report.warnings.push('RockstarINTEL check failed: '+sources[1].reason.message);
   // Manually verified launch-day articles: original publication date and
   // independent attribution are preserved. Duplicate source URLs are ignored.
