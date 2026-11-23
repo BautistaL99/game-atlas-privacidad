@@ -1,25 +1,48 @@
 {
-  "checkedAt": "2026-11-23T20:36:50.761Z",
-  "mode": "news",
+  "checkedAt": "2026-11-23T21:15:01.841Z",
+  "mode": "wiki",
   "runner": "public-free",
   "publisher": "SIGNED_READY_TO_COMMIT",
-  "officialRevision": 9,
-  "communityRevision": 64,
-  "previousOfficialCount": 21,
-  "previousIndependentCount": 53,
+  "officialRevision": 10,
+  "communityRevision": 65,
+  "previousOfficialCount": 22,
+  "previousIndependentCount": 58,
   "previousWikiCount": 726,
-  "newOfficial": 1,
-  "newIndependent": 5,
-  "newWiki": 0,
-  "quarantined": [],
+  "newOfficial": 0,
+  "newIndependent": 0,
+  "newWiki": 50,
+  "quarantined": [
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-043f5ca57fa247425736fba7 affiliations pt: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-052a5e721d0f2de9b7dcec38 lineup es: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-094829817f298dc99f5ec504 lineup es: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-0c0bbb0447467ff851cf2273 variants es: Untrusted translation response"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-10381f113522bd5bab7f0bb6 lineup es: Description not translated; retry later instead of mislabeling language"
+    }
+  ],
   "warnings": [],
-  "updatedOfficial": 0,
-  "latestRockstarSourceDate": "2026-11-23",
-  "latestPublishedOfficialDate": "2026-11-23",
-  "unpublishedRockstarUrls": [],
-  "updatedIndependent": 0,
-  "latestIndependentSourceDate": "2026-11-23",
-  "latestPublishedIndependentDate": "2026-11-23",
-  "unpublishedIndependentUrls": [],
+  "specsInspected": 60,
+  "withWikiSpecifications": 55,
+  "specsTranslated": 77,
+  "specsPending": 441,
+  "translationRequests": 10,
   "changesSigned": true
 }
