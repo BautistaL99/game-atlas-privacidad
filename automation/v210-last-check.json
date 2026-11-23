@@ -1,8 +1,8 @@
 {
-  "checkedAt": "2026-11-22T23:53:13.814Z",
-  "mode": "news",
+  "checkedAt": "2026-11-23T00:13:34.913Z",
+  "mode": "wiki",
   "runner": "public-free",
-  "publisher": "UNCHANGED_SIGNED_ARCHIVES_PRESERVED",
+  "publisher": "SIGNED_READY_TO_COMMIT",
   "officialRevision": 9,
   "communityRevision": 60,
   "previousOfficialCount": 21,
@@ -10,16 +10,39 @@
   "previousWikiCount": 705,
   "newOfficial": 0,
   "newIndependent": 0,
-  "newWiki": 0,
-  "quarantined": [],
+  "newWiki": 56,
+  "quarantined": [
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-043f5ca57fa247425736fba7 affiliations pt: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-052a5e721d0f2de9b7dcec38 lineup es: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-094829817f298dc99f5ec504 lineup pt: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-0c0bbb0447467ff851cf2273 variants es: Untrusted translation response"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-238a850a766cb2604bb96301 affiliations pt: Description not translated; retry later instead of mislabeling language"
+    }
+  ],
   "warnings": [],
-  "updatedOfficial": 0,
-  "latestRockstarSourceDate": "2026-11-20",
-  "latestPublishedOfficialDate": "2026-11-20",
-  "unpublishedRockstarUrls": [],
-  "updatedIndependent": 0,
-  "latestIndependentSourceDate": "2026-11-22",
-  "latestPublishedIndependentDate": "2026-11-22",
-  "unpublishedIndependentUrls": [],
-  "changesSigned": false
+  "specsInspected": 60,
+  "withWikiSpecifications": 59,
+  "specsTranslated": 52,
+  "specsPending": 391,
+  "translationRequests": 10,
+  "changesSigned": true
 }
