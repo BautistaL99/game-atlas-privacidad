@@ -15,6 +15,7 @@
   try{
    const u=new URL(url);
    if(u.protocol!=='https:'||u.username||u.password||u.port||u.hash)return false;
+   if(u.hostname==='gta.wiki')return /^\/images\/[a-z0-9_/%().,-]+\.(?:png|jpe?g|webp)$/i.test(u.pathname)&&!u.search;
    if(u.hostname==='media-rockstargames-com.akamaized.net')
     return /^\/tina-uploads\/posts\/[a-z0-9_-]+\/[a-f0-9]{40}\.(?:jpe?g|png|webp)$/.test(u.pathname)&&!u.search;
    if(u.hostname==='www.rockstargames.com')
