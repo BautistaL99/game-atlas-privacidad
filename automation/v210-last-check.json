@@ -1,25 +1,38 @@
 {
-  "checkedAt": "2026-11-25T20:14:36.659Z",
-  "mode": "news",
+  "checkedAt": "2026-11-25T22:27:31.302Z",
+  "mode": "wiki",
   "runner": "public-free",
   "publisher": "SIGNED_READY_TO_COMMIT",
   "officialRevision": 10,
-  "communityRevision": 77,
+  "communityRevision": 78,
   "previousOfficialCount": 22,
-  "previousIndependentCount": 61,
+  "previousIndependentCount": 64,
   "previousWikiCount": 757,
   "newOfficial": 0,
-  "newIndependent": 3,
-  "newWiki": 0,
-  "quarantined": [],
+  "newIndependent": 0,
+  "newWiki": 46,
+  "quarantined": [
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-043f5ca57fa247425736fba7 affiliations pt: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-052a5e721d0f2de9b7dcec38 lineup es: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-094829817f298dc99f5ec504 lineup es: Description not translated; retry later instead of mislabeling language"
+    }
+  ],
   "warnings": [],
-  "updatedOfficial": 0,
-  "latestRockstarSourceDate": "2026-11-23",
-  "latestPublishedOfficialDate": "2026-11-23",
-  "unpublishedRockstarUrls": [],
-  "updatedIndependent": 0,
-  "latestIndependentSourceDate": "2026-11-25",
-  "latestPublishedIndependentDate": "2026-11-25",
-  "unpublishedIndependentUrls": [],
+  "specsInspected": 60,
+  "withWikiSpecifications": 59,
+  "specsTranslated": 60,
+  "specsPending": 484,
+  "translationRequests": 10,
   "changesSigned": true
 }
