@@ -4,7 +4,7 @@ import path from 'node:path';
 import {createHash,createPrivateKey,createPublicKey,sign,verify} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import schema from './content-schema-v265.cjs';
-import {checkDelta,checkCatalog,checkImages,checkHistory} from './resource-budget.mjs';
+import {LIMITS,checkDelta,checkCatalog,checkImages,checkHistory} from './resource-budget.mjs';
 export const hash=b=>createHash('sha256').update(b).digest('hex');
 const rootPath='updates/approved-content-v265.json';
 const imagePath=/^updates\/assets\/[a-f0-9]{64}\.(?:png|jpe?g|webp)$/;
@@ -40,14 +40,14 @@ function mediaOK(b,rel){const ext=rel.split('.').pop();if(ext==='png')return b.s
 export async function publish({root,delta,key,dryRun=true,fetchFn=fetch,now}){
  const prev=load(root,createPublicKey(key));
  if(delta.baseRevision<prev.revision){if(delta.reviewId===prev.reviewId)return {status:'already-published',revision:prev.revision};throw Error('Stale batch; rebase and review again');}
- checkDelta(prev,delta);const next=merge(prev,delta,now);const downloaded=new Map(),approvedDownloads=delta.imageDownloads||{},images=[];
+ checkDelta(prev,delta);const next=merge(prev,delta,now);const result=pack(next,key);checkCatalog(next,result.files);const downloaded=new Map(),approvedDownloads=delta.imageDownloads||{},images=[];
  for(const c of next.changes){if(!c.image)continue;const m=c.image;if(!imagePath.test(m.path))throw Error('Unsafe image path');
  let bytes;
  if(fs.existsSync(path.join(root,m.path)))bytes=read(root,m.path,900000);
- else{const request=approvedDownloads[c.id];if(!request||request.sha256!==m.sha256||m.rights!=='licensed')throw Error('Missing approved image '+c.id);const u=new URL(request.url);if(u.origin!=='https://gta.wiki'||!/^\/images\/[a-z0-9_/%().,\-]+\.(?:png|jpe?g|webp)$/i.test(u.pathname)||u.search||u.hash)throw Error('Image origin not allowlisted');const r=await fetchFn(u,{redirect:'error',signal:AbortSignal.timeout(20000)});if(!r.ok||!/^image\/(?:png|jpeg|webp)(?:;|$)/i.test(r.headers.get('content-type')||'')||Number(r.headers.get('content-length')||0)>900000)throw Error('Image response not allowed');const chunks=[];let size=0;for await(const chunk of r.body){size+=chunk.length;if(size>900000)throw Error('Image oversized');chunks.push(chunk)}bytes=Buffer.concat(chunks);downloaded.set(m.path,bytes)}
+ else{const request=approvedDownloads[c.id];if(!request||request.sha256!==m.sha256||m.rights!=='licensed')throw Error('Missing approved image '+c.id);const u=new URL(request.url);if(u.origin!=='https://gta.wiki'||!/^\/images\/[a-z0-9_/%().,\-]+\.(?:png|jpe?g|webp)$/i.test(u.pathname)||u.search||u.hash)throw Error('Image origin not allowlisted');const r=await fetchFn(u,{redirect:'error',signal:AbortSignal.timeout(20000)});if(!r.ok||!/^image\/(?:png|jpeg|webp)(?:;|$)/i.test(r.headers.get('content-type')||'')||Number(r.headers.get('content-length')||0)>LIMITS.imageBytes)throw Error('Image response not allowed');const chunks=[];let size=0;for await(const chunk of r.body){size+=chunk.length;if(size>LIMITS.imageBytes)throw Error('Image oversized');chunks.push(chunk)}bytes=Buffer.concat(chunks);downloaded.set(m.path,bytes)}
  if(hash(bytes)!==m.sha256||!mediaOK(bytes,m.path))throw Error('Image integrity mismatch '+c.id);images.push([m.path,bytes]);
  }
- const result=pack(next,key);checkCatalog(next,result.files);const imageBudget=checkImages(images),historyBudget=checkHistory(root,result.files,downloaded);
+ const imageBudget=checkImages(images),historyBudget=checkHistory(root,result.files,downloaded);
  if(!dryRun){for(const [rel,bytes] of downloaded)write(root,rel,bytes);for(const [rel,bytes] of result.files)write(root,rel,bytes);write(root,rootPath,result.root);const check=load(root,createPublicKey(key));if(check.revision!==next.revision||check.changes.length!==next.changes.length)throw Error('Post-write verification failed');}
  return {status:dryRun?'validated-no-write':'signed-and-verified',revision:next.revision,changes:next.changes.length,parts:result.files.size,images:next.changes.filter(c=>c.image).length,...imageBudget,...historyBudget};
 }
