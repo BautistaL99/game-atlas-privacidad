@@ -255,6 +255,53 @@ export function mergeWiki(previous,staged){
  const next={...previous,revision:previous.revision+1,fiches:[...byId.values()]};
  validatePublication(next);return {next,changed};
 }
+// Conservative ingestion: keep old IDs, quarantine possible aliases, and never
+// replace verified attributes when the new revision's infobox was not inspected.
+export function mergeWikiSafely(previous,staged){
+ validatePublication(previous);
+ let next=previous,changed=0;
+ const report={added:0,updated:0,unchanged:0,capacity:0,deferred:0,conflicts:[]};
+ const norm=v=>String(v||'').normalize('NFKC').trim().replace(/[_\s]+/g,' ').toLocaleLowerCase('en-US');
+ const nameKey=row=>row.category+'|'+norm(row.title?.en);
+ const urlKey=row=>{try{return new URL(row.sourceUrl).href}catch{return ''}};
+ const byId=new Map(previous.fiches.map(row=>[row.id,row]));
+ const byName=new Map(previous.fiches.map(row=>[nameKey(row),row.id]));
+ const byUrl=new Map(previous.fiches.map(row=>[urlKey(row),row.id]));
+ for(const row of staged){
+  const old=byId.get(row.id);
+  const conflict=(byUrl.get(urlKey(row))||byName.get(nameKey(row)));
+  if((old&&old.category!==row.category)||(!old&&conflict)){
+   report.conflicts.push({id:row.id,sourceUrl:row.sourceUrl,reason:'Possible duplicate or category change; review required'});continue;
+  }
+  if(old&&row.wikiRevision>old.wikiRevision&&old.specs?.length&&row.wikiSpecsChecked!==true){
+   report.deferred++;continue;
+  }
+  if(!old&&next.fiches.length>=MAX_CLIENT_WIKI){report.capacity++;continue}
+  const {wikiSpecsChecked,...candidate}=row;
+  try{
+   let result;
+   if(old&&row.wikiRevision===old.wikiRevision&&old.specs?.length&&candidate.specs?.length){
+    const keys=new Set(old.specs.map(x=>x.key));
+    const extras=candidate.specs.filter(x=>!keys.has(x.key)).slice(0,18-old.specs.length);
+    if(extras.length){
+     const updated={...old,specs:[...old.specs,...extras]};
+     const proposed={...next,revision:next.revision+1,fiches:next.fiches.map(x=>x.id===old.id?updated:x)};
+     validatePublication(proposed);result={next:proposed,changed:1};
+    }else result={next,changed:0};
+   }else result=mergeWiki(next,[candidate]);
+   if(!result.changed){report.unchanged++;continue}
+   next=result.next;changed++;
+   const saved=next.fiches.find(x=>x.id===row.id);
+   byId.set(saved.id,saved);byName.set(nameKey(saved),saved.id);byUrl.set(urlKey(saved),saved.id);
+   if(old)report.updated++;else report.added++;
+  }catch(e){
+   if(/payload limit|entry caps|Overfull catalog/.test(e.message))report.capacity++;
+   else report.conflicts.push({id:row.id,sourceUrl:row.sourceUrl,reason:String(e.message).slice(0,140)});
+  }
+ }
+ if(changed){next={...next,revision:previous.revision+1};validatePublication(next)}
+ return {next,changed,report};
+}
 async function run(){
  const stamp=new Date().toISOString();
  const mode=process.env.GAME_ATLAS_MODE||'news',dry=process.env.GAME_ATLAS_DRY_RUN!=='false';
@@ -334,7 +381,11 @@ async function run(){
  }else if(mode==='wiki'){
   try{wikiState=JSON.parse(await readFile('automation/v210-wiki-state.json','utf8'))}catch(e){if(e.code!=='ENOENT')throw e}
   const scanned=await getWikiBatch(wikiState,fetch,{withSpecifications:true});
-  const joined=mergeWiki(community,scanned.items);
+  const joined=mergeWikiSafely(community,scanned.items);
+  report.wikiMerge=joined.report;
+  report.warnings.push(...(joined.report.capacity?['Client capacity blocked '+joined.report.capacity+' candidates; no existing records removed']:[]));
+  report.quarantined.push(...joined.report.conflicts.map(x=>({source:'GTA Wiki',url:x.sourceUrl,reason:x.reason})));
+  report.warnings.push(...(joined.report.deferred?['Deferred '+joined.report.deferred+' revised fiches until infobox is checked']:[]));
   nextCommunity=joined.next;report.newWiki=joined.changed;report.warnings.push(...scanned.errors);
   wikiState={cursor:scanned.cursor,specCursor:scanned.specCursor,checkedAt:stamp};
   report.specsInspected=scanned.specsInspected;report.withWikiSpecifications=scanned.withSpecs;
