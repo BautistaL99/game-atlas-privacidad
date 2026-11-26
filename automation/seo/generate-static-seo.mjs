@@ -30,7 +30,7 @@ const nav=[
  ['guia-gta-6/mi-partida/','Mi partida']
 ];
 const guidePages=[
- {p:'guia-gta-6/mapa/',title:'Mapa de GTA 6: lugares y exploración de Leonida | Guía en español',
+ {p:'guia-gta-6/mapa/',title:'Mapa GTA 6: mapa interactivo de Leonida | Game Atlas',
  desc:'Consultá el mapa interactivo de GTA 6 y explorá los lugares de Leonida. Ubicaciones verificadas, marcadores, favoritos y estado de cada descubrimiento.',
  h:'Mapa interactivo de GTA 6',sub:'Explorá Leonida y organizá los lugares que encontrás.',
  body:section('Cómo usar el mapa de GTA VI',[
@@ -39,21 +39,23 @@ const guidePages=[
   'El mapa y sus marcadores pueden cambiar a medida que se confirme información nueva del juego. Revisá siempre la fuente y el estado de verificación de cada elemento.'
  ])+section('Ubicaciones, filtros y progreso',[
   'Podés pasar del mapa a las fichas de lugares y guardar los elementos que te interesan. Los favoritos y el progreso de tu partida se gestionan dentro de la aplicación.',
-  'La información publicada antes del lanzamiento o sin una confirmación espacial definitiva se identifica como provisional; no reemplaza al mapa oficial del juego.'
+  'Para planificar una ruta, elegí primero una zona, localizá los puntos que querés visitar y guardá tus propios marcadores. Al regresar, revisá tus favoritos y el progreso registrado. Los puntos que no tengan una ubicación comprobada siguen sin coordenadas.',
+  'Entre las regiones de Leonida se encuentran Vice City, Leonida Keys, Grassrivers, Port Gellhorn, Ambrosia y Mount Kalaga. El mapa de Game Atlas es una reconstrucción independiente y no sustituye el mapa oficial del juego.'
  ]),
  app:'app/#/mapa',appText:'Abrir mapa GTA 6'},
- {p:'guia-gta-6/personajes/',title:'Personajes de GTA 6: Jason, Lucía y fichas | Guía GTA VI',
- desc:'Conocé los personajes de GTA 6, incluidos Jason y Lucía, con fichas en español, imágenes oficiales y fuentes para distinguir datos confirmados de rumores.',
+ {p:'guia-gta-6/personajes/',title:'Personajes GTA 6: Jason, Lucía y reparto | Game Atlas',
+ desc:'Conocé a Jason, Lucía y otros personajes de GTA 6: reparto, perfiles en español, favoritos y referencias.',
  h:'Personajes de GTA 6',sub:'Protagonistas, relaciones y perfiles con fuentes contrastadas.',
  body:section('Jason y Lucía: los protagonistas',[
   'Jason Duval y Lucía Caminos son los protagonistas presentados por Rockstar Games para Grand Theft Auto VI. La información sobre su historia y sus relaciones se amplía según los materiales oficiales publicados por el estudio.',
-  'Nuestra guía reúne fichas para consultar personajes y seguir sus apariciones en la información confirmada. La intención es diferenciar lo anunciado oficialmente de las interpretaciones de la comunidad.'
+  'Jason tiene experiencia militar y trabaja con contrabandistas en los Cayos de Leonida. Lucía pasó por la penitenciaría de Leonida y busca construir una vida distinta junto a Jason. Sus perfiles ayudan a entender el punto de partida de la historia sin revelar desenlaces.',
+  'El reparto incluye a Dylan Rourke como Jason Duval, Manni L. Perez como Lucía Caminos y Hiram Delgado como Yasmani Cabrera.'
  ])+section('Qué vas a encontrar en las fichas',[
   'Cada ficha puede reunir una descripción, imágenes y enlaces a las fuentes disponibles. Cuando una característica no está confirmada, evitamos completar el perfil con suposiciones.',
   'Podés consultar los personajes desde el catálogo y guardar tus favoritos sin depender de una cuenta externa.'
- ])+'<aside class="source">Fuente principal: <a href="https://www.rockstargames.com/VI" rel="noopener noreferrer" target="_blank">sitio oficial de Grand Theft Auto VI de Rockstar Games</a>.</aside>',
+ ])+'<aside class="source">Fuente principal: <a href="https://www.rockstargames.com/VI" rel="noopener noreferrer" target="_blank">sitio oficial de Grand Theft Auto VI de Rockstar Games</a> · <a href="https://www.rockstargames.com/VI/credits" rel="noopener noreferrer" target="_blank">Créditos oficiales del reparto</a>.</aside>',
  app:'app/#/explorar/personajes',appText:'Explorar personajes'},
- {p:'guia-gta-6/vehiculos/',title:'Vehículos de GTA 6: autos, motos y fichas verificadas | Guía',
+ {p:'guia-gta-6/vehiculos/',title:'Vehículos GTA 6: autos, motos y fichas | Game Atlas',
  desc:'Explorá la guía de vehículos de GTA 6: fichas, categorías, imágenes de referencia y datos confirmados. Consultá modelos y encontralos en el catálogo.',
  h:'Vehículos de GTA 6',sub:'Encontrá los vehículos documentados y distinguí sus datos verificados.',
  body:section('Catálogo de vehículos de GTA VI',[
@@ -61,6 +63,7 @@ const guidePages=[
   'Cuando hay datos contrastables se incorporan en las fichas, junto con su procedencia. Si una característica, modificación o ubicación de aparición es desconocida, se mantiene como pendiente.'
  ])+section('Comparar y descubrir',[
   'La sección te permite recorrer distintas fichas y marcar tus elementos favoritos. Los datos de rendimiento, personalización y disponibilidad se incorporan únicamente cuando existe información verificable.',
+  'Para elegir entre vehículos, buscá el modelo, abrí su ficha y comparalo con otros de la misma categoría. Revisá las unidades de las estadísticas antes de sacar conclusiones: velocidad máxima y aceleración son medidas distintas. Si faltan valores, no se usan estimaciones como resultados reales.',
   'La información de vehículos se actualiza independientemente de tu lista personal de favoritos y elementos completados.'
  ]),
  app:'app/#/explorar/vehiculos',appText:'Explorar vehículos'},
