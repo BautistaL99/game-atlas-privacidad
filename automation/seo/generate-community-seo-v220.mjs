@@ -66,12 +66,12 @@ export async function generateCommunitySeo(community,siteRoot){
   if(seen.has(p))continue;seen.add(p);
   const facts=worthwhileFacts(x);
   const data='<section class="copy"><h2>Datos documentados por la comunidad</h2>'+
-   '<p>Esta ficha procede de GTA Wiki y corresponde a su revisión '+esc(x.wikiRevision)+'. No es información confirmada por Rockstar Games. Contrastá cada dato con el enlace original antes de utilizarlo como definitivo.</p>'+
+   '<p>Información comunitaria pendiente de confirmación oficial. Los detalles desconocidos se mantienen sin completar.</p>'+
    '<dl>'+facts.map(f=>'<dt><strong>'+esc(f.labelI18n.es)+'</strong></dt><dd>'+esc(f.valueI18n.es)+'</dd>').join('')+'</dl>'+
-   '<p><a href="'+esc(x.sourceUrl)+'" target="_blank" rel="noopener noreferrer">Consultar la ficha original en GTA Wiki</a></p>'+
+   '<h3>Referencias</h3><p><a href="'+esc(x.sourceUrl)+'" target="_blank" rel="noopener noreferrer">GTA Wiki</a> · revisión '+esc(x.wikiRevision)+'</p>'+
    '<p><a href="'+esc(link('app/#/ficha/'+x.id))+'">Abrir esta ficha en Game Atlas</a></p></section>';
   pages.push({p,html:page(p,x.title.es+' | Wiki GTA 6 · Game Atlas',
-   'Ficha comunitaria de '+x.title.es+' en GTA 6, con datos atribuidos a GTA Wiki y enlace a la fuente. No oficial.',
+   'Ficha de '+x.title.es+' en GTA 6: características disponibles, referencias y estado de verificación.',
    x.title.es+' · Wiki GTA 6',data)});
  }
  const indexMap=new Set(indexed.map(x=>x.id));
