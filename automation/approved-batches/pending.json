@@ -1,0 +1,187 @@
+{
+  "ownerDecision": "APPROVED_BY_OWNER",
+  "baseRevision": 4,
+  "mapVersion": "map-v216-yanis17",
+  "reviewId": "delegated-editorial-batch-20261126-01",
+  "changes": [
+    {
+      "op": "patch",
+      "id": "wiki-community-c62ab5a486423fd5cec332a5",
+      "category": "personajes",
+      "status": "reviewed",
+      "title": {
+        "es": "Yasmani Cabrera",
+        "en": "Yasmani Cabrera",
+        "pt": "Yasmani Cabrera"
+      },
+      "summary": {
+        "es": "Yasmani Cabrera es un personaje de GTA VI que regenta un comercio en Little Cuba, Vice City, y compra objetos robados. Está interpretado por Hiram Delgado.",
+        "en": "Yasmani Cabrera is a GTA VI character who runs a shop in Little Cuba, Vice City, and buys stolen goods. He is portrayed by Hiram Delgado.",
+        "pt": "Yasmani Cabrera é um personagem de GTA VI que administra uma loja em Little Cuba, Vice City, e compra objetos roubados. É interpretado por Hiram Delgado."
+      },
+      "sources": [
+        {
+          "url": "https://www.rockstargames.com/VI/credits",
+          "label": "Rockstar Games – créditos oficiales",
+          "checkedAt": "2026-11-26"
+        },
+        {
+          "url": "https://gta.guide/gta-6/characters/yasmani",
+          "label": "gta.guide – perfil del personaje",
+          "checkedAt": "2026-11-26"
+        },
+        {
+          "url": "https://gta6.house/library/characters/yasmani",
+          "label": "GTA6 House – perfil del personaje",
+          "checkedAt": "2026-11-26"
+        }
+      ],
+      "facts": [
+        {
+          "key": "actor",
+          "label": {
+            "es": "Intérprete",
+            "en": "Performer",
+            "pt": "Intérprete"
+          },
+          "value": {
+            "es": "Hiram Delgado",
+            "en": "Hiram Delgado",
+            "pt": "Hiram Delgado"
+          },
+          "verified": true,
+          "sourceUrl": "https://www.rockstargames.com/VI/credits"
+        },
+        {
+          "key": "location",
+          "label": {
+            "es": "Zona",
+            "en": "Area",
+            "pt": "Área"
+          },
+          "value": {
+            "es": "Little Cuba, Vice City",
+            "en": "Little Cuba, Vice City",
+            "pt": "Little Cuba, Vice City"
+          },
+          "verified": true,
+          "sourceUrl": "https://gta.guide/gta-6/characters/yasmani"
+        }
+      ],
+      "searchTerms": [
+        "Yasmani Cabrera",
+        "Yasmani",
+        "Little Cuba"
+      ]
+    },
+    {
+      "op": "patch",
+      "id": "wiki-community-53a0514488c4215ab37d8195",
+      "category": "personajes",
+      "status": "reviewed",
+      "title": {
+        "es": "Monterossa",
+        "en": "Monterossa",
+        "pt": "Monterossa"
+      },
+      "summary": {
+        "es": "Monterossa es un personaje de Grand Theft Auto VI interpretado por Raymond Neil Hernandez. Su alias es Monty y está vinculado a La Polilla Negra.",
+        "en": "Monterossa is a Grand Theft Auto VI character portrayed by Raymond Neil Hernandez. He is known as Monty and is associated with La Polilla Negra.",
+        "pt": "Monterossa é um personagem de Grand Theft Auto VI interpretado por Raymond Neil Hernandez. É conhecido como Monty e está ligado a La Polilla Negra."
+      },
+      "sources": [
+        {
+          "url": "https://www.rockstargames.com/VI/credits",
+          "label": "Rockstar Games – créditos oficiales",
+          "checkedAt": "2026-11-26"
+        },
+        {
+          "url": "https://gta.wiki/w/Monterossa",
+          "label": "GTA Wiki – perfil comunitario",
+          "checkedAt": "2026-11-26"
+        }
+      ],
+      "facts": [
+        {
+          "key": "actor",
+          "label": {
+            "es": "Intérprete",
+            "en": "Performer",
+            "pt": "Intérprete"
+          },
+          "value": {
+            "es": "Raymond Neil Hernandez",
+            "en": "Raymond Neil Hernandez",
+            "pt": "Raymond Neil Hernandez"
+          },
+          "verified": true,
+          "sourceUrl": "https://www.rockstargames.com/VI/credits"
+        },
+        {
+          "key": "cod",
+          "label": {
+            "es": "Posibles desenlaces (spoiler)",
+            "en": "Possible outcomes (spoiler)",
+            "pt": "Possíveis desfechos (spoiler)"
+          },
+          "value": {
+            "es": "Devorado por un caimán o abatido por Andrea; desenlaces pendientes de corroboración independiente.",
+            "en": "Eaten by an alligator or shot by Andrea; outcomes pending independent corroboration.",
+            "pt": "Devorado por um jacaré ou baleado por Andrea; desfechos pendentes de confirmação independente."
+          },
+          "verified": true,
+          "sourceUrl": "https://gta.wiki/w/Monterossa"
+        }
+      ],
+      "searchTerms": [
+        "Monty",
+        "Monterossa"
+      ]
+    },
+    {
+      "op": "add",
+      "id": "atlas-fauna-alligators",
+      "category": "flora-fauna",
+      "status": "reviewed",
+      "title": {
+        "es": "Caimanes",
+        "en": "Alligators",
+        "pt": "Jacarés"
+      },
+      "summary": {
+        "es": "Los caimanes son reptiles asociados a los ambientes acuáticos de Leonida. Aparecen en el material promocional de GTA VI, en escenas de una piscina residencial y un comercio. Las ubicaciones exactas de aparición en el juego están pendientes de comprobación.",
+        "en": "Alligators are reptiles associated with Leonida's aquatic environments. They appear in GTA VI promotional material in scenes at a residential pool and a shop. Exact in-game spawn locations remain unverified.",
+        "pt": "Os jacarés são répteis associados aos ambientes aquáticos de Leonida. Aparecem no material promocional de GTA VI em cenas de uma piscina residencial e de uma loja. Os locais exatos de aparecimento no jogo ainda não foram verificados."
+      },
+      "sources": [
+        {
+          "url": "https://gta.wiki/w/Grand_Theft_Auto_VI/Trailers",
+          "label": "GTA Wiki – avances de GTA VI",
+          "checkedAt": "2026-11-26"
+        }
+      ],
+      "facts": [
+        {
+          "key": "trailer-sighting",
+          "label": {
+            "es": "Escenas de los avances",
+            "en": "Trailer scenes",
+            "pt": "Cenas dos trailers"
+          },
+          "value": {
+            "es": "Piscina residencial y comercio",
+            "en": "Residential pool and shop",
+            "pt": "Piscina residencial e loja"
+          },
+          "verified": true,
+          "sourceUrl": "https://gta.wiki/w/Grand_Theft_Auto_VI/Trailers"
+        }
+      ],
+      "searchTerms": [
+        "caimanes",
+        "alligator",
+        "jacaré"
+      ]
+    }
+  ]
+}
