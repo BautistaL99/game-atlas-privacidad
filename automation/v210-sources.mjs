@@ -147,19 +147,19 @@ export function wikiFiche(title,category,revision,pageId=0){
  const sourceUrl=wikiUrl(title);
  if(!sourceUrl||!Number.isSafeInteger(revision)||revision<=0)return null;
  const labels={
-  vehiculos:['vehículos','vehicles','veículos'],
-  personajes:['personajes','characters','personagens'],
-  armas:['armas','weapons','armas'],
-  'mapa-lugares':['lugares','locations','locais']
+  vehiculos:['Vehículo','Vehicle','Veículo'],
+  personajes:['Personaje','Character','Personagem'],
+  armas:['Arma','Weapon','Arma'],
+  'mapa-lugares':['Lugar','Location','Local']
  }[category];
  if(!labels)return null;
  const en=clean(title,130);
  return {id:'wiki-community-'+sha(sourceUrl).slice(0,24),category,
   title:{es:en,en,pt:en},
   summary:{
-   es:'GTA Wiki incluye «'+en+'» entre los '+labels[0]+' vinculados a GTA VI. Esta información comunitaria no está confirmada por Rockstar.',
-   en:'GTA Wiki lists '+en+' among its GTA VI '+labels[1]+'. This community information is not confirmed by Rockstar.',
-   pt:'A GTA Wiki lista '+en+' entre '+labels[2]+' de GTA VI. Esta informação comunitária não é confirmada pela Rockstar.'
+   es:en+' — '+labels[0]+' de GTA VI. Información comunitaria: su clasificación no está confirmada por Rockstar.',
+   en:en+' — '+labels[1]+' in GTA VI. Community information: classification not confirmed by Rockstar.',
+   pt:en+' — '+labels[2]+' de GTA VI. Informação comunitária: a classificação não é confirmada pela Rockstar.'
   },sourceUrl,sourceName:'GTA Wiki',
   sourceTier:'community_indexed_not_rockstar_confirmed',wikiRevision:revision,
   ...(pageId>0?{wikiPageId:pageId}:{})};
