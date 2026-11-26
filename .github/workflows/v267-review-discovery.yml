@@ -7,6 +7,7 @@ on:
     paths:
       - automation/v267-review-discovery.mjs
       - automation/v267-review-discovery.test.mjs
+      - 'automation/v267/draft-proposals*'
       - .github/workflows/v267-review-discovery.yml
 permissions:
   contents: read
@@ -26,7 +27,7 @@ jobs:
         with:
           node-version: '22'
       - name: Test read-only scanner
-        run: node --test automation/v267-review-discovery.test.mjs
+        run: node --test automation/v267-review-discovery.test.mjs automation/v267/draft-proposals.test.mjs
       - name: Recover previous queue without modifying public content
         if: github.event_name != 'pull_request'
         env:
@@ -42,10 +43,14 @@ jobs:
           fi
       - name: Discover candidates and report gaps (never publish)
         run: node automation/v267-review-discovery.mjs review-queue/queue.json
+      - name: Build unapproved proposals from signed community data and candidates
+        run: node automation/v267/draft-proposals.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: atlas-v267-review-queue
-          path: review-queue/queue.json
+          path: |
+            review-queue/queue.json
+            review-queue/proposals.json
           if-no-files-found: warn
           retention-days: 90
