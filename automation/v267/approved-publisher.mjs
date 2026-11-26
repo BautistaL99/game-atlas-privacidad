@@ -52,7 +52,7 @@ export async function publish({root,delta,key,dryRun=true,fetchFn=fetch,now}){
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  const root=process.cwd(),batch='automation/approved-batches/pending.json';
- if(!fs.existsSync(batch)){console.log('NO_APPROVED_BATCH: no publication, no signer needed');process.exit(0)}
+ if(!fs.existsSync(batch)){if(process.env.ATLAS_APPLY==='false'&&process.env.ATLAS_V265_SIGNING_KEY){const key=createPrivateKey(Buffer.from(process.env.ATLAS_V265_SIGNING_KEY,'base64'));if(key.asymmetricKeyType!=='ed25519')throw Error('Wrong key type');const prev=load(root,createPublicKey(key));for(const c of prev.changes){if(c.image){const bytes=read(root,c.image.path,900000);if(hash(bytes)!==c.image.sha256||!mediaOK(bytes,c.image.path))throw Error('Existing image integrity mismatch '+c.id);}}console.log(JSON.stringify({status:'SIGNER_MATCHES_CURRENT_FEED',revision:prev.revision,changes:prev.changes.length}));}else console.log('NO_APPROVED_BATCH: no publication, no signer needed');process.exit(0)}
  if(!process.env.ATLAS_V265_SIGNING_KEY){console.log('SIGNER_SETUP_REQUIRED: no publication');process.exit(1)}
  const key=createPrivateKey(Buffer.from(process.env.ATLAS_V265_SIGNING_KEY,'base64'));if(key.asymmetricKeyType!=='ed25519')throw Error('Wrong key type');
  const delta=JSON.parse(read(root,batch,2500000));const r=await publish({root,delta,key,dryRun:process.env.ATLAS_APPLY!=='true'});console.log(JSON.stringify(r));}
