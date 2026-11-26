@@ -22,8 +22,9 @@ test('Generates indexable GTA 6 HTML for all categories and official articles; S
   assert.match(root,/<h1>Wiki de GTA 6: guía interactiva en español<\/h1>/);
   assert.match(root,/<meta name="robots" content="index,follow,max-image-preview:large">/);
   assert.match(root,/<a class="app-link" href=/);
-  assert.match(root,/<title>Wiki GTA 6: personajes, mapa, vehículos y noticias \| Game Atlas<\/title>/);
+  assert.match(root,/<title>Wiki GTA 6: mapa, personajes y vehículos \| Game Atlas<\/title>/);
   assert.match(root, /Wiki independiente de GTA 6/);
+  assert.match(root,/href="https:\/\/gta6mapa\.web\.app\/app\/#\/mapa">Abrir mapa interactivo/);
   const sitemap=await readFile(path.join(temp,'sitemap.xml'),'utf8');
   assert.doesNotMatch(sitemap,/game-atlas-privacidad\/app\/<\/loc>/);
   assert.match(sitemap,/<loc>https:\/\/bautistal99\.github\.io\/game-atlas-privacidad\/guia-gta-6\/<\/loc>/);
