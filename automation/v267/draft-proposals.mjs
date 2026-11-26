@@ -1,0 +1,21 @@
+/* Read-only review worklist. A signed community source is not an owner approval. */
+import fs from 'node:fs';
+import path from 'node:path';
+import {createPublicKey,verify,createHash} from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+const communityKey='qxnlUBqCBknS8KL/Bymrx4COzWN9TpPJAfdHohv/ugI=';
+export function decodeCommunity(raw,key=communityKey){const e=JSON.parse(raw);const pub=createPublicKey({key:Buffer.concat([Buffer.from('302a300506032b6570032100','hex'),Buffer.from(key,'base64')]),format:'der',type:'spki'});if(e.schema!==205||typeof e.payload!=='string'||e.payload.length>2200000||!verify(null,Buffer.from(e.payload),pub,Buffer.from(e.signature,'base64')))throw Error('Community signature invalid');const d=JSON.parse(Buffer.from(e.payload,'base64'));if(d.schema!==205||!Array.isArray(d.fiches)||d.fiches.length>1000)throw Error('Invalid community data');return d;}
+const langs=['es','en','pt'],safe=(s,n)=>typeof s==='string'&&s.length>0&&s.length<=n&&!/[<>\x00-\x1f]/.test(s),loc=(v,n)=>v&&langs.every(l=>safe(v[l],n)),url=s=>typeof s==='string'&&/^https:\/\/gta\.wiki\/w\/[^?#\s]+$/.test(s),key=s=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const cats=['personajes','vehiculos','armas','mapa-lugares','misiones','coleccionables','secretos','economia','actividades','mundo','flora-fauna','musica'];
+export function drafts(queue,community){
+ if(queue.schema!==1||!Array.isArray(queue.candidates)||!Array.isArray(community.fiches))throw Error('Invalid inputs');
+ const signed=new Map(community.fiches.filter(c=>url(c.sourceUrl)&&loc(c.title,180)&&loc(c.summary,1250)&&cats.includes(c.category)&&/^wiki-community-[a-f0-9]{24}$/.test(c.id)).map(c=>[c.sourceUrl,c]));
+ const bySource=new Map();
+ for(const q of queue.candidates){if(!url(q.sourceUrl)||!safe(q.title,160))continue;const options=[...new Set((q.categoryOptions||[]).filter(x=>cats.includes(x)))];const old=bySource.get(q.sourceUrl);if(old){old.categoryOptions=[...new Set([...old.categoryOptions,...options])];continue}bySource.set(q.sourceUrl,{sourceUrl:q.sourceUrl,title:q.title,categoryOptions:options,pageId:q.pageId,sourceRevision:q.revision,imageCandidates:(q.imageCandidates||[]).filter(x=>x?.rightsStatus==='review-required')});}
+ for(const c of signed.values())if(!bySource.has(c.sourceUrl))bySource.set(c.sourceUrl,{sourceUrl:c.sourceUrl,title:c.title.en,categoryOptions:[c.category],sourceRevision:c.wikiRevision,imageCandidates:[]});
+ const rows=[];
+ for(const q of bySource.values()){const c=signed.get(q.sourceUrl),opts=[...new Set([...q.categoryOptions,...(c?[c.category]:[])])];const facts=[],seen=new Set();if(c)for(const s of c.specs||[]){const k=key(s.key);if(!k||seen.has(k)||!safe(s.key,70)||!loc(s.labelI18n,75)||!loc(s.valueI18n,220))continue;seen.add(k);facts.push({key:s.key,label:s.labelI18n,value:s.valueI18n,sourceUrl:c.sourceUrl,verified:false});}
+ rows.push({status:'pending-review',id:c?.id||null,op:c?'patch':null,category:opts.length===1?opts[0]:null,categoryOptions:opts,title:c?.title||{es:q.title,en:q.title,pt:q.title},summary:c?.summary||null,sourceUrl:q.sourceUrl,sourceRevision:q.sourceRevision,facts,imageCandidates:q.imageCandidates,needs:['Confirmar pertinencia a GTA VI y categoria','Resolver ID contra catalogo instalado; no crear duplicados','Revisar traducciones y hechos contra fuentes','Revisar derechos, identidad y hash de imagen','Aprobar lote explicito antes de firmar']});}
+ return {schema:1,status:'UNAPPROVED_DO_NOT_PUBLISH',communityRevision:community.revision,generatedAt:new Date().toISOString(),coverage:queue.coverage||{},drafts:rows.sort((a,b)=>a.sourceUrl.localeCompare(b.sourceUrl)),counts:Object.fromEntries(cats.map(c=>[c,rows.filter(x=>x.category===c).length]))};
+}
+if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){const queue=JSON.parse(fs.readFileSync('review-queue/queue.json','utf8')),community=decodeCommunity(fs.readFileSync('updates/community-envelope-v205.json','utf8'));const result=drafts(queue,community);fs.writeFileSync('review-queue/proposals.json',JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({count:result.drafts.length,counts:result.counts,communityRevision:result.communityRevision}));}
