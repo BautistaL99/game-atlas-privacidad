@@ -4,6 +4,7 @@ import path from 'node:path';
 import {createHash,createPrivateKey,createPublicKey,sign,verify} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import schema from './content-schema-v265.cjs';
+import {preflight} from './identity-preflight.mjs';
 import {LIMITS,checkDelta,checkCatalog,checkImages,checkHistory} from './resource-budget.mjs';
 export const hash=b=>createHash('sha256').update(b).digest('hex');
 const rootPath='updates/approved-content-v265.json';
@@ -58,7 +59,7 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
  const prev=load(root,createPublicKey(key));let delta=null,consumed=false;
  if(fs.existsSync(manual)){const m=JSON.parse(read(root,manual,2500000));if(m.baseRevision<prev.revision){if(m.reviewId!==prev.reviewId)throw Error('Stale manual batch requires review');consumed=true;}else delta=m;}
  if(!delta&&fs.existsSync(auto)){const a=JSON.parse(read(root,auto,2500000));if(!/^auto-policy-v1-[a-f0-9]{20}$/.test(a.reviewId)||a.changes?.length>6||a.changes?.some(c=>c.op!=='patch'||!/^wiki-community-[a-f0-9]{24}$/.test(c.id)))throw Error('Automatic policy boundary');delta=a;}
- if(delta){const r=await publish({root,delta,key,dryRun});console.log(JSON.stringify(r));if(delta===undefined)throw Error('missing batch');if(fs.existsSync(manual)&&!consumed)consumed=true;}
+ if(delta){preflight(root,prev,delta);const r=await publish({root,delta,key,dryRun});console.log(JSON.stringify(r));if(delta===undefined)throw Error('missing batch');if(fs.existsSync(manual)&&!consumed)consumed=true;}
  else{for(const c of prev.changes){if(c.image){const bytes=read(root,c.image.path,900000);if(hash(bytes)!==c.image.sha256||!mediaOK(bytes,c.image.path))throw Error('Existing image integrity mismatch '+c.id);}}console.log(JSON.stringify({status:'SIGNER_MATCHES_CURRENT_FEED',revision:prev.revision,changes:prev.changes.length}));}
  if(consumed&&!dryRun)fs.unlinkSync(manual);
 }
