@@ -1,0 +1,68 @@
+{
+  "checkedAt": "2026-11-26T05:12:25.852Z",
+  "mode": "wiki",
+  "runner": "public-free",
+  "publisher": "SIGNED_READY_TO_COMMIT",
+  "officialRevision": 10,
+  "communityRevision": 80,
+  "previousOfficialCount": 22,
+  "previousIndependentCount": 64,
+  "previousWikiCount": 764,
+  "newOfficial": 0,
+  "newIndependent": 0,
+  "newWiki": 33,
+  "quarantined": [
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-043f5ca57fa247425736fba7 affiliations pt: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-052a5e721d0f2de9b7dcec38 lineup es: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-094829817f298dc99f5ec504 lineup es: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-0c0bbb0447467ff851cf2273 variants es: Untrusted translation response"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-10381f113522bd5bab7f0bb6 lineup es: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-2da5e259d25ce01e5b88d1b2 lineup es: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-38ab67983948d1bc415c4d72 aka es: Description not translated; retry later instead of mislabeling language"
+    }
+  ],
+  "warnings": [
+    "Deferred 7 revised fiches until infobox is checked"
+  ],
+  "wikiMerge": {
+    "added": 4,
+    "updated": 29,
+    "unchanged": 135,
+    "capacity": 0,
+    "deferred": 7,
+    "conflicts": []
+  },
+  "specsInspected": 60,
+  "withWikiSpecifications": 59,
+  "specsTranslated": 51,
+  "specsPending": 493,
+  "translationRequests": 10,
+  "changesSigned": true
+}
