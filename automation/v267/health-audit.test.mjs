@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {usageReport} from './health-audit.mjs';
+const fixture=()=>({community:{revision:86,fiches:[{id:'wiki-community-test',category:'personajes'}],news:[]},communityBytes:100,approved:{revision:5,changes:[{id:'wiki-community-test',op:'patch',category:'personajes'}]},partBytes:100,partCount:1,imageCount:0,imageBytes:0,decodedPixelBytes:0,partHistory:100,imageHistory:0,officialCount:1});
+test('healthy catalog with valid base',()=>assert.deepEqual(usageReport(fixture()).warnings,[]));
+test('warn at eighty percent, fail over limit',()=>{const f=fixture();f.communityBytes=1760000;assert(usageReport(f).warnings.includes('community envelope bytes'));f.communityBytes=2200001;assert.throws(()=>usageReport(f),/Health budget exceeded/);});
+test('missing or wrong category base blocks publication preflight',()=>{const f=fixture();f.approved.changes[0].category='armas';assert.throws(()=>usageReport(f),/incompatible community base/);f.approved.changes[0].category='personajes';f.community.fiches=[];assert.throws(()=>usageReport(f),/incompatible community base/);});
