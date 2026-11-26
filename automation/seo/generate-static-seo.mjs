@@ -152,9 +152,10 @@ function generatePages(catalog){
  const entry=(p,html)=>pages.push({p,html});
  const hubs=nav.filter(x=>x[0]!==HUB).map(([route,label])=>'<a class="card category-card" href="'+E(url(route))+'"><span>EXPLORAR</span><strong>'+E(label)+'</strong><small>Ver información y enlaces a la guía →</small></a>').join('');
  const fresh=recentNews.slice(0,3).map(newsLink).join('');
- entry(HUB,basePage({p:HUB,title:'Wiki GTA 6: personajes, mapa, vehículos y noticias | Game Atlas',desc:'Wiki independiente de GTA 6 en español: personajes, vehículos, armas, mapa interactivo de Leonida, rutas, fichas con fuentes y noticias. No oficial.',
+ entry(HUB,basePage({p:HUB,title:'Wiki GTA 6: mapa, personajes y vehículos | Game Atlas',desc:'Wiki independiente de GTA 6 en español: personajes, vehículos, armas, mapa interactivo de Leonida, rutas, fichas con fuentes y noticias. No oficial.',
  h:'Wiki de GTA 6: guía interactiva en español',sub:'Fichas, mapa de Leonida, rutas, noticias y progreso de GTA VI con fuentes y contenido independiente.',
  body:'<section class="copy"><h2>Wiki y guía de GTA 6 en un solo lugar</h2><p>Game Atlas Companion reúne una wiki independiente de Grand Theft Auto VI: fichas de personajes, vehículos, armas y lugares, un mapa interactivo y noticias con enlaces a sus fuentes. Distinguimos los anuncios oficiales de los aportes de medios y comunidades, sin presentar rumores como confirmaciones de Rockstar.</p><p>La aplicación interactiva incorpora mapa, fichas, favoritos y seguimiento de progreso. Los datos nuevos se incorporan cuando existen fuentes suficientes y nunca se presentan como confirmados si siguen siendo provisionales.</p></section>'+
+ '<p><a class="button" href="'+E(url('app/#/mapa'))+'">Abrir mapa interactivo →</a> · <a href="'+E(url('app/#/explorar/personajes'))+'">Buscar personajes</a></p>'+
  '<section><h2>Explorá las categorías de GTA VI</h2><div class="grid">'+hubs+'</div></section>'+
  '<section><h2>Últimas noticias oficiales sobre GTA 6</h2><p class="muted">Resúmenes independientes con enlace directo al anuncio original de Rockstar Games.</p><div class="news-grid">'+fresh+'</div><p><a class="button" href="'+E(url(HUB+'noticias/'))+'">Ver todas las noticias oficiales →</a></p></section>'+
  section('Información confirmada y datos pendientes',[
@@ -174,7 +175,7 @@ function generatePages(catalog){
  '<section><h2>Noticias oficiales publicadas</h2><div class="news-grid">'+recentNews.map(newsLink).join('')+'</div>'+(oldNews.length?'<p><a class="button" href="'+E(url(ARCHIVE))+'">Ver archivo histórico ('+oldNews.length+') →</a></p>':'')+'</section>'+
  '<section class="copy"><h2>¿Buscás novedades de la comunidad?</h2><p>Podés consultar las noticias de medios independientes con su fuente y fecha. Se mantienen separadas de los anuncios oficiales.</p><p><a href="'+E(url(HUB+'noticias/independientes/'))+'">Ver noticias independientes de GTA 6</a></p></section>'+
  '<p><a class="button" href="'+E(url('app/#/noticias/oficiales'))+'">Abrir Noticias en la guía interactiva →</a></p>';
- entry(npath,basePage({p:npath,title:'Noticias GTA 6: últimas novedades oficiales de Rockstar | Guía',desc:'Últimas noticias oficiales de GTA 6 en español, con imágenes de los anuncios de Rockstar Games, fechas, resúmenes y fuentes originales.',
+ entry(npath,basePage({p:npath,title:'Noticias GTA 6: novedades oficiales | Game Atlas',desc:'Últimas noticias oficiales de GTA 6 en español, con imágenes de los anuncios de Rockstar Games, fechas, resúmenes y fuentes originales.',
  h:'Noticias de GTA 6',sub:'Anuncios de Rockstar Games con imágenes y enlaces a las fuentes originales.',body:newsBody,image:news[0]?.image||''}));
  entry(ARCHIVE,basePage({p:ARCHIVE,title:'Archivo de noticias GTA 6 | Anuncios anteriores',desc:'Archivo histórico de anuncios oficiales de GTA 6 publicados por Rockstar Games, con fechas, imágenes y enlaces a las fuentes originales.',
  h:'Archivo de noticias de GTA 6',sub:'Noticias anteriores preservadas, ordenadas por fecha y con su fuente original.',
