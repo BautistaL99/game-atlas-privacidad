@@ -1,0 +1,1200 @@
+{
+  "schema": 1,
+  "source": "iOS V267 shipped source: app-v137.js and v262-curated-catalog.js",
+  "rows": [
+    {
+      "id": "personalizacion-estetica",
+      "category": "actividades",
+      "title": "Personal style: clothing, hairstyles and tattoos",
+      "sources": []
+    },
+    {
+      "id": "personalizacion-vehiculos",
+      "category": "actividades",
+      "title": "Vehicle customization",
+      "sources": []
+    },
+    {
+      "id": "anuncio-ediciones",
+      "category": "actualizaciones",
+      "title": "Announced editions and bonuses",
+      "sources": []
+    },
+    {
+      "id": "anuncio-radio-octubre",
+      "category": "actualizaciones",
+      "title": "Rockstar reveals radio stations · 10/08/2026",
+      "sources": []
+    },
+    {
+      "id": "fecha-lanzamiento",
+      "category": "actualizaciones",
+      "title": "Planned release · Nov 19, 2026",
+      "sources": []
+    },
+    {
+      "id": "trailer-extendido",
+      "category": "actualizaciones",
+      "title": "Extended look · 08/27/2026",
+      "sources": []
+    },
+    {
+      "id": "trailer-lanzamiento-2026",
+      "category": "actualizaciones",
+      "title": "Launch trailer · Oct 15, 2026",
+      "sources": []
+    },
+    {
+      "id": "hawk-little-morgan-revolvers",
+      "category": "armas",
+      "title": "Hawk & Little Morgan Revolvers",
+      "sources": []
+    },
+    {
+      "id": "variantes-personalizadas-armas",
+      "category": "armas",
+      "title": "Customized weapon variants",
+      "sources": []
+    },
+    {
+      "id": "classic-car-collection",
+      "category": "coleccionables",
+      "title": "Classic Car Collection",
+      "sources": []
+    },
+    {
+      "id": "vintage-vice-city-pack",
+      "category": "coleccionables",
+      "title": "Vintage Vice City Pack",
+      "sources": []
+    },
+    {
+      "id": "negocios-boobie-ike",
+      "category": "economia",
+      "title": "Boobie Ike’s businesses",
+      "sources": []
+    },
+    {
+      "id": "only-raw-records",
+      "category": "economia",
+      "title": "Only Raw Records",
+      "sources": []
+    },
+    {
+      "id": "ambrosia",
+      "category": "mapa-lugares",
+      "title": "Ambrosia",
+      "sources": []
+    },
+    {
+      "id": "electric-fang-tattoo",
+      "category": "mapa-lugares",
+      "title": "Electric Fang Tattoo Parlor",
+      "sources": []
+    },
+    {
+      "id": "grassrivers",
+      "category": "mapa-lugares",
+      "title": "Grassrivers",
+      "sources": []
+    },
+    {
+      "id": "leonida-keys",
+      "category": "mapa-lugares",
+      "title": "Leonida Keys",
+      "sources": []
+    },
+    {
+      "id": "mount-kalaga",
+      "category": "mapa-lugares",
+      "title": "Mount Kalaga",
+      "sources": []
+    },
+    {
+      "id": "one-eyed-willies",
+      "category": "mapa-lugares",
+      "title": "One-Eyed Willie’s Mod Shop",
+      "sources": []
+    },
+    {
+      "id": "port-gellhorn",
+      "category": "mapa-lugares",
+      "title": "Port Gellhorn",
+      "sources": []
+    },
+    {
+      "id": "ptt-youngins",
+      "category": "mapa-lugares",
+      "title": "PTT YOUNGIN$ Illegal Goods Store",
+      "sources": []
+    },
+    {
+      "id": "rideout-customs",
+      "category": "mapa-lugares",
+      "title": "Rideout Customs Mod Shop",
+      "sources": []
+    },
+    {
+      "id": "saras-unisex-salon",
+      "category": "mapa-lugares",
+      "title": "Sara’s Unisex Salon",
+      "sources": []
+    },
+    {
+      "id": "stock-305",
+      "category": "mapa-lugares",
+      "title": "Stock 305 Clothing Store",
+      "sources": []
+    },
+    {
+      "id": "vice-city",
+      "category": "mapa-lugares",
+      "title": "Vice City",
+      "sources": []
+    },
+    {
+      "id": "premisa-jason-lucia",
+      "category": "misiones",
+      "title": "Main story: Jason and Lucia",
+      "sources": []
+    },
+    {
+      "id": "afro-bank-fm",
+      "category": "musica",
+      "title": "Afro Bank FM",
+      "sources": []
+    },
+    {
+      "id": "back-country-radio",
+      "category": "musica",
+      "title": "Back Country",
+      "sources": []
+    },
+    {
+      "id": "cocoteo",
+      "category": "musica",
+      "title": "Cocoteo",
+      "sources": []
+    },
+    {
+      "id": "dirty-south-classics",
+      "category": "musica",
+      "title": "Dirty South Classics",
+      "sources": []
+    },
+    {
+      "id": "flash-fm",
+      "category": "musica",
+      "title": "Flash FM",
+      "sources": []
+    },
+    {
+      "id": "gta-vi-the-album",
+      "category": "musica",
+      "title": "Grand Theft Auto VI: The Album",
+      "sources": []
+    },
+    {
+      "id": "original-score-justice",
+      "category": "musica",
+      "title": "Justice soundtrack",
+      "sources": []
+    },
+    {
+      "id": "radio-gta6",
+      "category": "musica",
+      "title": "GTA VI radio stations",
+      "sources": []
+    },
+    {
+      "id": "the-chamber",
+      "category": "musica",
+      "title": "The Chamber",
+      "sources": []
+    },
+    {
+      "id": "boobie-ike",
+      "category": "personajes",
+      "title": "Boobie Ike",
+      "sources": []
+    },
+    {
+      "id": "brian-heder",
+      "category": "personajes",
+      "title": "Brian Heder",
+      "sources": []
+    },
+    {
+      "id": "cal-hampton",
+      "category": "personajes",
+      "title": "Cal Hampton",
+      "sources": []
+    },
+    {
+      "id": "dre-quan-priest",
+      "category": "personajes",
+      "title": "Dre’Quan Priest",
+      "sources": []
+    },
+    {
+      "id": "jason-duval",
+      "category": "personajes",
+      "title": "Jason Duval",
+      "sources": []
+    },
+    {
+      "id": "lucia-caminos",
+      "category": "personajes",
+      "title": "Lucia Caminos",
+      "sources": []
+    },
+    {
+      "id": "raul-bautista",
+      "category": "personajes",
+      "title": "Raul Bautista",
+      "sources": []
+    },
+    {
+      "id": "real-dimez",
+      "category": "personajes",
+      "title": "Real Dimez",
+      "sources": []
+    },
+    {
+      "id": "55-vapid-stanier",
+      "category": "vehiculos",
+      "title": "’55 Vapid Stanier",
+      "sources": []
+    },
+    {
+      "id": "67-vapid-dominator-buggy",
+      "category": "vehiculos",
+      "title": "’67 Vapid Dominator Buggy",
+      "sources": []
+    },
+    {
+      "id": "95-grotti-cheetah",
+      "category": "vehiculos",
+      "title": "’95 Grotti Cheetah",
+      "sources": []
+    },
+    {
+      "id": "crest-kayak",
+      "category": "vehiculos",
+      "title": "Crest Kayak",
+      "sources": []
+    },
+    {
+      "id": "dinka-enduro",
+      "category": "vehiculos",
+      "title": "Dinka Enduro",
+      "sources": []
+    },
+    {
+      "id": "ganado-retro-build",
+      "category": "vehiculos",
+      "title": "Ganado Retro Build",
+      "sources": []
+    },
+    {
+      "id": "shitzu-squalo",
+      "category": "vehiculos",
+      "title": "Shitzu Squalo",
+      "sources": []
+    },
+    {
+      "id": "community-gta-vi-2026-august-leaks",
+      "category": "actualizaciones",
+      "title": "Rumour: alleged GTA VI videos circulated in August 2026",
+      "sources": [
+        "https://gta.wiki/w/Grand_Theft_Auto_VI/Leaks"
+      ]
+    },
+    {
+      "id": "community-gta-vi-2025-demo-reel",
+      "category": "actualizaciones",
+      "title": "Rumour: an animation demo may have shown new GTA VI material",
+      "sources": [
+        "https://gta.wiki/w/Grand_Theft_Auto_VI/Leaks"
+      ]
+    },
+    {
+      "id": "community-gta-vi-2025-domains",
+      "category": "actualizaciones",
+      "title": "Rumour: registered domains sparked GTA VI theories",
+      "sources": [
+        "https://gta.wiki/w/Grand_Theft_Auto_VI/Leaks"
+      ]
+    },
+    {
+      "id": "community-gta-vi-2025-devkit",
+      "category": "actualizaciones",
+      "title": "Rumour: an alleged GTA VI development image circulated online",
+      "sources": [
+        "https://gta.wiki/w/Grand_Theft_Auto_VI/Leaks"
+      ]
+    },
+    {
+      "id": "community-grandtheftwiki-leaks",
+      "category": "actualizaciones",
+      "title": "Rumours: GTA VI reports compiled by Grand Theft Wiki",
+      "sources": []
+    },
+    {
+      "id": "pesca-mount-kalaga",
+      "category": "actividades",
+      "title": "Fishing in Leonida",
+      "sources": []
+    },
+    {
+      "id": "caza-mount-kalaga",
+      "category": "actividades",
+      "title": "Hunting in Mount Kalaga",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-prologue",
+      "category": "misiones",
+      "title": "Prologue",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-gone-fishing",
+      "category": "misiones",
+      "title": "Gone Fishing",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-gear-up",
+      "category": "misiones",
+      "title": "Gear Up",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-just-a-scratch",
+      "category": "misiones",
+      "title": "Just A Scratch",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-lab-fees",
+      "category": "misiones",
+      "title": "Lab Fees",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-unwanted-attention",
+      "category": "misiones",
+      "title": "Unwanted Attention",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-pipework",
+      "category": "misiones",
+      "title": "Pipework",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-hey-arnold",
+      "category": "misiones",
+      "title": "Hey Arnold!",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-island-dreams",
+      "category": "misiones",
+      "title": "Island Dreams",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-feng-shui",
+      "category": "misiones",
+      "title": "Feng Shui",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-coming-home",
+      "category": "misiones",
+      "title": "Coming Home",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-buck-me",
+      "category": "misiones",
+      "title": "Buck Me",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-clean-up-after-donnie",
+      "category": "misiones",
+      "title": "Clean Up After Donnie",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-down-to-earth",
+      "category": "misiones",
+      "title": "Down to Earth",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-clear-skies",
+      "category": "misiones",
+      "title": "Clear Skies",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-day-release",
+      "category": "misiones",
+      "title": "Day Release",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-swamped",
+      "category": "misiones",
+      "title": "Swamped",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-don-gone",
+      "category": "misiones",
+      "title": "Don Gone",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-recalibration",
+      "category": "misiones",
+      "title": "Recalibration",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-tourist-trap",
+      "category": "misiones",
+      "title": "Tourist Trap",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-home-sweet-home",
+      "category": "misiones",
+      "title": "Home Sweet Home",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-discharge-time",
+      "category": "misiones",
+      "title": "Discharge Time",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-what-s-in-the-bag",
+      "category": "misiones",
+      "title": "What's in the Bag?",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-ambulance-chaser",
+      "category": "misiones",
+      "title": "Ambulance Chaser",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-just-moved-in",
+      "category": "misiones",
+      "title": "Just Moved In",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-girls-trip",
+      "category": "misiones",
+      "title": "Girls’ Trip",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-moses",
+      "category": "misiones",
+      "title": "Moses",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-daily-driver",
+      "category": "misiones",
+      "title": "Daily Driver",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-slam-dunk",
+      "category": "misiones",
+      "title": "Slam Dunk",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-breakfast-run",
+      "category": "misiones",
+      "title": "Breakfast Run",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-coffee-break",
+      "category": "misiones",
+      "title": "Coffee Break",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-afternoon-delight",
+      "category": "misiones",
+      "title": "Afternoon Delight",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-checking-out",
+      "category": "misiones",
+      "title": "Checking Out",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-welcome-to-vice-city",
+      "category": "misiones",
+      "title": "Welcome to Vice City",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-dealers-choice",
+      "category": "misiones",
+      "title": "Dealer’s Choice",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-meet-the-heders",
+      "category": "misiones",
+      "title": "Meet the Heders",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-dubious-provenance",
+      "category": "misiones",
+      "title": "Dubious Provenance",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-mami-knows-best",
+      "category": "misiones",
+      "title": "Mami Knows Best",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-south-leonida-real-estate",
+      "category": "misiones",
+      "title": "South Leonida Real Estate",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-tyrone",
+      "category": "misiones",
+      "title": "Tyrone",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-here-kitty-kitty",
+      "category": "misiones",
+      "title": "Here, Kitty Kitty",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-car-services",
+      "category": "misiones",
+      "title": "Car Services",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-top-billing",
+      "category": "misiones",
+      "title": "Top Billing",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-boobie-time",
+      "category": "misiones",
+      "title": "Boobie Time",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-first-impressions",
+      "category": "misiones",
+      "title": "First Impressions",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-caught-slipping",
+      "category": "misiones",
+      "title": "Caught Slipping",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-crosstown-traffic",
+      "category": "misiones",
+      "title": "Crosstown Traffic",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-credit-check",
+      "category": "misiones",
+      "title": "Credit Check",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-steal-the-zorruso-for-randy",
+      "category": "misiones",
+      "title": "Steal the Zorruso for Randy",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-sinfrontera-national-bank",
+      "category": "misiones",
+      "title": "Sinfrontera National Bank",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-security-expert",
+      "category": "misiones",
+      "title": "Security Expert",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-ride-or-die",
+      "category": "misiones",
+      "title": "Ride or Die",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-company-property",
+      "category": "misiones",
+      "title": "Company Property",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-the-missing-link",
+      "category": "misiones",
+      "title": "The Missing Link",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-safe-word",
+      "category": "misiones",
+      "title": "Safe Word",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-cooties",
+      "category": "misiones",
+      "title": "Cooties",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-bricked-up",
+      "category": "misiones",
+      "title": "Bricked Up",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-hidden-charges",
+      "category": "misiones",
+      "title": "Hidden Charges",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-the-cartel-heist",
+      "category": "misiones",
+      "title": "The Cartel Heist",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-ocean-beach",
+      "category": "misiones",
+      "title": "Ocean Beach",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-another-life",
+      "category": "misiones",
+      "title": "Another Life",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-company-cars",
+      "category": "misiones",
+      "title": "Company Cars",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-lawyer-up",
+      "category": "misiones",
+      "title": "Lawyer Up",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-party-hard",
+      "category": "misiones",
+      "title": "Party Hard",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-heavy-lifting",
+      "category": "misiones",
+      "title": "Heavy Lifting",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-photo-shoot",
+      "category": "misiones",
+      "title": "Photo/Shoot",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-making-gainz",
+      "category": "misiones",
+      "title": "Making Gainz",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-watch-it",
+      "category": "misiones",
+      "title": "Watch It",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-cash-injections",
+      "category": "misiones",
+      "title": "Cash Injections",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-amateur-hour",
+      "category": "misiones",
+      "title": "Amateur Hour",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-dirty-work",
+      "category": "misiones",
+      "title": "Dirty Work",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-too-much-baggage",
+      "category": "misiones",
+      "title": "Too Much Baggage",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-adventures-in-babysitting",
+      "category": "misiones",
+      "title": "Adventures in Babysitting",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-fresh-evidence",
+      "category": "misiones",
+      "title": "Fresh Evidence",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-power-play",
+      "category": "misiones",
+      "title": "Power Play",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-childs-play",
+      "category": "misiones",
+      "title": "Child’s Play",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-headliners",
+      "category": "misiones",
+      "title": "Headliners",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-close-surveillance",
+      "category": "misiones",
+      "title": "Close Surveillance",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-delivery-method",
+      "category": "misiones",
+      "title": "Delivery Method",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-team-building",
+      "category": "misiones",
+      "title": "Team Building",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-fully-catered",
+      "category": "misiones",
+      "title": "Fully Catered",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-vcia-takedown",
+      "category": "misiones",
+      "title": "VCIA Takedown",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-sunset",
+      "category": "misiones",
+      "title": "Sunset",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-bird-in-the-hand",
+      "category": "misiones",
+      "title": "Bird in the Hand",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-taking-liberties",
+      "category": "misiones",
+      "title": "Taking Liberties",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-vc-baby",
+      "category": "misiones",
+      "title": "VC Baby",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-doggie-bag",
+      "category": "misiones",
+      "title": "Doggie Bag",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-operation-savage-glory",
+      "category": "misiones",
+      "title": "Operation Savage Glory",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-protective-custody",
+      "category": "misiones",
+      "title": "Protective Custody",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-opcional-get-shirleys-rum",
+      "category": "misiones",
+      "title": "Get Shirley’s Rum",
+      "sources": []
+    },
+    {
+      "id": "v262-mision-opcional-steal-the-scooter",
+      "category": "misiones",
+      "title": "Steal the Scooter",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-vice-city-flamingos",
+      "category": "coleccionables",
+      "title": "Vice City Flamingos",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-vice-city-narcos",
+      "category": "coleccionables",
+      "title": "Vice City Narcos",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-vice-city-manatees",
+      "category": "coleccionables",
+      "title": "Vice City Manatees",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-vice-city-club-de-futbol",
+      "category": "coleccionables",
+      "title": "Vice City Club De Fútbol",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-liberty-city-swingers",
+      "category": "coleccionables",
+      "title": "Liberty City Swingers",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-liberty-city-penetrators",
+      "category": "coleccionables",
+      "title": "Liberty City Penetrators",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-liberty-city-wrath",
+      "category": "coleccionables",
+      "title": "Liberty City Wrath",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-los-santos-corkers",
+      "category": "coleccionables",
+      "title": "Los Santos Corkers",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-los-santos-panic",
+      "category": "coleccionables",
+      "title": "Los Santos Panic",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-los-santos-pounders",
+      "category": "coleccionables",
+      "title": "Los Santos Pounders",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-backyard-wrestling",
+      "category": "coleccionables",
+      "title": "Backyard Wrestling",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-americas-next-top-hooker",
+      "category": "coleccionables",
+      "title": "America’s Next Top Hooker",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-delights-dancers",
+      "category": "coleccionables",
+      "title": "Delights Dancers",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-jack-of-hearts-dancers",
+      "category": "coleccionables",
+      "title": "Jack of Hearts Dancers",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-nine1nine-dancers",
+      "category": "coleccionables",
+      "title": "Nine1Nine Dancers",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-the-legends-of-ratface",
+      "category": "coleccionables",
+      "title": "The Legends of Ratface",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-right-wing-americas-hero",
+      "category": "coleccionables",
+      "title": "Right Wing: America’s Hero",
+      "sources": []
+    },
+    {
+      "id": "v262-coleccion-ed-comics-universe",
+      "category": "coleccionables",
+      "title": "Ed Comics Universe",
+      "sources": []
+    },
+    {
+      "id": "v262-actividad-golf",
+      "category": "actividades",
+      "title": "Golf",
+      "sources": []
+    },
+    {
+      "id": "v262-actividad-baloncesto",
+      "category": "actividades",
+      "title": "Baloncesto",
+      "sources": []
+    },
+    {
+      "id": "v262-actividad-billar",
+      "category": "actividades",
+      "title": "Billar",
+      "sources": []
+    },
+    {
+      "id": "v262-actividad-carreras",
+      "category": "actividades",
+      "title": "Carreras",
+      "sources": []
+    },
+    {
+      "id": "v262-golf-king-gator-adventure-golf",
+      "category": "mapa-lugares",
+      "title": "King Gator Adventure Golf",
+      "sources": []
+    },
+    {
+      "id": "v262-golf-frontier-adventure-golf",
+      "category": "mapa-lugares",
+      "title": "Frontier Adventure Golf",
+      "sources": []
+    },
+    {
+      "id": "v262-golf-dino-golf-challenge",
+      "category": "mapa-lugares",
+      "title": "Dino Golf Challenge",
+      "sources": []
+    },
+    {
+      "id": "v262-golf-leaf-links-golf-challenge",
+      "category": "mapa-lugares",
+      "title": "Leaf Links Golf Challenge",
+      "sources": []
+    },
+    {
+      "id": "v262-golf-mount-hailes-golf-challenge",
+      "category": "mapa-lugares",
+      "title": "Mount Hailes Golf Challenge",
+      "sources": []
+    },
+    {
+      "id": "v262-personaje-shirley",
+      "category": "personajes",
+      "title": "Shirley",
+      "sources": []
+    },
+    {
+      "id": "v262-personaje-kirk",
+      "category": "personajes",
+      "title": "Kirk",
+      "sources": []
+    },
+    {
+      "id": "v262-beneficio-goodtime-gear",
+      "category": "economia",
+      "title": "Goodtime Gear",
+      "sources": []
+    },
+    {
+      "id": "v262-vehiculo-bravado-youga-xl-79",
+      "category": "vehiculos",
+      "title": "Bravado Youga XL ’79",
+      "sources": []
+    },
+    {
+      "id": "v262-arma-girardi-az1200",
+      "category": "armas",
+      "title": "Girardi AZ1200",
+      "sources": []
+    },
+    {
+      "id": "v263-mision-new-look",
+      "category": "misiones",
+      "title": "New Look",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-playlist-sniper-la-perle",
+      "category": "coleccionables",
+      "title": "The Sniper of La Perle",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-playlist-vault-radio",
+      "category": "coleccionables",
+      "title": "The Vault Radio",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-mision-thrillbillies",
+      "category": "misiones",
+      "title": "Thrillbillies",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-mision-read-the-label",
+      "category": "misiones",
+      "title": "Read the Label",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-equipo-binoculars",
+      "category": "coleccionables",
+      "title": "Binoculars",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-equipo-flashlight",
+      "category": "coleccionables",
+      "title": "Flashlight",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-equipo-duffel-bag",
+      "category": "coleccionables",
+      "title": "Duffel Bag",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-equipo-headphones",
+      "category": "coleccionables",
+      "title": "Headphones",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-equipo-pry-bar",
+      "category": "coleccionables",
+      "title": "Pry Bar",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-equipo-masks",
+      "category": "coleccionables",
+      "title": "Masks",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-equipo-metal-detector",
+      "category": "coleccionables",
+      "title": "Metal Detector",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-equipo-slim-jim",
+      "category": "coleccionables",
+      "title": "Slim Jim",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-equipo-snap-gun",
+      "category": "coleccionables",
+      "title": "Snap Gun",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-equipo-cut-off-tool",
+      "category": "coleccionables",
+      "title": "Cut-Off Tool",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-equipo-key-cloner",
+      "category": "coleccionables",
+      "title": "Key Cloner",
+      "sources": []
+    },
+    {
+      "id": "ga-r11-equipo-dye-pack-jammer",
+      "category": "coleccionables",
+      "title": "Dye Pack Jammer",
+      "sources": []
+    }
+  ],
+  "excluded": {
+    "wiki-community-d7778b3fef5b53100d99ab52": "Area 69 (HD Universe)",
+    "wiki-community-b8f2ac0b4b43521f6a77bdc8": "State of New Austin"
+  }
+}
