@@ -34,7 +34,15 @@ jobs:
           node-version: '22'
       - run: |
           echo '9e93ba4883dc76ca9889bb683f54c1c4db660dc884ae4f80dfd6168f4a526b49  automation/v267/content-schema-v265.cjs' | sha256sum -c -
-          node --test automation/v267/approved-publisher.test.mjs
+          node --test automation/v267/approved-publisher.test.mjs automation/v267/auto-review.test.mjs
+      - name: Live policy review without secrets or publication
+        if: github.event_name == 'pull_request'
+        run: node automation/v267/auto-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'pull_request'
+        with:
+          name: atlas-policy-review-test
+          path: review-queue/auto-review-report.json
   publish:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: test
@@ -49,6 +57,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Check live sources and documented image permissions without signing key
+        if: github.event_name != 'push'
+        run: node automation/v267/auto-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'push'
+        with:
+          name: atlas-policy-review
+          path: review-queue/auto-review-report.json
       - name: Verify and sign reviewed batch, if present
         env:
           ATLAS_V265_SIGNING_KEY: ${{ secrets.ATLAS_V265_SIGNING_KEY }}
@@ -59,6 +75,7 @@ jobs:
         run: |
           set -euo pipefail
           git add updates/approved-content-v265.json
+          if git ls-files --error-unmatch automation/approved-batches/pending.json >/dev/null 2>&1; then git add -u automation/approved-batches/pending.json; fi
           if [ -d updates/approved-parts ]; then git add updates/approved-parts; fi
           if [ -d updates/assets ]; then git add updates/assets; fi
           if git diff --cached --quiet; then echo "No reviewed data to publish"; exit 0; fi
