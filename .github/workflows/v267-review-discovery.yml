@@ -1,0 +1,51 @@
+name: Game Atlas - cola de revision 12 categorias V267
+on:
+  schedule:
+    - cron: '23 9 * * *'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - automation/v267-review-discovery.mjs
+      - automation/v267-review-discovery.test.mjs
+      - .github/workflows/v267-review-discovery.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: atlas-v267-read-only-discovery
+  cancel-in-progress: false
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test read-only scanner
+        run: node --test automation/v267-review-discovery.test.mjs
+      - name: Recover previous queue without modifying public content
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p review-queue
+          previous=$(gh run list --workflow v267-review-discovery.yml --branch "$GITHUB_REF_NAME" --status success --limit 1 --json databaseId --jq '.[0].databaseId // empty')
+          if [ -n "$previous" ]; then
+            gh run download "$previous" --name atlas-v267-review-queue --dir review-queue
+            test -s review-queue/queue.json
+          fi
+      - name: Discover candidates and report gaps (never publish)
+        run: node automation/v267-review-discovery.mjs review-queue/queue.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: atlas-v267-review-queue
+          path: review-queue/queue.json
+          if-no-files-found: warn
+          retention-days: 90
