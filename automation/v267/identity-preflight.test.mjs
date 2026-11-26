@@ -1,0 +1,9 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {checkIdentities} from './identity-preflight.mjs';
+const w={id:'wiki-community-example',category:'personajes',title:{en:'Example'},sourceUrl:'https://gta.wiki/w/Example'};
+const fixed={id:'curated',category:'personajes',title:'Known',sources:['https://gta.wiki/w/Known']};
+function fixture(){return {previous:{changes:[]},delta:{changes:[{...w,op:'patch'}]},community:{fiches:[w],news:[]},official:{items:[]},inventory:{schema:1,rows:[fixed],excluded:{}}};}
+test('valid existing community patch',()=>assert.doesNotThrow(()=>checkIdentities(fixture())));
+test('missing community base rejected',()=>{const f=fixture();f.community.fiches=[];assert.throws(()=>checkIdentities(f),/missing or incompatible/);});
+test('alias, curated exact title and quarantine rejected',()=>{for(const mode of ['source','title','quarantine']){const f=fixture();if(mode==='source')f.inventory.rows=[{...fixed,sources:[w.sourceUrl]}];if(mode==='title')f.inventory.rows=[{...fixed,title:'Example'}];if(mode==='quarantine')f.inventory.excluded[w.id]='Example';assert.throws(()=>checkIdentities(f),/prospective identity/);}});
+test('new add rejects same title, accepts distinct identity',()=>{const f=fixture();f.delta.changes=[{id:'atlas-new',category:'personajes',title:{en:'Known'},op:'add'}];assert.throws(()=>checkIdentities(f),/duplicate/);f.delta.changes[0].title.en='Different';assert.doesNotThrow(()=>checkIdentities(f));});
+test('category remap guarded; reviewed identity preserved',()=>{const f=fixture();const r={...w,category:'mundo',title:{en:'Radio station'}};f.community.fiches=[r];f.delta.changes=[{...r,op:'patch'}];assert.throws(()=>checkIdentities(f),/incompatible/);f.delta.changes[0].category='musica';assert.doesNotThrow(()=>checkIdentities(f));f.previous.changes=[f.delta.changes[0]];assert.doesNotThrow(()=>checkIdentities(f));});
