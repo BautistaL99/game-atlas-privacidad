@@ -22,8 +22,8 @@ export function checkIdentities({previous,delta,community,official,inventory}){
   if(row.op==='patch'){
    if(row.id.startsWith('wiki-community-')){
     const w=wiki.find(r=>r.id===row.id);
-    if(!w||w.category!==row.category||matches.length!==1)reject(row.id,'missing or incompatible community record');
-    if(crosswalk.has(source(w.sourceUrl))||fixed.some(r=>key(r)===key(w)||(r.sources||[]).some(s=>source(typeof s==='string'?s:s.url)===source(w.sourceUrl)))||wiki.some(r=>r.id!==w.id&&source(r.sourceUrl)===source(w.sourceUrl)))reject(row.id,'may be merged into another client identity');
+    if(!w||w.category!==row.category||community.fiches.find(r=>r.id===row.id)?.category!==row.category||matches.length!==1)reject(row.id,'missing or incompatible community record');
+    if(crosswalk.has(source(w.sourceUrl))||fixed.some(r=>key(r)===key(w)||(r.sources||[]).some(s=>source(typeof s==='string'?s:s.url)===source(w.sourceUrl)))||wiki.some(r=>r.id!==w.id&&(source(r.sourceUrl)===source(w.sourceUrl)||key(r)===key(w))))reject(row.id,'may be merged into another client identity');
    }else if(!inventory.rows.some(r=>r.id===row.id&&r.category===row.category)||matches.some(r=>r.category!==row.category)){
     reject(row.id,'not a stable bundled identity');
    }
