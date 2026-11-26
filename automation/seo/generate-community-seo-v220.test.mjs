@@ -44,7 +44,7 @@ test('Signed community facts create index and only substantive Wiki detail pages
   const detail=await readFile(path.join(dir,'guia-gta-6/wiki/fichas',good.id,'index.html'),'utf8');
   assert.match(detail,/Fabricante/);
   assert.match(detail,/Bravado/);
-  assert.match(detail,/no es informaci[oó]n confirmada por Rockstar/i);
+  assert.match(detail,/Información comunitaria pendiente de confirmación oficial/i);
   assert.match(detail,/rel="canonical"/);
   const news=await readFile(path.join(dir,'guia-gta-6/noticias/independientes/index.html'),'utf8');
   assert.match(news,/RockstarINTEL/);
