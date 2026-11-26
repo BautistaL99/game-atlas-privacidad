@@ -1,16 +1,16 @@
 {
-  "checkedAt": "2026-11-26T07:31:26.803Z",
+  "checkedAt": "2026-11-26T18:38:16.146Z",
   "mode": "wiki",
   "runner": "public-free",
   "publisher": "SIGNED_READY_TO_COMMIT",
   "officialRevision": 10,
-  "communityRevision": 82,
+  "communityRevision": 84,
   "previousOfficialCount": 22,
   "previousIndependentCount": 64,
-  "previousWikiCount": 768,
+  "previousWikiCount": 773,
   "newOfficial": 0,
   "newIndependent": 0,
-  "newWiki": 29,
+  "newWiki": 49,
   "quarantined": [
     {
       "source": "GTA Wiki",
@@ -25,7 +25,7 @@
     {
       "source": "GTA Wiki",
       "url": "",
-      "reason": "wiki-community-094829817f298dc99f5ec504 lineup es: Description not translated; retry later instead of mislabeling language"
+      "reason": "wiki-community-094829817f298dc99f5ec504 lineup pt: Description not translated; retry later instead of mislabeling language"
     },
     {
       "source": "GTA Wiki",
@@ -44,20 +44,20 @@
     }
   ],
   "warnings": [
-    "Deferred 4 revised fiches until infobox is checked"
+    "Deferred 14 revised fiches until infobox is checked"
   ],
   "wikiMerge": {
-    "added": 5,
-    "updated": 24,
-    "unchanged": 84,
+    "added": 2,
+    "updated": 47,
+    "unchanged": 111,
     "capacity": 0,
-    "deferred": 4,
+    "deferred": 14,
     "conflicts": []
   },
   "specsInspected": 60,
-  "withWikiSpecifications": 58,
-  "specsTranslated": 58,
-  "specsPending": 506,
+  "withWikiSpecifications": 56,
+  "specsTranslated": 139,
+  "specsPending": 548,
   "translationRequests": 10,
   "changesSigned": true
 }

@@ -1,8 +1,8 @@
 {
-  "checkedAt": "2026-11-26T13:14:04.303Z",
-  "mode": "news",
+  "checkedAt": "2026-11-26T18:38:16.146Z",
+  "mode": "wiki",
   "runner": "public-free",
-  "publisher": "UNCHANGED_SIGNED_ARCHIVES_PRESERVED",
+  "publisher": "SIGNED_READY_TO_COMMIT",
   "officialRevision": 10,
   "communityRevision": 84,
   "previousOfficialCount": 22,
@@ -10,14 +10,54 @@
   "previousWikiCount": 773,
   "newOfficial": 0,
   "newIndependent": 0,
-  "newWiki": 0,
-  "quarantined": [],
-  "warnings": [
-    "RockstarINTEL check failed: All RockstarINTEL feeds unavailable: Source unavailable: HTTP 500; The operation was aborted due to timeout"
+  "newWiki": 49,
+  "quarantined": [
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-043f5ca57fa247425736fba7 affiliations pt: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-052a5e721d0f2de9b7dcec38 lineup es: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-094829817f298dc99f5ec504 lineup pt: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-0c0bbb0447467ff851cf2273 variants es: Untrusted translation response"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-10381f113522bd5bab7f0bb6 lineup es: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-2da5e259d25ce01e5b88d1b2 lineup es: Description not translated; retry later instead of mislabeling language"
+    }
   ],
-  "updatedOfficial": 0,
-  "latestRockstarSourceDate": "2026-11-23",
-  "latestPublishedOfficialDate": "2026-11-23",
-  "unpublishedRockstarUrls": [],
-  "changesSigned": false
+  "warnings": [
+    "Deferred 14 revised fiches until infobox is checked"
+  ],
+  "wikiMerge": {
+    "added": 2,
+    "updated": 47,
+    "unchanged": 111,
+    "capacity": 0,
+    "deferred": 14,
+    "conflicts": []
+  },
+  "specsInspected": 60,
+  "withWikiSpecifications": 56,
+  "specsTranslated": 139,
+  "specsPending": 548,
+  "translationRequests": 10,
+  "changesSigned": true
 }
