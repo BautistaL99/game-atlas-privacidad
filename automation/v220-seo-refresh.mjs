@@ -20,7 +20,9 @@ const community=verifyFeed(JSON.parse(communityRaw),205);
 validatePublication(official);
 validatePublication(community);
 const sha=raw=>createHash('sha256').update(raw).digest('hex');
-const state={schema:220,officialRevision:official.revision,communityRevision:community.revision,
+const templatePaths=['automation/seo/generate-static-seo.mjs','automation/seo/generate-community-seo-v220.mjs','automation/seo/static-seo.css','automation/seo/static-compare/es.html','automation/seo/static-compare/en.html','automation/seo/static-compare/pt.html'];
+const templateHash=sha(JSON.stringify(await Promise.all(templatePaths.map(async p=>[p,sha(await readFile(p))]))));
+const state={schema:220,templateHash,officialRevision:official.revision,communityRevision:community.revision,
  officialHash:sha(officialRaw),communityHash:sha(communityRaw)};
 let prev=null;
 try{prev=JSON.parse(await readFile(statePath,'utf8'))}
@@ -34,7 +36,7 @@ for(const key of ['official','community']){
 let hubExists=true;
 for(const p of ['guia-gta-6/index.html','guia-gta-6/wiki/index.html','guia-gta-6/noticias/independientes/index.html','sitemap.xml'])
  try{await access(p)}catch{hubExists=false}
-if(hubExists&&prev?.officialHash===state.officialHash&&prev?.communityHash===state.communityHash){
+if(hubExists&&prev?.officialHash===state.officialHash&&prev?.communityHash===state.communityHash&&prev?.templateHash===state.templateHash){
  console.log('SEO V220 unchanged: existing signed revisions are indexed');
 }else{
  const pages=await generateStaticSeo(official,'.');
