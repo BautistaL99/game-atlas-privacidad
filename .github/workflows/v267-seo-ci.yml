@@ -1,0 +1,28 @@
+name: Game Atlas - SEO regeneration safety
+on:
+  pull_request:
+    paths:
+      - 'automation/seo/**'
+      - 'automation/v220-seo-refresh.mjs'
+      - '.github/workflows/v267-seo-ci.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  seo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          node --test automation/seo/compare-signed-envelope.test.mjs automation/seo/generate-static-seo.test.mjs automation/seo/generate-community-seo-v220.test.mjs
+          node automation/v220-seo-refresh.mjs
+          git diff --exit-code -- app updates
+          node automation/v220-seo-refresh.mjs | tee /tmp/atlas-seo-result.txt
+          grep -q 'SEO V220 unchanged' /tmp/atlas-seo-result.txt
+          git diff --exit-code -- app updates
