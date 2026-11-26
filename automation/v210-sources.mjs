@@ -230,14 +230,16 @@ export async function enrichWikiSpecs(items,previous={},fetchFn=fetch,{maxPages=
     const record=byId.get(page.pageid);
     const rev=page.revisions?.[0];
     if(!record||!rev||rev.revid!==record.wikiRevision)continue;
-    const specs=parseWikiInfobox(revisionContent(page));
-    if(specs.length)enriched.set(record.id,{...record,specs});
+    const content=revisionContent(page);
+    if(!content.trim()){errors.push('Wiki infobox content missing for '+record.id);continue}
+    const specs=parseWikiInfobox(content);
+    enriched.set(record.id,{...record,wikiSpecsChecked:true,...(specs.length?{specs}:{})});
     inspected++;
    }
   }catch(e){errors.push('Wiki infobox batch skipped: '+e.message)}
  }
- return {items:items.map(row=>enriched.get(row.id)||row),specCursor:(offset+selected.length)%Math.max(1,candidates.length),
-  withSpecs:enriched.size,inspected,errors};
+ return {items:items.map(row=>enriched.get(row.id)||{...row,wikiSpecsChecked:false}),specCursor:(offset+selected.length)%Math.max(1,candidates.length),
+  withSpecs:[...enriched.values()].filter(row=>row.specs?.length).length,inspected,errors};
 }
 
 /* Scan one category page per category, persist continuation.
@@ -254,21 +256,24 @@ export async function getWikiBatch(previous={},fetchFn=fetch,{withSpecifications
    const json=JSON.parse(await boundedText('https://gta.wiki/api.php?'+params,fetchFn,{max:1400000}));
    if(!Array.isArray(json?.query?.categorymembers))throw Error('Wiki category unavailable');
    const members=json.query.categorymembers;
-   const info=[];
+   const info=[];let metadataComplete=true;
    for(let i=0;i<members.length;i+=10){
     const ids=members.slice(i,i+10).map(p=>p.pageid).filter(n=>Number.isSafeInteger(n)&&n>0);
     if(!ids.length)continue;
     try{
      const meta=new URLSearchParams({action:'query',pageids:ids.join('|'),prop:'revisions',rvprop:'ids',format:'json',formatversion:'2'});
      const data=JSON.parse(await boundedText('https://gta.wiki/api.php?'+meta,fetchFn,{max:1400000}));
-     for(const page of data.query?.pages||[]){const row=wikiFiche(page.title,label,page.revisions?.[0]?.revid||0,page.pageid);if(row)info.push(row)}
-    }catch(e){errors.push(category+' metadata: '+e.message)}
+     const pages=data.query?.pages||[];
+     const returned=new Set(pages.filter(page=>Number.isSafeInteger(page.revisions?.[0]?.revid)&&page.revisions[0].revid>0).map(page=>page.pageid));
+     if(ids.some(id=>!returned.has(id))){metadataComplete=false;errors.push(category+' metadata incompleta; cursor conservado')}
+     for(const page of pages){const row=wikiFiche(page.title,label,page.revisions?.[0]?.revid||0,page.pageid);if(row)info.push(row)}
+    }catch(e){metadataComplete=false;errors.push(category+' metadata: '+e.message)}
    }
    if(info.length)items.push(...info);
-   cursor[category]=json.continue?.cmcontinue?json.continue:null;
+   if(metadataComplete)cursor[category]=json.continue?.cmcontinue?json.continue:null;
   }catch(e){errors.push(category+': '+e.message)}
  }
- if(errors.length===WIKI_CATEGORIES.length)throw Error('All GTA Wiki categories offline: keep last signed data');
+ // Partial failures do not invalidate successful categories; the empty-result guard below protects the archive.
  const unique=[...new Map(items.map(x=>[x.id,x])).values()];
  if(!unique.length)throw Error('No Wiki entries; preserve previous catalog rather than publishing an empty replacement');
  if(withSpecifications){

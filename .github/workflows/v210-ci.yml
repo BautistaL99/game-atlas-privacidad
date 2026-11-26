@@ -1,6 +1,10 @@
 name: V210 verificar recuperacion segura GRATIS (sin publicar)
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'automation/**'
+      - '.github/workflows/v210*.yml'
 permissions:
   contents: read
 jobs:
@@ -16,8 +20,9 @@ jobs:
         run: |
           node --check automation/v210-sources.mjs
           node --check automation/v210-publisher.mjs
-          node --test automation/v210-publisher.test.mjs
+          node --test automation/v210-publisher.test.mjs automation/v267-autoupdate.test.mjs automation/v253-client-limits.test.mjs automation/v219-launch-window.test.mjs automation/v220-wiki-spec-translations.test.mjs automation/v220-client-integration.test.mjs automation/v253-manual-news-20261118.test.mjs automation/v253-launch-resilience.test.mjs
       - name: Probar deteccion sin escribir datos ni necesitar secretos
+        if: github.event_name == 'workflow_dispatch'
         env:
           GAME_ATLAS_MODE: news
           GAME_ATLAS_DRY_RUN: 'true'
