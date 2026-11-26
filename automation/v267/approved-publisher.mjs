@@ -51,8 +51,13 @@ export async function publish({root,delta,key,dryRun=true,fetchFn=fetch,now}){
  return {status:dryRun?'validated-no-write':'signed-and-verified',revision:next.revision,changes:next.changes.length,parts:result.files.size,images:next.changes.filter(c=>c.image).length};
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
- const root=process.cwd(),batch='automation/approved-batches/pending.json';
- if(!fs.existsSync(batch)){if(process.env.ATLAS_APPLY==='false'&&process.env.ATLAS_V265_SIGNING_KEY){const key=createPrivateKey(Buffer.from(process.env.ATLAS_V265_SIGNING_KEY,'base64'));if(key.asymmetricKeyType!=='ed25519')throw Error('Wrong key type');const prev=load(root,createPublicKey(key));for(const c of prev.changes){if(c.image){const bytes=read(root,c.image.path,900000);if(hash(bytes)!==c.image.sha256||!mediaOK(bytes,c.image.path))throw Error('Existing image integrity mismatch '+c.id);}}console.log(JSON.stringify({status:'SIGNER_MATCHES_CURRENT_FEED',revision:prev.revision,changes:prev.changes.length}));}else console.log('NO_APPROVED_BATCH: no publication, no signer needed');process.exit(0)}
- if(!process.env.ATLAS_V265_SIGNING_KEY){console.log('SIGNER_SETUP_REQUIRED: no publication');process.exit(1)}
+ const root=process.cwd(),manual='automation/approved-batches/pending.json',auto='review-queue/auto-batch.json',dryRun=process.env.ATLAS_APPLY!=='true';
+ if(!process.env.ATLAS_V265_SIGNING_KEY){if(!fs.existsSync(manual)&&!fs.existsSync(auto)){console.log('NO_APPROVED_BATCH');process.exit(0)}throw Error('SIGNER_SETUP_REQUIRED');}
  const key=createPrivateKey(Buffer.from(process.env.ATLAS_V265_SIGNING_KEY,'base64'));if(key.asymmetricKeyType!=='ed25519')throw Error('Wrong key type');
- const delta=JSON.parse(read(root,batch,2500000));const r=await publish({root,delta,key,dryRun:process.env.ATLAS_APPLY!=='true'});console.log(JSON.stringify(r));}
+ const prev=load(root,createPublicKey(key));let delta=null,consumed=false;
+ if(fs.existsSync(manual)){const m=JSON.parse(read(root,manual,2500000));if(m.baseRevision<prev.revision){if(m.reviewId!==prev.reviewId)throw Error('Stale manual batch requires review');consumed=true;}else delta=m;}
+ if(!delta&&fs.existsSync(auto)){const a=JSON.parse(read(root,auto,2500000));if(!/^auto-policy-v1-[a-f0-9]{20}$/.test(a.reviewId)||a.changes?.length>6||a.changes?.some(c=>c.op!=='patch'||!/^wiki-community-[a-f0-9]{24}$/.test(c.id)))throw Error('Automatic policy boundary');delta=a;}
+ if(delta){const r=await publish({root,delta,key,dryRun});console.log(JSON.stringify(r));if(delta===undefined)throw Error('missing batch');if(fs.existsSync(manual)&&!consumed)consumed=true;}
+ else{for(const c of prev.changes){if(c.image){const bytes=read(root,c.image.path,900000);if(hash(bytes)!==c.image.sha256||!mediaOK(bytes,c.image.path))throw Error('Existing image integrity mismatch '+c.id);}}console.log(JSON.stringify({status:'SIGNER_MATCHES_CURRENT_FEED',revision:prev.revision,changes:prev.changes.length}));}
+ if(consumed&&!dryRun)fs.unlinkSync(manual);
+}
