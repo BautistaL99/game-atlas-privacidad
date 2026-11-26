@@ -1,6 +1,7 @@
 // Policy review of existing community identities only. No new IDs, no inferred gameplay facts.
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';import {createHash} from 'node:crypto';
 import {decodeCommunity} from './draft-proposals.mjs';import {categories,wikiUrl} from '../v267-review-discovery.mjs';import schema from './content-schema-v265.cjs';
+import {LIMITS} from './resource-budget.mjs';
 const hash=s=>createHash('sha256').update(s).digest('hex');
 const text=(v,n)=>typeof v==='string'&&v.length>0&&v.length<=n&&!/[<>\x00-\x1f]/.test(v);
 const langs=['es','en','pt'];
@@ -12,7 +13,7 @@ export function validGrant(g){return g&&g.permission==='commercial-redistributio
 export async function api(params,fetchFn=fetch){const u='https://gta.wiki/api.php?'+new URLSearchParams({format:'json',formatversion:'2',...params});const r=await fetchFn(u,{redirect:'error',signal:AbortSignal.timeout(18000),headers:{Accept:'application/json','User-Agent':'GameAtlasPolicyReview/1.0'}});if(!r.ok)throw Error('HTTP '+r.status);if(Number(r.headers.get('content-length')||0)>2000000)throw Error('oversized');const raw=await r.text();if(raw.length>2000000)throw Error('oversized');const d=JSON.parse(raw);if(d.error)throw Error('API error');return d;}
 function eligible(c){return categories[c.category]&&c.sourceName==='GTA Wiki'&&c.sourceTier==='community_indexed_not_rockstar_confirmed'&&wikiUrl(c.title?.en)===c.sourceUrl&&c.id==='wiki-community-'+hash(c.sourceUrl).slice(0,24)&&Number.isSafeInteger(c.wikiRevision)&&validLoc(c.title,180)&&validLoc(c.summary,1250)&&/no está confirmada por Rockstar/i.test(c.summary.es)&&/not confirmed by Rockstar/i.test(c.summary.en)&&/não é confirmada pela Rockstar/i.test(c.summary.pt);}
 function verified(c,p){return p&&!p.missing&&p.ns===0&&wikiUrl(p.title)===c.sourceUrl&&p.revisions?.[0]?.revid===c.wikiRevision&&p.categories?.some(x=>categories[c.category].some(a=>x.title==='Category:'+a));}
-export async function review({community,previous,grants={},now=new Date().toISOString(),query=api,maxChecks=24,maxChanges=6,maxImageChecks=8}){
+export async function review({community,previous,grants={},now=new Date().toISOString(),query=api,maxChecks=24,maxChanges=LIMITS.newImages,maxImageChecks=8}){
  const old=new Map(previous.changes.map(c=>[c.id,c])),ids=new Map(),sourceCounts=new Map();for(const c of community.fiches){ids.set(c.id,(ids.get(c.id)||0)+1);sourceCounts.set(c.sourceUrl,(sourceCounts.get(c.sourceUrl)||0)+1);}
  const report={schema:1,policy:'auto-policy-v1',communityRevision:community.revision,baseRevision:previous.revision,checked:0,eligible:0,imagesAuthorized:0,imagesPending:0,imageCandidates:[],decisions:[],remaining:0};
  const changes=[],imageDownloads={};let imageBudget=maxImageChecks;const pool=community.fiches.filter(c=>eligible(c)&&ids.get(c.id)===1&&sourceCounts.get(c.sourceUrl)===1&&(!old.get(c.id)?.image)).sort((a,b)=>a.id.localeCompare(b.id));
@@ -30,7 +31,7 @@ export async function review({community,previous,grants={},now=new Date().toISOS
  const list=await query({action:'query',titles:c.title.en,prop:'images',imlimit:'max'});
  if(list.query?.pages?.[0]?.images?.some(x=>x.title===g.fileTitle)){
  const meta=await query({action:'query',titles:g.fileTitle,prop:'imageinfo',iiprop:'url|mime|size'});
- const i=meta.query?.pages?.[0]?.imageinfo?.[0];if(i&&i.url===g.url&&i.descriptionurl===g.filePage&&['image/png','image/jpeg','image/webp'].includes(i.mime)&&Number.isSafeInteger(i.size)&&i.size>0&&i.size<=900000){
+ const i=meta.query?.pages?.[0]?.imageinfo?.[0];if(i&&i.url===g.url&&i.descriptionurl===g.filePage&&['image/png','image/jpeg','image/webp'].includes(i.mime)&&Number.isSafeInteger(i.size)&&i.size>0&&i.size<=LIMITS.imageBytes){
  const ext=new URL(g.url).pathname.split('.').pop().toLowerCase();const credit='Autor: '+g.author+'; permiso comercial documentado';const evidence=[{url:g.filePage,label:credit,checkedAt:now.slice(0,10)},{url:g.evidenceUrl,label:'Permiso de redistribución comercial',checkedAt:now.slice(0,10)}];
  const all=[...new Map([...next.sources,...evidence].map(s=>[s.url,s])).values()];if(all.length<=8&&text(credit,110)){
  next.sources=all;next.image={path:'updates/assets/'+g.sha256+'.'+ext,sha256:g.sha256,rights:'licensed',rightsEvidence:'Permiso comercial: '+g.evidenceUrl,alt:g.alt};if(text(next.image.rightsEvidence,300)){imageDownloads[c.id]={url:g.url,sha256:g.sha256};imageOK=true;report.imagesAuthorized++;}else delete next.image;
