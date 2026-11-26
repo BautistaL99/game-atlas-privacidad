@@ -1,25 +1,23 @@
 {
-  "checkedAt": "2026-11-26T07:31:19.015Z",
+  "checkedAt": "2026-11-26T13:14:04.303Z",
   "mode": "news",
   "runner": "public-free",
   "publisher": "UNCHANGED_SIGNED_ARCHIVES_PRESERVED",
   "officialRevision": 10,
-  "communityRevision": 82,
+  "communityRevision": 84,
   "previousOfficialCount": 22,
   "previousIndependentCount": 64,
-  "previousWikiCount": 768,
+  "previousWikiCount": 773,
   "newOfficial": 0,
   "newIndependent": 0,
   "newWiki": 0,
   "quarantined": [],
-  "warnings": [],
+  "warnings": [
+    "RockstarINTEL check failed: All RockstarINTEL feeds unavailable: Source unavailable: HTTP 500; The operation was aborted due to timeout"
+  ],
   "updatedOfficial": 0,
   "latestRockstarSourceDate": "2026-11-23",
   "latestPublishedOfficialDate": "2026-11-23",
   "unpublishedRockstarUrls": [],
-  "updatedIndependent": 0,
-  "latestIndependentSourceDate": "2026-11-25",
-  "latestPublishedIndependentDate": "2026-11-25",
-  "unpublishedIndependentUrls": [],
   "changesSigned": false
 }
