@@ -34,7 +34,7 @@ jobs:
           node-version: '22'
       - run: |
           echo '9e93ba4883dc76ca9889bb683f54c1c4db660dc884ae4f80dfd6168f4a526b49  automation/v267/content-schema-v265.cjs' | sha256sum -c -
-          node --test automation/v267/approved-publisher.test.mjs automation/v267/auto-review.test.mjs automation/v267/health-audit.test.mjs
+          node --test automation/v267/approved-publisher.test.mjs automation/v267/auto-review.test.mjs automation/v267/health-audit.test.mjs automation/v267/identity-preflight.test.mjs
       - name: Audit actual signed feeds without credentials
         run: node automation/v267/health-audit.mjs
       - name: Live policy review without secrets or publication
