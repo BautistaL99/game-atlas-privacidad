@@ -12,12 +12,14 @@ test('safe merge preserves IDs, rejects ambiguous aliases and keeps categories',
  assert.equal(result.changed,0);assert.equal(result.report.conflicts.length,2);
  assert.equal(result.next,state);
 });
-test('uninspected revision cannot erase prior facts; checked empty revision can',()=>{
+test('uninspected or empty newer revision cannot erase prior facts; parsed revision can update',()=>{
  const old={...fiche(),specs:[spec]},state=base([old]);
  const pending=mergeWikiSafely(state,[{...fiche('Test Car',2),wikiSpecsChecked:false}]);
  assert.equal(pending.report.deferred,1);assert.equal(pending.next,state);
- const reviewed=mergeWikiSafely(state,[{...fiche('Test Car',2),wikiSpecsChecked:true}]);
- assert.equal(reviewed.changed,1);assert.equal(reviewed.next.fiches[0].specs,undefined);
+ const empty=mergeWikiSafely(state,[{...fiche('Test Car',2),wikiSpecsChecked:true}]);
+ assert.equal(empty.report.deferred,1);assert.equal(empty.next,state);
+ const reviewed=mergeWikiSafely(state,[{...fiche('Test Car',2),wikiSpecsChecked:true,specs:[{...spec,value:'4'}]}]);
+ assert.equal(reviewed.changed,1);assert.equal(reviewed.next.fiches[0].specs[0].value,'4');
  assert(!('wikiSpecsChecked' in reviewed.next.fiches[0]));
 });
 test('same revision enrichment adds missing fields without destroying existing ones',()=>{
@@ -59,4 +61,12 @@ test('infobox status distinguishes inspected empty from failed fetch',async()=>{
  assert.equal(result.items[0].wikiSpecsChecked,true);
  assert.equal(result.items[1].wikiSpecsChecked,false);
  assert.equal(result.withSpecs,0);
+});
+test('revision metadata without actual content does not count as inspected',async()=>{
+ const a=fiche('Car A',1,12);
+ const fake=async()=>new Response(JSON.stringify({query:{pages:[{pageid:12,revisions:[{revid:1,slots:{main:{}}}]}]}}));
+ const result=await enrichWikiSpecs([a],{},fake);
+ assert.equal(result.items[0].wikiSpecsChecked,false);
+ assert.equal(result.inspected,0);
+ assert.equal(result.errors.length,1);
 });

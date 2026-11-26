@@ -230,7 +230,9 @@ export async function enrichWikiSpecs(items,previous={},fetchFn=fetch,{maxPages=
     const record=byId.get(page.pageid);
     const rev=page.revisions?.[0];
     if(!record||!rev||rev.revid!==record.wikiRevision)continue;
-    const specs=parseWikiInfobox(revisionContent(page));
+    const content=revisionContent(page);
+    if(!content.trim()){errors.push('Wiki infobox content missing for '+record.id);continue}
+    const specs=parseWikiInfobox(content);
     enriched.set(record.id,{...record,wikiSpecsChecked:true,...(specs.length?{specs}:{})});
     inspected++;
    }

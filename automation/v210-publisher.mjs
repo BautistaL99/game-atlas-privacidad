@@ -273,7 +273,7 @@ export function mergeWikiSafely(previous,staged){
   if((old&&old.category!==row.category)||(!old&&conflict)){
    report.conflicts.push({id:row.id,sourceUrl:row.sourceUrl,reason:'Possible duplicate or category change; review required'});continue;
   }
-  if(old&&row.wikiRevision>old.wikiRevision&&old.specs?.length&&row.wikiSpecsChecked!==true){
+  if(old&&row.wikiRevision>old.wikiRevision&&old.specs?.length&&(row.wikiSpecsChecked!==true||!row.specs?.length)){
    report.deferred++;continue;
   }
   if(!old&&next.fiches.length>=MAX_CLIENT_WIKI){report.capacity++;continue}
