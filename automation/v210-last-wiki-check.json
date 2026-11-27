@@ -1,21 +1,21 @@
 {
-  "checkedAt": "2026-11-26T18:38:16.146Z",
+  "checkedAt": "2026-11-27T18:27:18.185Z",
   "mode": "wiki",
   "runner": "public-free",
   "publisher": "SIGNED_READY_TO_COMMIT",
   "officialRevision": 10,
-  "communityRevision": 84,
+  "communityRevision": 88,
   "previousOfficialCount": 22,
-  "previousIndependentCount": 64,
-  "previousWikiCount": 773,
+  "previousIndependentCount": 74,
+  "previousWikiCount": 775,
   "newOfficial": 0,
   "newIndependent": 0,
-  "newWiki": 49,
+  "newWiki": 27,
   "quarantined": [
     {
       "source": "GTA Wiki",
       "url": "",
-      "reason": "wiki-community-043f5ca57fa247425736fba7 affiliations pt: Description not translated; retry later instead of mislabeling language"
+      "reason": "wiki-community-043f5ca57fa247425736fba7 affiliations es: Description not translated; retry later instead of mislabeling language"
     },
     {
       "source": "GTA Wiki",
@@ -25,7 +25,7 @@
     {
       "source": "GTA Wiki",
       "url": "",
-      "reason": "wiki-community-094829817f298dc99f5ec504 lineup pt: Description not translated; retry later instead of mislabeling language"
+      "reason": "wiki-community-094829817f298dc99f5ec504 lineup es: Description not translated; retry later instead of mislabeling language"
     },
     {
       "source": "GTA Wiki",
@@ -41,23 +41,28 @@
       "source": "GTA Wiki",
       "url": "",
       "reason": "wiki-community-2da5e259d25ce01e5b88d1b2 lineup es: Description not translated; retry later instead of mislabeling language"
+    },
+    {
+      "source": "GTA Wiki",
+      "url": "",
+      "reason": "wiki-community-38ab67983948d1bc415c4d72 aka es: Description not translated; retry later instead of mislabeling language"
     }
   ],
   "warnings": [
-    "Deferred 14 revised fiches until infobox is checked"
+    "Deferred 22 revised fiches until infobox is checked"
   ],
   "wikiMerge": {
-    "added": 2,
-    "updated": 47,
-    "unchanged": 111,
+    "added": 8,
+    "updated": 19,
+    "unchanged": 97,
     "capacity": 0,
-    "deferred": 14,
+    "deferred": 22,
     "conflicts": []
   },
   "specsInspected": 60,
-  "withWikiSpecifications": 56,
-  "specsTranslated": 139,
-  "specsPending": 548,
+  "withWikiSpecifications": 58,
+  "specsTranslated": 52,
+  "specsPending": 564,
   "translationRequests": 10,
   "changesSigned": true
 }
